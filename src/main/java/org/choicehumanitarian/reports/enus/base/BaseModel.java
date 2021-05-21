@@ -1,20 +1,17 @@
-package org.choicehumanitarian.reports.enus.base;     
+package org.choicehumanitarian.reports.enus.base;
 
 import java.text.Normalizer;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.choicehumanitarian.reports.enus.page.PageLayout;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
+import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 import org.choicehumanitarian.reports.enus.wrap.Wrap;
-import org.choicehumanitarian.reports.enus.writer.AllWriter;
-import org.choicehumanitarian.reports.enus.xml.UtilXml;
 
 
 
@@ -24,16 +21,7 @@ import org.choicehumanitarian.reports.enus.xml.UtilXml;
  * Api: true
  * Indexed: true
  * 
- * AName.enUS: a cluster
- * Color: gray
- * IconGroup: regular
- * IconName: fort-awesome
  * Keyword: classSimpleNameCluster
- * 
- * RoleUser: true
- * Role.frFR: SiteAdmin
- * Role.enUS: SiteAdmin
- * RoleRead.enUS: User
  */  
 public class BaseModel extends BaseModelGen<Object> {       
 
@@ -99,7 +87,7 @@ public class BaseModel extends BaseModelGen<Object> {
 	 * DisplayName.enUS: modified
 	 */ 
 	protected void _modified(Wrap<ZonedDateTime> c) {
-		c.o(ZonedDateTime.now(ZoneId.of(siteRequest_.getSiteConfig_().getSiteZone())));
+		c.o(ZonedDateTime.now(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))));
 	}
 
 	/**   
@@ -303,7 +291,7 @@ public class BaseModel extends BaseModelGen<Object> {
 	 */ 
 	protected void _pageUrlId(Wrap<String> c) {
 		if(objectId != null) {
-			String o = siteRequest_.getSiteConfig_().getSiteBaseUrl() + "/" + objectNameVar + "/" + objectId;
+			String o = siteRequest_.getConfig().getString(ConfigKeys.SITE_BASE_URL) + "/" + objectNameVar + "/" + objectId;
 			c.o(o);
 		}
 	}
@@ -316,7 +304,7 @@ public class BaseModel extends BaseModelGen<Object> {
 	 */ 
 	protected void _pageUrlPk(Wrap<String> c) {
 		if(pk != null) {
-			String o = siteRequest_.getSiteConfig_().getSiteBaseUrl() + "/" + objectNameVar + "/" + pk;
+			String o = siteRequest_.getConfig().getString(ConfigKeys.SITE_BASE_URL) + "/" + objectNameVar + "/" + pk;
 			c.o(o);
 		}
 	}
@@ -328,7 +316,7 @@ public class BaseModel extends BaseModelGen<Object> {
 	 **/   
 	protected void _pageUrlApi(Wrap<String> c)  {
 		if(pk != null) {
-			String o = siteRequest_.getSiteConfig_().getSiteBaseUrl() + "/api/" + objectNameVar + "/" + pk;
+			String o = siteRequest_.getConfig().getString(ConfigKeys.SITE_BASE_URL) + "/api/" + objectNameVar + "/" + pk;
 			c.o(o);
 		}
 	}

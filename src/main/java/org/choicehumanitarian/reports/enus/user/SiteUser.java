@@ -10,7 +10,7 @@ import org.choicehumanitarian.reports.enus.wrap.Wrap;
  * Model: true
  * Api: true
  * Indexed: true
- * Map.Integer.sqlSort: 3
+ * Map.Integer.sqlSort: 1
  * 
  * ApiTag.enUS: User
  * ApiUri.enUS: /api/user
@@ -21,7 +21,7 @@ import org.choicehumanitarian.reports.enus.wrap.Wrap;
  * 
  * Keyword: classSimpleNameSiteUser
  * Role.enUS: SiteAdmin
- * Filter: utilisateurId
+ * Filter: userId
  * Saves: true
  * 
  * AName.enUS: a site user
@@ -32,7 +32,7 @@ import org.choicehumanitarian.reports.enus.wrap.Wrap;
  * RoleUser: true
  * Role.enUS: SiteAdmin
  */
-public class SiteUser extends SiteUserGen<BaseModel> {   
+public class SiteUser extends SiteUserGen<BaseModel> {
 
 	/**   
 	 * {@inheritDoc}

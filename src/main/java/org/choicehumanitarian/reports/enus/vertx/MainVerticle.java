@@ -1,8 +1,5 @@
 package org.choicehumanitarian.reports.enus.vertx;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,21 +12,11 @@ import java.util.function.Function;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.response.FacetField.Count;
+import org.choicehumanitarian.reports.enus.config.ConfigKeys;
+import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
+import org.choicehumanitarian.reports.enus.user.SiteUserEnUSGenApiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import org.choicehumanitarian.reports.enus.agency.SiteAgencyEnUSGenApiService;
-import org.choicehumanitarian.reports.enus.config.ConfigKeys;
-import org.choicehumanitarian.reports.enus.java.LocalDateSerializer;
-import org.choicehumanitarian.reports.enus.java.LocalTimeSerializer;
-import org.choicehumanitarian.reports.enus.java.ZonedDateTimeDeserializer;
-import org.choicehumanitarian.reports.enus.java.ZonedDateTimeSerializer;
-import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
-import org.choicehumanitarian.reports.enus.search.SearchList;
-import org.choicehumanitarian.reports.enus.searchbasis.SearchBasisEnUSGenApiService;
-import org.choicehumanitarian.reports.enus.user.SiteUserEnUSGenApiService;
 
 import io.vertx.config.ConfigRetriever;
 import io.vertx.config.ConfigRetrieverOptions;
@@ -47,9 +34,7 @@ import io.vertx.core.eventbus.EventBusOptions;
 import io.vertx.core.http.Cookie;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.http.HttpServerOptions;
-import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
-import io.vertx.core.json.jackson.DatabindCodec;
 import io.vertx.core.net.JksOptions;
 import io.vertx.core.shareddata.AsyncMap;
 import io.vertx.core.shareddata.SharedData;
@@ -87,8 +72,8 @@ import io.vertx.sqlclient.PoolOptions;
  *	A Java class to start the Vert.x application as a main method. 
  * Keyword: classSimpleNameVerticle
  **/
-public class AppVertx extends AppVertxGen<AbstractVerticle> {
-	private static final Logger LOG = LoggerFactory.getLogger(AppVertx.class);
+public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
+	private static final Logger LOG = LoggerFactory.getLogger(MainVerticle.class);
 
 	public final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
@@ -123,7 +108,7 @@ public class AppVertx extends AppVertxGen<AbstractVerticle> {
 
 	public static final String CONFIG_staticPath = "staticPath";
 
-	public AppVertx setSemaphore(Semaphore semaphore) {
+	public MainVerticle setSemaphore(Semaphore semaphore) {
 		this.semaphore = semaphore;
 		return this;
 	}
@@ -160,7 +145,7 @@ public class AppVertx extends AppVertxGen<AbstractVerticle> {
 				put("maxTimes", 3);
 			}
 		});
-		ClusterManager gestionnaireCluster = new ZookeeperClusterManager(zkConfig);
+		ClusterManager clusterManager = new ZookeeperClusterManager(zkConfig);
 		VertxOptions vertxOptions = new VertxOptions();
 		// For OpenShift
 		EventBusOptions eventBusOptions = new EventBusOptions();
@@ -191,7 +176,7 @@ public class AppVertx extends AppVertxGen<AbstractVerticle> {
 			eventBusOptions.setClusterPublicPort(clusterPublicPort);
 		}
 		vertxOptions.setEventBusOptions(eventBusOptions);
-		vertxOptions.setClusterManager(gestionnaireCluster);
+		vertxOptions.setClusterManager(clusterManager);
 		vertxOptions.setWarningExceptionTime(vertxWarningExceptionSeconds);
 		vertxOptions.setWarningExceptionTimeUnit(TimeUnit.SECONDS);
 		vertxOptions.setWorkerPoolSize(System.getenv(ConfigKeys.WORKER_POOL_SIZE) == null ? 5 : Integer.parseInt(System.getenv(ConfigKeys.WORKER_POOL_SIZE)));
@@ -205,7 +190,7 @@ public class AppVertx extends AppVertxGen<AbstractVerticle> {
 
 		Consumer<Vertx> runner = vertx -> {
 			for(Integer i = 0; i < siteInstances; i++) {
-				vertx.deployVerticle(new AppVertx().setSemaphore(semaphore), deploymentOptions);
+				vertx.deployVerticle(new MainVerticle().setSemaphore(semaphore), deploymentOptions);
 			}
 			vertx.deployVerticle(new MailVerticle(), mailVerticleDeploymentOptions);
 			vertx.deployVerticle(new WorkerVerticle().setSemaphore(semaphore), workerVerticleDeploymentOptions);
@@ -794,7 +779,7 @@ public class AppVertx extends AppVertxGen<AbstractVerticle> {
 		return promise.future();
 	}
 
-	/**	
+	/**
 	 *	This is called by Vert.x when the verticle instance is undeployed. 
 	 *	Setup the stopPromise to handle tearing down the server. 
 	 * Val.Fail.enUS:Could not close the database client connection. 
