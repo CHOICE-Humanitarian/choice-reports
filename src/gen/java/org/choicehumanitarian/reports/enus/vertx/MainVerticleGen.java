@@ -46,37 +46,49 @@ public abstract class MainVerticleGen<DEV> extends AbstractVerticle {
 /*
 CREATE TABLE SiteUser(
 	pk bigserial primary key
-	, inheritPk bigint
+	, inheritPk text
 	, created timestamp with time zone
-	, modified timestamp with time zone
 	, archived boolean
 	, deleted boolean
 	, userId text
 	, userKey bigint
-	, userKey bigint
-	, userId text
 	, userName text
 	, userEmail text
 	, userFirstName text
 	, userLastName text
 	, userFullName text
 	);
-CREATE TABLE BaseModel(
+CREATE TABLE ChoiceDonor(
 	pk bigserial primary key
-	, inheritPk bigint
+	, inheritPk text
 	, created timestamp with time zone
-	, modified timestamp with time zone
 	, archived boolean
 	, deleted boolean
 	, userId text
 	, userKey bigint
+	, donorFullName text
+	, donorId bigint
+	, donorAttributeId text
+	, donorInKind bigint
+	, donorTotal decimal
+	, donorYtd decimal
+	, donorQ1 decimal
+	, donorQ2 decimal
+	, donorQ3 decimal
+	, donorQ4 decimal
+	, donorParentName text
 	);
 
 DROP TABLE SiteUser CASCADE;
-DROP TABLE BaseModel CASCADE;
+DROP TABLE ChoiceDonor CASCADE;
 */
 
 	protected static final Logger LOG = LoggerFactory.getLogger(MainVerticle.class);
+	public static final String configureConfigComplete1 = "The config was configured successfully. ";
+	public static final String configureConfigComplete = configureConfigComplete1;
+	public static final String configureConfigFail1 = "Could not configure the config(). ";
+	public static final String configureConfigFail = configureConfigFail1;
+
 	public static final String configureDataConnectionError1 = "Could not open the database client connection. ";
 	public static final String configureDataConnectionError = configureDataConnectionError1;
 	public static final String configureDataConnectionSuccess1 = "The database client connection was successful. ";
@@ -86,11 +98,6 @@ DROP TABLE BaseModel CASCADE;
 	public static final String configureDataInitSuccess1 = "The database tables were created successfully. ";
 	public static final String configureDataInitSuccess = configureDataInitSuccess1;
 
-	public static final String configureClusterDataError1 = "Could not configure the shared cluster data. ";
-	public static final String configureClusterDataError = configureClusterDataError1;
-	public static final String configureClusterDataSuccess1 = "The shared cluster data was configured successfully. ";
-	public static final String configureClusterDataSuccess = configureClusterDataSuccess1;
-
 	public static final String configureOpenApiError1 = "Could not configure the auth server and API. ";
 	public static final String configureOpenApiError = configureOpenApiError1;
 	public static final String configureOpenApiSuccess1 = "The auth server and API was configured successfully. ";
@@ -98,7 +105,7 @@ DROP TABLE BaseModel CASCADE;
 
 	public static final String configureSharedWorkerExecutorFail1 = "Could not configure the shared worker executor. ";
 	public static final String configureSharedWorkerExecutorFail = configureSharedWorkerExecutorFail1;
-	public static final String configureSharedWorkerExecutorComplete1 = "The shared worker executor was configured successfully. ";
+	public static final String configureSharedWorkerExecutorComplete1 = "The shared worker executor \"{}\" was configured successfully. ";
 	public static final String configureSharedWorkerExecutorComplete = configureSharedWorkerExecutorComplete1;
 
 	public static final String configureHealthChecksComplete1 = "The health checks were configured successfully. ";
@@ -364,6 +371,6 @@ DROP TABLE BaseModel CASCADE;
 		return sb.toString();
 	}
 
-	public static final String[] MainVerticleVals = new String[] { configureDataConnectionError1, configureDataConnectionSuccess1, configureDataInitError1, configureDataInitSuccess1, configureClusterDataError1, configureClusterDataSuccess1, configureOpenApiError1, configureOpenApiSuccess1, configureSharedWorkerExecutorFail1, configureSharedWorkerExecutorComplete1, configureHealthChecksComplete1, configureHealthChecksFail1, configureHealthChecksErrorDatabase1, configureHealthChecksEmptySolr1, configureHealthChecksErrorSolr1, configureHealthChecksErrorVertx1, configureWebsocketsComplete1, configureWebsocketsFail1, configureEmailComplete1, configureEmailFail1, configureApiFail1, configureApiComplete1, configureUiFail1, configureUiComplete1, startServerErrorServer1, startServerSuccessServer1, startServerBeforeServer1, startServerSsl1, stopFail1, stopComplete1 };
+	public static final String[] MainVerticleVals = new String[] { configureConfigComplete1, configureConfigFail1, configureDataConnectionError1, configureDataConnectionSuccess1, configureDataInitError1, configureDataInitSuccess1, configureOpenApiError1, configureOpenApiSuccess1, configureSharedWorkerExecutorFail1, configureSharedWorkerExecutorComplete1, configureHealthChecksComplete1, configureHealthChecksFail1, configureHealthChecksErrorDatabase1, configureHealthChecksEmptySolr1, configureHealthChecksErrorSolr1, configureHealthChecksErrorVertx1, configureWebsocketsComplete1, configureWebsocketsFail1, configureEmailComplete1, configureEmailFail1, configureApiFail1, configureApiComplete1, configureUiFail1, configureUiComplete1, startServerErrorServer1, startServerSuccessServer1, startServerBeforeServer1, startServerSsl1, stopFail1, stopComplete1 };
 
 }

@@ -32,6 +32,8 @@
         <build-helper-maven-plugin.version>3.0.0</build-helper-maven-plugin.version>
         <exec-maven-plugin.version>1.5.0</exec-maven-plugin.version>
         <vertx.version>4.0.3</vertx.version>
+		<handlebars-maven-plugin.version>4.2.0</handlebars-maven-plugin.version>
+		<apache-curator.version>4.3.0</apache-curator.version>
     </properties>
 
     <dependencyManagement>
@@ -97,17 +99,54 @@
         <!-- Solr -->
         <!-- #### -->
 
-        <dependency>
-            <groupId>org.apache.solr</groupId>
-            <artifactId>solr-core</artifactId>
-            <version>${solr.version}</version>
-        </dependency>
+		<dependency>
+			<groupId>org.apache.solr</groupId>
+			<artifactId>solr-solrj</artifactId>
+			<version>8.4.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.solr</groupId>
+			<artifactId>solr-core</artifactId>
+			<version>8.4.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.logging.log4j</groupId>
+					<artifactId>log4j-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.logging.log4j</groupId>
+					<artifactId>log4j-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.logging.log4j</groupId>
+					<artifactId>log4j-1.2-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.logging.log4j</groupId>
+					<artifactId>log4j-slf4j-impl</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.logging.log4j</groupId>
+					<artifactId>log4j-web</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 
-        <dependency>
-            <groupId>org.apache.solr</groupId>
-            <artifactId>solr-solrj</artifactId>
-            <version>${solr.version}</version>
-        </dependency>
+		<dependency>
+			<groupId>org.apache.curator</groupId>
+			<artifactId>curator-client</artifactId>
+			<version>${apache-curator.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.curator</groupId>
+			<artifactId>curator-framework</artifactId>
+			<version>${apache-curator.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.curator</groupId>
+			<artifactId>curator-recipes</artifactId>
+			<version>${apache-curator.version}</version>
+		</dependency>
 
         <!-- ################# -->
         <!-- Flying Saucer PDF -->
@@ -260,48 +299,162 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+	<build>
 
-    <build>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-            </resource>
-        </resources>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven-compiler-plugin.version}</version>
-                <configuration>
-                    <target>1.8</target>
-                    <source>1.8</source>
-                    <annotationProcessors>
-                        <annotationProcessor>io.vertx.codegen.CodeGenProcessor</annotationProcessor>
-                    </annotationProcessors>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>${build-helper-maven-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>src/gen/java</source>
-                                <source>target/generated-sources/annotations</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+		<!-- Source Directory Configuration -->
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+		</resources>
+
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>${build-helper-maven-plugin.version}</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>src/gen/java</source>
+								<source>target/generated-sources/annotations</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Vert.X Code Generation -->
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler-plugin.version}</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<annotationProcessors>
+						<annotationProcessor>io.vertx.codegen.CodeGenProcessor</annotationProcessor>
+					</annotationProcessors>
+				</configuration>
+			</plugin>
+
+			<!-- Handlebars Template Plugin -->
+			<plugin>
+				<groupId>com.github.jknack</groupId>
+				<artifactId>handlebars-maven-plugin</artifactId>
+				<version>${handlebars-maven-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>precompile</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>precompile</goal>
+						</goals>
+						<configuration>
+							<output>/usr/local/src/opendatapolicing-static/js/helpers.js</output>
+							<prefix>/usr/local/src/opendatapolicing-static/template</prefix>
+							<suffix>.hbs</suffix>
+							<handlebarsJsFile>handlebars-v4.7.6.js</handlebarsJsFile>
+							<minimize>false</minimize>
+							<runtime></runtime>
+							<amd>false</amd>
+							<encoding>UTF-8</encoding>
+							<templates>
+							</templates>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	<profiles>
+		<!-- OpenShift Code Signing Plugins -->
+		<profile>
+			<id>openshift</id>
+			<build>
+				<plugins>
+
+					<!-- Read Project Properties -->
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>properties-maven-plugin</artifactId>
+						<version>1.0.0</version>
+						<executions>
+							<execution>
+								<phase>initialize</phase>
+								<goals>
+									<goal>read-project-properties</goal>
+								</goals>
+								<configuration>
+									<files>
+										<file>/opt/keystore/opendatapolicing-keystore.properties</file>
+									</files>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-shade-plugin</artifactId>
+						<version>2.3</version>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>shade</goal>
+								</goals>
+								<configuration>
+									<filters>
+										<filter>
+											<artifact>*:*</artifact>
+											<excludes>
+												<exclude>META-INF/*.SF</exclude>
+												<exclude>META-INF/*.DSA</exclude>
+												<exclude>META-INF/*.RSA</exclude>
+											</excludes>
+										</filter>
+									</filters>
+									<transformers>
+										<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+										</transformer>
+									</transformers>
+									<shadedArtifactAttached>true</shadedArtifactAttached>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jarsigner-plugin</artifactId>
+						<version>1.4</version>
+						<executions>
+							<execution>
+								<id>sign</id>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>verify</id>
+								<goals>
+									<goal>verify</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<keystore>${keystore-path}</keystore>
+							<alias>${keystore-alias}</alias>
+							<storepass>${keystore-storepass}</storepass>
+							<keypass>${keystore-keypass}</keypass>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>

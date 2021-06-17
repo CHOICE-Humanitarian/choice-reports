@@ -2,15 +2,11 @@ package org.choicehumanitarian.reports.enus.base;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.Semaphore;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.solr.client.solrj.util.ClientUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import org.choicehumanitarian.reports.enus.request.api.ApiRequest;
@@ -18,6 +14,8 @@ import org.choicehumanitarian.reports.enus.search.SearchList;
 import org.choicehumanitarian.reports.enus.user.SiteUser;
 import org.choicehumanitarian.reports.enus.user.SiteUserEnUSApiServiceImpl;
 import org.choicehumanitarian.reports.enus.vertx.MailVerticle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
@@ -47,8 +45,6 @@ public class BaseApiServiceImpl {
 
 	protected static final Logger LOG = LoggerFactory.getLogger(BaseApiServiceImpl.class);
 
-	protected Semaphore semaphore;
-
 	protected EventBus eventBus;
 
 	protected JsonObject config;
@@ -63,8 +59,7 @@ public class BaseApiServiceImpl {
 
 	protected AuthorizationProvider authorizationProvider;
 
-	public BaseApiServiceImpl(Semaphore semaphore, EventBus eventBus, JsonObject config, WorkerExecutor workerExecutor, PgPool pgPool, WebClient webClient, OAuth2Auth oauth2AuthenticationProvider, AuthorizationProvider authorizationProvider) {
-		this.semaphore = semaphore;
+	public BaseApiServiceImpl(EventBus eventBus, JsonObject config, WorkerExecutor workerExecutor, PgPool pgPool, WebClient webClient, OAuth2Auth oauth2AuthenticationProvider, AuthorizationProvider authorizationProvider) {
 		this.eventBus = eventBus;
 		this.config = config;
 		this.workerExecutor = workerExecutor;
@@ -144,7 +139,7 @@ public class BaseApiServiceImpl {
 							searchList.addFilterQuery("userId_indexed_string:" + ClientUtils.escapeQueryChars(userId));
 							searchList.promiseDeepSearchList(siteRequest).onSuccess(c -> {
 								SiteUser siteUser1 = searchList.getList().stream().findFirst().orElse(null);
-								SiteUserEnUSApiServiceImpl userService = new SiteUserEnUSApiServiceImpl(semaphore, eventBus, config, workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider);
+								SiteUserEnUSApiServiceImpl userService = new SiteUserEnUSApiServiceImpl(eventBus, config, workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider);
 
 								if(siteUser1 == null) {
 									JsonObject jsonObject = new JsonObject();

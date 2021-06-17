@@ -986,6 +986,76 @@ public abstract class ApiRequestGen<DEV> extends Object {
 		return vars == null ? "" : vars.toString();
 	}
 
+	///////////////////
+	// timeRemaining //
+	///////////////////
+
+	/**	 The entity timeRemaining
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String timeRemaining;
+	@JsonIgnore
+	public Wrap<String> timeRemainingWrap = new Wrap<String>().var("timeRemaining").o(timeRemaining);
+
+	/**	<br/> The entity timeRemaining
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.request.api.ApiRequest&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:timeRemaining">Find the entity timeRemaining in Solr</a>
+	 * <br/>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _timeRemaining(Wrap<String> w);
+
+	public String getTimeRemaining() {
+		return timeRemaining;
+	}
+	public void setTimeRemaining(String o) {
+		this.timeRemaining = ApiRequest.staticSetTimeRemaining(siteRequest_, o);
+		this.timeRemainingWrap.alreadyInitialized = true;
+	}
+	public static String staticSetTimeRemaining(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected ApiRequest timeRemainingInit() {
+		if(!timeRemainingWrap.alreadyInitialized) {
+			_timeRemaining(timeRemainingWrap);
+			if(timeRemaining == null)
+				setTimeRemaining(timeRemainingWrap.o);
+			timeRemainingWrap.o(null);
+		}
+		timeRemainingWrap.alreadyInitialized(true);
+		return (ApiRequest)this;
+	}
+
+	public static String staticSolrTimeRemaining(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrTimeRemaining(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqTimeRemaining(SiteRequestEnUS siteRequest_, String o) {
+		return ApiRequest.staticSolrStrTimeRemaining(siteRequest_, ApiRequest.staticSolrTimeRemaining(siteRequest_, ApiRequest.staticSetTimeRemaining(siteRequest_, o)));
+	}
+
+	public String solrTimeRemaining() {
+		return ApiRequest.staticSolrTimeRemaining(siteRequest_, timeRemaining);
+	}
+
+	public String strTimeRemaining() {
+		return timeRemaining == null ? "" : timeRemaining;
+	}
+
+	public String sqlTimeRemaining() {
+		return timeRemaining;
+	}
+
+	public String jsonTimeRemaining() {
+		return timeRemaining == null ? "" : timeRemaining;
+	}
+
 	//////////////
 	// initDeep //
 	//////////////
@@ -1018,6 +1088,7 @@ public abstract class ApiRequestGen<DEV> extends Object {
 				pksInit();
 				classesInit();
 				varsInit();
+				timeRemainingInit();
 	}
 
 	public void initDeepForClass(SiteRequestEnUS siteRequest_) {
@@ -1083,6 +1154,8 @@ public abstract class ApiRequestGen<DEV> extends Object {
 				return oApiRequest.classes;
 			case "vars":
 				return oApiRequest.vars;
+			case "timeRemaining":
+				return oApiRequest.timeRemaining;
 			default:
 				return null;
 		}
@@ -1142,6 +1215,8 @@ public abstract class ApiRequestGen<DEV> extends Object {
 			return ApiRequest.staticSetClasses(siteRequest_, o);
 		case "vars":
 			return ApiRequest.staticSetVars(siteRequest_, o);
+		case "timeRemaining":
+			return ApiRequest.staticSetTimeRemaining(siteRequest_, o);
 			default:
 				return null;
 		}
@@ -1176,6 +1251,8 @@ public abstract class ApiRequestGen<DEV> extends Object {
 			return ApiRequest.staticSolrClasses(siteRequest_, (String)o);
 		case "vars":
 			return ApiRequest.staticSolrVars(siteRequest_, (String)o);
+		case "timeRemaining":
+			return ApiRequest.staticSolrTimeRemaining(siteRequest_, (String)o);
 			default:
 				return null;
 		}
@@ -1210,6 +1287,8 @@ public abstract class ApiRequestGen<DEV> extends Object {
 			return ApiRequest.staticSolrStrClasses(siteRequest_, (String)o);
 		case "vars":
 			return ApiRequest.staticSolrStrVars(siteRequest_, (String)o);
+		case "timeRemaining":
+			return ApiRequest.staticSolrStrTimeRemaining(siteRequest_, (String)o);
 			default:
 				return null;
 		}
@@ -1244,6 +1323,8 @@ public abstract class ApiRequestGen<DEV> extends Object {
 			return ApiRequest.staticSolrFqClasses(siteRequest_, o);
 		case "vars":
 			return ApiRequest.staticSolrFqVars(siteRequest_, o);
+		case "timeRemaining":
+			return ApiRequest.staticSolrFqTimeRemaining(siteRequest_, o);
 			default:
 				return null;
 		}
@@ -1353,4 +1434,5 @@ public abstract class ApiRequestGen<DEV> extends Object {
 	public static final String VAR_pks = "pks";
 	public static final String VAR_classes = "classes";
 	public static final String VAR_vars = "vars";
+	public static final String VAR_timeRemaining = "timeRemaining";
 }

@@ -1,33 +1,48 @@
 package org.choicehumanitarian.reports.enus.vertx;
 
+import java.math.BigDecimal;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
+import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
+import org.choicehumanitarian.reports.enus.request.api.ApiRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.vertx.config.ConfigRetriever;
-import io.vertx.config.ConfigRetrieverOptions;
-import io.vertx.config.ConfigStoreOptions;
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
+import io.vertx.core.MultiMap;
 import io.vertx.core.Promise;
 import io.vertx.core.WorkerExecutor;
 import io.vertx.core.eventbus.DeliveryOptions;
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
+import io.vertx.ext.auth.authentication.TokenCredentials;
+import io.vertx.ext.auth.authentication.UsernamePasswordCredentials;
 import io.vertx.ext.mail.MailClient;
 import io.vertx.ext.mail.MailConfig;
 import io.vertx.ext.web.client.WebClient;
+import io.vertx.ext.web.client.predicate.ResponsePredicate;
 import io.vertx.pgclient.PgConnectOptions;
 import io.vertx.pgclient.PgPool;
 import io.vertx.sqlclient.PoolOptions;
+import io.vertx.sqlclient.Row;
+import io.vertx.sqlclient.RowStream;
 
 /**
  */
 public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 	private static final Logger LOG = LoggerFactory.getLogger(WorkerVerticle.class);
+
+	public static final Integer FACET_LIMIT = 100;
 
 	/**
 	 * A io.vertx.ext.jdbc.JDBCClient for connecting to the relational database PostgreSQL. 
@@ -35,8 +50,6 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 	private PgPool pgPool;
 
 	private WebClient webClient;
-
-	private JsonObject config;
 
 	WorkerExecutor workerExecutor;
 
@@ -56,18 +69,19 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 	public void  start(Promise<Void> startPromise) throws Exception, Exception {
 
 		try {
-			Future<Void> promiseSteps = configureSiteContext().compose(a ->
+			configureWebClient().compose(a -> 
 				configureData().compose(b -> 
 					configureSharedWorkerExecutor().compose(c -> 
 						configureEmail().compose(d -> 
-							refreshAllData().compose(e -> 
-								importData()
+							importData().compose(e -> 
+								syncDbToSolr().compose(f -> 
+									refreshAllData()
+								)
 							)
 						)
 					)
 				)
-			);
-			promiseSteps.onComplete(startPromise);
+			).onComplete(startPromise);
 		} catch (Exception ex) {
 			LOG.error("Couldn't start verticle. ", ex);
 		}
@@ -75,30 +89,12 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 
 	/**	
 	 **/
-	private Future<Void> configureSiteContext() {
+	private Future<Void> configureWebClient() {
 		Promise<Void> promise = Promise.promise();
 
 		try {
-			ConfigRetrieverOptions retrieverOptions = new ConfigRetrieverOptions();
-			ConfigStoreOptions storeEnv = new ConfigStoreOptions().setType("env");
-			retrieverOptions.addStore(storeEnv);
-
-			String configPath = System.getenv("configPath");
-			if(StringUtils.isNotBlank(configPath)) {
-				ConfigStoreOptions configIni = new ConfigStoreOptions().setType("file").setFormat("properties")
-						.setConfig(new JsonObject().put("path", configPath));
-				retrieverOptions.addStore(configIni);
-			}
-
-			ConfigRetriever configRetriever = ConfigRetriever.create(vertx, retrieverOptions);
-			configRetriever.getConfig(a -> {
-				config = a.result();
-
-				webClient = WebClient.create(vertx);
-
-				LOG.info("The site context was configured successfully. ");
-				promise.complete();
-			});
+			webClient = WebClient.create(vertx);
+			promise.complete();
 		} catch(Exception ex) {
 			LOG.error("Unable to configure site context. ", ex);
 			promise.fail(ex);
@@ -124,20 +120,20 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 		Promise<Void> promise = Promise.promise();
 		try {
 			PgConnectOptions pgOptions = new PgConnectOptions();
-			Integer jdbcMaxPoolSize = config.getInteger(ConfigKeys.JDBC_MAX_POOL_SIZE, 1);
+			Integer jdbcMaxPoolSize = config().getInteger(ConfigKeys.JDBC_MAX_POOL_SIZE, 1);
 
-			pgOptions.setPort(config.getInteger(ConfigKeys.JDBC_PORT));
-			pgOptions.setHost(config.getString(ConfigKeys.JDBC_HOST));
-			pgOptions.setDatabase(config.getString(ConfigKeys.JDBC_DATABASE));
-			pgOptions.setUser(config.getString(ConfigKeys.JDBC_USERNAME));
-			pgOptions.setPassword(config.getString(ConfigKeys.JDBC_PASSWORD));
-			pgOptions.setIdleTimeout(config.getInteger(ConfigKeys.JDBC_MAX_IDLE_TIME, 10));
-			pgOptions.setIdleTimeoutUnit(TimeUnit.SECONDS);
-			pgOptions.setConnectTimeout(config.getInteger(ConfigKeys.JDBC_CONNECT_TIMEOUT, 5));
+			pgOptions.setPort(config().getInteger(ConfigKeys.JDBC_PORT));
+			pgOptions.setHost(config().getString(ConfigKeys.JDBC_HOST));
+			pgOptions.setDatabase(config().getString(ConfigKeys.JDBC_DATABASE));
+			pgOptions.setUser(config().getString(ConfigKeys.JDBC_USERNAME));
+			pgOptions.setPassword(config().getString(ConfigKeys.JDBC_PASSWORD));
+			pgOptions.setIdleTimeout(config().getInteger(ConfigKeys.JDBC_MAX_IDLE_TIME, 24));
+			pgOptions.setIdleTimeoutUnit(TimeUnit.HOURS);
+			pgOptions.setConnectTimeout(config().getInteger(ConfigKeys.JDBC_CONNECT_TIMEOUT, 86400000));
 
 			PoolOptions poolOptions = new PoolOptions();
 			poolOptions.setMaxSize(jdbcMaxPoolSize);
-			poolOptions.setMaxWaitQueueSize(config.getInteger(ConfigKeys.JDBC_MAX_WAIT_QUEUE_SIZE, 10));
+			poolOptions.setMaxWaitQueueSize(config().getInteger(ConfigKeys.JDBC_MAX_WAIT_QUEUE_SIZE, 10));
 
 			pgPool = PgPool.pool(vertx, pgOptions, poolOptions);
 
@@ -152,9 +148,8 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 	}
 
 	/**	
-	 * 
-	 * Val.Error.enUS:Could not configure the shared worker executor. 
-	 * Val.Success.enUS:The shared worker executor was configured successfully. 
+	 * Val.Fail.enUS:Could not configure the shared worker executor. 
+	 * Val.Complete.enUS:The shared worker executor "{}" was configured successfully. 
 	 * 
 	 *	Configure a shared worker executor for running blocking tasks in the background. 
 	 *	Return a promise that configures the shared worker executor. 
@@ -162,10 +157,13 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 	private Future<Void> configureSharedWorkerExecutor() {
 		Promise<Void> promise = Promise.promise();
 		try {
-			workerExecutor = vertx.createSharedWorkerExecutor("WorkerExecutor");
+			String name = "WorkerVerticle-WorkerExecutor";
+			Integer workerPoolSize = System.getenv(ConfigKeys.WORKER_POOL_SIZE) == null ? 5 : Integer.parseInt(System.getenv(ConfigKeys.WORKER_POOL_SIZE));
+			workerExecutor = vertx.createSharedWorkerExecutor(name, workerPoolSize);
+			LOG.info(configureSharedWorkerExecutorComplete, name);
 			promise.complete();
 		} catch (Exception ex) {
-			LOG.error(configureSharedWorkerExecutorError, ex);
+			LOG.error(configureSharedWorkerExecutorFail, ex);
 			promise.fail(ex);
 		}
 		return promise.future();
@@ -179,14 +177,14 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 	private Future<Void> configureEmail() {
 		Promise<Void> promise = Promise.promise();
 		try {
-			String emailHost = config.getString(ConfigKeys.EMAIL_HOST);
+			String emailHost = config().getString(ConfigKeys.EMAIL_HOST);
 			if(StringUtils.isNotBlank(emailHost)) {
 				MailConfig mailConfig = new MailConfig();
 				mailConfig.setHostname(emailHost);
-				mailConfig.setPort(config.getInteger(ConfigKeys.EMAIL_PORT));
-				mailConfig.setSsl(config.getBoolean(ConfigKeys.EMAIL_SSL));
-				mailConfig.setUsername(config.getString(ConfigKeys.EMAIL_USERNAME));
-				mailConfig.setPassword(config.getString(ConfigKeys.EMAIL_PASSWORD));
+				mailConfig.setPort(config().getInteger(ConfigKeys.EMAIL_PORT));
+				mailConfig.setSsl(config().getBoolean(ConfigKeys.EMAIL_SSL));
+				mailConfig.setUsername(config().getString(ConfigKeys.EMAIL_USERNAME));
+				mailConfig.setPassword(config().getString(ConfigKeys.EMAIL_PASSWORD));
 				MailClient.createShared(vertx, mailConfig);
 				LOG.info(configureEmailComplete);
 				promise.complete();
@@ -205,14 +203,246 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 	 * Import initial data
 	 * Val.Complete.enUS:Importing initial data completed. 
 	 * Val.Fail.enUS:Importing initial data failed. 
+	 * Val.Skip.enUS:Skip importing data. 
 	 **/
 	private Future<Void> importData() {
 		Promise<Void> promise = Promise.promise();
 		try {
-			LOG.info(importDataComplete);
-			promise.complete();
+			if(config().getBoolean(ConfigKeys.ENABLE_IMPORT_DATA, false)) {
+
+				webClient.post(config().getInteger(ConfigKeys.DOMO_PORT), config().getString(ConfigKeys.DOMO_HOST_NAME), config().getString(ConfigKeys.DOMO_AUTH_TOKEN_URI))
+						.expect(ResponsePredicate.SC_OK)
+						.ssl(config().getBoolean(ConfigKeys.DOMO_SSL))
+						.authentication(new UsernamePasswordCredentials(config().getString(ConfigKeys.DOMO_AUTH_CLIENT_ID), config().getString(ConfigKeys.DOMO_AUTH_CLIENT_SECRET)))
+						.putHeader("Content-Type", "application/x-www-form-urlencoded")
+						.sendForm(MultiMap.caseInsensitiveMultiMap().set("grant_type", "client_credentials").set("scope", config().getString(ConfigKeys.DOMO_AUTH_SCOPE)))
+						.onSuccess(tokenResponse -> {
+					JsonObject token = tokenResponse.bodyAsJsonObject();
+					webClient.post(config().getInteger(ConfigKeys.DOMO_PORT), config().getString(ConfigKeys.DOMO_HOST_NAME), config().getString(ConfigKeys.DOMO_DATASET_CPP_URI))
+							.expect(ResponsePredicate.SC_OK)
+							.ssl(config().getBoolean(ConfigKeys.DOMO_SSL))
+							.authentication(new TokenCredentials(token.getString("access_token")))
+							.sendJson(new JsonObject().put("sql", "SELECT * FROM table"))
+							.onSuccess(cppResponse -> {
+						JsonObject cppData = cppResponse.bodyAsJsonObject();
+						List<Future> futures = new ArrayList<>();
+
+						cppData.getJsonArray("rows").stream().map(o -> (JsonArray)o).forEach(row -> {
+							String donorFullName = row.getString(0);
+							Long donorId = row.getLong(1);
+							String donorAttributeName = row.getString(2);
+							Long donorAttributeId = row.getLong(3);
+							String donorInKind = row.getString(4);
+							BigDecimal donorTotal = BigDecimal.valueOf(row.getDouble(5));
+							BigDecimal donorYtd = BigDecimal.valueOf(row.getDouble(6));
+							BigDecimal donorQ1 = BigDecimal.valueOf(row.getDouble(7));
+							BigDecimal donorQ2 = BigDecimal.valueOf(row.getDouble(8));
+							BigDecimal donorQ3 = BigDecimal.valueOf(row.getDouble(9));
+							BigDecimal donorQ4 = BigDecimal.valueOf(row.getDouble(10));
+							String donorParentName = row.getString(11);
+		
+							JsonObject body = new JsonObject()
+									.put("saves", new JsonArray().add("inheritPk").add("donorFullName").add("donorId").add("stateKey").add("donorAttributeName").add("donorAttributeId").add("donorInKind").add("donorTotal").add("donorYtd").add("donorQ1").add("donorQ2").add("donorQ3").add("donorQ4").add("donorParentName"))
+									.put("pk", Optional.ofNullable(donorId).map(v -> v.toString()).orElse(null))
+									.put("donorFullName", Optional.ofNullable(donorFullName).map(v -> v.trim()).orElse(null))
+									.put("donorId", Optional.ofNullable(donorId).map(v -> v.toString()).orElse(null))
+									.put("donorAttributeName", Optional.ofNullable(donorAttributeName).map(v -> v.trim()).orElse(null))
+									.put("donorAttributeId", Optional.ofNullable(donorAttributeId).map(v -> v.toString()).orElse(null))
+									.put("donorInKind", Optional.ofNullable(donorInKind).map(v -> v.toString()).orElse(null))
+									.put("donorTotal", Optional.ofNullable(donorTotal).map(v -> v.toString()).orElse(null))
+									.put("donorYtd", Optional.ofNullable(donorYtd).map(v -> v.toString()).orElse(null))
+									.put("donorQ1", Optional.ofNullable(donorQ1).map(v -> v.toString()).orElse(null))
+									.put("donorQ2", Optional.ofNullable(donorQ2).map(v -> v.toString()).orElse(null))
+									.put("donorQ3", Optional.ofNullable(donorQ3).map(v -> v.toString()).orElse(null))
+									.put("donorQ4", Optional.ofNullable(donorQ4).map(v -> v.toString()).orElse(null))
+									.put("donorParentName", Optional.ofNullable(donorParentName).map(v -> v.trim()).orElse(null))
+									;
+							JsonObject params = new JsonObject();
+							params.put("body", body);
+							params.put("path", new JsonObject());
+							params.put("cookie", new JsonObject());
+							params.put("query", new JsonObject().put("q", "*:*").put("var", new JsonArray().add("refresh:false")));
+							JsonObject context = new JsonObject().put("params", params);
+							JsonObject json = new JsonObject().put("context", context);
+							futures.add(vertx.eventBus().request(String.format("choice-reports-enUS-%s", "ChoiceDonor"), json, new DeliveryOptions().addHeader("action", String.format("putimport%sFuture", "ChoiceDonor"))));
+						});
+						CompositeFuture.all(futures).onSuccess(a -> {
+							LOG.info(importDataComplete);
+							promise.complete();
+						}).onFailure(ex -> {
+							LOG.error(importDataFail, ex);
+							promise.fail(ex);
+						});
+
+
+
+
+					}).onFailure(ex -> {
+						LOG.error(importDataFail, ex);
+						promise.fail(ex);
+					});
+				}).onFailure(ex -> {
+					LOG.error(importDataFail, ex);
+					promise.fail(ex);
+				});
+			} else {
+				LOG.info(importDataSkip);
+				promise.complete();
+			}
 		} catch (Exception ex) {
-			LOG.error(configureEmailFail, ex);
+			LOG.error(importDataFail, ex);
+			promise.fail(ex);
+		}
+		return promise.future();
+	}
+
+	/**	
+	 * Val.Complete.enUS:Syncing database to Solr completed. 
+	 * Val.Fail.enUS:Syncing database to Solr failed. 
+	 * Val.Skip.enUS:Skip syncing database to Solr. 
+	 **/
+	private Future<Void> syncDbToSolr() {
+		Promise<Void> promise = Promise.promise();
+		try {
+			if(config().getBoolean(ConfigKeys.ENABLE_DB_SOLR_SYNC, false)) {
+				Long millis = 1000L * config().getInteger(ConfigKeys.TIMER_DB_SOLR_SYNC_IN_SECONDS, 10);
+				vertx.setTimer(millis, a -> {
+					syncData("ChoiceDonor").onSuccess(b -> {
+						LOG.info(syncDbToSolrComplete);
+						promise.complete();
+					}).onFailure(ex -> {
+						LOG.error(syncDbToSolrFail, ex);
+						promise.fail(ex);
+					});
+				});
+			} else {
+				LOG.info(syncDbToSolrSkip);
+				promise.complete();
+			}
+		} catch(Exception ex) {
+			LOG.error(syncDbToSolrFail, ex);
+			promise.fail(ex);
+		}
+		return promise.future();
+	}
+
+	/**	
+	 * Sync %s data from the database to Solr. 
+	 * Val.Complete.enUS:%s data sync completed. 
+	 * Val.Fail.enUS:%s data sync failed. 
+	 * Val.CounterResetFail.enUS:%s data sync failed to reset counter. 
+	 * Val.Skip.enUS:%s data sync skipped. 
+	 * Val.Started.enUS:%s data sync started. 
+	 **/
+	private Future<Void> syncData(String tableName) {
+		Promise<Void> promise = Promise.promise();
+		try {
+			if(config().getBoolean(String.format("%s%s", ConfigKeys.ENABLE_DB_SOLR_SYNC, tableName), true)) {
+
+				LOG.info(String.format(syncDataStarted, tableName));
+				pgPool.withTransaction(sqlConnection -> {
+					Promise<Void> promise1 = Promise.promise();
+					sqlConnection.query(String.format("SELECT count(pk) FROM %s", tableName)).execute().onSuccess(countRowSet -> {
+						try {
+							Optional<Long> rowCountOptional = Optional.ofNullable(countRowSet.iterator().next()).map(row -> row.getLong(0));
+							if(rowCountOptional.isPresent()) {
+								Long apiCounterResume = config().getLong(ConfigKeys.API_COUNTER_RESUME);
+								Integer apiCounterFetch = config().getInteger(ConfigKeys.API_COUNTER_FETCH);
+								ApiCounter apiCounter = new ApiCounter();
+	
+								SiteRequestEnUS siteRequest = new SiteRequestEnUS();
+								siteRequest.setConfig(config());
+								siteRequest.initDeepSiteRequestEnUS(siteRequest);
+		
+								ApiRequest apiRequest = new ApiRequest();
+								apiRequest.setRows(apiCounterFetch.intValue());
+								apiRequest.setNumFound(rowCountOptional.get());
+								apiRequest.setNumPATCH(apiCounter.getQueueNum());
+								apiRequest.setCreated(ZonedDateTime.now(ZoneId.of(config().getString(ConfigKeys.SITE_ZONE))));
+								apiRequest.initDeepApiRequest(siteRequest);
+								vertx.eventBus().publish(String.format("websocket%s", tableName), JsonObject.mapFrom(apiRequest));
+		
+								sqlConnection.prepare(String.format("SELECT pk FROM %s", tableName)).onSuccess(preparedStatement -> {
+									apiCounter.setQueueNum(0L);
+									apiCounter.setTotalNum(0L);
+									try {
+										RowStream<Row> stream = preparedStatement.createStream(apiCounterFetch);
+										stream.pause();
+										stream.fetch(apiCounterFetch);
+										stream.exceptionHandler(ex -> {
+											LOG.error(String.format(syncDataFail, tableName), new RuntimeException(ex));
+											promise1.fail(ex);
+										});
+										stream.endHandler(v -> {
+											LOG.info(String.format(syncDataComplete, tableName));
+											promise1.complete();
+										});
+										stream.handler(row -> {
+											apiCounter.incrementQueueNum();
+											try {
+												vertx.eventBus().request(
+														String.format("choice-reports-enUS-%s", tableName)
+														, new JsonObject().put(
+																"context"
+																, new JsonObject().put(
+																		"params"
+																		, new JsonObject()
+																				.put("body", new JsonObject().put("pk", row.getLong(0).toString()))
+																				.put("path", new JsonObject())
+																				.put("cookie", new JsonObject())
+																				.put("query", new JsonObject().put("q", "*:*").put("fq", new JsonArray().add("pk:" + row.getLong(0))).put("var", new JsonArray().add("refresh:false")))
+																)
+														)
+														, new DeliveryOptions().addHeader("action", String.format("patch%sFuture", tableName))).onSuccess(a -> {
+													apiCounter.incrementTotalNum();
+													apiCounter.decrementQueueNum();
+													if(apiCounter.getQueueNum().compareTo(apiCounterResume) == 0) {
+														stream.fetch(apiCounterFetch);
+														apiRequest.setNumPATCH(apiCounter.getTotalNum());
+														apiRequest.setTimeRemaining(apiRequest.calculateTimeRemaining());
+														vertx.eventBus().publish(String.format("websocket%s", tableName), JsonObject.mapFrom(apiRequest));
+													}
+												}).onFailure(ex -> {
+													LOG.error(String.format(syncDataFail, tableName), ex);
+													promise1.fail(ex);
+												});
+											} catch (Exception ex) {
+												LOG.error(String.format(syncDataFail, tableName), ex);
+												promise1.fail(ex);
+											}
+										});
+									} catch (Exception ex) {
+										LOG.error(String.format(syncDataFail, tableName), ex);
+										promise1.fail(ex);
+									}
+								}).onFailure(ex -> {
+									LOG.error(String.format(syncDataFail, tableName), ex);
+									promise1.fail(ex);
+								});
+							} else {
+								promise1.complete();
+							}
+						} catch (Exception ex) {
+							LOG.error(String.format(syncDataFail, tableName), ex);
+							promise1.fail(ex);
+						}
+					}).onFailure(ex -> {
+						LOG.error(String.format(syncDataFail, tableName), ex);
+						promise1.fail(ex);
+					});
+					return promise1.future();
+				}).onSuccess(a -> {
+					promise.complete();
+				}).onFailure(ex -> {
+					LOG.error(String.format(syncDataFail, tableName), ex);
+					promise.fail(ex);
+				});
+			} else {
+				LOG.info(String.format(syncDataSkip, tableName));
+				promise.complete();
+			}
+		} catch (Exception ex) {
+			LOG.error(String.format(syncDataFail, tableName), ex);
 			promise.fail(ex);
 		}
 		return promise.future();
@@ -225,20 +455,40 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 	 **/
 	private Future<Void> refreshAllData() {
 		Promise<Void> promise = Promise.promise();
-		if(config.getBoolean(ConfigKeys.ENABLE_REFRESH_DATA, false)) {
-			vertx.setTimer(1000 * 10, a -> {
-				refreshData("SiteUser").onSuccess(b -> {
-					LOG.info(refreshAllDataComplete);
-					promise.complete();
+		vertx.setTimer(1000 * 10, a -> {
+			if(config().getBoolean(ConfigKeys.ENABLE_REFRESH_DATA, false)) {
+				refreshData("TrafficContraband").onSuccess(b -> {
+					refreshData("SearchBasis").onSuccess(c -> {
+						refreshData("TrafficSearch").onSuccess(d -> {
+							refreshData("TrafficPerson").onSuccess(e -> {
+								refreshData("TrafficStop").onSuccess(f -> {
+									LOG.info(refreshAllDataComplete);
+									promise.complete();
+								}).onFailure(ex -> {
+									LOG.error(refreshAllDataFail, ex);
+									promise.fail(ex);
+								});
+							}).onFailure(ex -> {
+								LOG.error(refreshAllDataFail, ex);
+								promise.fail(ex);
+							});
+						}).onFailure(ex -> {
+							LOG.error(refreshAllDataFail, ex);
+							promise.fail(ex);
+						});
+					}).onFailure(ex -> {
+						LOG.error(refreshAllDataFail, ex);
+						promise.fail(ex);
+					});
 				}).onFailure(ex -> {
 					LOG.error(refreshAllDataFail, ex);
 					promise.fail(ex);
 				});
-			});
-		} else {
-			LOG.info(refreshAllDataSkip);
-			promise.complete();
-		}
+			} else {
+				LOG.info(refreshAllDataSkip);
+				promise.complete();
+			}
+		});
 		return promise.future();
 	}
 
@@ -251,12 +501,12 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 	private Future<Void> refreshData(String tableName) {
 		Promise<Void> promise = Promise.promise();
 		try {
-			if(config.getBoolean(String.format("%s%s", ConfigKeys.ENABLE_REFRESH_DATA, tableName), true)) {
+			if(config().getBoolean(String.format("%s%s", ConfigKeys.ENABLE_REFRESH_DATA, tableName), true)) {
 				JsonObject params = new JsonObject();
 				params.put("body", new JsonObject());
 				params.put("path", new JsonObject());
 				params.put("cookie", new JsonObject());
-				params.put("query", new JsonObject().put("q", "*:*"));
+				params.put("query", new JsonObject().put("q", "*:*").put("var", new JsonArray().add("refresh:false")));
 				JsonObject context = new JsonObject().put("params", params);
 				JsonObject json = new JsonObject().put("context", context);
 				vertx.eventBus().request(String.format("choice-reports-enUS-%s", tableName), json, new DeliveryOptions().addHeader("action", String.format("patch%s", tableName))).onSuccess(a -> {

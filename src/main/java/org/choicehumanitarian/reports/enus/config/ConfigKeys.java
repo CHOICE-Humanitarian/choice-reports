@@ -59,6 +59,21 @@ public class ConfigKeys {
 	/**
 	 * 
 	 **/
+	public static final String API_COUNTER_PAUSE = "apiCounterPause";
+
+	/**
+	 * 
+	 **/
+	public static final String API_COUNTER_RESUME = "apiCounterResume";
+
+	/**
+	 * 
+	 **/
+	public static final String API_COUNTER_FETCH = "apiCounterFetch";
+
+	/**
+	 * 
+	 **/
 	public static final String AUTH_REALM = "authRealm";
 
 	/**
@@ -244,11 +259,6 @@ public class ConfigKeys {
 	/**
 	 * 
 	 **/
-	public static final String NUMBER_EXECUTORS = "numberExecutors";
-
-	/**
-	 * 
-	 **/
 	public static final String OPEN_API_VERSION = "openApiVersion";
 
 	/**
@@ -359,6 +369,11 @@ public class ConfigKeys {
 	/**
 	 * 
 	 **/
+	public static final String ENABLE_IMPORT_DATA = "enableImportData";
+
+	/**
+	 * 
+	 **/
 	public static final String ENABLE_DB_SOLR_SYNC = "enableDbSolrSync";
 
 	/**
@@ -380,4 +395,59 @@ public class ConfigKeys {
 	 * 
 	 **/
 	public static final String VERTX_WARNING_EXCEPTION_SECONDS = "vertxWarningExceptionSeconds";
+
+	/**
+	 * 
+	 **/
+	public static final String ZOOKEEPER_HOST_NAME = "zookeeperHostName";
+
+	/**
+	 * 
+	 **/
+	public static final String ZOOKEEPER_PORT = "zookeeperPort";
+
+	/**
+	 * 
+	 **/
+	public static final String ZOOKEEPER_HOSTS = "zookeeperHosts";
+
+	/**
+	 * 
+	 **/
+	public static final String DOMO_HOST_NAME = "DOMO_HOST_NAME";
+
+	/**
+	 * 
+	 **/
+	public static final String DOMO_PORT = "DOMO_PORT";
+
+	/**
+	 * 
+	 **/
+	public static final String DOMO_SSL = "DOMO_SSL";
+
+	/**
+	 * 
+	 **/
+	public static final String DOMO_AUTH_TOKEN_URI = "DOMO_AUTH_TOKEN_URI";
+
+	/**
+	 * 
+	 **/
+	public static final String DOMO_AUTH_SCOPE = "DOMO_AUTH_SCOPE";
+
+	/**
+	 * 
+	 **/
+	public static final String DOMO_AUTH_CLIENT_ID = "DOMO_AUTH_CLIENT_ID";
+
+	/**
+	 * 
+	 **/
+	public static final String DOMO_AUTH_CLIENT_SECRET = "DOMO_AUTH_CLIENT_SECRET";
+
+	/**
+	 * 
+	 **/
+	public static final String DOMO_DATASET_CPP_URI = "DOMO_DATASET_CPP_URI";
 }

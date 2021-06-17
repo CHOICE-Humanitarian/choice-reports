@@ -1,4 +1,4 @@
-package org.choicehumanitarian.reports.enus.user;
+package org.choicehumanitarian.reports.enus.user; 
 
 import java.util.List;
 
@@ -34,17 +34,6 @@ import org.choicehumanitarian.reports.enus.wrap.Wrap;
  */
 public class SiteUser extends SiteUserGen<BaseModel> {
 
-	/**   
-	 * {@inheritDoc}
-	 * Var.enUS: userKey
-	 * Indexed: true
-	 * Stored: true
-	 * Define: true
-	 * Modify: false
-	 */                 
-	protected void _userKey(Wrap<Long> c) {
-	}
-
 	/**
 	 * {@inheritDoc}
 	 * Indexed: true
@@ -52,16 +41,6 @@ public class SiteUser extends SiteUserGen<BaseModel> {
 	 */
 	protected void _userKeys(List<Long> l) {
 		l.add(pk);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
-	 * Define: true
-	 * DisplayName: user ID
-	 */
-	protected void _userId(Wrap<String> c) {
 	}
 
 	/**

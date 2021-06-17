@@ -1,10 +1,12 @@
 package org.choicehumanitarian.reports.enus.request.api; 
 
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
+import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import org.choicehumanitarian.reports.enus.wrap.Wrap;
 
@@ -54,5 +56,27 @@ public class ApiRequest extends ApiRequestGen<Object> {
 	}
 
 	protected void _vars(List<String> c) {
+	}
+
+	protected void _timeRemaining(Wrap<String> w) {
+		w.o(calculateTimeRemaining());
+	}
+
+	public String calculateTimeRemaining() {
+		ZonedDateTime now = ZonedDateTime.now(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE)));
+		Long timeDifferenceNow = ChronoUnit.SECONDS.between(created, now);
+		Double ratio = ((double) numPATCH / numFound);
+		Double remainingSeconds = ((double) timeDifferenceNow) / ratio - ((double) timeDifferenceNow);
+
+		// Calculating the difference in Hours
+		Long hours = ((Double) (remainingSeconds / 60 / 60)).longValue();
+
+		// Calculating the difference in Minutes
+		Long minutes = ((Double) ((remainingSeconds / 60) % 60)).longValue();
+
+		// Calculating the difference in Seconds
+		Long seconds = ((Double) (remainingSeconds % 60)).longValue();
+
+		return (hours > 0L ? hours + " hours " : "") + (minutes > 0L ? minutes + " minutes " : "") + (hours == 0L && minutes <= 1L ? seconds + " seconds." : "");
 	}
 }

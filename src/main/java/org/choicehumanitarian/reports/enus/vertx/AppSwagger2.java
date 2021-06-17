@@ -251,7 +251,7 @@ public class AppSwagger2 extends AppSwagger2Gen<Object> {
 					SolrQuery searchEntites = new SolrQuery();
 					searchEntites.setQuery("*:*");
 					searchEntites.setRows(1000000);
-					searchEntites.addFilterQuery("appliChemin_indexed_string:" + ClientUtils.escapeQueryChars(config.getString(ConfigKeys.APP_PATH)));
+					searchEntites.addFilterQuery("appliChemin_indexed_string:" + ClientUtils.escapeQueryChars(appPath));
 					searchEntites.addFilterQuery("classeCheminAbsolu_indexed_string:" + ClientUtils.escapeQueryChars(classAbsolutePath));
 					searchEntites.addFilterQuery("partEstEntite_indexed_boolean:true");
 					searchEntites.addSort("partNumero_indexed_int", ORDER.asc);

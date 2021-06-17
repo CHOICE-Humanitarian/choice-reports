@@ -10,7 +10,6 @@ import org.choicehumanitarian.reports.enus.base.BaseApiServiceImpl;
 import io.vertx.ext.web.client.WebClient;
 import java.util.Objects;
 import io.vertx.core.WorkerExecutor;
-import java.util.concurrent.Semaphore;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.pgclient.PgPool;
 import io.vertx.ext.auth.authorization.AuthorizationProvider;
@@ -107,8 +106,8 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 
 	protected static final Logger LOG = LoggerFactory.getLogger(SiteUserEnUSGenApiServiceImpl.class);
 
-	public SiteUserEnUSGenApiServiceImpl(Semaphore semaphore, EventBus eventBus, JsonObject config, WorkerExecutor workerExecutor, PgPool pgPool, WebClient webClient, OAuth2Auth oauth2AuthenticationProvider, AuthorizationProvider authorizationProvider) {
-		super(semaphore, eventBus, config, workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider);
+	public SiteUserEnUSGenApiServiceImpl(EventBus eventBus, JsonObject config, WorkerExecutor workerExecutor, PgPool pgPool, WebClient webClient, OAuth2Auth oauth2AuthenticationProvider, AuthorizationProvider authorizationProvider) {
+		super(eventBus, config, workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider);
 	}
 
 	// Search //
@@ -117,8 +116,8 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 	public void searchSiteUser(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
 		user(serviceRequest).onSuccess(siteRequest -> {
 			try {
-				siteRequest.setRequestUri("/api/user");
-				siteRequest.setRequestMethod("Search");
+				siteRequest.setRequestUri(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("uri")).orElse(null));
+				siteRequest.setRequestMethod(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("method")).orElse(null));
 				{
 					searchSiteUserList(siteRequest, false, true, false, "/api/user", "Search").onSuccess(listSiteUser -> {
 						response200SearchSiteUser(listSiteUser).onSuccess(response -> {
@@ -306,8 +305,8 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 		user(serviceRequest).onSuccess(siteRequest -> {
 			try {
 				siteRequest.setJsonObject(body);
-				siteRequest.setRequestUri("/api/user");
-				siteRequest.setRequestMethod("PATCH");
+				siteRequest.setRequestUri(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("uri")).orElse(null));
+				siteRequest.setRequestMethod(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("method")).orElse(null));
 				{
 					serviceRequest.getParams().getJsonObject("query").put("rows", 100);
 					searchSiteUserList(siteRequest, false, true, true, "/api/user", "PATCH").onSuccess(listSiteUser -> {
@@ -381,25 +380,18 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 		SiteRequestEnUS siteRequest = listSiteUser.getSiteRequest_();
 		listSiteUser.getList().forEach(o -> {
 			futures.add(Future.future(promise1 -> {
-				workerExecutor.executeBlocking(blockingCodeHandler -> {
-					try {
-						semaphore.acquire();
-						Long pk = o.getPk();
+				Long pk = o.getPk();
 
-						JsonObject params = new JsonObject();
-						params.put("body", siteRequest.getJsonObject().put(SiteUser.VAR_pk, pk.toString()));
-						params.put("path", new JsonObject());
-						params.put("cookie", new JsonObject());
-						params.put("query", new JsonObject().put("q", "*:*").put("fq", new JsonArray().add("pk:" + pk)));
-						JsonObject context = new JsonObject().put("params", params);
-						JsonObject json = new JsonObject().put("context", context);
-						eventBus.send("choice-reports-enUS-SiteUser", json, new DeliveryOptions().addHeader("action", "patchSiteUserFuture"));
-						blockingCodeHandler.complete();
-					} catch(Exception ex) {
-						LOG.error(String.format("listPATCHSiteUser failed. "), ex);
-						blockingCodeHandler.fail(ex);
-					}
-				}).onSuccess(a -> {
+				JsonObject params = new JsonObject();
+				params.put("body", siteRequest.getJsonObject().put(SiteUser.VAR_pk, pk.toString()));
+				params.put("path", new JsonObject());
+				params.put("cookie", new JsonObject());
+				params.put("header", new JsonObject());
+				params.put("form", new JsonObject());
+				params.put("query", new JsonObject().put("q", "*:*").put("fq", new JsonArray().add("pk:" + pk)));
+				JsonObject context = new JsonObject().put("params", params);
+				JsonObject json = new JsonObject().put("context", context);
+				eventBus.request("choice-reports-enUS-SiteUser", json, new DeliveryOptions().addHeader("action", "patchSiteUserFuture")).onSuccess(a -> {
 					promise1.complete();
 				}).onFailure(ex -> {
 					LOG.error(String.format("listPATCHSiteUser failed. "), ex);
@@ -432,8 +424,8 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 	}
 
 	@Override
-	public void patchSiteUserFuture(JsonObject json, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		SiteRequestEnUS siteRequest = generateSiteRequestEnUS(null, serviceRequest, json);
+	public void patchSiteUserFuture(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
+		SiteRequestEnUS siteRequest = generateSiteRequestEnUS(null, serviceRequest, body);
 		SiteUser o = new SiteUser();
 		o.setSiteRequest_(siteRequest);
 		ApiRequest apiRequest = new ApiRequest();
@@ -442,12 +434,13 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 		apiRequest.setNumPATCH(0L);
 		apiRequest.initDeepApiRequest(siteRequest);
 		siteRequest.setApiRequest_(apiRequest);
-		o.setPk(json.getString(SiteUser.VAR_pk));
+		if(Optional.ofNullable(serviceRequest.getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getJsonArray("var")).orElse(new JsonArray()).stream().filter(s -> "refresh:false".equals(s)).count() > 0L) {
+			siteRequest.getRequestVars().put( "refresh", "false" );
+		}
+		o.setPk(body.getString(SiteUser.VAR_pk));
 		patchSiteUserFuture(o, false).onSuccess(a -> {
-			semaphore.release();
-			eventHandler.handle(Future.succeededFuture());
+			eventHandler.handle(Future.succeededFuture(ServiceResponse.completedWithJson(Buffer.buffer(new JsonObject().encodePrettily()))));
 		}).onFailure(ex -> {
-			semaphore.release();
 			eventHandler.handle(Future.failedFuture(ex));
 		});
 	}
@@ -557,14 +550,6 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 							num++;
 							bParams.add(o2.sqlDeleted());
 						break;
-					case "setUserId":
-							o2.setUserId(jsonObject.getString(entityVar));
-							if(bParams.size() > 0)
-								bSql.append(", ");
-							bSql.append(SiteUser.VAR_userId + "=$" + num);
-							num++;
-							bParams.add(o2.sqlUserId());
-						break;
 					case "setUserName":
 							o2.setUserName(jsonObject.getString(entityVar));
 							if(bParams.size() > 0)
@@ -664,8 +649,8 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 		user(serviceRequest).onSuccess(siteRequest -> {
 			try {
 				siteRequest.setJsonObject(body);
-				siteRequest.setRequestUri("/api/user");
-				siteRequest.setRequestMethod("POST");
+				siteRequest.setRequestUri(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("uri")).orElse(null));
+				siteRequest.setRequestMethod(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("method")).orElse(null));
 				{
 					ApiRequest apiRequest = new ApiRequest();
 					apiRequest.setRows(1);
@@ -674,15 +659,20 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 					apiRequest.initDeepApiRequest(siteRequest);
 					siteRequest.setApiRequest_(apiRequest);
 					eventBus.publish("websocketSiteUser", JsonObject.mapFrom(apiRequest).toString());
-					postSiteUserFuture(siteRequest, false).onSuccess(siteUser -> {
-						apiRequest.setPk(siteUser.getPk());
-						response200POSTSiteUser(siteUser).onSuccess(response -> {
-							eventHandler.handle(Future.succeededFuture(response));
-							LOG.debug(String.format("postSiteUser succeeded. "));
-						}).onFailure(ex -> {
-							LOG.error(String.format("postSiteUser failed. "), ex);
-							error(siteRequest, eventHandler, ex);
-						});
+					JsonObject params = new JsonObject();
+					params.put("body", siteRequest.getJsonObject());
+					params.put("path", new JsonObject());
+					params.put("cookie", new JsonObject());
+					params.put("header", new JsonObject());
+					params.put("form", new JsonObject());
+					params.put("query", new JsonObject());
+					JsonObject context = new JsonObject().put("params", params);
+					JsonObject json = new JsonObject().put("context", context);
+					eventBus.request("choice-reports-enUS-SiteUser", json, new DeliveryOptions().addHeader("action", "postSiteUserFuture")).onSuccess(a -> {
+						JsonObject responseBody = (JsonObject)a.body();
+						apiRequest.setPk(Long.parseLong(responseBody.getString("pk")));
+						eventHandler.handle(Future.succeededFuture(ServiceResponse.completedWithJson(Buffer.buffer(responseBody.encodePrettily()))));
+						LOG.debug(String.format("postSiteUser succeeded. "));
 					}).onFailure(ex -> {
 						LOG.error(String.format("postSiteUser failed. "), ex);
 						error(siteRequest, eventHandler, ex);
@@ -709,19 +699,20 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 
 
 	@Override
-	public void postSiteUserFuture(JsonObject json, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		SiteRequestEnUS siteRequest = generateSiteRequestEnUS(null, serviceRequest, json);
+	public void postSiteUserFuture(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
+		SiteRequestEnUS siteRequest = generateSiteRequestEnUS(null, serviceRequest, body);
 		ApiRequest apiRequest = new ApiRequest();
 		apiRequest.setRows(1);
 		apiRequest.setNumFound(1L);
 		apiRequest.setNumPATCH(0L);
 		apiRequest.initDeepApiRequest(siteRequest);
 		siteRequest.setApiRequest_(apiRequest);
+		if(Optional.ofNullable(serviceRequest.getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getJsonArray("var")).orElse(new JsonArray()).stream().filter(s -> "refresh:false".equals(s)).count() > 0L) {
+			siteRequest.getRequestVars().put( "refresh", "false" );
+		}
 		postSiteUserFuture(siteRequest, false).onSuccess(a -> {
-			semaphore.release();
-			eventHandler.handle(Future.succeededFuture());
+			eventHandler.handle(Future.succeededFuture(ServiceResponse.completedWithJson(Buffer.buffer(new JsonObject().encodePrettily()))));
 		}).onFailure(ex -> {
-			semaphore.release();
 			eventHandler.handle(Future.failedFuture(ex));
 		});
 	}
@@ -861,15 +852,6 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 						num++;
 						bParams.add(o2.sqlDeleted());
 						break;
-					case SiteUser.VAR_userId:
-						o2.setUserId(jsonObject.getString(entityVar));
-						if(bParams.size() > 0) {
-							bSql.append(", ");
-						}
-						bSql.append(SiteUser.VAR_userId + "=$" + num);
-						num++;
-						bParams.add(o2.sqlUserId());
-						break;
 					case SiteUser.VAR_userName:
 						o2.setUserName(jsonObject.getString(entityVar));
 						if(bParams.size() > 0) {
@@ -964,9 +946,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 		}
 		return promise.future();
 	}
-	public static final String VAR_userKey = "userKey";
 	public static final String VAR_userKeys = "userKeys";
-	public static final String VAR_userId = "userId";
 	public static final String VAR_userName = "userName";
 	public static final String VAR_userEmail = "userEmail";
 	public static final String VAR_userFirstName = "userFirstName";
@@ -1341,6 +1321,8 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 					JsonObject params = new JsonObject();
 					params.put("body", new JsonObject());
 					params.put("cookie", new JsonObject());
+					params.put("header", new JsonObject());
+					params.put("form", new JsonObject());
 					params.put("path", new JsonObject());
 					params.put("query", new JsonObject().put("q", "*:*").put("fq", new JsonArray().add("pk:" + o.getPk())));
 					JsonObject context = new JsonObject().put("params", params).put("user", siteRequest.getJsonPrincipal());

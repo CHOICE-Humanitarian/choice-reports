@@ -17,8 +17,6 @@ import org.choicehumanitarian.reports.enus.wrap.Wrap;
 
 
 /**
- * Model: true
- * Api: true
  * Indexed: true
  * 
  * Keyword: classSimpleNameCluster
@@ -38,7 +36,7 @@ public class BaseModel extends BaseModelGen<Object> {
 	 * PrimaryKey: true
 	 * Modify: false
 	 * HtmlRow: 1
-	 * HtmlCell: 3
+	 * HtmlCell: 1
 	 * DisplayName.enUS: primary key
 	 */
 	protected void _pk(Wrap<Long> c) {}
@@ -50,7 +48,7 @@ public class BaseModel extends BaseModelGen<Object> {
 	 * InheritPrimaryKey: true
 	 * Define: true
 	 */
-	protected void _inheritPk(Wrap<Long> c) {}
+	protected void _inheritPk(Wrap<String> c) {}
 
 	/**
 	 * {@inheritDoc}
@@ -58,7 +56,7 @@ public class BaseModel extends BaseModelGen<Object> {
 	 */
 	protected void _id(Wrap<String> c) {
 		if(pk != null)
-			c.o(pk.toString());
+			c.o(getClass().getSimpleName() + "_" + pk.toString());
 	}
 
 	/**
@@ -69,7 +67,7 @@ public class BaseModel extends BaseModelGen<Object> {
 	 * Modify: false
 	 * VarCreated: true
 	 * HtmlRow: 1
-	 * HtmlCell: 3
+	 * HtmlCell: 2
 	 * HtmlColumn: 2
 	 * DisplayName.enUS: created
 	 */
@@ -79,24 +77,14 @@ public class BaseModel extends BaseModelGen<Object> {
 	 * {@inheritDoc}
 	 * Indexed: true
 	 * Stored: true
-	 * Define: true
 	 * Modify: false
 	 * VarModified: true
 	 * HtmlRow: 1
-	 * HtmlCell: 4
+	 * HtmlCell: 3
 	 * DisplayName.enUS: modified
 	 */ 
 	protected void _modified(Wrap<ZonedDateTime> c) {
 		c.o(ZonedDateTime.now(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))));
-	}
-
-	/**   
-	 * {@inheritDoc}
-	 * Stored: true
-	 */ 
-	protected void  _modifiedIsoOffsetDateTime(Wrap<String> c) {
-		if(modified != null)
-			c.o(modified.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
 	}
 
 	/**
@@ -203,6 +191,8 @@ public class BaseModel extends BaseModelGen<Object> {
 	 * HtmlColumn: 2
 	 */ 
 	protected void _objectTitle(Wrap<String> c) {
+		if(pk != null)
+			c.o(pk.toString());
 	}
 
 	/**
@@ -234,103 +224,5 @@ public class BaseModel extends BaseModelGen<Object> {
 		}
 
 		return s;
-	}
-
-	protected void _objectNameVar(Wrap<String> c) {
-		if(objectId != null) {
-			Class<?> cl = getClass();
-
-			try {
-				String o = toId(StringUtils.join(StringUtils.splitByCharacterTypeCamelCase((String)FieldUtils.getField(cl, cl.getSimpleName() + "_NameVar").get(this)), "-"));
-				c.o(o);
-			} catch (Exception e) {
-				ExceptionUtils.rethrow(e);
-			}
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * Suggested: true
-	 */    
-	protected void _objectSuggest(Wrap<String> c) { 
-		StringBuilder b = new StringBuilder();
-		if(pk != null)
-			b.append(" ").append(pk);
-		if(objectNameVar != null)
-			b.append(" ").append(objectNameVar);
-		if(objectId != null)
-			b.append(" ").append(objectId);
-		if(objectTitle != null)
-			b.append(" ").append(objectTitle);
-		c.o(b.toString());
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * Text: true
-	 */ 
-	protected void _objectText(Wrap<String> c) { 
-		StringBuilder b = new StringBuilder();
-		if(pk != null)
-			b.append(" ").append(pk);
-		if(objectNameVar != null)
-			b.append(" ").append(objectNameVar);
-		if(objectId != null)
-			b.append(" ").append(objectId);
-		if(objectTitle != null)
-			b.append(" ").append(objectTitle);
-		c.o(b.toString());
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
-	 * VarUrlId: true
-	 */ 
-	protected void _pageUrlId(Wrap<String> c) {
-		if(objectId != null) {
-			String o = siteRequest_.getConfig().getString(ConfigKeys.SITE_BASE_URL) + "/" + objectNameVar + "/" + objectId;
-			c.o(o);
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
-	 * VarUrlPk: true
-	 */ 
-	protected void _pageUrlPk(Wrap<String> c) {
-		if(pk != null) {
-			String o = siteRequest_.getConfig().getString(ConfigKeys.SITE_BASE_URL) + "/" + objectNameVar + "/" + pk;
-			c.o(o);
-		}
-	}
-
-	/**	
-	 * {@inheritDoc}
-	 * Indexe: true
-	 * Stocke: true
-	 **/   
-	protected void _pageUrlApi(Wrap<String> c)  {
-		if(pk != null) {
-			String o = siteRequest_.getConfig().getString(ConfigKeys.SITE_BASE_URL) + "/api/" + objectNameVar + "/" + pk;
-			c.o(o);
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * H1: true
-	 */ 
-	protected void _pageH1(Wrap<String> c) {
-		try {
-			Class<?> cl = getClass();
-			c.o((String)FieldUtils.getField(cl, cl.getSimpleName() + "_NameSingular").get(this) + ": " + objectTitle);
-		} catch (Exception e) {
-			ExceptionUtils.rethrow(e);
-		}
 	}
 }
