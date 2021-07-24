@@ -52,35 +52,16 @@ CREATE TABLE SiteUser(
 	, deleted boolean
 	, userId text
 	, userKey bigint
+	, userKey bigint
+	, userId text
 	, userName text
 	, userEmail text
 	, userFirstName text
 	, userLastName text
 	, userFullName text
 	);
-CREATE TABLE ChoiceDonor(
-	pk bigserial primary key
-	, inheritPk text
-	, created timestamp with time zone
-	, archived boolean
-	, deleted boolean
-	, userId text
-	, userKey bigint
-	, donorFullName text
-	, donorId bigint
-	, donorAttributeId text
-	, donorInKind bigint
-	, donorTotal decimal
-	, donorYtd decimal
-	, donorQ1 decimal
-	, donorQ2 decimal
-	, donorQ3 decimal
-	, donorQ4 decimal
-	, donorParentName text
-	);
 
 DROP TABLE SiteUser CASCADE;
-DROP TABLE ChoiceDonor CASCADE;
 */
 
 	protected static final Logger LOG = LoggerFactory.getLogger(MainVerticle.class);

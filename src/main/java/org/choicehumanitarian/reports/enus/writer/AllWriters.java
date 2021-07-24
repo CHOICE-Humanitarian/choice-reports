@@ -8,7 +8,7 @@ import org.choicehumanitarian.reports.enus.wrap.Wrap;
 
 /**
  * Keyword: classSimpleNameAllWriters
- */
+ **/
 public class AllWriters extends AllWritersGen<Object> {
 
 	protected void _siteRequest_(Wrap<SiteRequestEnUS> c) {

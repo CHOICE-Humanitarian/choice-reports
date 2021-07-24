@@ -90,6 +90,7 @@ import org.apache.solr.client.solrj.response.RangeFacet;
 import org.apache.solr.client.solrj.response.FacetField;
 import java.util.Map.Entry;
 import java.util.Iterator;
+import java.util.Base64;
 import java.time.ZonedDateTime;
 import org.apache.solr.common.util.SimpleOrderedMap;
 import org.apache.commons.collections.CollectionUtils;
@@ -202,7 +203,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 					params.put("header", new JsonObject());
 					params.put("form", new JsonObject());
 					params.put("query", new JsonObject());
-					JsonObject context = new JsonObject().put("params", params);
+					JsonObject context = new JsonObject().put("params", params).put("user", Optional.ofNullable(siteRequest.getUser()).map(user -> user.principal()).orElse(null));
 					JsonObject json = new JsonObject().put("context", context);
 					eventBus.request("choice-reports-enUS-ChoiceDonor", json, new DeliveryOptions().addHeader("action", "putimportChoiceDonorFuture")).onSuccess(a -> {
 						promise1.complete();
@@ -228,99 +229,115 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 
 	@Override
 	public void putimportChoiceDonorFuture(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		try {
-			SiteRequestEnUS siteRequest = generateSiteRequestEnUS(null, serviceRequest, body);
-			ApiRequest apiRequest = new ApiRequest();
-			apiRequest.setRows(1);
-			apiRequest.setNumFound(1L);
-			apiRequest.setNumPATCH(0L);
-			apiRequest.initDeepApiRequest(siteRequest);
-			siteRequest.setApiRequest_(apiRequest);
-			body.put("inheritPk", body.getValue("pk"));
-			if(Optional.ofNullable(serviceRequest.getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getJsonArray("var")).orElse(new JsonArray()).stream().filter(s -> "refresh:false".equals(s)).count() > 0L) {
-				siteRequest.getRequestVars().put( "refresh", "false" );
-			}
+		user(serviceRequest).onSuccess(siteRequest -> {
+			try {
+				ApiRequest apiRequest = new ApiRequest();
+				apiRequest.setRows(1);
+				apiRequest.setNumFound(1L);
+				apiRequest.setNumPATCH(0L);
+				apiRequest.initDeepApiRequest(siteRequest);
+				siteRequest.setApiRequest_(apiRequest);
+				body.put("inheritPk", body.getValue("pk"));
+				if(Optional.ofNullable(serviceRequest.getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getJsonArray("var")).orElse(new JsonArray()).stream().filter(s -> "refresh:false".equals(s)).count() > 0L) {
+					siteRequest.getRequestVars().put( "refresh", "false" );
+				}
 
-			SearchList<ChoiceDonor> searchList = new SearchList<ChoiceDonor>();
-			searchList.setStore(true);
-			searchList.setQuery("*:*");
-			searchList.setC(ChoiceDonor.class);
-			searchList.addFilterQuery("deleted_indexed_boolean:false");
-			searchList.addFilterQuery("archived_indexed_boolean:false");
-			searchList.addFilterQuery("inheritPk_indexed_string:" + ClientUtils.escapeQueryChars(body.getString("pk")));
-			searchList.promiseDeepForClass(siteRequest).onSuccess(a -> {
-				try {
-					if(searchList.size() >= 1) {
-						ChoiceDonor o = searchList.getList().stream().findFirst().orElse(null);
-						ChoiceDonor o2 = new ChoiceDonor();
-						JsonObject body2 = new JsonObject();
-						for(String f : body.fieldNames()) {
-							Object bodyVal = body.getValue(f);
-							if(bodyVal instanceof JsonArray) {
-								JsonArray bodyVals = (JsonArray)bodyVal;
-								Collection<?> vals = (Collection<?>)o.obtainForClass(f);
-								if(bodyVals.size() == vals.size()) {
-									Boolean match = true;
-									for(Object val : vals) {
-										if(val != null) {
-											if(!bodyVals.contains(val.toString())) {
+				SearchList<ChoiceDonor> searchList = new SearchList<ChoiceDonor>();
+				searchList.setStore(true);
+				searchList.setQuery("*:*");
+				searchList.setC(ChoiceDonor.class);
+				searchList.addFilterQuery("deleted_indexed_boolean:false");
+				searchList.addFilterQuery("archived_indexed_boolean:false");
+				searchList.addFilterQuery("inheritPk_indexed_string:" + ClientUtils.escapeQueryChars(body.getString("pk")));
+				searchList.promiseDeepForClass(siteRequest).onSuccess(a -> {
+					try {
+						if(searchList.size() >= 1) {
+							ChoiceDonor o = searchList.getList().stream().findFirst().orElse(null);
+							ChoiceDonor o2 = new ChoiceDonor();
+							JsonObject body2 = new JsonObject();
+							for(String f : body.fieldNames()) {
+								Object bodyVal = body.getValue(f);
+								if(bodyVal instanceof JsonArray) {
+									JsonArray bodyVals = (JsonArray)bodyVal;
+									Collection<?> vals = (Collection<?>)o.obtainForClass(f);
+									if(bodyVals.size() == vals.size()) {
+										Boolean match = true;
+										for(Object val : vals) {
+											if(val != null) {
+												if(!bodyVals.contains(val.toString())) {
+													match = false;
+													break;
+												}
+											} else {
 												match = false;
 												break;
 											}
-										} else {
-											match = false;
-											break;
 										}
-									}
-									if(!match) {
+										if(!match) {
+											body2.put("set" + StringUtils.capitalize(f), bodyVal);
+										}
+									} else {
 										body2.put("set" + StringUtils.capitalize(f), bodyVal);
 									}
 								} else {
-									body2.put("set" + StringUtils.capitalize(f), bodyVal);
+									o2.defineForClass(f, bodyVal);
+									o2.attributeForClass(f, bodyVal);
+									if(!StringUtils.containsAny(f, "pk", "created", "setCreated") && !Objects.equals(o.obtainForClass(f), o2.obtainForClass(f)))
+										body2.put("set" + StringUtils.capitalize(f), bodyVal);
 								}
-							} else {
-								o2.defineForClass(f, bodyVal);
-								o2.attributeForClass(f, bodyVal);
-								if(!StringUtils.containsAny(f, "pk", "created", "setCreated") && !Objects.equals(o.obtainForClass(f), o2.obtainForClass(f)))
-									body2.put("set" + StringUtils.capitalize(f), bodyVal);
 							}
-						}
-						for(String f : Optional.ofNullable(o.getSaves()).orElse(new ArrayList<>())) {
-							if(!body.fieldNames().contains(f))
-								body2.putNull("set" + StringUtils.capitalize(f));
-						}
-						if(body2.size() > 0) {
-							siteRequest.setJsonObject(body2);
-							patchChoiceDonorFuture(o, true).onSuccess(b -> {
-								LOG.info("Import ChoiceDonor {} succeeded, modified ChoiceDonor. ", body.getValue("pk"));
+							for(String f : Optional.ofNullable(o.getSaves()).orElse(new ArrayList<>())) {
+								if(!body.fieldNames().contains(f)) {
+									if(!StringUtils.containsAny(f, "pk", "created", "setCreated") && !Objects.equals(o.obtainForClass(f), o2.obtainForClass(f)))
+										body2.putNull("set" + StringUtils.capitalize(f));
+								}
+							}
+							if(body2.size() > 0) {
+								siteRequest.setJsonObject(body2);
+								patchChoiceDonorFuture(o, true).onSuccess(b -> {
+									LOG.info("Import ChoiceDonor {} succeeded, modified ChoiceDonor. ", body.getValue("pk"));
+									eventHandler.handle(Future.succeededFuture());
+								}).onFailure(ex -> {
+									LOG.error(String.format("putimportChoiceDonorFuture failed. "), ex);
+									eventHandler.handle(Future.failedFuture(ex));
+								});
+							} else {
+								eventHandler.handle(Future.succeededFuture());
+							}
+						} else {
+							postChoiceDonorFuture(siteRequest, true).onSuccess(b -> {
+								LOG.info("Import ChoiceDonor {} succeeded, created new ChoiceDonor. ", body.getValue("pk"));
 								eventHandler.handle(Future.succeededFuture());
 							}).onFailure(ex -> {
 								LOG.error(String.format("putimportChoiceDonorFuture failed. "), ex);
+								eventHandler.handle(Future.failedFuture(ex));
 							});
-						} else {
-							eventHandler.handle(Future.succeededFuture());
 						}
-					} else {
-						postChoiceDonorFuture(siteRequest, true).onSuccess(b -> {
-							LOG.info("Import ChoiceDonor {} succeeded, created new ChoiceDonor. ", body.getValue("pk"));
-							eventHandler.handle(Future.succeededFuture());
-						}).onFailure(ex -> {
-							LOG.error(String.format("putimportChoiceDonorFuture failed. "), ex);
-							eventHandler.handle(Future.failedFuture(ex));
-						});
+					} catch(Exception ex) {
+						LOG.error(String.format("putimportChoiceDonorFuture failed. "), ex);
+						eventHandler.handle(Future.failedFuture(ex));
 					}
-				} catch(Exception ex) {
+				}).onFailure(ex -> {
 					LOG.error(String.format("putimportChoiceDonorFuture failed. "), ex);
 					eventHandler.handle(Future.failedFuture(ex));
-				}
-			}).onFailure(ex -> {
+				});
+			} catch(Exception ex) {
 				LOG.error(String.format("putimportChoiceDonorFuture failed. "), ex);
 				eventHandler.handle(Future.failedFuture(ex));
-			});
-		} catch(Exception ex) {
-			LOG.error(String.format("putimportChoiceDonorFuture failed. "), ex);
-			eventHandler.handle(Future.failedFuture(ex));
-		}
+			}
+		}).onFailure(ex -> {
+			if("Inactive Token".equals(ex.getMessage())) {
+				try {
+					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
+				} catch(Exception ex2) {
+					LOG.error(String.format("putimportChoiceDonor failed. ", ex2));
+					error(null, eventHandler, ex2);
+				}
+			} else {
+				LOG.error(String.format("putimportChoiceDonor failed. "), ex);
+				error(null, eventHandler, ex);
+			}
+		});
 	}
 
 	public Future<ServiceResponse> response200PUTImportChoiceDonor(SiteRequestEnUS siteRequest) {
@@ -376,10 +393,11 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 					params.put("header", new JsonObject());
 					params.put("form", new JsonObject());
 					params.put("query", new JsonObject());
-					JsonObject context = new JsonObject().put("params", params);
+					JsonObject context = new JsonObject().put("params", params).put("user", Optional.ofNullable(siteRequest.getUser()).map(user -> user.principal()).orElse(null));
 					JsonObject json = new JsonObject().put("context", context);
 					eventBus.request("choice-reports-enUS-ChoiceDonor", json, new DeliveryOptions().addHeader("action", "postChoiceDonorFuture")).onSuccess(a -> {
-						JsonObject responseBody = (JsonObject)a.body();
+						JsonObject responseMessage = (JsonObject)a.body();
+						JsonObject responseBody = new JsonObject(new String(Base64.getDecoder().decode(responseMessage.getString("payload")), Charset.forName("UTF-8")));
 						apiRequest.setPk(Long.parseLong(responseBody.getString("pk")));
 						eventHandler.handle(Future.succeededFuture(ServiceResponse.completedWithJson(Buffer.buffer(responseBody.encodePrettily()))));
 						LOG.debug(String.format("postChoiceDonor succeeded. "));
@@ -410,20 +428,33 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 
 	@Override
 	public void postChoiceDonorFuture(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		SiteRequestEnUS siteRequest = generateSiteRequestEnUS(null, serviceRequest, body);
-		ApiRequest apiRequest = new ApiRequest();
-		apiRequest.setRows(1);
-		apiRequest.setNumFound(1L);
-		apiRequest.setNumPATCH(0L);
-		apiRequest.initDeepApiRequest(siteRequest);
-		siteRequest.setApiRequest_(apiRequest);
-		if(Optional.ofNullable(serviceRequest.getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getJsonArray("var")).orElse(new JsonArray()).stream().filter(s -> "refresh:false".equals(s)).count() > 0L) {
-			siteRequest.getRequestVars().put( "refresh", "false" );
-		}
-		postChoiceDonorFuture(siteRequest, false).onSuccess(a -> {
-			eventHandler.handle(Future.succeededFuture(ServiceResponse.completedWithJson(Buffer.buffer(new JsonObject().encodePrettily()))));
+		user(serviceRequest).onSuccess(siteRequest -> {
+			ApiRequest apiRequest = new ApiRequest();
+			apiRequest.setRows(1);
+			apiRequest.setNumFound(1L);
+			apiRequest.setNumPATCH(0L);
+			apiRequest.initDeepApiRequest(siteRequest);
+			siteRequest.setApiRequest_(apiRequest);
+			if(Optional.ofNullable(serviceRequest.getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getJsonArray("var")).orElse(new JsonArray()).stream().filter(s -> "refresh:false".equals(s)).count() > 0L) {
+				siteRequest.getRequestVars().put( "refresh", "false" );
+			}
+			postChoiceDonorFuture(siteRequest, false).onSuccess(o -> {
+				eventHandler.handle(Future.succeededFuture(ServiceResponse.completedWithJson(Buffer.buffer(JsonObject.mapFrom(o).encodePrettily()))));
+			}).onFailure(ex -> {
+				eventHandler.handle(Future.failedFuture(ex));
+			});
 		}).onFailure(ex -> {
-			eventHandler.handle(Future.failedFuture(ex));
+			if("Inactive Token".equals(ex.getMessage())) {
+				try {
+					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
+				} catch(Exception ex2) {
+					LOG.error(String.format("postChoiceDonor failed. ", ex2));
+					error(null, eventHandler, ex2);
+				}
+			} else {
+				LOG.error(String.format("postChoiceDonor failed. "), ex);
+				error(null, eventHandler, ex);
+			}
 		});
 	}
 
@@ -809,19 +840,10 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 		List<Future> futures = new ArrayList<>();
 		SiteRequestEnUS siteRequest = listChoiceDonor.getSiteRequest_();
 		listChoiceDonor.getList().forEach(o -> {
+			SiteRequestEnUS siteRequest2 = generateSiteRequestEnUS(siteRequest.getUser(), siteRequest.getServiceRequest(), siteRequest.getJsonObject());
+			o.setSiteRequest_(siteRequest2);
 			futures.add(Future.future(promise1 -> {
-				Long pk = o.getPk();
-
-				JsonObject params = new JsonObject();
-				params.put("body", siteRequest.getJsonObject().put(ChoiceDonor.VAR_pk, pk.toString()));
-				params.put("path", new JsonObject());
-				params.put("cookie", new JsonObject());
-				params.put("header", new JsonObject());
-				params.put("form", new JsonObject());
-				params.put("query", new JsonObject().put("q", "*:*").put("fq", new JsonArray().add("pk:" + pk)));
-				JsonObject context = new JsonObject().put("params", params);
-				JsonObject json = new JsonObject().put("context", context);
-				eventBus.request("choice-reports-enUS-ChoiceDonor", json, new DeliveryOptions().addHeader("action", "patchChoiceDonorFuture")).onSuccess(a -> {
+				patchChoiceDonorFuture(o, false).onSuccess(a -> {
 					promise1.complete();
 				}).onFailure(ex -> {
 					LOG.error(String.format("listPATCHChoiceDonor failed. "), ex);
@@ -855,23 +877,50 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 
 	@Override
 	public void patchChoiceDonorFuture(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		SiteRequestEnUS siteRequest = generateSiteRequestEnUS(null, serviceRequest, body);
-		ChoiceDonor o = new ChoiceDonor();
-		o.setSiteRequest_(siteRequest);
-		ApiRequest apiRequest = new ApiRequest();
-		apiRequest.setRows(1);
-		apiRequest.setNumFound(1L);
-		apiRequest.setNumPATCH(0L);
-		apiRequest.initDeepApiRequest(siteRequest);
-		siteRequest.setApiRequest_(apiRequest);
-		if(Optional.ofNullable(serviceRequest.getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getJsonArray("var")).orElse(new JsonArray()).stream().filter(s -> "refresh:false".equals(s)).count() > 0L) {
-			siteRequest.getRequestVars().put( "refresh", "false" );
-		}
-		o.setPk(body.getString(ChoiceDonor.VAR_pk));
-		patchChoiceDonorFuture(o, false).onSuccess(a -> {
-			eventHandler.handle(Future.succeededFuture(ServiceResponse.completedWithJson(Buffer.buffer(new JsonObject().encodePrettily()))));
+		user(serviceRequest).onSuccess(siteRequest -> {
+			try {
+				siteRequest.setJsonObject(body);
+				serviceRequest.getParams().getJsonObject("query").put("rows", 1);
+				searchChoiceDonorList(siteRequest, false, true, true, "/api/donor", "PATCH").onSuccess(listChoiceDonor -> {
+					try {
+						ChoiceDonor o = listChoiceDonor.first();
+						if(o != null && listChoiceDonor.getQueryResponse().getResults().getNumFound() == 1) {
+							ApiRequest apiRequest = new ApiRequest();
+							apiRequest.setRows(1);
+							apiRequest.setNumFound(1L);
+							apiRequest.setNumPATCH(0L);
+							apiRequest.initDeepApiRequest(siteRequest);
+							siteRequest.setApiRequest_(apiRequest);
+							if(Optional.ofNullable(serviceRequest.getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getJsonArray("var")).orElse(new JsonArray()).stream().filter(s -> "refresh:false".equals(s)).count() > 0L) {
+								siteRequest.getRequestVars().put( "refresh", "false" );
+							}
+							if(apiRequest.getNumFound() == 1L)
+								apiRequest.setOriginal(o);
+							apiRequest.setPk(listChoiceDonor.first().getPk());
+							eventBus.publish("websocketChoiceDonor", JsonObject.mapFrom(apiRequest).toString());
+							patchChoiceDonorFuture(o, false).onSuccess(a -> {
+								eventHandler.handle(Future.succeededFuture(ServiceResponse.completedWithJson(Buffer.buffer(new JsonObject().encodePrettily()))));
+							}).onFailure(ex -> {
+								eventHandler.handle(Future.failedFuture(ex));
+							});
+						} else {
+							eventHandler.handle(Future.succeededFuture(ServiceResponse.completedWithJson(Buffer.buffer(new JsonObject().encodePrettily()))));
+						}
+					} catch(Exception ex) {
+						LOG.error(String.format("patchChoiceDonor failed. "), ex);
+						error(siteRequest, eventHandler, ex);
+					}
+				}).onFailure(ex -> {
+					LOG.error(String.format("patchChoiceDonor failed. "), ex);
+					error(siteRequest, eventHandler, ex);
+				});
+			} catch(Exception ex) {
+				LOG.error(String.format("patchChoiceDonor failed. "), ex);
+				error(null, eventHandler, ex);
+			}
 		}).onFailure(ex -> {
-			eventHandler.handle(Future.failedFuture(ex));
+			LOG.error(String.format("patchChoiceDonor failed. "), ex);
+			error(null, eventHandler, ex);
 		});
 	}
 
@@ -1459,7 +1508,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 			String fq2 = fqs[1].equals("*") ? fqs[1] : ChoiceDonor.staticSolrFqForClass(entityVar, searchList.getSiteRequest_(), fqs[1]);
 			 return varIndexed + ":[" + fq1 + " TO " + fq2 + "]";
 		} else {
-			return varIndexed + ":" + ChoiceDonor.staticSolrFqForClass(entityVar, searchList.getSiteRequest_(), valueIndexed);
+			return varIndexed + ":" + ClientUtils.escapeQueryChars(ChoiceDonor.staticSolrFqForClass(entityVar, searchList.getSiteRequest_(), valueIndexed)).replace("\\", "\\\\");
 		}
 	}
 
@@ -1729,7 +1778,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 				String solrHostName = siteRequest.getConfig().getString(ConfigKeys.SOLR_HOST_NAME);
 				Integer solrPort = siteRequest.getConfig().getInteger(ConfigKeys.SOLR_PORT);
 				String solrCollection = siteRequest.getConfig().getString(ConfigKeys.SOLR_COLLECTION);
-				String solrRequestUri = String.format("/solr/%s/update%s", solrCollection, "?commitWithin=10000&overwrite=true&wt=json");
+				String solrRequestUri = String.format("/solr/%s/update%s", solrCollection, "?softCommit=true&overwrite=true&wt=json");
 				JsonArray json = new JsonArray().add(new JsonObject(document.toMap(new HashMap<String, Object>())));
 				webClient.post(solrPort, solrHostName, solrRequestUri).putHeader("Content-Type", "application/json").expect(ResponsePredicate.SC_OK).sendBuffer(json.toBuffer()).onSuccess(b -> {
 					promise.complete();
@@ -1772,10 +1821,15 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 					params.put("form", new JsonObject());
 					params.put("path", new JsonObject());
 					params.put("query", new JsonObject().put("q", "*:*").put("fq", new JsonArray().add("pk:" + o.getPk())));
-					JsonObject context = new JsonObject().put("params", params).put("user", siteRequest.getJsonPrincipal());
+					JsonObject context = new JsonObject().put("params", params).put("user", Optional.ofNullable(siteRequest.getUser()).map(user -> user.principal()).orElse(null));
 					JsonObject json = new JsonObject().put("context", context);
-					eventBus.request("choice-reports-enUS-ChoiceDonor", json, new DeliveryOptions().addHeader("action", "patchChoiceDonor")).onSuccess(c -> {
-						promise.complete();
+					eventBus.request("choice-reports-enUS-ChoiceDonor", json, new DeliveryOptions().addHeader("action", "patchChoiceDonorFuture")).onSuccess(c -> {
+						JsonObject responseMessage = (JsonObject)c.body();
+						Integer statusCode = responseMessage.getInteger("statusCode");
+						if(statusCode.equals(200))
+							promise.complete();
+						else
+							promise.fail(new RuntimeException(responseMessage.getString("statusMessage")));
 					}).onFailure(ex -> {
 						LOG.error("Refresh relations failed. ", ex);
 						promise.fail(ex);

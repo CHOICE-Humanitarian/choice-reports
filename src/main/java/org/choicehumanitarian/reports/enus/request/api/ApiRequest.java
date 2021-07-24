@@ -1,9 +1,11 @@
 package org.choicehumanitarian.reports.enus.request.api; 
 
+import java.time.Period;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
@@ -22,7 +24,7 @@ public class ApiRequest extends ApiRequestGen<Object> {
 	protected void _siteRequest_(Wrap<SiteRequestEnUS> c) {}
 	
 	protected void _created(Wrap<ZonedDateTime> c) {
-		c.o(ZonedDateTime.now());
+		c.o(ZonedDateTime.now(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))));
 	}
 
 	protected void _rows(Wrap<Integer> c) {

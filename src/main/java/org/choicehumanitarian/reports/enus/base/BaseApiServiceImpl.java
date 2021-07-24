@@ -7,6 +7,9 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.solr.client.solrj.util.ClientUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import org.choicehumanitarian.reports.enus.request.api.ApiRequest;
@@ -14,8 +17,6 @@ import org.choicehumanitarian.reports.enus.search.SearchList;
 import org.choicehumanitarian.reports.enus.user.SiteUser;
 import org.choicehumanitarian.reports.enus.user.SiteUserEnUSApiServiceImpl;
 import org.choicehumanitarian.reports.enus.vertx.MailVerticle;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
@@ -101,7 +102,7 @@ public class BaseApiServiceImpl {
 	}
 
 	public SiteRequestEnUS generateSiteRequestEnUS(User user, ServiceRequest serviceRequest) {
-		return generateSiteRequestEnUS(user, serviceRequest, null);
+		return generateSiteRequestEnUS(user, serviceRequest, serviceRequest.getParams().getJsonObject("body"));
 	}
 
 	public SiteRequestEnUS generateSiteRequestEnUS(User user, ServiceRequest serviceRequest, JsonObject body) {
@@ -248,11 +249,7 @@ public class BaseApiServiceImpl {
 	}
 
 	public Boolean userDefine(SiteRequestEnUS siteRequest, JsonObject jsonObject, Boolean patch) {
-		if(patch) {
-			return false;
-		} else {
-			return false;
-		}
+		return false;
 	}
 
 	public void attributeArrayFuture(SiteRequestEnUS siteRequest, Class<?> c1, Long pk1, Class<?> c2, String pk2, List<Future<?>> futures, String entityVar, Boolean inheritPk) {
@@ -336,7 +333,7 @@ public class BaseApiServiceImpl {
 					pks.add(pk2);
 					classes.add(c2.getSimpleName());
 				}
-				siteRequest.getSqlConnection().preparedQuery(String.format("UPDATE %s SET %s=$1 WHERE pk=$2", c1.getSimpleName(), entityVar1)).execute(Tuple.of(pk1, pk2)).onSuccess(a -> {
+				siteRequest.getSqlConnection().preparedQuery(String.format("UPDATE %s SET %s=$1 WHERE pk=$2", c1.getSimpleName(), entityVar1)).execute(Tuple.of(pk2, pk1)).onSuccess(a -> {
 					promise.complete();
 				}).onFailure(ex -> {
 					promise.fail(ex);

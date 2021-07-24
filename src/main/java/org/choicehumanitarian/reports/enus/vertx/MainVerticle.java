@@ -1,9 +1,11 @@
-package org.choicehumanitarian.reports.enus.vertx; 
+package org.choicehumanitarian.reports.enus.vertx;
 
-import java.net.URLEncoder;
+import java.net.URLDecoder;
+import java.text.Normalizer;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
@@ -17,13 +19,13 @@ import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 import org.choicehumanitarian.reports.enus.model.donor.ChoiceDonorEnUSGenApiService;
-import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import org.choicehumanitarian.reports.enus.user.SiteUserEnUSGenApiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.jknack.handlebars.Handlebars;
-import com.github.jknack.handlebars.Helper;
+import com.github.jknack.handlebars.helper.ConditionalHelpers;
+import com.github.jknack.handlebars.helper.StringHelpers;
 
 import io.vertx.config.ConfigRetriever;
 import io.vertx.config.ConfigRetrieverOptions;
@@ -54,6 +56,7 @@ import io.vertx.ext.healthchecks.Status;
 import io.vertx.ext.mail.MailClient;
 import io.vertx.ext.mail.MailConfig;
 import io.vertx.ext.web.Router;
+import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.Session;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.handler.OAuth2AuthHandler;
@@ -73,7 +76,7 @@ import io.vertx.sqlclient.PoolOptions;
 /**	
  *	A Java class to start the Vert.x application as a main method. 
  * Keyword: classSimpleNameVerticle
- **/  
+ **/
 public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 	private static final Logger LOG = LoggerFactory.getLogger(MainVerticle.class);
 
@@ -102,8 +105,6 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 
 	AuthorizationProvider authorizationProvider;
 
-	public static final String CONFIG_staticPath = "staticPath";
-
 	/**	
 	 *	The main method for the Vert.x application that runs the Vert.x Runner class
 	 **/
@@ -123,7 +124,7 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 
 			retrieverOptions.addStore(new ConfigStoreOptions().setType("file").setFormat("properties").setConfig(new JsonObject().put("path", "application.properties")));
 
-			String configPath = System.getenv("configPath");
+			String configPath = System.getenv(ConfigKeys.CONFIG_PATH);
 			if(StringUtils.isNotBlank(configPath)) {
 				ConfigStoreOptions configIni = new ConfigStoreOptions().setType("file").setFormat("properties").setConfig(new JsonObject().put("path", configPath));
 				retrieverOptions.addStore(configIni);
@@ -156,51 +157,51 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 		RetryPolicy retryPolicy = new ExponentialBackoffRetry(1000, 3);
 		CuratorFramework curatorFramework = CuratorFrameworkFactory.newClient(zookeeperHosts, retryPolicy);
 		curatorFramework.start();
-		Integer clusterPort = System.getenv("clusterPort") == null ? null : Integer.parseInt(System.getenv("clusterPort"));
-		String clusterHost = System.getenv("clusterHost");
-		Integer clusterPublicPort = System.getenv("clusterPublicPort") == null ? null : Integer.parseInt(System.getenv("clusterPublicPort"));
-		Integer siteInstances = System.getenv(ConfigKeys.SITE_INSTANCES) == null ? 1 : Integer.parseInt(System.getenv(ConfigKeys.SITE_INSTANCES));
-		Long vertxWarningExceptionSeconds = System.getenv("vertxWarningExceptionSeconds") == null ? 10 : Long.parseLong(System.getenv("vertxWarningExceptionSeconds"));
-		String clusterPublicHost = System.getenv("clusterPublicHost");
+		Integer clusterPort = Optional.ofNullable(System.getenv(ConfigKeys.CLUSTER_PORT)).map(s -> Integer.parseInt(s)).orElse(null);
+		String clusterHostName = System.getenv(ConfigKeys.CLUSTER_HOST_NAME);
+		Integer clusterPublicPort = Optional.ofNullable(System.getenv(ConfigKeys.CLUSTER_PUBLIC_PORT)).map(s -> Integer.parseInt(s)).orElse(null);
+		Integer siteInstances = Optional.ofNullable(System.getenv(ConfigKeys.SITE_INSTANCES)).map(s -> Integer.parseInt(s)).orElse(null);
+		Long vertxWarningExceptionSeconds = Optional.ofNullable(System.getenv(ConfigKeys.VERTX_WARNING_EXCEPTION_SECONDS)).map(s -> Long.parseLong(s)).orElse(10L);
+		String clusterPublicHostName = System.getenv(ConfigKeys.CLUSTER_PUBLIC_HOST_NAME);
 		zkConfig.put("zookeeperHosts", zookeeperHosts);
-		zkConfig.put("sessionTimeout", 20000000);
-		zkConfig.put("connectTimeout", 30000);
-		zkConfig.put("rootPath", "io.vertx");
+		zkConfig.put("sessionTimeout", 20000);
+		zkConfig.put("connectTimeout", 3000);
+		zkConfig.put("rootPath", "opendatapolicing");
 		zkConfig.put("retry", new JsonObject() {
 			{
 				put("initialSleepTime", 100);
 				put("intervalTimes", 10000);
-				put("maxTimes", 30);
+				put("maxTimes", 3);
 			}
 		});
 		ClusterManager clusterManager = new ZookeeperClusterManager(zkConfig);
 		VertxOptions vertxOptions = new VertxOptions();
 		// For OpenShift
 		EventBusOptions eventBusOptions = new EventBusOptions();
-		String hostname = System.getenv("HOSTNAME");
-		String openshiftService = System.getenv("openshiftService");
-		if(clusterHost == null) {
-			clusterHost = hostname;
+		String hostname = System.getenv(ConfigKeys.HOSTNAME);
+		String openshiftService = System.getenv(ConfigKeys.OPENSHIFT_SERVICE);
+		if(clusterHostName == null) {
+			clusterHostName = hostname;
 		}
-		if(clusterPublicHost == null) {
+		if(clusterPublicHostName == null) {
 			if(hostname != null && openshiftService != null) {
-				clusterPublicHost = hostname + "." + openshiftService;
+				clusterPublicHostName = hostname + "." + openshiftService;
 			}
 		}
-		if(clusterHost != null) {
-			LOG.info(String.format("clusterHost: %s", clusterHost));
-			eventBusOptions.setHost(clusterHost);
+		if(clusterHostName != null) {
+			LOG.info(String.format("%s: %s", ConfigKeys.CLUSTER_HOST_NAME, clusterHostName));
+			eventBusOptions.setHost(clusterHostName);
 		}
 		if(clusterPort != null) {
-			LOG.info(String.format("clusterPort: %s", clusterPort));
+			LOG.info(String.format("%s: %s", ConfigKeys.CLUSTER_PORT, clusterPort));
 			eventBusOptions.setPort(clusterPort);
 		}
-		if(clusterPublicHost != null) {
-			LOG.info(String.format("clusterPublicHost: %s", clusterPublicHost));
-			eventBusOptions.setClusterPublicHost(clusterPublicHost);
+		if(clusterPublicHostName != null) {
+			LOG.info(String.format("%s: %s", ConfigKeys.CLUSTER_PUBLIC_HOST_NAME, clusterPublicHostName));
+			eventBusOptions.setClusterPublicHost(clusterPublicHostName);
 		}
 		if(clusterPublicPort != null) {
-			LOG.info(String.format("clusterPublicPort: %s", clusterPublicPort));
+			LOG.info(String.format("%s: %s", ConfigKeys.CLUSTER_PUBLIC_PORT, clusterPublicPort));
 			eventBusOptions.setClusterPublicPort(clusterPublicPort);
 		}
 		vertxOptions.setEventBusOptions(eventBusOptions);
@@ -380,13 +381,13 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 						oauth2AuthHandler.setupCallback(tempRouter.get("/callback"));
 					}
 			
-			//		ClusteredSessionStore sessionStore = ClusteredSessionStore.create(vertx);
-					LocalSessionStore sessionStore = LocalSessionStore.create(vertx, "choice-reports-sessions");
+					//ClusteredSessionStore sessionStore = ClusteredSessionStore.create(vertx);
+					LocalSessionStore sessionStore = LocalSessionStore.create(vertx, "opendatapolicing-sessions");
 					SessionHandler sessionHandler = SessionHandler.create(sessionStore);
 					if(StringUtils.startsWith(siteBaseUrl, "https://"))
 						sessionHandler.setCookieSecureFlag(true);
 			
-					RouterBuilder.create(vertx, "src/main/resources/openapi3-enUS.yaml", b -> {
+					RouterBuilder.create(vertx, "webroot/openapi3-enUS.yaml", b -> {
 						if (b.succeeded()) {
 							RouterBuilder routerBuilder = b.result();
 							routerBuilder.mountServicesFromExtensions();
@@ -539,7 +540,7 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 					String solrHostName = config().getString(ConfigKeys.SOLR_HOST_NAME);
 					Integer solrPort = config().getInteger(ConfigKeys.SOLR_PORT);
 					String solrCollection = config().getString(ConfigKeys.SOLR_COLLECTION);
-					String solrRequestUri = String.format("/solr/%s/select%s", solrCollection, query.toQueryString() + "&suggest=true&terms=true&terms.fl=stopPurposeTitle_indexed_string");
+					String solrRequestUri = String.format("/solr/%s/select%s", solrCollection, query.toQueryString());
 					webClient.get(solrPort, solrHostName, solrRequestUri).send().onSuccess(b -> {
 						try {
 							a.complete(Status.OK());
@@ -548,7 +549,7 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 							a.fail(ex);
 						}
 					}).onFailure(ex -> {
-						LOG.error(String.format("indexTrafficStop failed. "), new RuntimeException(ex));
+						LOG.error(String.format("Solr request failed. "), new RuntimeException(ex));
 						a.fail(ex);
 					});
 				} catch (Exception e) {
@@ -654,38 +655,15 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 			Handlebars handlebars = (Handlebars)engine.unwrap();
 			TemplateHandler templateHandler = TemplateHandler.create(engine, staticPath + "/template", "text/html");
 
-			handlebars.registerHelper("urlencode", (Helper<String>) (value, options) -> {
-				try {
-					return URLEncoder.encode(value, "UTF-8");
-				} catch (Exception ex) {
-					throw new RuntimeException(ex);
-				}
-			});
+			handlebars.registerHelpers(ConditionalHelpers.class);
+			handlebars.registerHelpers(StringHelpers.class);
 
 			router.get("/").handler(a -> {
 				a.reroute("/template/home-page");
 			});
 
-			router.get("/template/home-page").handler(ctx -> {
-				SiteRequestEnUS siteRequest = new SiteRequestEnUS();
-				siteRequest.setWebClient(webClient);
-				siteRequest.setConfig(config());
-				siteRequest.initDeepSiteRequestEnUS(siteRequest);
-				ctx.next();
-			});
-
-			router.get("/state/:stateId").handler(ctx -> {
-				ctx.put("stateId", ctx.pathParam("stateId"));
-				ctx.reroute("/template/state-page");
-			});
-
 			router.get("/api").handler(ctx -> {
 				ctx.reroute("/template/openapi");
-			});
-
-			router.get("/report").handler(ctx -> {
-				ctx.put("queryParams", ctx.queryParams());
-				ctx.reroute("/template/traffic-stop-report");
 			});
 
 			router.get("/template/*").handler(ctx -> {
@@ -717,7 +695,32 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 		return promise.future();
 	}
 
-	/**
+	public Future<Void> putVarsInRoutingContext(RoutingContext ctx) {
+		Promise<Void> promise = Promise.promise();
+		try {
+			for(Entry<String, String> entry : ctx.queryParams()) {
+				String paramName = entry.getKey();
+				String paramObject = entry.getValue();
+				String entityVar = null;
+				String valueIndexed = null;
+
+				switch(paramName) {
+					case "var":
+						entityVar = StringUtils.trim(StringUtils.substringBefore((String)paramObject, ":"));
+						valueIndexed = URLDecoder.decode(StringUtils.trim(StringUtils.substringAfter((String)paramObject, ":")), "UTF-8");
+						ctx.put(entityVar, valueIndexed);
+						break;
+				}
+				promise.complete();
+			}
+		} catch(Exception ex) {
+			LOG.error(String.format("putVarsInRoutingContext failed. "), ex);
+			promise.fail(ex);
+		}
+		return promise.future();
+	}
+
+	/**	
 	 * 
 	 * Val.ErrorServer.enUS:The server is not configured properly. 
 	 * Val.SuccessServer.enUS:The HTTP server is running: %s
@@ -778,5 +781,18 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 				promise.fail(ex);
 			});
 		}
+	}
+
+	public String toId(String s) {
+		if(s != null) {
+			s = Normalizer.normalize(s, Normalizer.Form.NFD);
+			s = StringUtils.lowerCase(s);
+			s = StringUtils.trim(s);
+			s = StringUtils.replacePattern(s, "\\s{1,}", "-");
+			s = StringUtils.replacePattern(s, "[^\\w-]", "");
+			s = StringUtils.replacePattern(s, "-{2,}", "-");
+		}
+
+		return s;
 	}
 }

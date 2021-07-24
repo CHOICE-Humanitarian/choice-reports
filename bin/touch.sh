@@ -13,6 +13,7 @@ touch /usr/local/src/choice-reports/src/main/java/org/choicehumanitarian/reports
 touch /usr/local/src/choice-reports/src/main/java/org/choicehumanitarian/reports/enus/writer/AllWriter.java
 touch /usr/local/src/choice-reports/src/main/java/org/choicehumanitarian/reports/enus/writer/AllWriters.java
 touch /usr/local/src/choice-reports/src/main/java/org/choicehumanitarian/reports/enus/writer/ApiWriter.java
+touch /usr/local/src/choice-reports/src/main/java/org/choicehumanitarian/reports/enus/vertx/ApiCounter.java
 touch /usr/local/src/choice-reports/src/main/java/org/choicehumanitarian/reports/enus/vertx/AppOpenApi3.java
 touch /usr/local/src/choice-reports/src/main/java/org/choicehumanitarian/reports/enus/vertx/AppSwagger2.java
 touch /usr/local/src/choice-reports/src/main/java/org/choicehumanitarian/reports/enus/vertx/MainVerticle.java

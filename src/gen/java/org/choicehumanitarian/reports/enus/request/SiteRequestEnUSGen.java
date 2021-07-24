@@ -2,52 +2,51 @@ package org.choicehumanitarian.reports.enus.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Arrays;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import io.vertx.ext.web.client.WebClient;
 import org.slf4j.LoggerFactory;
 import io.vertx.core.MultiMap;
+import java.util.HashMap;
+import org.choicehumanitarian.reports.enus.writer.AllWriter;
 import org.apache.commons.lang3.StringUtils;
+import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import io.vertx.sqlclient.SqlConnection;
 import org.choicehumanitarian.reports.enus.wrap.Wrap;
+import org.apache.commons.collections.CollectionUtils;
 import java.lang.Long;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.choicehumanitarian.reports.enus.java.ZonedDateTimeSerializer;
 import java.util.Map;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.lang.Boolean;
 import io.vertx.core.json.JsonObject;
+import java.lang.String;
 import java.math.RoundingMode;
+import org.choicehumanitarian.reports.enus.request.api.ApiRequest;
+import org.slf4j.Logger;
 import java.math.MathContext;
+import org.choicehumanitarian.reports.enus.java.ZonedDateTimeDeserializer;
+import io.vertx.core.Promise;
 import org.choicehumanitarian.reports.enus.java.LocalDateSerializer;
+import org.apache.commons.text.StringEscapeUtils;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.vertx.core.Future;
 import io.vertx.ext.web.api.service.ServiceRequest;
 import org.choicehumanitarian.reports.enus.base.BaseModel;
 import java.util.Objects;
+import io.vertx.core.json.JsonArray;
+import org.apache.solr.common.SolrDocument;
 import java.util.List;
 import io.vertx.ext.auth.User;
 import org.apache.solr.client.solrj.SolrQuery;
-import java.util.Optional;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import io.vertx.ext.web.client.WebClient;
-import java.util.HashMap;
-import org.choicehumanitarian.reports.enus.writer.AllWriter;
-import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
-import java.text.NumberFormat;
-import java.util.Stack;
-import java.util.ArrayList;
-import io.vertx.sqlclient.SqlConnection;
-import org.apache.commons.collections.CollectionUtils;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.choicehumanitarian.reports.enus.java.ZonedDateTimeSerializer;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.lang.Boolean;
-import java.lang.String;
-import org.choicehumanitarian.reports.enus.request.api.ApiRequest;
-import org.slf4j.Logger;
-import org.choicehumanitarian.reports.enus.java.ZonedDateTimeDeserializer;
-import io.vertx.core.Promise;
-import org.apache.commons.text.StringEscapeUtils;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import io.vertx.core.json.JsonArray;
-import org.apache.solr.common.SolrDocument;
 import org.apache.commons.lang3.math.NumberUtils;
+import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.lang.Object;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 
 /**	
@@ -358,51 +357,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		return (SiteRequestEnUS)this;
 	}
 
-	///////
-	// w //
-	///////
-
-	/**	 The entity w
-	 *	 is defined as null before being initialized. 
-	 */
-	@JsonProperty
-	@JsonInclude(Include.NON_NULL)
-	protected AllWriter w;
-	@JsonIgnore
-	public Wrap<AllWriter> wWrap = new Wrap<AllWriter>().var("w").o(w);
-
-	/**	<br/> The entity w
-	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:w">Find the entity w in Solr</a>
-	 * <br/>
-	 * @param c is for wrapping a value to assign to this entity during initialization. 
-	 **/
-	protected abstract void _w(Wrap<AllWriter> c);
-
-	public AllWriter getW() {
-		return w;
-	}
-
-	public void setW(AllWriter w) {
-		this.w = w;
-		this.wWrap.alreadyInitialized = true;
-	}
-	public static AllWriter staticSetW(SiteRequestEnUS siteRequest_, String o) {
-		return null;
-	}
-	protected SiteRequestEnUS wInit() {
-		if(!wWrap.alreadyInitialized) {
-			_w(wWrap);
-			if(w == null)
-				setW(wWrap.o);
-			wWrap.o(null);
-		}
-		if(w != null)
-			w.initDeepForClass(siteRequest_);
-		wWrap.alreadyInitialized(true);
-		return (SiteRequestEnUS)this;
-	}
-
 	//////////
 	// user //
 	//////////
@@ -443,49 +397,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 			userWrap.o(null);
 		}
 		userWrap.alreadyInitialized(true);
-		return (SiteRequestEnUS)this;
-	}
-
-	///////////////////
-	// jsonPrincipal //
-	///////////////////
-
-	/**	 The entity jsonPrincipal
-	 *	 is defined as null before being initialized. 
-	 */
-	@JsonProperty
-	@JsonInclude(Include.NON_NULL)
-	protected JsonObject jsonPrincipal;
-	@JsonIgnore
-	public Wrap<JsonObject> jsonPrincipalWrap = new Wrap<JsonObject>().var("jsonPrincipal").o(jsonPrincipal);
-
-	/**	<br/> The entity jsonPrincipal
-	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:jsonPrincipal">Find the entity jsonPrincipal in Solr</a>
-	 * <br/>
-	 * @param c is for wrapping a value to assign to this entity during initialization. 
-	 **/
-	protected abstract void _jsonPrincipal(Wrap<JsonObject> c);
-
-	public JsonObject getJsonPrincipal() {
-		return jsonPrincipal;
-	}
-
-	public void setJsonPrincipal(JsonObject jsonPrincipal) {
-		this.jsonPrincipal = jsonPrincipal;
-		this.jsonPrincipalWrap.alreadyInitialized = true;
-	}
-	public static JsonObject staticSetJsonPrincipal(SiteRequestEnUS siteRequest_, String o) {
-		return null;
-	}
-	protected SiteRequestEnUS jsonPrincipalInit() {
-		if(!jsonPrincipalWrap.alreadyInitialized) {
-			_jsonPrincipal(jsonPrincipalWrap);
-			if(jsonPrincipal == null)
-				setJsonPrincipal(jsonPrincipalWrap.o);
-			jsonPrincipalWrap.o(null);
-		}
-		jsonPrincipalWrap.alreadyInitialized(true);
 		return (SiteRequestEnUS)this;
 	}
 
@@ -1355,47 +1266,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		return userResourceRoles == null ? "" : userResourceRoles.toString();
 	}
 
-	//////////////
-	// xmlStack //
-	//////////////
-
-	/**	 The entity xmlStack
-	 *	Il est construit avant d'être initialisé avec le constructeur par défaut Stack<String>(). 
-	 */
-	@JsonProperty
-	@JsonFormat(shape = JsonFormat.Shape.ARRAY)
-	@JsonInclude(Include.NON_NULL)
-	protected Stack<String> xmlStack = new Stack<String>();
-	@JsonIgnore
-	public Wrap<Stack<String>> xmlStackWrap = new Wrap<Stack<String>>().var("xmlStack").o(xmlStack);
-
-	/**	<br/> The entity xmlStack
-	 *  It is constructed before being initialized with the constructor by default Stack<String>(). 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:xmlStack">Find the entity xmlStack in Solr</a>
-	 * <br/>
-	 * @param xmlStack is the entity already constructed. 
-	 **/
-	protected abstract void _xmlStack(Stack<String> o);
-
-	public Stack<String> getXmlStack() {
-		return xmlStack;
-	}
-
-	public void setXmlStack(Stack<String> xmlStack) {
-		this.xmlStack = xmlStack;
-		this.xmlStackWrap.alreadyInitialized = true;
-	}
-	public static String staticSetXmlStack(SiteRequestEnUS siteRequest_, String o) {
-		return o;
-	}
-	protected SiteRequestEnUS xmlStackInit() {
-		if(!xmlStackWrap.alreadyInitialized) {
-			_xmlStack(xmlStack);
-		}
-		xmlStackWrap.alreadyInitialized(true);
-		return (SiteRequestEnUS)this;
-	}
-
 	//////////////////
 	// solrDocument //
 	//////////////////
@@ -1888,9 +1758,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 				jsonObjectInit();
 				solrQueryInit();
 				serviceRequestInit();
-				wInit();
 				userInit();
-				jsonPrincipalInit();
 				userIdInit();
 				userKeyInit();
 				sessionIdInit();
@@ -1903,7 +1771,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 				userRealmRolesInit();
 				userResourceInit();
 				userResourceRolesInit();
-				xmlStackInit();
 				solrDocumentInit();
 				pageAdminInit();
 				requestPkInit();
@@ -1923,8 +1790,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	/////////////////
 
 	public void siteRequestSiteRequestEnUS(SiteRequestEnUS siteRequest_) {
-		if(w != null)
-			w.setSiteRequest_(siteRequest_);
 	}
 
 	public void siteRequestForClass(SiteRequestEnUS siteRequest_) {
@@ -1969,12 +1834,8 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 				return oSiteRequestEnUS.solrQuery;
 			case "serviceRequest":
 				return oSiteRequestEnUS.serviceRequest;
-			case "w":
-				return oSiteRequestEnUS.w;
 			case "user":
 				return oSiteRequestEnUS.user;
-			case "jsonPrincipal":
-				return oSiteRequestEnUS.jsonPrincipal;
 			case "userId":
 				return oSiteRequestEnUS.userId;
 			case "userKey":
@@ -1999,8 +1860,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 				return oSiteRequestEnUS.userResource;
 			case "userResourceRoles":
 				return oSiteRequestEnUS.userResourceRoles;
-			case "xmlStack":
-				return oSiteRequestEnUS.xmlStack;
 			case "solrDocument":
 				return oSiteRequestEnUS.solrDocument;
 			case "pageAdmin":
@@ -2322,9 +2181,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	public static final String VAR_jsonObject = "jsonObject";
 	public static final String VAR_solrQuery = "solrQuery";
 	public static final String VAR_serviceRequest = "serviceRequest";
-	public static final String VAR_w = "w";
 	public static final String VAR_user = "user";
-	public static final String VAR_jsonPrincipal = "jsonPrincipal";
 	public static final String VAR_userId = "userId";
 	public static final String VAR_userKey = "userKey";
 	public static final String VAR_sessionId = "sessionId";
@@ -2337,7 +2194,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	public static final String VAR_userRealmRoles = "userRealmRoles";
 	public static final String VAR_userResource = "userResource";
 	public static final String VAR_userResourceRoles = "userResourceRoles";
-	public static final String VAR_xmlStack = "xmlStack";
 	public static final String VAR_solrDocument = "solrDocument";
 	public static final String VAR_pageAdmin = "pageAdmin";
 	public static final String VAR_requestPk = "requestPk";

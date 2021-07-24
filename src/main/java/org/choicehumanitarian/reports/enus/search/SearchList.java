@@ -1,5 +1,6 @@
 package org.choicehumanitarian.reports.enus.search;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URLDecoder;
@@ -18,6 +19,7 @@ import org.apache.commons.lang3.reflect.MethodUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrQuery.SortClause;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
@@ -92,7 +94,7 @@ public class SearchList<DEV> extends SearchListGen<DEV> {
 
 					promise.complete(true);
 				}).onFailure(ex -> {
-					LOG.error(String.format("indexTrafficStop failed. "), ex);
+					LOG.error(String.format("Search failed. "), ex);
 					promise.fail(ex);
 				});
 			} else {
@@ -100,7 +102,36 @@ public class SearchList<DEV> extends SearchListGen<DEV> {
 			}
 		} catch (Exception ex) {
 			promise.fail(ex);
-			LOG.error(String.format("indexTrafficStop failed. "), ex);
+			LOG.error(String.format("Solr search failed. "), ex);
+		}
+		return promise.future();
+	}
+
+	public Future<Boolean> query() {
+		Promise<Boolean> promise = Promise.promise();
+		try {
+			String solrHostName = siteRequest_.getConfig().getString(ConfigKeys.SOLR_HOST_NAME);
+			Integer solrPort = siteRequest_.getConfig().getInteger(ConfigKeys.SOLR_PORT);
+			String solrCollection = siteRequest_.getConfig().getString(ConfigKeys.SOLR_COLLECTION);
+			String solrRequestUri = String.format("/solr/%s/select%s", solrCollection, solrQuery.toQueryString());
+			siteRequest_.getWebClient().get(solrPort, solrHostName, solrRequestUri).send().onSuccess(a -> {
+				JsonObject json = a.bodyAsJsonObject();
+				Map<String, Object> map = json.getMap();
+				QueryResponse r = generateSolrQueryResponse(map);
+				setQueryResponse(r);
+				_solrDocumentList(solrDocumentListWrap);
+				setSolrDocumentList(solrDocumentListWrap.o);
+				list.clear();
+				_list(list);
+
+				promise.complete(true);
+			}).onFailure(ex -> {
+				promise.fail(ex);
+				LOG.error(String.format("Solr search failed. "), ex);
+			});
+		} catch (Exception ex) {
+			promise.fail(ex);
+			LOG.error(String.format("Solr search failed. "), ex);
 		}
 		return promise.future();
 	}
@@ -126,7 +157,7 @@ public class SearchList<DEV> extends SearchListGen<DEV> {
 						promise.fail(ex);
 					}
 				}).onFailure(ex -> {
-					LOG.error(String.format("indexTrafficStop failed. "), new RuntimeException(ex));
+					LOG.error(String.format("Search failed. "), new RuntimeException(ex));
 					promise.fail(ex);
 				});
 			} else {
@@ -134,7 +165,7 @@ public class SearchList<DEV> extends SearchListGen<DEV> {
 			}
 		} catch (Exception ex) {
 			promise.fail(ex);
-			LOG.error(String.format("indexTrafficStop failed. "), ex);
+			LOG.error(String.format("Search failed. "), ex);
 		}
 	}
 
@@ -235,49 +266,7 @@ public class SearchList<DEV> extends SearchListGen<DEV> {
 					List<NamedList<Object>> pivots1 = new ArrayList<>();
 					facetPivots.add(key1, pivots1);
 					for(Map<String, Object> pivotJson1 : pivotsJson1) {
-						NamedList<Object> namedList1 = new NamedList<>();
-						pivots1.add(namedList1);
-						namedList1.add("field", pivotJson1.get("field"));
-						namedList1.add("value", pivotJson1.get("value"));
-						namedList1.add("count", pivotJson1.get("count"));
-						List<NamedList<Object>> pivots2 = new ArrayList<>();
-						namedList1.add("pivot", pivots2);
-						Optional.ofNullable((List<Map<String, Object>>)pivotJson1.get("pivot")).ifPresent(pivotsJson2 -> {
-							pivotsJson2.forEach(pivotJson2 -> {
-								NamedList<Object> namedList2 = new NamedList<>();
-								pivots2.add(namedList2);
-								namedList2.add("field", pivotJson2.get("field"));
-								namedList2.add("value", pivotJson2.get("value"));
-								namedList2.add("count", pivotJson2.get("count"));
-								Optional.ofNullable((List<Object>)pivotJson1.get("pivot")).ifPresent(pivotsJson3 -> {
-									
-								});
-							});
-							
-						});
-						Optional.ofNullable(pivotJson1.get("ranges")).ifPresent(facetRangesJson -> {
-							NamedList<Object> facetRanges = new NamedList<Object>();
-							namedList1.add("ranges", facetRanges);
-							((Map<String, Map<String, Object>>)facetRangesJson).forEach((key2, value2) -> {
-								NamedList<Object> namedList2 = new NamedList<>();
-								facetRanges.add(key2, namedList2);
-								List<Object> countsJson = (List<Object>)value2.get("counts");
-								NamedList<Integer> counts = new NamedList<>();
-								namedList2.add("counts", counts);
-								Optional.ofNullable((String)value2.get("gap")).ifPresent(gap -> {
-									namedList2.add("gap", gap);
-								});
-								Optional.ofNullable((String)value2.get("start")).ifPresent(start -> {
-									namedList2.add("start", start);
-								});
-								Optional.ofNullable((String)value2.get("end")).ifPresent(end -> {
-									namedList2.add("end", end);
-								});
-								for(Integer i = 0; i < countsJson.size(); i+=2) {
-									counts.add((String)countsJson.get(i), (Integer)countsJson.get(i + 1));
-								}
-							});
-						});
+						generateFacetPivotResponse(pivotJson1, pivots1);
 					}
 				});
 			});
@@ -288,9 +277,26 @@ public class SearchList<DEV> extends SearchListGen<DEV> {
 
 		// facets //
 		NamedList<Object> facets = new SimpleOrderedMap<Object>();
-		Optional.ofNullable(((Map<String, ? extends Object>)map.get("facets"))).orElse(new HashMap<>()).forEach((key, value) -> {
-			facets.add(key, value);
-		});
+		Optional.ofNullable(((Map<String, ? extends Object>) map.get("facets"))).orElse(new HashMap<>())
+				.forEach((key, value) -> {
+					if (value instanceof LinkedHashMap) {
+						LinkedHashMap<String, Object> linkedHashMap1 = (LinkedHashMap<String, Object>) value;
+						SimpleOrderedMap simpleOrderedMap1 = new SimpleOrderedMap<Object>();
+						facets.add(key, simpleOrderedMap1);
+						ArrayList<LinkedHashMap<String, Object>> bucketsIn = (ArrayList<LinkedHashMap<String, Object>>) linkedHashMap1
+								.get("buckets");
+						ArrayList<SimpleOrderedMap<Object>> bucketsOut = new ArrayList<SimpleOrderedMap<Object>>();
+						simpleOrderedMap1.add("buckets", bucketsOut);
+						bucketsIn.forEach(bucket -> {
+							SimpleOrderedMap simpleOrderedMap2 = new SimpleOrderedMap<Object>();
+							simpleOrderedMap2.add("val", bucket.get("val").toString());
+							simpleOrderedMap2.add("count", bucket.get("count"));
+							bucketsOut.add(simpleOrderedMap2);
+						});
+					} else {
+						facets.add(key, value);
+					}
+				});
 
 		// Look for known things
 		l.add("responseHeader", new NamedList<Object>(((Map<String, ? extends Object>)map.get("responseHeader"))));
@@ -312,6 +318,45 @@ public class SearchList<DEV> extends SearchListGen<DEV> {
 
 		QueryResponse r = new QueryResponse(l, null);
 		return r;
+	}
+
+	private void generateFacetPivotResponse(Map<String, Object> pivotJson, List<NamedList<Object>> pivots) {
+		NamedList<Object> namedList1 = new NamedList<>();
+		pivots.add(namedList1);
+		namedList1.add("field", pivotJson.get("field"));
+		namedList1.add("value", pivotJson.get("value"));
+		namedList1.add("count", pivotJson.get("count"));
+		List<NamedList<Object>> pivots2 = new ArrayList<>();
+		namedList1.add("pivot", pivots2);
+		Optional.ofNullable((List<Map<String, Object>>)pivotJson.get("pivot")).ifPresent(pivotsJson2 -> {
+			pivotsJson2.forEach(pivotJson2 -> {
+				generateFacetPivotResponse(pivotJson2, pivots2);
+			});
+			
+		});
+		Optional.ofNullable(pivotJson.get("ranges")).ifPresent(facetRangesJson -> {
+			NamedList<Object> facetRanges = new NamedList<Object>();
+			namedList1.add("ranges", facetRanges);
+			((Map<String, Map<String, Object>>)facetRangesJson).forEach((key2, value2) -> {
+				NamedList<Object> namedList2 = new NamedList<>();
+				facetRanges.add(key2, namedList2);
+				List<Object> countsJson = (List<Object>)value2.get("counts");
+				NamedList<Integer> counts = new NamedList<>();
+				namedList2.add("counts", counts);
+				Optional.ofNullable((String)value2.get("gap")).ifPresent(gap -> {
+					namedList2.add("gap", gap);
+				});
+				Optional.ofNullable((String)value2.get("start")).ifPresent(start -> {
+					namedList2.add("start", start);
+				});
+				Optional.ofNullable((String)value2.get("end")).ifPresent(end -> {
+					namedList2.add("end", end);
+				});
+				for(Integer i = 0; i < countsJson.size(); i+=2) {
+					counts.add((String)countsJson.get(i), (Integer)countsJson.get(i + 1));
+				}
+			});
+		});
 	}
 
 	private void searchFacetPivot() {
@@ -882,12 +927,6 @@ public class SearchList<DEV> extends SearchListGen<DEV> {
 	@Override()
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-//		sb.append("ListeRecherche { ");
-//		list.stream().forEach(o -> {
-//			sb.append(o);
-//		});
-//		sb.append(" }");
-//		return sb.toString();
 		
 		try {
 			sb.append(URLDecoder.decode(solrQuery.toString(), "UTF-8")).append("\n");
