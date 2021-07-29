@@ -60,6 +60,29 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	public static final List<String> ROLES = Arrays.asList("SiteAdmin");
 	public static final List<String> ROLE_READS = Arrays.asList("");
 
+	public static final String ChoiceDonor_AName = "a donor";
+	public static final String ChoiceDonor_This = "this ";
+	public static final String ChoiceDonor_ThisName = "this donor";
+	public static final String ChoiceDonor_A = "a ";
+	public static final String ChoiceDonor_TheName = "the donor";
+	public static final String ChoiceDonor_NameSingular = "donor";
+	public static final String ChoiceDonor_NamePlural = "donors";
+	public static final String ChoiceDonor_NameActual = "current donor";
+	public static final String ChoiceDonor_AllName = "all the donors";
+	public static final String ChoiceDonor_SearchAllNameBy = "search donors by ";
+	public static final String ChoiceDonor_Title = "donors";
+	public static final String ChoiceDonor_ThePluralName = "the donors";
+	public static final String ChoiceDonor_NoNameFound = "no donor found";
+	public static final String ChoiceDonor_NameVar = "donor";
+	public static final String ChoiceDonor_OfName = "of donor";
+	public static final String ChoiceDonor_ANameAdjective = "a donor";
+	public static final String ChoiceDonor_NameAdjectiveSingular = "donor";
+	public static final String ChoiceDonor_NameAdjectivePlural = "donors";
+	public static final String ChoiceDonor_Color = "pale-blue";
+	public static final String ChoiceDonor_IconGroup = "regular";
+	public static final String ChoiceDonor_IconName = "globe-americas";
+	public static final Integer ChoiceDonor_Rows = 100;
+
 	///////////////////
 	// donorFullName //
 	///////////////////
@@ -128,6 +151,14 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 
 	public String jsonDonorFullName() {
 		return donorFullName == null ? "" : donorFullName;
+	}
+
+	public String htmTooltipDonorFullName() {
+		return null;
+	}
+
+	public String htmDonorFullName() {
+		return donorFullName == null ? "" : StringEscapeUtils.escapeHtml4(strDonorFullName());
 	}
 
 	/////////////
@@ -209,6 +240,14 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return donorId == null ? "" : donorId.toString();
 	}
 
+	public String htmTooltipDonorId() {
+		return null;
+	}
+
+	public String htmDonorId() {
+		return donorId == null ? "" : StringEscapeUtils.escapeHtml4(strDonorId());
+	}
+
 	//////////////////////
 	// donorAttributeId //
 	//////////////////////
@@ -277,6 +316,14 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 
 	public String jsonDonorAttributeId() {
 		return donorAttributeId == null ? "" : donorAttributeId;
+	}
+
+	public String htmTooltipDonorAttributeId() {
+		return null;
+	}
+
+	public String htmDonorAttributeId() {
+		return donorAttributeId == null ? "" : StringEscapeUtils.escapeHtml4(strDonorAttributeId());
 	}
 
 	/////////////////
@@ -356,6 +403,14 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 
 	public String jsonDonorInKind() {
 		return donorInKind == null ? "" : donorInKind.toString();
+	}
+
+	public String htmTooltipDonorInKind() {
+		return null;
+	}
+
+	public String htmDonorInKind() {
+		return donorInKind == null ? "" : StringEscapeUtils.escapeHtml4(strDonorInKind());
 	}
 
 	////////////////
@@ -448,6 +503,14 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return donorTotal == null ? "" : donorTotal.toString();
 	}
 
+	public String htmTooltipDonorTotal() {
+		return null;
+	}
+
+	public String htmDonorTotal() {
+		return donorTotal == null ? "" : StringEscapeUtils.escapeHtml4(strDonorTotal());
+	}
+
 	//////////////
 	// donorYtd //
 	//////////////
@@ -536,6 +599,14 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 
 	public String jsonDonorYtd() {
 		return donorYtd == null ? "" : donorYtd.toString();
+	}
+
+	public String htmTooltipDonorYtd() {
+		return null;
+	}
+
+	public String htmDonorYtd() {
+		return donorYtd == null ? "" : StringEscapeUtils.escapeHtml4(strDonorYtd());
 	}
 
 	/////////////
@@ -628,6 +699,14 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return donorQ1 == null ? "" : donorQ1.toString();
 	}
 
+	public String htmTooltipDonorQ1() {
+		return null;
+	}
+
+	public String htmDonorQ1() {
+		return donorQ1 == null ? "" : StringEscapeUtils.escapeHtml4(strDonorQ1());
+	}
+
 	/////////////
 	// donorQ2 //
 	/////////////
@@ -716,6 +795,14 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 
 	public String jsonDonorQ2() {
 		return donorQ2 == null ? "" : donorQ2.toString();
+	}
+
+	public String htmTooltipDonorQ2() {
+		return null;
+	}
+
+	public String htmDonorQ2() {
+		return donorQ2 == null ? "" : StringEscapeUtils.escapeHtml4(strDonorQ2());
 	}
 
 	/////////////
@@ -808,6 +895,14 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return donorQ3 == null ? "" : donorQ3.toString();
 	}
 
+	public String htmTooltipDonorQ3() {
+		return null;
+	}
+
+	public String htmDonorQ3() {
+		return donorQ3 == null ? "" : StringEscapeUtils.escapeHtml4(strDonorQ3());
+	}
+
 	/////////////
 	// donorQ4 //
 	/////////////
@@ -898,6 +993,14 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return donorQ4 == null ? "" : donorQ4.toString();
 	}
 
+	public String htmTooltipDonorQ4() {
+		return null;
+	}
+
+	public String htmDonorQ4() {
+		return donorQ4 == null ? "" : StringEscapeUtils.escapeHtml4(strDonorQ4());
+	}
+
 	/////////////////////
 	// donorParentName //
 	/////////////////////
@@ -966,6 +1069,14 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 
 	public String jsonDonorParentName() {
 		return donorParentName == null ? "" : donorParentName;
+	}
+
+	public String htmTooltipDonorParentName() {
+		return null;
+	}
+
+	public String htmDonorParentName() {
+		return donorParentName == null ? "" : StringEscapeUtils.escapeHtml4(strDonorParentName());
 	}
 
 	//////////////

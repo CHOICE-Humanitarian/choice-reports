@@ -1,4 +1,4 @@
-package org.choicehumanitarian.reports.enus.model.donor;  
+package org.choicehumanitarian.reports.enus.model.donor;                          
 
 import java.math.BigDecimal;
 
@@ -8,6 +8,7 @@ import org.choicehumanitarian.reports.enus.wrap.Wrap;
 /**
  * Model: true
  * Api: true
+ * Page: true
  * Indexed: true
  * Saved: true
  * Map.Integer.sqlSort: 5
@@ -31,10 +32,10 @@ import org.choicehumanitarian.reports.enus.wrap.Wrap;
  * Role.enUS: SiteAdmin
  * 
  * Rows: 100
-**/    
+**/                     
 public class ChoiceDonor extends ChoiceDonorGen<BaseModel> {
 
-	/**   
+	/**  
 	 * {@inheritDoc}
 	 * Indexed: true
 	 * Stored: true

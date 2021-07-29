@@ -166,7 +166,7 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 		zkConfig.put("zookeeperHosts", zookeeperHosts);
 		zkConfig.put("sessionTimeout", 20000);
 		zkConfig.put("connectTimeout", 3000);
-		zkConfig.put("rootPath", "opendatapolicing");
+		zkConfig.put("rootPath", "choice-reports");
 		zkConfig.put("retry", new JsonObject() {
 			{
 				put("initialSleepTime", 100);
@@ -382,7 +382,7 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 					}
 			
 					//ClusteredSessionStore sessionStore = ClusteredSessionStore.create(vertx);
-					LocalSessionStore sessionStore = LocalSessionStore.create(vertx, "opendatapolicing-sessions");
+					LocalSessionStore sessionStore = LocalSessionStore.create(vertx, "choice-reports-sessions");
 					SessionHandler sessionHandler = SessionHandler.create(sessionStore);
 					if(StringUtils.startsWith(siteBaseUrl, "https://"))
 						sessionHandler.setCookieSecureFlag(true);
