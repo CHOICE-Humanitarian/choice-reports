@@ -1,0 +1,9 @@
+---
+
+- name: Install the computate-postgres pod on OpenShift
+  hosts: localhost
+  connection: local
+  vars_files:
+    - "{{ PROJECT_ANSIBLE_INVENTORY }}/vaults/{{ VAULT_ID }}/vault"
+  roles: 
+    - project_postgres_openshift

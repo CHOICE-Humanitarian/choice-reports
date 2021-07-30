@@ -1,0 +1,14 @@
+---
+# Title: create the Ansible playbook for deploying the application to OpenShift
+# Mission: create the Ansible playbook for deploying the application to OpenShift
+# Milestone: Automate Project Deployment
+# Column: Automate Project Deployment
+
+- name: Install the choice-reports pod on OpenShift
+  hosts: localhost
+  connection: local
+  vars_files:
+#    - "{{ lookup('env', 'ODP_ANSIBLE_INVENTORY') | default('/usr/local/src/choice-reports-ansible') }}/vaults/{{ VAULT_ID }}/vault"
+    - "/usr/local/src/choice-reports-ansible/vaults/{{ VAULT_ID }}/vault"
+  roles: 
+    - project_openshift

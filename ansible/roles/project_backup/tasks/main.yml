@@ -1,0 +1,35 @@
+---
+# Label: project_backup_tasks
+# Title: create the Ansible tasks for backing up all choice-reports data
+# Mission: create the Ansible tasks for backing up all choice-reports data
+# Milestone: Data Backup/Restore
+# Column: Data Backup/Restore
+
+- name: Create the data backup directory
+  file: 
+    path: "{{PROJECT_BACKUP_DIR_ENUS}}"
+    state: directory
+
+- name: Delete previous {{DATA_NAME_VAR}} backups
+  file: 
+    path: "{{item}}"
+    state: absent
+  with_fileglob: "{{PROJECT_BACKUP_DIR_ENUS}}/{{DATA_NAME_VAR}}*"
+
+- name: Restore site access token
+  include_role:
+    name: project_login
+  when: ACCESS_TOKEN is not defined
+- name: Call get_num tasks
+  include_tasks: get_num.yml
+  ignore_errors: true
+- name: Restore site access token again
+  include_role:
+    name: project_login
+  when: REQUEST_NUM.failed | default(false)
+- name: Call get_num tasks again
+  include_tasks: get_num.yml
+  when: REQUEST_NUM.failed | default(false)
+- name: Call project_backup tasks
+  include_tasks: project_backup.yml
+  with_sequence: "start=0 end={{ REQUEST_NUM.json.foundNum }} stride={{ DATA_ROWS }}"

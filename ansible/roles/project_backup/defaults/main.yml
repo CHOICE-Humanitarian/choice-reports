@@ -1,0 +1,8 @@
+---
+# Label: project_backup_defaults
+# Title: create some Ansible default variables for backing up all choice-reports data
+# Mission: create some Ansible default variables for backing up all choice-reports data
+# Milestone: Data Backup/Restore
+# Column: Data Backup/Restore
+
+target: project_backup

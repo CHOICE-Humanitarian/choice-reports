@@ -11,27 +11,19 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<maven.min.version>3.3.9</maven.min.version>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
-		<jdk.min.version>${maven.compiler.source}</jdk.min.version>
-		<junit.version>4.13.1</junit.version>
-		<kafka.version>1.0.0</kafka.version>
-		<maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
+
+		<!-- maven plugin versions -->
+		<maven-compiler-plugin.version>3.6.0</maven-compiler-plugin.version>
 		<maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
-		<maven-war-plugin.version>2.3</maven-war-plugin.version>
-		<maven-shade-plugin.version>2.3</maven-shade-plugin.version>
-		<maven-jarsigner-plugin.version>1.4</maven-jarsigner-plugin.version>
-		<properties-maven-plugin.version>1.0.0</properties-maven-plugin.version>
-		<postgresql.version>42.2.2.jre7</postgresql.version>
-		<solr.version>8.4.1</solr.version>
+		<vertx-maven-plugin.version>1.0.9</vertx-maven-plugin.version>
 		<build-helper-maven-plugin.version>3.0.0</build-helper-maven-plugin.version>
 		<exec-maven-plugin.version>1.5.0</exec-maven-plugin.version>
 		<vertx.version>4.0.3</vertx.version>
-
-		<vertx-maven-plugin.version>1.0.24</vertx-maven-plugin.version>
-		<vertx.launcher>org.choicehumanitarian.reports.enus.vertx.MainVerticle</vertx.launcher>
+		<handlebars-maven-plugin.version>4.2.0</handlebars-maven-plugin.version>
+		<apache-curator.version>4.3.0</apache-curator.version>
+		<postgresql.version>42.2.2.jre7</postgresql.version>
+		<solr.version>8.4.1</solr.version>
+		<junit.version>4.13.1</junit.version>
 	</properties>
 
 	<dependencyManagement>
@@ -101,6 +93,28 @@
 			<groupId>org.apache.solr</groupId>
 			<artifactId>solr-core</artifactId>
 			<version>${solr.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.logging.log4j</groupId>
+					<artifactId>log4j-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.logging.log4j</groupId>
+					<artifactId>log4j-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.logging.log4j</groupId>
+					<artifactId>log4j-1.2-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.logging.log4j</groupId>
+					<artifactId>log4j-slf4j-impl</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.logging.log4j</groupId>
+					<artifactId>log4j-web</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
@@ -190,6 +204,7 @@
 		<dependency>
 			<groupId>io.vertx</groupId>
 			<artifactId>vertx-codegen</artifactId>
+			<classifier>processor</classifier>
 		</dependency>
 
 		<dependency>
