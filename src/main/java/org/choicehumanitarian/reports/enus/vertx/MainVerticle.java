@@ -160,16 +160,16 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 		Integer clusterPort = Optional.ofNullable(System.getenv(ConfigKeys.CLUSTER_PORT)).map(s -> Integer.parseInt(s)).orElse(null);
 		String clusterHostName = System.getenv(ConfigKeys.CLUSTER_HOST_NAME);
 		Integer clusterPublicPort = Optional.ofNullable(System.getenv(ConfigKeys.CLUSTER_PUBLIC_PORT)).map(s -> Integer.parseInt(s)).orElse(null);
-		Integer siteInstances = Optional.ofNullable(System.getenv(ConfigKeys.SITE_INSTANCES)).map(s -> Integer.parseInt(s)).orElse(null);
+		Integer siteInstances = Optional.ofNullable(System.getenv(ConfigKeys.SITE_INSTANCES)).map(s -> Integer.parseInt(s)).orElse(1);
 		Long vertxWarningExceptionSeconds = Optional.ofNullable(System.getenv(ConfigKeys.VERTX_WARNING_EXCEPTION_SECONDS)).map(s -> Long.parseLong(s)).orElse(10L);
 		String clusterPublicHostName = System.getenv(ConfigKeys.CLUSTER_PUBLIC_HOST_NAME);
 		zkConfig.put("zookeeperHosts", zookeeperHosts);
-		zkConfig.put("sessionTimeout", 20000);
+		zkConfig.put("sessionTimeout", 500000);
 		zkConfig.put("connectTimeout", 3000);
 		zkConfig.put("rootPath", "choice-reports");
 		zkConfig.put("retry", new JsonObject() {
 			{
-				put("initialSleepTime", 100);
+				put("initialSleepTime", 3000);
 				put("intervalTimes", 10000);
 				put("maxTimes", 3);
 			}
@@ -360,7 +360,11 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 			String siteBaseUrl = config().getString(ConfigKeys.SITE_BASE_URL);
 
 			OAuth2Options oauth2ClientOptions = new OAuth2Options();
-			oauth2ClientOptions.setSite(config().getString(ConfigKeys.AUTH_URL) + "/realms/" + config().getString(ConfigKeys.AUTH_REALM));
+			Boolean authSsl = config().getBoolean(ConfigKeys.AUTH_SSL);
+			String authHostName = config().getString(ConfigKeys.AUTH_HOST_NAME);
+			Integer authPort = config().getInteger(ConfigKeys.AUTH_PORT);
+			String authUrl = String.format("%s://%s%s/auth", (authSsl ? "https" : "http"), authHostName, (authPort == 443 || authPort == 80 ? "" : ":" + authPort));
+			oauth2ClientOptions.setSite(authUrl + "/realms/" + config().getString(ConfigKeys.AUTH_REALM));
 			oauth2ClientOptions.setTenant(config().getString(ConfigKeys.AUTH_REALM));
 			oauth2ClientOptions.setClientID(config().getString(ConfigKeys.AUTH_RESOURCE));
 			oauth2ClientOptions.setClientSecret(config().getString(ConfigKeys.AUTH_SECRET));
@@ -520,7 +524,7 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 		Promise<Void> promise = Promise.promise();
 		try {
 			HealthCheckHandler healthCheckHandler = HealthCheckHandler.create(vertx);
-			siteInstances = System.getenv("siteInstances") == null ? 1 : Integer.parseInt(System.getenv("siteInstances"));
+			siteInstances = Optional.ofNullable(System.getenv(ConfigKeys.SITE_INSTANCES)).map(s -> Integer.parseInt(s)).orElse(1);
 			workerPoolSize = System.getenv(ConfigKeys.WORKER_POOL_SIZE) == null ? null : Integer.parseInt(System.getenv(ConfigKeys.WORKER_POOL_SIZE));
 
 			healthCheckHandler.register("database", 2000, a -> {
@@ -558,7 +562,7 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 				}
 			});
 			healthCheckHandler.register("vertx", 2000, a -> {
-				a.complete(Status.OK(new JsonObject().put("siteInstances", siteInstances).put("workerPoolSize", workerPoolSize)));
+				a.complete(Status.OK(new JsonObject().put(ConfigKeys.SITE_INSTANCES, siteInstances).put("workerPoolSize", workerPoolSize)));
 			});
 			router.get("/health").handler(healthCheckHandler);
 			LOG.info(configureHealthChecksComplete);
