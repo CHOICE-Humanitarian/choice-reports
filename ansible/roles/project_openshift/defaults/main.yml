@@ -113,7 +113,7 @@ PROJECT_SITE_PORT_ENUS: "10581"
 # The base URL of the site.
 PROJECT_SITE_BASE_URL_ENUS: "https://{{PROJECT_SITE_HOST_NAME_ENUS}}:{{PROJECT_SITE_PORT_ENUS}}"
 # The Solr collection of the site.
-PROJECT_SOLR_COLLECTION_ENUS: "site"
+PROJECT_SOLR_COLLECTION_ENUS: "choice-reports"
 # The timezone of the site.
 PROJECT_SITE_ZONE_ENUS: "America/Denver"
 # The PostgreSQL database host name of the site.
