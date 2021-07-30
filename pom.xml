@@ -294,23 +294,15 @@
 	</dependencies>
 
 	<build>
+
+		<!-- Source Directory Configuration -->
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
 			</resource>
 		</resources>
+
 		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${maven-compiler-plugin.version}</version>
-				<configuration>
-					<target>1.8</target>
-					<source>1.8</source>
-					<annotationProcessors>
-						<annotationProcessor>io.vertx.codegen.CodeGenProcessor</annotationProcessor>
-					</annotationProcessors>
-				</configuration>
-			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
@@ -330,6 +322,19 @@
 					</execution>
 				</executions>
 			</plugin>
+
+			<!-- Vert.X Code Generation -->
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler-plugin.version}</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<annotationProcessors>
+						<annotationProcessor>io.vertx.codegen.CodeGenProcessor</annotationProcessor>
+					</annotationProcessors>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -338,6 +343,11 @@
 		<profile>
 			<id>openshift</id>
 			<build>
+				<resources>
+					<resource>
+						<directory>src/main/resources</directory>
+					</resource>
+				</resources>
 				<plugins>
 
 					<!-- Read Project Properties -->
