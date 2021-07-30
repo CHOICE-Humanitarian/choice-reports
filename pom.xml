@@ -85,6 +85,23 @@
 			<version>${postgresql.version}</version>
 		</dependency>
 
+		<!-- Apache Curator -->
+		<dependency>
+			<groupId>org.apache.curator</groupId>
+			<artifactId>curator-client</artifactId>
+			<version>${apache-curator.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.curator</groupId>
+			<artifactId>curator-framework</artifactId>
+			<version>${apache-curator.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.curator</groupId>
+			<artifactId>curator-recipes</artifactId>
+			<version>${apache-curator.version}</version>
+		</dependency>
+
 		<!-- #### -->
 		<!-- Solr -->
 		<!-- #### -->
