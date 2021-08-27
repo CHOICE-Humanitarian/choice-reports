@@ -343,11 +343,6 @@
 		<profile>
 			<id>openshift</id>
 			<build>
-				<resources>
-					<resource>
-						<directory>src/main/resources</directory>
-					</resource>
-				</resources>
 				<plugins>
 
 					<!-- Read Project Properties -->

@@ -419,4 +419,44 @@ public class ConfigKeys {
 	 * 
 	 **/
 	public static final String ZOOKEEPER_HOSTS = "ZOOKEEPER_HOSTS";
+
+	/**
+	 * 
+	 **/
+	public static final String DOMO_HOST_NAME = "DOMO_HOST_NAME";
+
+	/**
+	 * 
+	 **/
+	public static final String DOMO_PORT = "DOMO_PORT";
+
+	/**
+	 * 
+	 **/
+	public static final String DOMO_SSL = "DOMO_SSL";
+
+	/**
+	 * 
+	 **/
+	public static final String DOMO_AUTH_TOKEN_URI = "DOMO_AUTH_TOKEN_URI";
+
+	/**
+	 * 
+	 **/
+	public static final String DOMO_AUTH_SCOPE = "DOMO_AUTH_SCOPE";
+
+	/**
+	 * 
+	 **/
+	public static final String DOMO_AUTH_CLIENT_ID = "DOMO_AUTH_CLIENT_ID";
+
+	/**
+	 * 
+	 **/
+	public static final String DOMO_AUTH_CLIENT_SECRET = "DOMO_AUTH_CLIENT_SECRET";
+
+	/**
+	 * 
+	 **/
+	public static final String DOMO_DATASET_CPP_URI = "DOMO_DATASET_CPP_URI";
 }

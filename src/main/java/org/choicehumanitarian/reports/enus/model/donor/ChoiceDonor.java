@@ -1,4 +1,4 @@
-package org.choicehumanitarian.reports.enus.model.donor;                          
+package org.choicehumanitarian.reports.enus.model.donor;                            
 
 import java.math.BigDecimal;
 

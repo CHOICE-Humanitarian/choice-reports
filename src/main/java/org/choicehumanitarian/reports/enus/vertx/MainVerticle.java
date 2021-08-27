@@ -76,7 +76,7 @@ import io.vertx.sqlclient.PoolOptions;
 /**	
  *	A Java class to start the Vert.x application as a main method. 
  * Keyword: classSimpleNameVerticle
- **/
+ **/  
 public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 	private static final Logger LOG = LoggerFactory.getLogger(MainVerticle.class);
 
@@ -104,6 +104,8 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 	OAuth2Auth oauth2AuthenticationProvider;
 
 	AuthorizationProvider authorizationProvider;
+
+	HandlebarsTemplateEngine templateEngine;
 
 	/**	
 	 *	The main method for the Vert.x application that runs the Vert.x Runner class
@@ -633,8 +635,10 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 	private Future<Void> configureApi() {
 		Promise<Void> promise = Promise.promise();
 		try {
-			SiteUserEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, vertx);
-			ChoiceDonorEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, vertx);
+			templateEngine = HandlebarsTemplateEngine.create(vertx);
+
+			SiteUserEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine, vertx);
+			ChoiceDonorEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine, vertx);
 
 			LOG.info(configureApiComplete);
 			promise.complete();

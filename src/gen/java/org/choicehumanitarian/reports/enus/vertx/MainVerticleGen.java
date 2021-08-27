@@ -52,9 +52,8 @@ CREATE TABLE SiteUser(
 	, deleted boolean
 	, userId text
 	, userKey bigint
-	, userKey bigint
-	, userId text
 	, userName text
+	, sessionId text
 	, userEmail text
 	, userFirstName text
 	, userLastName text

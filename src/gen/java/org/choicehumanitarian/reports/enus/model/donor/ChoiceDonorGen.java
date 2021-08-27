@@ -1554,71 +1554,71 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	}
 	public void populateChoiceDonor(SolrDocument solrDocument) {
 		ChoiceDonor oChoiceDonor = (ChoiceDonor)this;
-		saves = (List<String>)solrDocument.get("saves_stored_strings");
+		saves = (List<String>)solrDocument.get("saves_indexedstored_strings");
 		if(saves != null) {
 
 			if(saves.contains("donorFullName")) {
-				String donorFullName = (String)solrDocument.get("donorFullName_stored_string");
+				String donorFullName = (String)solrDocument.get("donorFullName_indexedstored_string");
 				if(donorFullName != null)
 					oChoiceDonor.setDonorFullName(donorFullName);
 			}
 
 			if(saves.contains("donorId")) {
-				Long donorId = (Long)solrDocument.get("donorId_stored_long");
+				Long donorId = (Long)solrDocument.get("donorId_indexedstored_long");
 				if(donorId != null)
 					oChoiceDonor.setDonorId(donorId);
 			}
 
 			if(saves.contains("donorAttributeId")) {
-				String donorAttributeId = (String)solrDocument.get("donorAttributeId_stored_string");
+				String donorAttributeId = (String)solrDocument.get("donorAttributeId_indexedstored_string");
 				if(donorAttributeId != null)
 					oChoiceDonor.setDonorAttributeId(donorAttributeId);
 			}
 
 			if(saves.contains("donorInKind")) {
-				Long donorInKind = (Long)solrDocument.get("donorInKind_stored_long");
+				Long donorInKind = (Long)solrDocument.get("donorInKind_indexedstored_long");
 				if(donorInKind != null)
 					oChoiceDonor.setDonorInKind(donorInKind);
 			}
 
 			if(saves.contains("donorTotal")) {
-				Double donorTotal = (Double)solrDocument.get("donorTotal_stored_double");
+				Double donorTotal = (Double)solrDocument.get("donorTotal_indexedstored_double");
 				if(donorTotal != null)
 					oChoiceDonor.setDonorTotal(donorTotal);
 			}
 
 			if(saves.contains("donorYtd")) {
-				Double donorYtd = (Double)solrDocument.get("donorYtd_stored_double");
+				Double donorYtd = (Double)solrDocument.get("donorYtd_indexedstored_double");
 				if(donorYtd != null)
 					oChoiceDonor.setDonorYtd(donorYtd);
 			}
 
 			if(saves.contains("donorQ1")) {
-				Double donorQ1 = (Double)solrDocument.get("donorQ1_stored_double");
+				Double donorQ1 = (Double)solrDocument.get("donorQ1_indexedstored_double");
 				if(donorQ1 != null)
 					oChoiceDonor.setDonorQ1(donorQ1);
 			}
 
 			if(saves.contains("donorQ2")) {
-				Double donorQ2 = (Double)solrDocument.get("donorQ2_stored_double");
+				Double donorQ2 = (Double)solrDocument.get("donorQ2_indexedstored_double");
 				if(donorQ2 != null)
 					oChoiceDonor.setDonorQ2(donorQ2);
 			}
 
 			if(saves.contains("donorQ3")) {
-				Double donorQ3 = (Double)solrDocument.get("donorQ3_stored_double");
+				Double donorQ3 = (Double)solrDocument.get("donorQ3_indexedstored_double");
 				if(donorQ3 != null)
 					oChoiceDonor.setDonorQ3(donorQ3);
 			}
 
 			if(saves.contains("donorQ4")) {
-				Double donorQ4 = (Double)solrDocument.get("donorQ4_stored_double");
+				Double donorQ4 = (Double)solrDocument.get("donorQ4_indexedstored_double");
 				if(donorQ4 != null)
 					oChoiceDonor.setDonorQ4(donorQ4);
 			}
 
 			if(saves.contains("donorParentName")) {
-				String donorParentName = (String)solrDocument.get("donorParentName_stored_string");
+				String donorParentName = (String)solrDocument.get("donorParentName_indexedstored_string");
 				if(donorParentName != null)
 					oChoiceDonor.setDonorParentName(donorParentName);
 			}
@@ -1629,48 +1629,37 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 
 	public void indexChoiceDonor(SolrInputDocument document) {
 		if(donorFullName != null) {
-			document.addField("donorFullName_indexed_string", donorFullName);
-			document.addField("donorFullName_stored_string", donorFullName);
+			document.addField("donorFullName_indexedstored_string", donorFullName);
 		}
 		if(donorId != null) {
-			document.addField("donorId_indexed_long", donorId);
-			document.addField("donorId_stored_long", donorId);
+			document.addField("donorId_indexedstored_long", donorId);
 		}
 		if(donorAttributeId != null) {
-			document.addField("donorAttributeId_indexed_string", donorAttributeId);
-			document.addField("donorAttributeId_stored_string", donorAttributeId);
+			document.addField("donorAttributeId_indexedstored_string", donorAttributeId);
 		}
 		if(donorInKind != null) {
-			document.addField("donorInKind_indexed_long", donorInKind);
-			document.addField("donorInKind_stored_long", donorInKind);
+			document.addField("donorInKind_indexedstored_long", donorInKind);
 		}
 		if(donorTotal != null) {
-			document.addField("donorTotal_indexed_double", donorTotal.doubleValue());
-			document.addField("donorTotal_stored_double", donorTotal.doubleValue());
+			document.addField("donorTotal_indexedstored_double", donorTotal.doubleValue());
 		}
 		if(donorYtd != null) {
-			document.addField("donorYtd_indexed_double", donorYtd.doubleValue());
-			document.addField("donorYtd_stored_double", donorYtd.doubleValue());
+			document.addField("donorYtd_indexedstored_double", donorYtd.doubleValue());
 		}
 		if(donorQ1 != null) {
-			document.addField("donorQ1_indexed_double", donorQ1.doubleValue());
-			document.addField("donorQ1_stored_double", donorQ1.doubleValue());
+			document.addField("donorQ1_indexedstored_double", donorQ1.doubleValue());
 		}
 		if(donorQ2 != null) {
-			document.addField("donorQ2_indexed_double", donorQ2.doubleValue());
-			document.addField("donorQ2_stored_double", donorQ2.doubleValue());
+			document.addField("donorQ2_indexedstored_double", donorQ2.doubleValue());
 		}
 		if(donorQ3 != null) {
-			document.addField("donorQ3_indexed_double", donorQ3.doubleValue());
-			document.addField("donorQ3_stored_double", donorQ3.doubleValue());
+			document.addField("donorQ3_indexedstored_double", donorQ3.doubleValue());
 		}
 		if(donorQ4 != null) {
-			document.addField("donorQ4_indexed_double", donorQ4.doubleValue());
-			document.addField("donorQ4_stored_double", donorQ4.doubleValue());
+			document.addField("donorQ4_indexedstored_double", donorQ4.doubleValue());
 		}
 		if(donorParentName != null) {
-			document.addField("donorParentName_indexed_string", donorParentName);
-			document.addField("donorParentName_stored_string", donorParentName);
+			document.addField("donorParentName_indexedstored_string", donorParentName);
 		}
 		super.indexBaseModel(document);
 
@@ -1679,27 +1668,27 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	public static String varIndexedChoiceDonor(String entityVar) {
 		switch(entityVar) {
 			case "donorFullName":
-				return "donorFullName_indexed_string";
+				return "donorFullName_indexedstored_string";
 			case "donorId":
-				return "donorId_indexed_long";
+				return "donorId_indexedstored_long";
 			case "donorAttributeId":
-				return "donorAttributeId_indexed_string";
+				return "donorAttributeId_indexedstored_string";
 			case "donorInKind":
-				return "donorInKind_indexed_long";
+				return "donorInKind_indexedstored_long";
 			case "donorTotal":
-				return "donorTotal_indexed_double";
+				return "donorTotal_indexedstored_double";
 			case "donorYtd":
-				return "donorYtd_indexed_double";
+				return "donorYtd_indexedstored_double";
 			case "donorQ1":
-				return "donorQ1_indexed_double";
+				return "donorQ1_indexedstored_double";
 			case "donorQ2":
-				return "donorQ2_indexed_double";
+				return "donorQ2_indexedstored_double";
 			case "donorQ3":
-				return "donorQ3_indexed_double";
+				return "donorQ3_indexedstored_double";
 			case "donorQ4":
-				return "donorQ4_indexed_double";
+				return "donorQ4_indexedstored_double";
 			case "donorParentName":
-				return "donorParentName_indexed_string";
+				return "donorParentName_indexedstored_string";
 			default:
 				return BaseModel.varIndexedBaseModel(entityVar);
 		}
@@ -1729,17 +1718,17 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	public void storeChoiceDonor(SolrDocument solrDocument) {
 		ChoiceDonor oChoiceDonor = (ChoiceDonor)this;
 
-		oChoiceDonor.setDonorFullName(Optional.ofNullable(solrDocument.get("donorFullName_stored_string")).map(v -> v.toString()).orElse(null));
-		oChoiceDonor.setDonorId(Optional.ofNullable(solrDocument.get("donorId_stored_long")).map(v -> v.toString()).orElse(null));
-		oChoiceDonor.setDonorAttributeId(Optional.ofNullable(solrDocument.get("donorAttributeId_stored_string")).map(v -> v.toString()).orElse(null));
-		oChoiceDonor.setDonorInKind(Optional.ofNullable(solrDocument.get("donorInKind_stored_long")).map(v -> v.toString()).orElse(null));
-		oChoiceDonor.setDonorTotal(Optional.ofNullable(solrDocument.get("donorTotal_stored_double")).map(v -> v.toString()).orElse(null));
-		oChoiceDonor.setDonorYtd(Optional.ofNullable(solrDocument.get("donorYtd_stored_double")).map(v -> v.toString()).orElse(null));
-		oChoiceDonor.setDonorQ1(Optional.ofNullable(solrDocument.get("donorQ1_stored_double")).map(v -> v.toString()).orElse(null));
-		oChoiceDonor.setDonorQ2(Optional.ofNullable(solrDocument.get("donorQ2_stored_double")).map(v -> v.toString()).orElse(null));
-		oChoiceDonor.setDonorQ3(Optional.ofNullable(solrDocument.get("donorQ3_stored_double")).map(v -> v.toString()).orElse(null));
-		oChoiceDonor.setDonorQ4(Optional.ofNullable(solrDocument.get("donorQ4_stored_double")).map(v -> v.toString()).orElse(null));
-		oChoiceDonor.setDonorParentName(Optional.ofNullable(solrDocument.get("donorParentName_stored_string")).map(v -> v.toString()).orElse(null));
+		oChoiceDonor.setDonorFullName(Optional.ofNullable(solrDocument.get("donorFullName_indexedstored_string")).map(v -> v.toString()).orElse(null));
+		oChoiceDonor.setDonorId(Optional.ofNullable(solrDocument.get("donorId_indexedstored_long")).map(v -> v.toString()).orElse(null));
+		oChoiceDonor.setDonorAttributeId(Optional.ofNullable(solrDocument.get("donorAttributeId_indexedstored_string")).map(v -> v.toString()).orElse(null));
+		oChoiceDonor.setDonorInKind(Optional.ofNullable(solrDocument.get("donorInKind_indexedstored_long")).map(v -> v.toString()).orElse(null));
+		oChoiceDonor.setDonorTotal(Optional.ofNullable(solrDocument.get("donorTotal_indexedstored_double")).map(v -> v.toString()).orElse(null));
+		oChoiceDonor.setDonorYtd(Optional.ofNullable(solrDocument.get("donorYtd_indexedstored_double")).map(v -> v.toString()).orElse(null));
+		oChoiceDonor.setDonorQ1(Optional.ofNullable(solrDocument.get("donorQ1_indexedstored_double")).map(v -> v.toString()).orElse(null));
+		oChoiceDonor.setDonorQ2(Optional.ofNullable(solrDocument.get("donorQ2_indexedstored_double")).map(v -> v.toString()).orElse(null));
+		oChoiceDonor.setDonorQ3(Optional.ofNullable(solrDocument.get("donorQ3_indexedstored_double")).map(v -> v.toString()).orElse(null));
+		oChoiceDonor.setDonorQ4(Optional.ofNullable(solrDocument.get("donorQ4_indexedstored_double")).map(v -> v.toString()).orElse(null));
+		oChoiceDonor.setDonorParentName(Optional.ofNullable(solrDocument.get("donorParentName_indexedstored_string")).map(v -> v.toString()).orElse(null));
 
 		super.storeBaseModel(solrDocument);
 	}

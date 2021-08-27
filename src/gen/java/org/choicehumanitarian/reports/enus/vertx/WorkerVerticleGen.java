@@ -66,7 +66,7 @@ public abstract class WorkerVerticleGen<DEV> extends AbstractVerticle {
 	public static final String importDataComplete = importDataComplete1;
 	public static final String importDataFail1 = "Importing initial data failed. ";
 	public static final String importDataFail = importDataFail1;
-	public static final String importDataSkip1 = "data import skipped. ";
+	public static final String importDataSkip1 = "Skip importing data. ";
 	public static final String importDataSkip = importDataSkip1;
 
 	public static final String syncDbToSolrComplete1 = "Syncing database to Solr completed. ";

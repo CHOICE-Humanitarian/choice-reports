@@ -226,8 +226,8 @@ public class BaseModel extends BaseModelGen<Object> {
 			Class<?> cl = getClass();
 
 			try {
-				String o = toId(StringUtils.join(StringUtils.splitByCharacterTypeCamelCase((String)FieldUtils.getField(cl, cl.getSimpleName() + "_NameVar").get(this)), "-"));
-				c.o(o);
+//				String o = toId(StringUtils.join(StringUtils.splitByCharacterTypeCamelCase((String)FieldUtils.getField(cl, cl.getSimpleName() + "_NameVar").get(this)), "-"));
+//				c.o(o);
 			} catch (Exception e) {
 				ExceptionUtils.rethrow(e);
 			}
@@ -313,7 +313,7 @@ public class BaseModel extends BaseModelGen<Object> {
 	protected void _pageH1(Wrap<String> c) {
 		try {
 			Class<?> cl = getClass();
-			c.o((String)FieldUtils.getField(cl, cl.getSimpleName() + "_NameSingular").get(this) + ": " + objectTitle);
+//			c.o((String)FieldUtils.getField(cl, cl.getSimpleName() + "_NameSingular").get(this) + ": " + objectTitle);
 		} catch (Exception e) {
 			ExceptionUtils.rethrow(e);
 		}
