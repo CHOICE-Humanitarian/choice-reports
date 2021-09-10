@@ -166,7 +166,7 @@ public class BaseModel extends BaseModelGen<Object> {
 	 * Stored: true
 	 * Define: true
 	 * Modify: false
-	 */                 
+	 */               
 	protected void _userKey(Wrap<Long> c) {
 	}
 	/**

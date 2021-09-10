@@ -1,19 +1,46 @@
 package org.choicehumanitarian.reports.enus.model.donor;
 
+import org.choicehumanitarian.reports.enus.page.PageLayout;
+import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
+import org.choicehumanitarian.reports.enus.user.SiteUser;
+import java.io.IOException;
+import io.vertx.core.http.HttpServerRequest;
+import io.vertx.core.http.HttpServerResponse;
+import org.choicehumanitarian.reports.enus.search.SearchList;
+import org.choicehumanitarian.reports.enus.wrap.Wrap;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+import io.vertx.core.json.JsonObject;
+import io.vertx.ext.web.api.service.ServiceRequest;
+import io.vertx.core.json.JsonArray;
+import java.net.URLDecoder;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.commons.lang3.StringUtils;
+import java.util.Map;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
+import org.apache.solr.common.util.SimpleOrderedMap;
+import java.util.stream.Collectors;
+import java.util.Arrays;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.math.MathContext;
+import org.apache.commons.collections.CollectionUtils;
+import java.util.Objects;
+import org.apache.solr.client.solrj.SolrQuery.SortClause;
+import io.vertx.core.Promise;
+
 
 /**
  * Translate: false
  **/
-public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<Object> {
-
-	public static final List<String> ROLES = Arrays.asList("SiteAdmin");
-	public static final List<String> ROLE_READS = Arrays.asList("");
-
-	/**
-	 * Ignore: true
-	**/
-	protected void _siteRequest_(Wrap<SiteRequestEnUS> c) {
-	}
+public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<PageLayout> {
 
 	/**
 	 * {@inheritDoc}
@@ -27,25 +54,27 @@ public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<Object> {
 			c.o(listChoiceDonor_.get(0));
 	}
 
-	/**
-	 * Ignore: true
-	**/
+	@Override
 	protected void _promiseBefore(Promise<Void> promise) {
 		promise.complete();
 	}
 
+	@Override
 	protected void _pageH1(Wrap<String> c) {
 			c.o("donors");
 	}
 
+	@Override
 	protected void _pageH2(Wrap<String> c) {
 		c.o("");
 	}
 
+	@Override
 	protected void _pageH3(Wrap<String> c) {
 		c.o("");
 	}
 
+	@Override
 	protected void _pageTitle(Wrap<String> c) {
 		if(choiceDonor_ != null && choiceDonor_.getObjectTitle() != null)
 			c.o(choiceDonor_.getObjectTitle());
@@ -57,30 +86,53 @@ public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<Object> {
 			c.o("donors");
 	}
 
+	@Override
 	protected void _pageUri(Wrap<String> c) {
 		c.o("/api/donor");
 	}
 
+	@Override
+	protected void _roles(List<String> l) {
+		if(siteRequest_ != null) {
+			l.addAll(Stream.concat(siteRequest_.getUserResourceRoles().stream(), siteRequest_.getUserRealmRoles().stream()).distinct().collect(Collectors.toList()));
+		}
+	}
+
+	@Override
+	protected void _rolesRequired(List<String> l) {
+		l.addAll(Arrays.asList("SiteAdmin"));
+	}
+
+	@Override
+	protected void _authRolesAdmin(List<String> l) {
+		l.addAll(Arrays.asList("SiteAdmin"));
+	}
+
+	@Override
 	protected void _pagination(JsonObject pagination) {
 		JsonArray pages = new JsonArray();
 		Long start = listChoiceDonor_.getStart().longValue();
 		Long rows = listChoiceDonor_.getRows().longValue();
 		Long foundNum = listChoiceDonor_.getQueryResponse().getResults().getNumFound();
-		Long startNum = start + 1;
+		Long startNum = start + 1L;
 		Long endNum = start + rows;
 		Long floorMod = Math.floorMod(foundNum, rows);
 		Long last = Math.floorDiv(foundNum, rows) - (floorMod.equals(0L) ? 1L : 0L) * rows;
 		endNum = endNum < foundNum ? endNum : foundNum;
 		startNum = foundNum == 0L ? 0L : startNum;
-		Long paginationStart = start - 10 * rows;
-		if(paginationStart < 0)
+		Long paginationStart = start - 10L * rows;
+		if(paginationStart < 0L)
 			paginationStart = 0L;
-		Long paginationEnd = start + 10 * rows;
+		Long paginationEnd = start + 10L * rows;
 		if(paginationEnd > foundNum)
 			paginationEnd = foundNum;
 
+		pagination.put("1L", 1L);
+		pagination.put("0L", 0L);
 		pagination.put("start", start);
 		pagination.put("rows", rows);
+		pagination.put("rowsPrevious", rows / 2);
+		pagination.put("rowsNext", rows * 2);
 		pagination.put("startNum", startNum);
 		pagination.put("endNum", endNum);
 		pagination.put("foundNum", foundNum);
@@ -88,7 +140,7 @@ public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<Object> {
 		if(start > 0L)
 			pagination.put("pagePrevious", new JsonObject().put("start", start - rows).put("pageNumber", start - rows + 1L));
 		if(start + rows < foundNum)
-			pagination.put("pagePrevious", new JsonObject().put("start", start + rows).put("pageNumber", start + rows + 1L));
+			pagination.put("pageNext", new JsonObject().put("start", start + rows).put("pageNumber", start + rows + 1L));
 		pagination.put("pageEnd", new JsonObject().put("start", last).put("pageNumber", last + 1L));
 		pagination.put("pages", pages);
 		for(Long i = paginationStart; i < paginationEnd; i += rows) {
@@ -101,6 +153,7 @@ public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<Object> {
 		}
 	}
 
+	@Override
 	protected void _query(JsonObject query) {
 		ServiceRequest serviceRequest = siteRequest_.getServiceRequest();
 		JsonObject params = serviceRequest.getParams();
@@ -159,21 +212,22 @@ public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<Object> {
 		query.put("sort", sorts);
 	}
 
-	/**
-	 * Ignore: true
-	**/
+	@Override
 	protected void _promiseAfter(Promise<Void> promise) {
 		promise.complete();
 	}
 
+	@Override
 	protected void _pageImageUri(Wrap<String> c) {
 			c.o("/png/api/donor-999.png");
 	}
 
+	@Override
 	protected void _contextIconGroup(Wrap<String> c) {
 			c.o("regular");
 	}
 
+	@Override
 	protected void _contextIconName(Wrap<String> c) {
 			c.o("globe-americas");
 	}

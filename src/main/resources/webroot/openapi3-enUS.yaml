@@ -117,7 +117,7 @@ paths:
           required: false
           schema:
             type: integer
-            default: 10
+            default: 100
             minimum: 0
         - in: query
           name: var
@@ -259,7 +259,7 @@ paths:
           required: false
           schema:
             type: integer
-            default: 10
+            default: 100
             minimum: 0
         - in: query
           name: var
@@ -395,7 +395,7 @@ paths:
           required: false
           schema:
             type: integer
-            default: 10
+            default: 100
             minimum: 0
         - in: query
           name: var
@@ -508,6 +508,284 @@ paths:
             application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/GETChoiceDonorResponse'
+  /donor:
+    get:
+      operationId: searchpageChoiceDonor
+      x-vertx-event-bus: choice-reports-enUS-ChoiceDonor
+      security:
+        - openIdConnect:
+          - DefaultAuthScope
+      description: >+
+      summary: >+
+      tags:
+        - Donor
+      parameters:
+        - name: vertx-web.session
+          in: cookie
+          schema:
+            type: string
+        - name: sessionIdBefore
+          in: cookie
+          schema:
+            type: string
+        - in: query
+          name: q
+          description: ''
+          required: false
+          schema:
+            type: string
+            default: '*:*'
+        - in: query
+          name: fq
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: fl
+          description: ''
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: start
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - in: query
+          name: rows
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 100
+            minimum: 0
+        - in: query
+          name: var
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: facet
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: boolean
+        - in: query
+          name: facet.range.start
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.end
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.gap
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.pivot
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.field
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: >+
+          content:
+            text/html; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SearchPageChoiceDonorResponse'
+  /donor/{id}:
+    get:
+      operationId: searchpageChoiceDonorId
+      x-vertx-event-bus: choice-reports-enUS-ChoiceDonor
+      security:
+        - openIdConnect:
+          - DefaultAuthScope
+      description: >+
+      summary: >+
+      tags:
+        - Donor
+      parameters:
+        - name: vertx-web.session
+          in: cookie
+          schema:
+            type: string
+        - name: sessionIdBefore
+          in: cookie
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: >+
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: q
+          description: ''
+          required: false
+          schema:
+            type: string
+            default: '*:*'
+        - in: query
+          name: fq
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: fl
+          description: ''
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: start
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - in: query
+          name: rows
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 100
+            minimum: 0
+        - in: query
+          name: var
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: facet
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: boolean
+        - in: query
+          name: facet.range.start
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.end
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.gap
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.pivot
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.field
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: >+
+          content:
+            text/html; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SearchPageChoiceDonorResponse'
   /api/user:
     get:
       operationId: searchSiteUser
@@ -859,6 +1137,11 @@ components:
         application/json; charset=utf-8:
           schema:
             $ref: '#/components/schemas/GETChoiceDonorResponse'
+    SearchPageChoiceDonorResponse:
+      content:
+        text/html; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/SearchPageChoiceDonorResponse'
     SearchSiteUserResponse:
       content:
         application/json; charset=utf-8:
@@ -1205,21 +1488,22 @@ components:
               type: string
             donorParentName:
               type: string
+    SearchPageChoiceDonorResponse:
+      allOf:
+        - type: string
     SearchSiteUserResponse:
       allOf:
         - type: array
           items:
             type: object
             properties:
-              userKey:
-                type: string
               userKeys:
                 type: array
                 items:
                   type: string
-              userId:
-                type: string
               userName:
+                type: string
+              sessionId:
                 type: string
               userEmail:
                 type: string
@@ -1233,13 +1517,6 @@ components:
       allOf:
         - type: object
           properties:
-            setUserKey:
-              type: string
-              nullable: true
-            removeUserKey:
-              type: string
-            removeAllUserKey:
-              type: string
             setUserKeys:
               type: array
               nullable: true
@@ -1257,19 +1534,19 @@ components:
               type: array
               items:
                 type: string
-            setUserId:
-              type: string
-              nullable: true
-            removeUserId:
-              type: string
-            removeAllUserId:
-              type: string
             setUserName:
               type: string
               nullable: true
             removeUserName:
               type: string
             removeAllUserName:
+              type: string
+            setSessionId:
+              type: string
+              nullable: true
+            removeSessionId:
+              type: string
+            removeAllSessionId:
               type: string
             setUserEmail:
               type: string
@@ -1303,13 +1580,6 @@ components:
       allOf:
         - type: object
           properties:
-            setUserKey:
-              type: string
-              nullable: true
-            removeUserKey:
-              type: string
-            removeAllUserKey:
-              type: string
             setUserKeys:
               type: array
               nullable: true
@@ -1327,19 +1597,19 @@ components:
               type: array
               items:
                 type: string
-            setUserId:
-              type: string
-              nullable: true
-            removeUserId:
-              type: string
-            removeAllUserId:
-              type: string
             setUserName:
               type: string
               nullable: true
             removeUserName:
               type: string
             removeAllUserName:
+              type: string
+            setSessionId:
+              type: string
+              nullable: true
+            removeSessionId:
+              type: string
+            removeAllSessionId:
               type: string
             setUserEmail:
               type: string
@@ -1373,15 +1643,13 @@ components:
       allOf:
         - type: object
           properties:
-            userKey:
-              type: string
             userKeys:
               type: array
               items:
                 type: string
-            userId:
-              type: string
             userName:
+              type: string
+            sessionId:
               type: string
             userEmail:
               type: string
@@ -1395,15 +1663,13 @@ components:
       allOf:
         - type: object
           properties:
-            userKey:
-              type: string
             userKeys:
               type: array
               items:
                 type: string
-            userId:
-              type: string
             userName:
+              type: string
+            sessionId:
               type: string
             userEmail:
               type: string

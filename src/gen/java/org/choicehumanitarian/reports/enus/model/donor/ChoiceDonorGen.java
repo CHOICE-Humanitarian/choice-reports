@@ -157,8 +157,86 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return null;
 	}
 
-	public String htmDonorFullName() {
+	public String htmlDonorFullName() {
 		return donorFullName == null ? "" : StringEscapeUtils.escapeHtml4(strDonorFullName());
+	}
+
+	/////////////////////
+	// donorParentName //
+	/////////////////////
+
+	/**	 The entity donorParentName
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String donorParentName;
+	@JsonIgnore
+	public Wrap<String> donorParentNameWrap = new Wrap<String>().var("donorParentName").o(donorParentName);
+
+	/**	<br/> The entity donorParentName
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:donorParentName">Find the entity donorParentName in Solr</a>
+	 * <br/>
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _donorParentName(Wrap<String> c);
+
+	public String getDonorParentName() {
+		return donorParentName;
+	}
+	public void setDonorParentName(String o) {
+		this.donorParentName = ChoiceDonor.staticSetDonorParentName(siteRequest_, o);
+		this.donorParentNameWrap.alreadyInitialized = true;
+	}
+	public static String staticSetDonorParentName(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected ChoiceDonor donorParentNameInit() {
+		if(!donorParentNameWrap.alreadyInitialized) {
+			_donorParentName(donorParentNameWrap);
+			if(donorParentName == null)
+				setDonorParentName(donorParentNameWrap.o);
+			donorParentNameWrap.o(null);
+		}
+		donorParentNameWrap.alreadyInitialized(true);
+		return (ChoiceDonor)this;
+	}
+
+	public static String staticSolrDonorParentName(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrDonorParentName(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqDonorParentName(SiteRequestEnUS siteRequest_, String o) {
+		return ChoiceDonor.staticSolrStrDonorParentName(siteRequest_, ChoiceDonor.staticSolrDonorParentName(siteRequest_, ChoiceDonor.staticSetDonorParentName(siteRequest_, o)));
+	}
+
+	public String solrDonorParentName() {
+		return ChoiceDonor.staticSolrDonorParentName(siteRequest_, donorParentName);
+	}
+
+	public String strDonorParentName() {
+		return donorParentName == null ? "" : donorParentName;
+	}
+
+	public String sqlDonorParentName() {
+		return donorParentName;
+	}
+
+	public String jsonDonorParentName() {
+		return donorParentName == null ? "" : donorParentName;
+	}
+
+	public String htmTooltipDonorParentName() {
+		return null;
+	}
+
+	public String htmlDonorParentName() {
+		return donorParentName == null ? "" : StringEscapeUtils.escapeHtml4(strDonorParentName());
 	}
 
 	/////////////
@@ -244,7 +322,7 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return null;
 	}
 
-	public String htmDonorId() {
+	public String htmlDonorId() {
 		return donorId == null ? "" : StringEscapeUtils.escapeHtml4(strDonorId());
 	}
 
@@ -322,7 +400,7 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return null;
 	}
 
-	public String htmDonorAttributeId() {
+	public String htmlDonorAttributeId() {
 		return donorAttributeId == null ? "" : StringEscapeUtils.escapeHtml4(strDonorAttributeId());
 	}
 
@@ -409,7 +487,7 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return null;
 	}
 
-	public String htmDonorInKind() {
+	public String htmlDonorInKind() {
 		return donorInKind == null ? "" : StringEscapeUtils.escapeHtml4(strDonorInKind());
 	}
 
@@ -507,7 +585,7 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return null;
 	}
 
-	public String htmDonorTotal() {
+	public String htmlDonorTotal() {
 		return donorTotal == null ? "" : StringEscapeUtils.escapeHtml4(strDonorTotal());
 	}
 
@@ -605,7 +683,7 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return null;
 	}
 
-	public String htmDonorYtd() {
+	public String htmlDonorYtd() {
 		return donorYtd == null ? "" : StringEscapeUtils.escapeHtml4(strDonorYtd());
 	}
 
@@ -703,7 +781,7 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return null;
 	}
 
-	public String htmDonorQ1() {
+	public String htmlDonorQ1() {
 		return donorQ1 == null ? "" : StringEscapeUtils.escapeHtml4(strDonorQ1());
 	}
 
@@ -801,7 +879,7 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return null;
 	}
 
-	public String htmDonorQ2() {
+	public String htmlDonorQ2() {
 		return donorQ2 == null ? "" : StringEscapeUtils.escapeHtml4(strDonorQ2());
 	}
 
@@ -899,7 +977,7 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return null;
 	}
 
-	public String htmDonorQ3() {
+	public String htmlDonorQ3() {
 		return donorQ3 == null ? "" : StringEscapeUtils.escapeHtml4(strDonorQ3());
 	}
 
@@ -997,86 +1075,8 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return null;
 	}
 
-	public String htmDonorQ4() {
+	public String htmlDonorQ4() {
 		return donorQ4 == null ? "" : StringEscapeUtils.escapeHtml4(strDonorQ4());
-	}
-
-	/////////////////////
-	// donorParentName //
-	/////////////////////
-
-	/**	 The entity donorParentName
-	 *	 is defined as null before being initialized. 
-	 */
-	@JsonProperty
-	@JsonInclude(Include.NON_NULL)
-	protected String donorParentName;
-	@JsonIgnore
-	public Wrap<String> donorParentNameWrap = new Wrap<String>().var("donorParentName").o(donorParentName);
-
-	/**	<br/> The entity donorParentName
-	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:donorParentName">Find the entity donorParentName in Solr</a>
-	 * <br/>
-	 * @param c is for wrapping a value to assign to this entity during initialization. 
-	 **/
-	protected abstract void _donorParentName(Wrap<String> c);
-
-	public String getDonorParentName() {
-		return donorParentName;
-	}
-	public void setDonorParentName(String o) {
-		this.donorParentName = ChoiceDonor.staticSetDonorParentName(siteRequest_, o);
-		this.donorParentNameWrap.alreadyInitialized = true;
-	}
-	public static String staticSetDonorParentName(SiteRequestEnUS siteRequest_, String o) {
-		return o;
-	}
-	protected ChoiceDonor donorParentNameInit() {
-		if(!donorParentNameWrap.alreadyInitialized) {
-			_donorParentName(donorParentNameWrap);
-			if(donorParentName == null)
-				setDonorParentName(donorParentNameWrap.o);
-			donorParentNameWrap.o(null);
-		}
-		donorParentNameWrap.alreadyInitialized(true);
-		return (ChoiceDonor)this;
-	}
-
-	public static String staticSolrDonorParentName(SiteRequestEnUS siteRequest_, String o) {
-		return o;
-	}
-
-	public static String staticSolrStrDonorParentName(SiteRequestEnUS siteRequest_, String o) {
-		return o == null ? null : o.toString();
-	}
-
-	public static String staticSolrFqDonorParentName(SiteRequestEnUS siteRequest_, String o) {
-		return ChoiceDonor.staticSolrStrDonorParentName(siteRequest_, ChoiceDonor.staticSolrDonorParentName(siteRequest_, ChoiceDonor.staticSetDonorParentName(siteRequest_, o)));
-	}
-
-	public String solrDonorParentName() {
-		return ChoiceDonor.staticSolrDonorParentName(siteRequest_, donorParentName);
-	}
-
-	public String strDonorParentName() {
-		return donorParentName == null ? "" : donorParentName;
-	}
-
-	public String sqlDonorParentName() {
-		return donorParentName;
-	}
-
-	public String jsonDonorParentName() {
-		return donorParentName == null ? "" : donorParentName;
-	}
-
-	public String htmTooltipDonorParentName() {
-		return null;
-	}
-
-	public String htmDonorParentName() {
-		return donorParentName == null ? "" : StringEscapeUtils.escapeHtml4(strDonorParentName());
 	}
 
 	//////////////
@@ -1116,6 +1116,7 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 			Promise<Void> promise2 = Promise.promise();
 			try {
 				donorFullNameInit();
+				donorParentNameInit();
 				donorIdInit();
 				donorAttributeIdInit();
 				donorInKindInit();
@@ -1125,7 +1126,6 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 				donorQ2Init();
 				donorQ3Init();
 				donorQ4Init();
-				donorParentNameInit();
 				promise2.complete();
 			} catch(Exception ex) {
 				promise2.fail(ex);
@@ -1181,6 +1181,8 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		switch(var) {
 			case "donorFullName":
 				return oChoiceDonor.donorFullName;
+			case "donorParentName":
+				return oChoiceDonor.donorParentName;
 			case "donorId":
 				return oChoiceDonor.donorId;
 			case "donorAttributeId":
@@ -1199,8 +1201,6 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 				return oChoiceDonor.donorQ3;
 			case "donorQ4":
 				return oChoiceDonor.donorQ4;
-			case "donorParentName":
-				return oChoiceDonor.donorParentName;
 			default:
 				return super.obtainBaseModel(var);
 		}
@@ -1242,6 +1242,8 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		switch(entityVar) {
 		case "donorFullName":
 			return ChoiceDonor.staticSetDonorFullName(siteRequest_, o);
+		case "donorParentName":
+			return ChoiceDonor.staticSetDonorParentName(siteRequest_, o);
 		case "donorId":
 			return ChoiceDonor.staticSetDonorId(siteRequest_, o);
 		case "donorAttributeId":
@@ -1260,8 +1262,6 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 			return ChoiceDonor.staticSetDonorQ3(siteRequest_, o);
 		case "donorQ4":
 			return ChoiceDonor.staticSetDonorQ4(siteRequest_, o);
-		case "donorParentName":
-			return ChoiceDonor.staticSetDonorParentName(siteRequest_, o);
 			default:
 				return BaseModel.staticSetBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -1278,6 +1278,8 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		switch(entityVar) {
 		case "donorFullName":
 			return ChoiceDonor.staticSolrDonorFullName(siteRequest_, (String)o);
+		case "donorParentName":
+			return ChoiceDonor.staticSolrDonorParentName(siteRequest_, (String)o);
 		case "donorId":
 			return ChoiceDonor.staticSolrDonorId(siteRequest_, (Long)o);
 		case "donorAttributeId":
@@ -1296,8 +1298,6 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 			return ChoiceDonor.staticSolrDonorQ3(siteRequest_, (BigDecimal)o);
 		case "donorQ4":
 			return ChoiceDonor.staticSolrDonorQ4(siteRequest_, (BigDecimal)o);
-		case "donorParentName":
-			return ChoiceDonor.staticSolrDonorParentName(siteRequest_, (String)o);
 			default:
 				return BaseModel.staticSolrBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -1314,6 +1314,8 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		switch(entityVar) {
 		case "donorFullName":
 			return ChoiceDonor.staticSolrStrDonorFullName(siteRequest_, (String)o);
+		case "donorParentName":
+			return ChoiceDonor.staticSolrStrDonorParentName(siteRequest_, (String)o);
 		case "donorId":
 			return ChoiceDonor.staticSolrStrDonorId(siteRequest_, (Long)o);
 		case "donorAttributeId":
@@ -1332,8 +1334,6 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 			return ChoiceDonor.staticSolrStrDonorQ3(siteRequest_, (Double)o);
 		case "donorQ4":
 			return ChoiceDonor.staticSolrStrDonorQ4(siteRequest_, (Double)o);
-		case "donorParentName":
-			return ChoiceDonor.staticSolrStrDonorParentName(siteRequest_, (String)o);
 			default:
 				return BaseModel.staticSolrStrBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -1350,6 +1350,8 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		switch(entityVar) {
 		case "donorFullName":
 			return ChoiceDonor.staticSolrFqDonorFullName(siteRequest_, o);
+		case "donorParentName":
+			return ChoiceDonor.staticSolrFqDonorParentName(siteRequest_, o);
 		case "donorId":
 			return ChoiceDonor.staticSolrFqDonorId(siteRequest_, o);
 		case "donorAttributeId":
@@ -1368,8 +1370,6 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 			return ChoiceDonor.staticSolrFqDonorQ3(siteRequest_, o);
 		case "donorQ4":
 			return ChoiceDonor.staticSolrFqDonorQ4(siteRequest_, o);
-		case "donorParentName":
-			return ChoiceDonor.staticSolrFqDonorParentName(siteRequest_, o);
 			default:
 				return BaseModel.staticSolrFqBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -1400,6 +1400,11 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 				if(val != null)
 					setDonorFullName(val);
 				saves.add("donorFullName");
+				return val;
+			case "donorparentname":
+				if(val != null)
+					setDonorParentName(val);
+				saves.add("donorParentName");
 				return val;
 			case "donorid":
 				if(val != null)
@@ -1446,11 +1451,6 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 					setDonorQ4(val);
 				saves.add("donorQ4");
 				return val;
-			case "donorparentname":
-				if(val != null)
-					setDonorParentName(val);
-				saves.add("donorParentName");
-				return val;
 			default:
 				return super.defineBaseModel(var, val);
 		}
@@ -1477,6 +1477,11 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 				if(val instanceof String)
 					setDonorFullName((String)val);
 				saves.add("donorFullName");
+				return val;
+			case "donorparentname":
+				if(val instanceof String)
+					setDonorParentName((String)val);
+				saves.add("donorParentName");
 				return val;
 			case "donorid":
 				if(val instanceof Long)
@@ -1535,11 +1540,6 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 					setDonorQ4(new BigDecimal(((Number)val).doubleValue()));
 				saves.add("donorQ4");
 				return val;
-			case "donorparentname":
-				if(val instanceof String)
-					setDonorParentName((String)val);
-				saves.add("donorParentName");
-				return val;
 			default:
 				return super.defineBaseModel(var, val);
 		}
@@ -1561,6 +1561,12 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 				String donorFullName = (String)solrDocument.get("donorFullName_indexedstored_string");
 				if(donorFullName != null)
 					oChoiceDonor.setDonorFullName(donorFullName);
+			}
+
+			if(saves.contains("donorParentName")) {
+				String donorParentName = (String)solrDocument.get("donorParentName_indexedstored_string");
+				if(donorParentName != null)
+					oChoiceDonor.setDonorParentName(donorParentName);
 			}
 
 			if(saves.contains("donorId")) {
@@ -1616,12 +1622,6 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 				if(donorQ4 != null)
 					oChoiceDonor.setDonorQ4(donorQ4);
 			}
-
-			if(saves.contains("donorParentName")) {
-				String donorParentName = (String)solrDocument.get("donorParentName_indexedstored_string");
-				if(donorParentName != null)
-					oChoiceDonor.setDonorParentName(donorParentName);
-			}
 		}
 
 		super.populateBaseModel(solrDocument);
@@ -1630,6 +1630,9 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	public void indexChoiceDonor(SolrInputDocument document) {
 		if(donorFullName != null) {
 			document.addField("donorFullName_indexedstored_string", donorFullName);
+		}
+		if(donorParentName != null) {
+			document.addField("donorParentName_indexedstored_string", donorParentName);
 		}
 		if(donorId != null) {
 			document.addField("donorId_indexedstored_long", donorId);
@@ -1658,9 +1661,6 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		if(donorQ4 != null) {
 			document.addField("donorQ4_indexedstored_double", donorQ4.doubleValue());
 		}
-		if(donorParentName != null) {
-			document.addField("donorParentName_indexedstored_string", donorParentName);
-		}
 		super.indexBaseModel(document);
 
 	}
@@ -1669,6 +1669,8 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		switch(entityVar) {
 			case "donorFullName":
 				return "donorFullName_indexedstored_string";
+			case "donorParentName":
+				return "donorParentName_indexedstored_string";
 			case "donorId":
 				return "donorId_indexedstored_long";
 			case "donorAttributeId":
@@ -1687,8 +1689,6 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 				return "donorQ3_indexedstored_double";
 			case "donorQ4":
 				return "donorQ4_indexedstored_double";
-			case "donorParentName":
-				return "donorParentName_indexedstored_string";
 			default:
 				return BaseModel.varIndexedBaseModel(entityVar);
 		}
@@ -1719,6 +1719,7 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		ChoiceDonor oChoiceDonor = (ChoiceDonor)this;
 
 		oChoiceDonor.setDonorFullName(Optional.ofNullable(solrDocument.get("donorFullName_indexedstored_string")).map(v -> v.toString()).orElse(null));
+		oChoiceDonor.setDonorParentName(Optional.ofNullable(solrDocument.get("donorParentName_indexedstored_string")).map(v -> v.toString()).orElse(null));
 		oChoiceDonor.setDonorId(Optional.ofNullable(solrDocument.get("donorId_indexedstored_long")).map(v -> v.toString()).orElse(null));
 		oChoiceDonor.setDonorAttributeId(Optional.ofNullable(solrDocument.get("donorAttributeId_indexedstored_string")).map(v -> v.toString()).orElse(null));
 		oChoiceDonor.setDonorInKind(Optional.ofNullable(solrDocument.get("donorInKind_indexedstored_long")).map(v -> v.toString()).orElse(null));
@@ -1728,7 +1729,6 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		oChoiceDonor.setDonorQ2(Optional.ofNullable(solrDocument.get("donorQ2_indexedstored_double")).map(v -> v.toString()).orElse(null));
 		oChoiceDonor.setDonorQ3(Optional.ofNullable(solrDocument.get("donorQ3_indexedstored_double")).map(v -> v.toString()).orElse(null));
 		oChoiceDonor.setDonorQ4(Optional.ofNullable(solrDocument.get("donorQ4_indexedstored_double")).map(v -> v.toString()).orElse(null));
-		oChoiceDonor.setDonorParentName(Optional.ofNullable(solrDocument.get("donorParentName_indexedstored_string")).map(v -> v.toString()).orElse(null));
 
 		super.storeBaseModel(solrDocument);
 	}
@@ -1744,6 +1744,8 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 			ChoiceDonor original = (ChoiceDonor)o;
 			if(!Objects.equals(donorFullName, original.getDonorFullName()))
 				apiRequest.addVars("donorFullName");
+			if(!Objects.equals(donorParentName, original.getDonorParentName()))
+				apiRequest.addVars("donorParentName");
 			if(!Objects.equals(donorId, original.getDonorId()))
 				apiRequest.addVars("donorId");
 			if(!Objects.equals(donorAttributeId, original.getDonorAttributeId()))
@@ -1762,8 +1764,6 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 				apiRequest.addVars("donorQ3");
 			if(!Objects.equals(donorQ4, original.getDonorQ4()))
 				apiRequest.addVars("donorQ4");
-			if(!Objects.equals(donorParentName, original.getDonorParentName()))
-				apiRequest.addVars("donorParentName");
 			super.apiRequestBaseModel();
 		}
 	}
@@ -1773,7 +1773,7 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	//////////////
 
 	@Override public int hashCode() {
-		return Objects.hash(super.hashCode(), donorFullName, donorId, donorAttributeId, donorInKind, donorTotal, donorYtd, donorQ1, donorQ2, donorQ3, donorQ4, donorParentName);
+		return Objects.hash(super.hashCode(), donorFullName, donorParentName, donorId, donorAttributeId, donorInKind, donorTotal, donorYtd, donorQ1, donorQ2, donorQ3, donorQ4);
 	}
 
 	////////////
@@ -1788,6 +1788,7 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		ChoiceDonor that = (ChoiceDonor)o;
 		return super.equals(o)
 				&& Objects.equals( donorFullName, that.donorFullName )
+				&& Objects.equals( donorParentName, that.donorParentName )
 				&& Objects.equals( donorId, that.donorId )
 				&& Objects.equals( donorAttributeId, that.donorAttributeId )
 				&& Objects.equals( donorInKind, that.donorInKind )
@@ -1796,8 +1797,7 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 				&& Objects.equals( donorQ1, that.donorQ1 )
 				&& Objects.equals( donorQ2, that.donorQ2 )
 				&& Objects.equals( donorQ3, that.donorQ3 )
-				&& Objects.equals( donorQ4, that.donorQ4 )
-				&& Objects.equals( donorParentName, that.donorParentName );
+				&& Objects.equals( donorQ4, that.donorQ4 );
 	}
 
 	//////////////
@@ -1809,6 +1809,7 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		sb.append(super.toString() + "\n");
 		sb.append("ChoiceDonor { ");
 		sb.append( "donorFullName: \"" ).append(donorFullName).append( "\"" );
+		sb.append( ", donorParentName: \"" ).append(donorParentName).append( "\"" );
 		sb.append( ", donorId: " ).append(donorId);
 		sb.append( ", donorAttributeId: \"" ).append(donorAttributeId).append( "\"" );
 		sb.append( ", donorInKind: " ).append(donorInKind);
@@ -1818,12 +1819,12 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		sb.append( ", donorQ2: " ).append(donorQ2);
 		sb.append( ", donorQ3: " ).append(donorQ3);
 		sb.append( ", donorQ4: " ).append(donorQ4);
-		sb.append( ", donorParentName: \"" ).append(donorParentName).append( "\"" );
 		sb.append(" }");
 		return sb.toString();
 	}
 
 	public static final String VAR_donorFullName = "donorFullName";
+	public static final String VAR_donorParentName = "donorParentName";
 	public static final String VAR_donorId = "donorId";
 	public static final String VAR_donorAttributeId = "donorAttributeId";
 	public static final String VAR_donorInKind = "donorInKind";
@@ -1833,5 +1834,4 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	public static final String VAR_donorQ2 = "donorQ2";
 	public static final String VAR_donorQ3 = "donorQ3";
 	public static final String VAR_donorQ4 = "donorQ4";
-	public static final String VAR_donorParentName = "donorParentName";
 }

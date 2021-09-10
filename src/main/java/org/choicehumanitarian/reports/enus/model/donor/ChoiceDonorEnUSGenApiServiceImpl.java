@@ -614,6 +614,15 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 						num++;
 						bParams.add(o2.sqlDonorFullName());
 						break;
+					case ChoiceDonor.VAR_donorParentName:
+						o2.setDonorParentName(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(ChoiceDonor.VAR_donorParentName + "=$" + num);
+						num++;
+						bParams.add(o2.sqlDonorParentName());
+						break;
 					case ChoiceDonor.VAR_donorId:
 						o2.setDonorId(jsonObject.getString(entityVar));
 						if(bParams.size() > 0) {
@@ -695,15 +704,6 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 						num++;
 						bParams.add(o2.sqlDonorQ4());
 						break;
-					case ChoiceDonor.VAR_donorParentName:
-						o2.setDonorParentName(jsonObject.getString(entityVar));
-						if(bParams.size() > 0) {
-							bSql.append(", ");
-						}
-						bSql.append(ChoiceDonor.VAR_donorParentName + "=$" + num);
-						num++;
-						bParams.add(o2.sqlDonorParentName());
-						break;
 					}
 				}
 			}
@@ -717,7 +717,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 							).onSuccess(b -> {
 						a.handle(Future.succeededFuture());
 					}).onFailure(ex -> {
-						RuntimeException ex2 = new RuntimeException("value ChoiceDonor.donorParentName failed", ex);
+						RuntimeException ex2 = new RuntimeException("value ChoiceDonor.donorQ4 failed", ex);
 						LOG.error(String.format("attributeChoiceDonor failed. "), ex2);
 						a.handle(Future.failedFuture(ex2));
 					});
@@ -1041,6 +1041,14 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 							num++;
 							bParams.add(o2.sqlDonorFullName());
 						break;
+					case "setDonorParentName":
+							o2.setDonorParentName(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(ChoiceDonor.VAR_donorParentName + "=$" + num);
+							num++;
+							bParams.add(o2.sqlDonorParentName());
+						break;
 					case "setDonorId":
 							o2.setDonorId(jsonObject.getString(entityVar));
 							if(bParams.size() > 0)
@@ -1113,14 +1121,6 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 							num++;
 							bParams.add(o2.sqlDonorQ4());
 						break;
-					case "setDonorParentName":
-							o2.setDonorParentName(jsonObject.getString(entityVar));
-							if(bParams.size() > 0)
-								bSql.append(", ");
-							bSql.append(ChoiceDonor.VAR_donorParentName + "=$" + num);
-							num++;
-							bParams.add(o2.sqlDonorParentName());
-						break;
 				}
 			}
 			bSql.append(" WHERE pk=$" + num);
@@ -1133,7 +1133,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 							).onSuccess(b -> {
 						a.handle(Future.succeededFuture());
 					}).onFailure(ex -> {
-						RuntimeException ex2 = new RuntimeException("value ChoiceDonor.donorParentName failed", ex);
+						RuntimeException ex2 = new RuntimeException("value ChoiceDonor.donorQ4 failed", ex);
 						LOG.error(String.format("attributeChoiceDonor failed. "), ex2);
 						a.handle(Future.failedFuture(ex2));
 					});
@@ -1460,7 +1460,108 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 			}
 		}
 	}
+
+	// SearchPage //
+
+	@Override
+	public void searchpageChoiceDonorId(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
+		searchpageChoiceDonor(serviceRequest, eventHandler);
+	}
+
+	@Override
+	public void searchpageChoiceDonor(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
+		user(serviceRequest).onSuccess(siteRequest -> {
+			try {
+				siteRequest.setRequestUri(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("uri")).orElse(null));
+				siteRequest.setRequestMethod(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("method")).orElse(null));
+
+				List<String> roles = Arrays.asList("SiteAdmin");
+				List<String> roleReads = Arrays.asList("");
+				if(
+						!CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roles)
+						&& !CollectionUtils.containsAny(siteRequest.getUserRealmRoles(), roles)
+						&& !CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roleReads)
+						&& !CollectionUtils.containsAny(siteRequest.getUserRealmRoles(), roleReads)
+						) {
+					eventHandler.handle(Future.succeededFuture(
+						new ServiceResponse(401, "UNAUTHORIZED", 
+							Buffer.buffer().appendString(
+								new JsonObject()
+									.put("errorCode", "401")
+									.put("errorMessage", "roles required: " + String.join(", ", roles))
+									.encodePrettily()
+								), MultiMap.caseInsensitiveMultiMap()
+						)
+					));
+				} else {
+					searchChoiceDonorList(siteRequest, false, true, false, "/donor", "SearchPage").onSuccess(listChoiceDonor -> {
+						response200SearchPageChoiceDonor(listChoiceDonor).onSuccess(response -> {
+							eventHandler.handle(Future.succeededFuture(response));
+							LOG.debug(String.format("searchpageChoiceDonor succeeded. "));
+						}).onFailure(ex -> {
+							LOG.error(String.format("searchpageChoiceDonor failed. "), ex);
+							error(siteRequest, eventHandler, ex);
+						});
+					}).onFailure(ex -> {
+						LOG.error(String.format("searchpageChoiceDonor failed. "), ex);
+						error(siteRequest, eventHandler, ex);
+					});
+				}
+			} catch(Exception ex) {
+				LOG.error(String.format("searchpageChoiceDonor failed. "), ex);
+				error(null, eventHandler, ex);
+			}
+		}).onFailure(ex -> {
+			if("Inactive Token".equals(ex.getMessage())) {
+				try {
+					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
+				} catch(Exception ex2) {
+					LOG.error(String.format("searchpageChoiceDonor failed. ", ex2));
+					error(null, eventHandler, ex2);
+				}
+			} else {
+				LOG.error(String.format("searchpageChoiceDonor failed. "), ex);
+				error(null, eventHandler, ex);
+			}
+		});
+	}
+
+
+	public void searchpageChoiceDonorPageInit(ChoiceDonorPage page, SearchList<ChoiceDonor> listChoiceDonor) {
+	}
+	public String templateSearchPageChoiceDonor() {
+		return config.getString(ConfigKeys.TEMPLATE_PATH) + "/enUS/ChoiceDonorPage";
+	}
+	public Future<ServiceResponse> response200SearchPageChoiceDonor(SearchList<ChoiceDonor> listChoiceDonor) {
+		Promise<ServiceResponse> promise = Promise.promise();
+		try {
+			SiteRequestEnUS siteRequest = listChoiceDonor.getSiteRequest_();
+			ChoiceDonorPage page = new ChoiceDonorPage();
+			MultiMap requestHeaders = MultiMap.caseInsensitiveMultiMap();
+			siteRequest.setRequestHeaders(requestHeaders);
+
+			if(listChoiceDonor.size() == 1)
+				siteRequest.setRequestPk(listChoiceDonor.get(0).getPk());
+			page.setListChoiceDonor_(listChoiceDonor);
+			page.setSiteRequest_(siteRequest);
+			page.promiseDeepChoiceDonorPage(siteRequest).onSuccess(a -> {
+				JsonObject json = JsonObject.mapFrom(page);
+				templateEngine.render(json, templateSearchPageChoiceDonor()).onSuccess(buffer -> {
+					promise.complete(new ServiceResponse(200, "OK", buffer, requestHeaders));
+				}).onFailure(ex -> {
+					promise.fail(ex);
+				});
+			}).onFailure(ex -> {
+				promise.fail(ex);
+			});
+		} catch(Exception ex) {
+			LOG.error(String.format("response200SearchPageChoiceDonor failed. "), ex);
+			promise.fail(ex);
+		}
+		return promise.future();
+	}
 	public static final String VAR_donorFullName = "donorFullName";
+	public static final String VAR_donorParentName = "donorParentName";
 	public static final String VAR_donorId = "donorId";
 	public static final String VAR_donorAttributeId = "donorAttributeId";
 	public static final String VAR_donorInKind = "donorInKind";
@@ -1470,7 +1571,6 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 	public static final String VAR_donorQ2 = "donorQ2";
 	public static final String VAR_donorQ3 = "donorQ3";
 	public static final String VAR_donorQ4 = "donorQ4";
-	public static final String VAR_donorParentName = "donorParentName";
 
 	// General //
 
@@ -1627,11 +1727,21 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 						for(Object paramObject : paramObjects) {
 							switch(paramName) {
 								case "q":
-									entityVar = StringUtils.trim(StringUtils.substringBefore((String)paramObject, ":"));
-									varIndexed = "*".equals(entityVar) ? entityVar : ChoiceDonor.varSearchChoiceDonor(entityVar);
-									valueIndexed = URLDecoder.decode(StringUtils.trim(StringUtils.substringAfter((String)paramObject, ":")), "UTF-8");
-									valueIndexed = StringUtils.isEmpty(valueIndexed) ? "*" : valueIndexed;
-									searchChoiceDonorQ(uri, apiMethod, searchList, entityVar, valueIndexed, varIndexed);
+									Matcher mQ = Pattern.compile("(\\w+):(.+?(?=(\\)|\\s+OR\\s+|\\s+AND\\s+|\\^|$)))").matcher((String)paramObject);
+									boolean foundQ = mQ.find();
+									if(foundQ) {
+										StringBuffer sb = new StringBuffer();
+										while(foundQ) {
+											entityVar = mQ.group(1).trim();
+											valueIndexed = mQ.group(2).trim();
+											varIndexed = ChoiceDonor.varIndexedChoiceDonor(entityVar);
+											String entityQ = searchChoiceDonorFq(uri, apiMethod, searchList, entityVar, valueIndexed, varIndexed);
+											mQ.appendReplacement(sb, entityQ);
+											foundQ = mQ.find();
+										}
+										mQ.appendTail(sb);
+										searchList.setQuery(sb.toString());
+									}
 									break;
 								case "fq":
 									Matcher mFq = Pattern.compile("(\\w+):(.+?(?=(\\)|\\s+OR\\s+|\\s+AND\\s+|$)))").matcher((String)paramObject);

@@ -68,6 +68,7 @@ CREATE TABLE ChoiceDonor(
 	, userId text
 	, userKey bigint
 	, donorFullName text
+	, donorParentName text
 	, donorId bigint
 	, donorAttributeId text
 	, donorInKind bigint
@@ -77,7 +78,6 @@ CREATE TABLE ChoiceDonor(
 	, donorQ2 decimal
 	, donorQ3 decimal
 	, donorQ4 decimal
-	, donorParentName text
 	);
 
 DROP TABLE SiteUser CASCADE;

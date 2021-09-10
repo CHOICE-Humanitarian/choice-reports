@@ -128,7 +128,7 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 
 			String configPath = System.getenv(ConfigKeys.CONFIG_PATH);
 			if(StringUtils.isNotBlank(configPath)) {
-				ConfigStoreOptions configIni = new ConfigStoreOptions().setType("file").setFormat("properties").setConfig(new JsonObject().put("path", configPath));
+				ConfigStoreOptions configIni = new ConfigStoreOptions().setType("file").setFormat("yaml").setConfig(new JsonObject().put("path", configPath));
 				retrieverOptions.addStore(configIni);
 			}
 
@@ -659,12 +659,12 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 			String staticPath = config().getString(ConfigKeys.STATIC_PATH);
 			String staticBaseUrl = config().getString(ConfigKeys.STATIC_BASE_URL);
 			String siteBaseUrl = config().getString(ConfigKeys.SITE_BASE_URL);
-			HandlebarsTemplateEngine engine = HandlebarsTemplateEngine.create(vertx);
-			Handlebars handlebars = (Handlebars)engine.unwrap();
-			TemplateHandler templateHandler = TemplateHandler.create(engine, staticPath + "/template", "text/html");
+			Handlebars handlebars = (Handlebars)templateEngine.unwrap();
+			TemplateHandler templateHandler = TemplateHandler.create(templateEngine, staticPath + "/template", "text/html");
 
 			handlebars.registerHelpers(ConditionalHelpers.class);
 			handlebars.registerHelpers(StringHelpers.class);
+			handlebars.registerHelpers(AuthHelpers.class);
 
 			router.get("/").handler(a -> {
 				a.reroute("/template/home-page");
