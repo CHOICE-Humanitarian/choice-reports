@@ -1,4 +1,4 @@
-package org.choicehumanitarian.reports.enus.user;    
+package org.choicehumanitarian.reports.enus.user;       
 
 import java.util.List;
 
@@ -9,6 +9,7 @@ import org.choicehumanitarian.reports.enus.wrap.Wrap;
 /**   
  * Model: true
  * Api: true
+ * Page: true
  * Indexed: true
  * Map.Integer.sqlSort: 3
  * 
@@ -18,6 +19,10 @@ import org.choicehumanitarian.reports.enus.wrap.Wrap;
  * ApiMethod.enUS: Search
  * ApiMethod: PATCH
  * ApiMethod: POST
+ * 
+ * ApiMethod.enUS: SearchPage
+ * PageSearchPage.enUS: SiteUserPage
+ * ApiUriSearchPage.enUS: /user
  * 
  * Keyword: classSimpleNameSiteUser
  * Role.enUS: SiteAdmin

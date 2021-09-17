@@ -261,7 +261,7 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 							params.put("body", body);
 							params.put("path", new JsonObject());
 							params.put("cookie", new JsonObject());
-							params.put("query", new JsonObject().put("q", "*:*").put("var", new JsonArray().add("refresh:false")));
+							params.put("query", new JsonObject().put("commitWithin", 10000).put("q", "*:*").put("var", new JsonArray().add("refresh:false")));
 							JsonObject context = new JsonObject().put("params", params);
 							JsonObject json = new JsonObject().put("context", context);
 							futures.add(vertx.eventBus().request(String.format("choice-reports-enUS-%s", "ChoiceDonor"), json, new DeliveryOptions().addHeader("action", String.format("putimport%sFuture", "ChoiceDonor"))));

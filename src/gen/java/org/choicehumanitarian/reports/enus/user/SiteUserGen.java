@@ -59,6 +59,28 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	public static final List<String> ROLES = Arrays.asList("SiteAdmin", "SiteAdmin");
 	public static final List<String> ROLE_READS = Arrays.asList("");
 
+	public static final String SiteUser_AName = "a site user";
+	public static final String SiteUser_This = "this ";
+	public static final String SiteUser_ThisName = "this site user";
+	public static final String SiteUser_A = "a ";
+	public static final String SiteUser_TheName = "the site user";
+	public static final String SiteUser_NameSingular = "site user";
+	public static final String SiteUser_NamePlural = "site users";
+	public static final String SiteUser_NameActual = "current site user";
+	public static final String SiteUser_AllName = "all the site users";
+	public static final String SiteUser_SearchAllNameBy = "search site users by ";
+	public static final String SiteUser_Title = "site users";
+	public static final String SiteUser_ThePluralName = "the site users";
+	public static final String SiteUser_NoNameFound = "no site user found";
+	public static final String SiteUser_NameVar = "siteUser";
+	public static final String SiteUser_OfName = "of site user";
+	public static final String SiteUser_ANameAdjective = "a site user";
+	public static final String SiteUser_NameAdjectiveSingular = "site user";
+	public static final String SiteUser_NameAdjectivePlural = "site users";
+	public static final String SiteUser_Color = "gray";
+	public static final String SiteUser_IconGroup = "regular";
+	public static final String SiteUser_IconName = "user-cog";
+
 	//////////////
 	// userKeys //
 	//////////////
@@ -168,6 +190,14 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		return userKeys == null ? "" : userKeys.toString();
 	}
 
+	public String htmTooltipUserKeys() {
+		return null;
+	}
+
+	public String htmlUserKeys() {
+		return userKeys == null ? "" : StringEscapeUtils.escapeHtml4(strUserKeys());
+	}
+
 	//////////////
 	// userName //
 	//////////////
@@ -236,6 +266,14 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 
 	public String jsonUserName() {
 		return userName == null ? "" : userName;
+	}
+
+	public String htmTooltipUserName() {
+		return null;
+	}
+
+	public String htmlUserName() {
+		return userName == null ? "" : StringEscapeUtils.escapeHtml4(strUserName());
 	}
 
 	///////////////
@@ -308,6 +346,14 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		return sessionId == null ? "" : sessionId;
 	}
 
+	public String htmTooltipSessionId() {
+		return null;
+	}
+
+	public String htmlSessionId() {
+		return sessionId == null ? "" : StringEscapeUtils.escapeHtml4(strSessionId());
+	}
+
 	///////////////
 	// userEmail //
 	///////////////
@@ -376,6 +422,14 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 
 	public String jsonUserEmail() {
 		return userEmail == null ? "" : userEmail;
+	}
+
+	public String htmTooltipUserEmail() {
+		return null;
+	}
+
+	public String htmlUserEmail() {
+		return userEmail == null ? "" : StringEscapeUtils.escapeHtml4(strUserEmail());
 	}
 
 	///////////////////
@@ -448,6 +502,14 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		return userFirstName == null ? "" : userFirstName;
 	}
 
+	public String htmTooltipUserFirstName() {
+		return null;
+	}
+
+	public String htmlUserFirstName() {
+		return userFirstName == null ? "" : StringEscapeUtils.escapeHtml4(strUserFirstName());
+	}
+
 	//////////////////
 	// userLastName //
 	//////////////////
@@ -518,6 +580,14 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		return userLastName == null ? "" : userLastName;
 	}
 
+	public String htmTooltipUserLastName() {
+		return null;
+	}
+
+	public String htmlUserLastName() {
+		return userLastName == null ? "" : StringEscapeUtils.escapeHtml4(strUserLastName());
+	}
+
 	//////////////////
 	// userFullName //
 	//////////////////
@@ -586,6 +656,14 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 
 	public String jsonUserFullName() {
 		return userFullName == null ? "" : userFullName;
+	}
+
+	public String htmTooltipUserFullName() {
+		return null;
+	}
+
+	public String htmlUserFullName() {
+		return userFullName == null ? "" : StringEscapeUtils.escapeHtml4(strUserFullName());
 	}
 
 	//////////////

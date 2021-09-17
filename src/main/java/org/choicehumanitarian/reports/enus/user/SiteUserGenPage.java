@@ -1,4 +1,4 @@
-package org.choicehumanitarian.reports.enus.model.donor;
+package org.choicehumanitarian.reports.enus.user;
 
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import org.choicehumanitarian.reports.enus.user.SiteUser;
@@ -39,7 +39,7 @@ import io.vertx.core.Promise;
 /**
  * Translate: false
  **/
-public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<Object> {
+public class SiteUserGenPage extends SiteUserGenPageGen<Object> {
 
 	/**
 	 * Ignore: true
@@ -51,12 +51,12 @@ public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<Object> {
 	 * {@inheritDoc}
 	 * 
 	 **/
-	protected void _listChoiceDonor_(Wrap<SearchList<ChoiceDonor>> c) {
+	protected void _listSiteUser_(Wrap<SearchList<SiteUser>> c) {
 	}
 
-	protected void _choiceDonor_(Wrap<ChoiceDonor> c) {
-		if(listChoiceDonor_ != null && listChoiceDonor_.size() == 1)
-			c.o(listChoiceDonor_.get(0));
+	protected void _siteUser_(Wrap<SiteUser> c) {
+		if(listSiteUser_ != null && listSiteUser_.size() == 1)
+			c.o(listSiteUser_.get(0));
 	}
 
 	/**
@@ -67,7 +67,7 @@ public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<Object> {
 	}
 
 	protected void _pageH1(Wrap<String> c) {
-			c.o("donors");
+			c.o("site users");
 	}
 
 	protected void _pageH2(Wrap<String> c) {
@@ -79,18 +79,18 @@ public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<Object> {
 	}
 
 	protected void _pageTitle(Wrap<String> c) {
-		if(choiceDonor_ != null && choiceDonor_.getObjectTitle() != null)
-			c.o(choiceDonor_.getObjectTitle());
-		else if(choiceDonor_ != null)
-			c.o("donors");
-		else if(listChoiceDonor_ == null || listChoiceDonor_.size() == 0)
-			c.o("no donor found");
+		if(siteUser_ != null && siteUser_.getObjectTitle() != null)
+			c.o(siteUser_.getObjectTitle());
+		else if(siteUser_ != null)
+			c.o("site users");
+		else if(listSiteUser_ == null || listSiteUser_.size() == 0)
+			c.o("no site user found");
 		else
-			c.o("donors");
+			c.o("site users");
 	}
 
 	protected void _pageUri(Wrap<String> c) {
-		c.o("/api/donor");
+		c.o("/api/user");
 	}
 
 	protected void _roles(List<String> l) {
@@ -100,7 +100,7 @@ public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<Object> {
 	}
 
 	protected void _rolesRequired(List<String> l) {
-		l.addAll(Arrays.asList("SiteAdmin"));
+		l.addAll(Arrays.asList("SiteAdmin", "SiteAdmin"));
 	}
 
 	protected void _authRolesAdmin(List<String> l) {
@@ -109,9 +109,9 @@ public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<Object> {
 
 	protected void _pagination(JsonObject pagination) {
 		JsonArray pages = new JsonArray();
-		Long start = listChoiceDonor_.getStart().longValue();
-		Long rows = listChoiceDonor_.getRows().longValue();
-		Long foundNum = listChoiceDonor_.getQueryResponse().getResults().getNumFound();
+		Long start = listSiteUser_.getStart().longValue();
+		Long rows = listSiteUser_.getRows().longValue();
+		Long foundNum = listSiteUser_.getQueryResponse().getResults().getNumFound();
 		Long startNum = start + 1L;
 		Long endNum = start + rows;
 		Long floorMod = Math.floorMod(foundNum, rows);
@@ -156,7 +156,7 @@ public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<Object> {
 		JsonObject params = serviceRequest.getParams();
 
 		JsonObject queryParams = Optional.ofNullable(serviceRequest).map(ServiceRequest::getParams).map(or -> or.getJsonObject("query")).orElse(new JsonObject());
-		Long num = listChoiceDonor_.getQueryResponse().getResults().getNumFound();
+		Long num = listSiteUser_.getQueryResponse().getResults().getNumFound();
 		String q = "*:*";
 		String q1 = "objectText";
 		String q2 = "";
@@ -184,15 +184,15 @@ public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<Object> {
 		}
 		query.put("q", q);
 
-		Integer rows1 = Optional.ofNullable(listChoiceDonor_).map(l -> l.getRows()).orElse(10);
-		Integer start1 = Optional.ofNullable(listChoiceDonor_).map(l -> l.getStart()).orElse(1);
+		Integer rows1 = Optional.ofNullable(listSiteUser_).map(l -> l.getRows()).orElse(10);
+		Integer start1 = Optional.ofNullable(listSiteUser_).map(l -> l.getStart()).orElse(1);
 		Integer start2 = start1 - rows1;
 		Integer start3 = start1 + rows1;
 		Integer rows2 = rows1 / 2;
 		Integer rows3 = rows1 * 2;
 		start2 = start2 < 0 ? 0 : start2;
 		JsonArray fqs = new JsonArray();
-		for(String fq : Optional.ofNullable(listChoiceDonor_).map(l -> l.getFilterQueries()).orElse(new String[0])) {
+		for(String fq : Optional.ofNullable(listSiteUser_).map(l -> l.getFilterQueries()).orElse(new String[0])) {
 			if(!StringUtils.contains(fq, "(")) {
 				String fq1 = StringUtils.substringBefore(fq, "_");
 				String fq2 = StringUtils.substringAfter(fq, ":");
@@ -203,7 +203,7 @@ public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<Object> {
 		query.put("fq", fqs);
 
 		JsonArray sorts = new JsonArray();
-		for(SortClause sort : Optional.ofNullable(listChoiceDonor_).map(l -> l.getSorts()).orElse(Arrays.asList())) {
+		for(SortClause sort : Optional.ofNullable(listSiteUser_).map(l -> l.getSorts()).orElse(Arrays.asList())) {
 			sorts.add(new JsonObject().put("var", StringUtils.substringBefore(sort.getItem(), "_")).put("order", sort.getOrder().name()));
 		}
 		query.put("sort", sorts);
@@ -217,7 +217,7 @@ public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<Object> {
 	}
 
 	protected void _pageImageUri(Wrap<String> c) {
-			c.o("/png/api/donor-999.png");
+			c.o("/png/api/user-999.png");
 	}
 
 	protected void _contextIconGroup(Wrap<String> c) {
@@ -225,6 +225,6 @@ public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<Object> {
 	}
 
 	protected void _contextIconName(Wrap<String> c) {
-			c.o("globe-americas");
+			c.o("user-cog");
 	}
 }

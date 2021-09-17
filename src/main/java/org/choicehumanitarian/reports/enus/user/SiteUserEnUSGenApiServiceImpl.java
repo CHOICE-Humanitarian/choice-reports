@@ -1,73 +1,104 @@
 package org.choicehumanitarian.reports.enus.user;
 
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.nio.charset.Charset;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
+import org.choicehumanitarian.reports.enus.user.SiteUser;
+import org.choicehumanitarian.reports.enus.request.api.ApiRequest;
+import org.choicehumanitarian.reports.enus.search.SearchResult;
+import org.choicehumanitarian.reports.enus.vertx.MailVerticle;
+import org.choicehumanitarian.reports.enus.config.ConfigKeys;
+import org.choicehumanitarian.reports.enus.base.BaseApiServiceImpl;
+import io.vertx.ext.web.client.WebClient;
+import java.util.Objects;
+import io.vertx.core.WorkerExecutor;
+import io.vertx.core.eventbus.EventBus;
+import io.vertx.pgclient.PgPool;
+import io.vertx.ext.auth.authorization.AuthorizationProvider;
+import io.vertx.ext.web.templ.handlebars.HandlebarsTemplateEngine;
+import io.vertx.core.eventbus.DeliveryOptions;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import java.time.Instant;
+import java.util.stream.Collectors;
+import io.vertx.core.json.Json;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrQuery.ORDER;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.client.solrj.util.ClientUtils;
+import org.apache.commons.lang3.StringUtils;
+import java.security.Principal;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import java.io.PrintWriter;
+import org.apache.solr.common.SolrDocumentList;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrInputDocument;
+import java.util.Collection;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Date;
 import java.time.format.DateTimeFormatter;
+import java.time.ZoneId;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Base64;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.exception.ExceptionUtils;
+import java.util.HashSet;
+import io.vertx.core.Handler;
+import io.vertx.ext.web.RoutingContext;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.solr.client.solrj.SolrQuery.ORDER;
-import org.apache.solr.client.solrj.response.FacetField;
-import org.apache.solr.client.solrj.response.PivotField;
-import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.client.solrj.response.RangeFacet;
-import org.apache.solr.client.solrj.util.ClientUtils;
-import org.apache.solr.common.SolrDocumentList;
-import org.apache.solr.common.SolrInputDocument;
-import org.apache.solr.common.util.NamedList;
-import org.apache.solr.util.DateMathParser;
-import org.choicehumanitarian.reports.enus.base.BaseApiServiceImpl;
-import org.choicehumanitarian.reports.enus.config.ConfigKeys;
-import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
-import org.choicehumanitarian.reports.enus.request.api.ApiRequest;
-import org.choicehumanitarian.reports.enus.search.SearchList;
+import io.vertx.ext.web.Router;
+import io.vertx.core.Vertx;
+import io.vertx.ext.reactivestreams.ReactiveReadStream;
+import io.vertx.ext.reactivestreams.ReactiveWriteStream;
+import io.vertx.core.MultiMap;
+import io.vertx.ext.auth.oauth2.OAuth2Auth;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import io.vertx.core.AsyncResult;
-import io.vertx.core.CompositeFuture;
-import io.vertx.core.Future;
-import io.vertx.core.Handler;
-import io.vertx.core.MultiMap;
-import io.vertx.core.Promise;
-import io.vertx.core.WorkerExecutor;
-import io.vertx.core.buffer.Buffer;
-import io.vertx.core.eventbus.DeliveryOptions;
-import io.vertx.core.eventbus.EventBus;
-import io.vertx.core.http.HttpHeaders;
-import io.vertx.core.json.JsonArray;
-import io.vertx.core.json.JsonObject;
-import io.vertx.ext.auth.authorization.AuthorizationProvider;
-import io.vertx.ext.auth.oauth2.OAuth2Auth;
-import io.vertx.ext.web.api.service.ServiceRequest;
-import io.vertx.ext.web.api.service.ServiceResponse;
-import io.vertx.ext.web.client.WebClient;
-import io.vertx.ext.web.client.predicate.ResponsePredicate;
-import io.vertx.ext.web.templ.handlebars.HandlebarsTemplateEngine;
-import io.vertx.pgclient.PgPool;
-import io.vertx.sqlclient.Row;
+import io.vertx.sqlclient.Transaction;
 import io.vertx.sqlclient.SqlConnection;
 import io.vertx.sqlclient.Tuple;
+import io.vertx.sqlclient.Row;
+import io.vertx.core.json.JsonArray;
+import io.vertx.core.json.JsonObject;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.sql.Timestamp;
+import io.vertx.core.Future;
+import io.vertx.core.Promise;
+import io.vertx.core.AsyncResult;
+import java.net.URLEncoder;
+import io.vertx.core.buffer.Buffer;
+import io.vertx.core.CompositeFuture;
+import io.vertx.core.http.HttpHeaders;
+import org.apache.http.client.utils.URLEncodedUtils;
+import java.nio.charset.Charset;
+import org.apache.http.NameValuePair;
+import io.vertx.ext.web.api.service.ServiceRequest;
+import io.vertx.ext.web.api.service.ServiceResponse;
+import io.vertx.ext.web.client.predicate.ResponsePredicate;
+import java.util.HashMap;
+import io.vertx.ext.auth.User;
+import java.util.Optional;
+import java.util.stream.Stream;
+import java.net.URLDecoder;
+import org.apache.solr.util.DateMathParser;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+import org.apache.solr.common.util.NamedList;
+import org.apache.solr.client.solrj.response.PivotField;
+import org.apache.solr.client.solrj.response.RangeFacet;
+import org.apache.solr.client.solrj.response.FacetField;
+import java.util.Map.Entry;
+import java.util.Iterator;
+import java.util.Base64;
+import java.time.ZonedDateTime;
+import org.apache.solr.common.util.SimpleOrderedMap;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.BooleanUtils;
+import org.choicehumanitarian.reports.enus.user.SiteUserEnUSApiServiceImpl;
+import org.choicehumanitarian.reports.enus.search.SearchList;
+import org.choicehumanitarian.reports.enus.writer.AllWriter;
 
 
 /**
@@ -967,6 +998,87 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 		}
 		return promise.future();
 	}
+
+	// SearchPage //
+
+	@Override
+	public void searchpageSiteUserId(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
+		searchpageSiteUser(serviceRequest, eventHandler);
+	}
+
+	@Override
+	public void searchpageSiteUser(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
+		user(serviceRequest).onSuccess(siteRequest -> {
+			try {
+				siteRequest.setRequestUri(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("uri")).orElse(null));
+				siteRequest.setRequestMethod(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("method")).orElse(null));
+				{
+					searchSiteUserList(siteRequest, false, true, false, "/user", "SearchPage").onSuccess(listSiteUser -> {
+						response200SearchPageSiteUser(listSiteUser).onSuccess(response -> {
+							eventHandler.handle(Future.succeededFuture(response));
+							LOG.debug(String.format("searchpageSiteUser succeeded. "));
+						}).onFailure(ex -> {
+							LOG.error(String.format("searchpageSiteUser failed. "), ex);
+							error(siteRequest, eventHandler, ex);
+						});
+					}).onFailure(ex -> {
+						LOG.error(String.format("searchpageSiteUser failed. "), ex);
+						error(siteRequest, eventHandler, ex);
+					});
+				}
+			} catch(Exception ex) {
+				LOG.error(String.format("searchpageSiteUser failed. "), ex);
+				error(null, eventHandler, ex);
+			}
+		}).onFailure(ex -> {
+			if("Inactive Token".equals(ex.getMessage())) {
+				try {
+					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
+				} catch(Exception ex2) {
+					LOG.error(String.format("searchpageSiteUser failed. ", ex2));
+					error(null, eventHandler, ex2);
+				}
+			} else {
+				LOG.error(String.format("searchpageSiteUser failed. "), ex);
+				error(null, eventHandler, ex);
+			}
+		});
+	}
+
+
+	public void searchpageSiteUserPageInit(SiteUserPage page, SearchList<SiteUser> listSiteUser) {
+	}
+	public String templateSearchPageSiteUser() {
+		return config.getString(ConfigKeys.TEMPLATE_PATH) + "/enUS/SiteUserPage";
+	}
+	public Future<ServiceResponse> response200SearchPageSiteUser(SearchList<SiteUser> listSiteUser) {
+		Promise<ServiceResponse> promise = Promise.promise();
+		try {
+			SiteRequestEnUS siteRequest = listSiteUser.getSiteRequest_();
+			SiteUserPage page = new SiteUserPage();
+			MultiMap requestHeaders = MultiMap.caseInsensitiveMultiMap();
+			siteRequest.setRequestHeaders(requestHeaders);
+
+			if(listSiteUser.size() == 1)
+				siteRequest.setRequestPk(listSiteUser.get(0).getPk());
+			page.setListSiteUser_(listSiteUser);
+			page.setSiteRequest_(siteRequest);
+			page.promiseDeepSiteUserPage(siteRequest).onSuccess(a -> {
+				JsonObject json = JsonObject.mapFrom(page);
+				templateEngine.render(json, templateSearchPageSiteUser()).onSuccess(buffer -> {
+					promise.complete(new ServiceResponse(200, "OK", buffer, requestHeaders));
+				}).onFailure(ex -> {
+					promise.fail(ex);
+				});
+			}).onFailure(ex -> {
+				promise.fail(ex);
+			});
+		} catch(Exception ex) {
+			LOG.error(String.format("response200SearchPageSiteUser failed. "), ex);
+			promise.fail(ex);
+		}
+		return promise.future();
+	}
 	public static final String VAR_userKeys = "userKeys";
 	public static final String VAR_userName = "userName";
 	public static final String VAR_sessionId = "sessionId";
@@ -1142,11 +1254,21 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 						for(Object paramObject : paramObjects) {
 							switch(paramName) {
 								case "q":
-									entityVar = StringUtils.trim(StringUtils.substringBefore((String)paramObject, ":"));
-									varIndexed = "*".equals(entityVar) ? entityVar : SiteUser.varSearchSiteUser(entityVar);
-									valueIndexed = URLDecoder.decode(StringUtils.trim(StringUtils.substringAfter((String)paramObject, ":")), "UTF-8");
-									valueIndexed = StringUtils.isEmpty(valueIndexed) ? "*" : valueIndexed;
-									searchSiteUserQ(uri, apiMethod, searchList, entityVar, valueIndexed, varIndexed);
+									Matcher mQ = Pattern.compile("(\\w+):(.+?(?=(\\)|\\s+OR\\s+|\\s+AND\\s+|\\^|$)))").matcher((String)paramObject);
+									boolean foundQ = mQ.find();
+									if(foundQ) {
+										StringBuffer sb = new StringBuffer();
+										while(foundQ) {
+											entityVar = mQ.group(1).trim();
+											valueIndexed = mQ.group(2).trim();
+											varIndexed = SiteUser.varIndexedSiteUser(entityVar);
+											String entityQ = searchSiteUserFq(uri, apiMethod, searchList, entityVar, valueIndexed, varIndexed);
+											mQ.appendReplacement(sb, entityQ);
+											foundQ = mQ.find();
+										}
+										mQ.appendTail(sb);
+										searchList.setQuery(sb.toString());
+									}
 									break;
 								case "fq":
 									Matcher mFq = Pattern.compile("(\\w+):(.+?(?=(\\)|\\s+OR\\s+|\\s+AND\\s+|$)))").matcher((String)paramObject);
