@@ -1,5 +1,10 @@
 package org.choicehumanitarian.reports.enus.model.donor;
 
+import java.lang.String;
+import java.lang.Long;
+import java.math.BigDecimal;
+import java.util.List;
+import org.choicehumanitarian.reports.enus.base.BaseModelPage;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import org.choicehumanitarian.reports.enus.user.SiteUser;
 import java.io.IOException;
@@ -7,6 +12,7 @@ import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
 import org.choicehumanitarian.reports.enus.search.SearchList;
 import org.choicehumanitarian.reports.enus.wrap.Wrap;
+import org.choicehumanitarian.reports.enus.page.PageLayout;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.LocalDate;
@@ -20,98 +26,99 @@ import java.net.URLDecoder;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.StringUtils;
 import java.util.Map;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 import org.apache.solr.common.util.SimpleOrderedMap;
 import java.util.stream.Collectors;
 import java.util.Arrays;
 import org.apache.solr.client.solrj.response.QueryResponse;
-import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.math.MathContext;
 import org.apache.commons.collections.CollectionUtils;
 import java.util.Objects;
 import org.apache.solr.client.solrj.SolrQuery.SortClause;
 import io.vertx.core.Promise;
+import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 
 
 /**
  * Translate: false
  **/
-public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<Object> {
+public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<BaseModelPage> {
 
 	/**
+	 * {@inheritDoc}
 	 * Ignore: true
-	**/
-	protected void _siteRequest_(Wrap<SiteRequestEnUS> c) {
+	 **/
+	protected void _searchListChoiceDonor_(Wrap<SearchList<ChoiceDonor>> w) {
 	}
 
 	/**
 	 * {@inheritDoc}
-	 * 
 	 **/
-	protected void _listChoiceDonor_(Wrap<SearchList<ChoiceDonor>> c) {
+	protected void _listChoiceDonor(JsonArray l) {
+		Optional.ofNullable(searchListChoiceDonor_).map(o -> o.getList()).orElse(Arrays.asList()).stream().map(o -> JsonObject.mapFrom(o)).forEach(o -> l.add(o));
 	}
 
-	protected void _choiceDonor_(Wrap<ChoiceDonor> c) {
-		if(listChoiceDonor_ != null && listChoiceDonor_.size() == 1)
-			c.o(listChoiceDonor_.get(0));
+	protected void _choiceDonorCount(Wrap<Integer> w) {
+		w.o(searchListChoiceDonor_ == null ? 0 : searchListChoiceDonor_.size());
 	}
 
-	/**
-	 * Ignore: true
-	**/
+	protected void _choiceDonor_(Wrap<ChoiceDonor> w) {
+		if(choiceDonorCount == 1)
+			w.o(searchListChoiceDonor_.get(0));
+	}
+
+	protected void _pk(Wrap<Long> w) {
+		if(choiceDonorCount == 1)
+			w.o(choiceDonor_.getPk());
+	}
+
+	@Override
 	protected void _promiseBefore(Promise<Void> promise) {
 		promise.complete();
 	}
 
-	protected void _pageH1(Wrap<String> c) {
-			c.o("donors");
+	@Override
+	protected void _classSimpleName(Wrap<String> w) {
+		w.o("ChoiceDonor");
 	}
 
-	protected void _pageH2(Wrap<String> c) {
-		c.o("");
-	}
-
-	protected void _pageH3(Wrap<String> c) {
-		c.o("");
-	}
-
+	@Override
 	protected void _pageTitle(Wrap<String> c) {
 		if(choiceDonor_ != null && choiceDonor_.getObjectTitle() != null)
 			c.o(choiceDonor_.getObjectTitle());
 		else if(choiceDonor_ != null)
 			c.o("donors");
-		else if(listChoiceDonor_ == null || listChoiceDonor_.size() == 0)
+		else if(searchListChoiceDonor_ == null || choiceDonorCount == 0)
 			c.o("no donor found");
 		else
 			c.o("donors");
 	}
 
+	@Override
 	protected void _pageUri(Wrap<String> c) {
 		c.o("/api/donor");
 	}
 
+	@Override
 	protected void _roles(List<String> l) {
 		if(siteRequest_ != null) {
 			l.addAll(Stream.concat(siteRequest_.getUserResourceRoles().stream(), siteRequest_.getUserRealmRoles().stream()).distinct().collect(Collectors.toList()));
 		}
 	}
 
+	@Override
 	protected void _rolesRequired(List<String> l) {
-		l.addAll(Arrays.asList("SiteAdmin"));
+		l.addAll(Optional.ofNullable(siteRequest_.getConfig().getJsonArray(ConfigKeys.AUTH_ROLES_REQUIRED + "_ChoiceDonor")).orElse(new JsonArray()).stream().map(o -> o.toString()).collect(Collectors.toList()));
 	}
 
-	protected void _authRolesAdmin(List<String> l) {
-		l.addAll(Arrays.asList("SiteAdmin"));
-	}
-
+	@Override
 	protected void _pagination(JsonObject pagination) {
 		JsonArray pages = new JsonArray();
-		Long start = listChoiceDonor_.getStart().longValue();
-		Long rows = listChoiceDonor_.getRows().longValue();
-		Long foundNum = listChoiceDonor_.getQueryResponse().getResults().getNumFound();
+		Long start = searchListChoiceDonor_.getStart().longValue();
+		Long rows = searchListChoiceDonor_.getRows().longValue();
+		Long foundNum = searchListChoiceDonor_.getQueryResponse().getResults().getNumFound();
 		Long startNum = start + 1L;
 		Long endNum = start + rows;
 		Long floorMod = Math.floorMod(foundNum, rows);
@@ -151,12 +158,13 @@ public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<Object> {
 		}
 	}
 
+	@Override
 	protected void _query(JsonObject query) {
 		ServiceRequest serviceRequest = siteRequest_.getServiceRequest();
 		JsonObject params = serviceRequest.getParams();
 
 		JsonObject queryParams = Optional.ofNullable(serviceRequest).map(ServiceRequest::getParams).map(or -> or.getJsonObject("query")).orElse(new JsonObject());
-		Long num = listChoiceDonor_.getQueryResponse().getResults().getNumFound();
+		Long num = searchListChoiceDonor_.getQueryResponse().getResults().getNumFound();
 		String q = "*:*";
 		String q1 = "objectText";
 		String q2 = "";
@@ -184,15 +192,15 @@ public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<Object> {
 		}
 		query.put("q", q);
 
-		Integer rows1 = Optional.ofNullable(listChoiceDonor_).map(l -> l.getRows()).orElse(10);
-		Integer start1 = Optional.ofNullable(listChoiceDonor_).map(l -> l.getStart()).orElse(1);
+		Integer rows1 = Optional.ofNullable(searchListChoiceDonor_).map(l -> l.getRows()).orElse(10);
+		Integer start1 = Optional.ofNullable(searchListChoiceDonor_).map(l -> l.getStart()).orElse(1);
 		Integer start2 = start1 - rows1;
 		Integer start3 = start1 + rows1;
 		Integer rows2 = rows1 / 2;
 		Integer rows3 = rows1 * 2;
 		start2 = start2 < 0 ? 0 : start2;
 		JsonArray fqs = new JsonArray();
-		for(String fq : Optional.ofNullable(listChoiceDonor_).map(l -> l.getFilterQueries()).orElse(new String[0])) {
+		for(String fq : Optional.ofNullable(searchListChoiceDonor_).map(l -> l.getFilterQueries()).orElse(new String[0])) {
 			if(!StringUtils.contains(fq, "(")) {
 				String fq1 = StringUtils.substringBefore(fq, "_");
 				String fq2 = StringUtils.substringAfter(fq, ":");
@@ -203,27 +211,28 @@ public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<Object> {
 		query.put("fq", fqs);
 
 		JsonArray sorts = new JsonArray();
-		for(SortClause sort : Optional.ofNullable(listChoiceDonor_).map(l -> l.getSorts()).orElse(Arrays.asList())) {
+		for(SortClause sort : Optional.ofNullable(searchListChoiceDonor_).map(l -> l.getSorts()).orElse(Arrays.asList())) {
 			sorts.add(new JsonObject().put("var", StringUtils.substringBefore(sort.getItem(), "_")).put("order", sort.getOrder().name()));
 		}
 		query.put("sort", sorts);
 	}
 
-	/**
-	 * Ignore: true
-	**/
+	@Override
 	protected void _promiseAfter(Promise<Void> promise) {
 		promise.complete();
 	}
 
+	@Override
 	protected void _pageImageUri(Wrap<String> c) {
 			c.o("/png/api/donor-999.png");
 	}
 
+	@Override
 	protected void _contextIconGroup(Wrap<String> c) {
 			c.o("regular");
 	}
 
+	@Override
 	protected void _contextIconName(Wrap<String> c) {
 			c.o("globe-americas");
 	}

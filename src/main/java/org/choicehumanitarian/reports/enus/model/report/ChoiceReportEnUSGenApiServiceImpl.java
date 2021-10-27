@@ -1,7 +1,7 @@
-package org.choicehumanitarian.reports.enus.model.donor;
+package org.choicehumanitarian.reports.enus.model.report;
 
-import org.choicehumanitarian.reports.enus.model.report.ChoiceReportEnUSApiServiceImpl;
-import org.choicehumanitarian.reports.enus.model.report.ChoiceReport;
+import org.choicehumanitarian.reports.enus.model.donor.ChoiceDonorEnUSApiServiceImpl;
+import org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import org.choicehumanitarian.reports.enus.user.SiteUser;
 import org.choicehumanitarian.reports.enus.request.api.ApiRequest;
@@ -106,19 +106,19 @@ import org.choicehumanitarian.reports.enus.writer.AllWriter;
 /**
  * Translate: false
  **/
-public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl implements ChoiceDonorEnUSGenApiService {
+public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implements ChoiceReportEnUSGenApiService {
 
-	protected static final Logger LOG = LoggerFactory.getLogger(ChoiceDonorEnUSGenApiServiceImpl.class);
+	protected static final Logger LOG = LoggerFactory.getLogger(ChoiceReportEnUSGenApiServiceImpl.class);
 
-	public ChoiceDonorEnUSGenApiServiceImpl(EventBus eventBus, JsonObject config, WorkerExecutor workerExecutor, PgPool pgPool, WebClient webClient, OAuth2Auth oauth2AuthenticationProvider, AuthorizationProvider authorizationProvider, HandlebarsTemplateEngine templateEngine) {
+	public ChoiceReportEnUSGenApiServiceImpl(EventBus eventBus, JsonObject config, WorkerExecutor workerExecutor, PgPool pgPool, WebClient webClient, OAuth2Auth oauth2AuthenticationProvider, AuthorizationProvider authorizationProvider, HandlebarsTemplateEngine templateEngine) {
 		super(eventBus, config, workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine);
 	}
 
 	// PUTImport //
 
 	@Override
-	public void putimportChoiceDonor(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		LOG.debug(String.format("putimportChoiceDonor started. "));
+	public void putimportChoiceReport(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
+		LOG.debug(String.format("putimportChoiceReport started. "));
 		user(serviceRequest).onSuccess(siteRequest -> {
 			try {
 				siteRequest.setJsonObject(body);
@@ -149,31 +149,31 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 						apiRequest.setNumPATCH(0L);
 						apiRequest.initDeepApiRequest(siteRequest);
 						siteRequest.setApiRequest_(apiRequest);
-						eventBus.publish("websocketChoiceDonor", JsonObject.mapFrom(apiRequest).toString());
-						varsChoiceDonor(siteRequest).onSuccess(d -> {
-							listPUTImportChoiceDonor(apiRequest, siteRequest).onSuccess(e -> {
-								response200PUTImportChoiceDonor(siteRequest).onSuccess(response -> {
-									LOG.debug(String.format("putimportChoiceDonor succeeded. "));
+						eventBus.publish("websocketChoiceReport", JsonObject.mapFrom(apiRequest).toString());
+						varsChoiceReport(siteRequest).onSuccess(d -> {
+							listPUTImportChoiceReport(apiRequest, siteRequest).onSuccess(e -> {
+								response200PUTImportChoiceReport(siteRequest).onSuccess(response -> {
+									LOG.debug(String.format("putimportChoiceReport succeeded. "));
 									eventHandler.handle(Future.succeededFuture(response));
 								}).onFailure(ex -> {
-									LOG.error(String.format("putimportChoiceDonor failed. "), ex);
+									LOG.error(String.format("putimportChoiceReport failed. "), ex);
 									error(siteRequest, eventHandler, ex);
 								});
 							}).onFailure(ex -> {
-								LOG.error(String.format("putimportChoiceDonor failed. "), ex);
+								LOG.error(String.format("putimportChoiceReport failed. "), ex);
 								error(siteRequest, eventHandler, ex);
 							});
 						}).onFailure(ex -> {
-							LOG.error(String.format("putimportChoiceDonor failed. "), ex);
+							LOG.error(String.format("putimportChoiceReport failed. "), ex);
 							error(siteRequest, eventHandler, ex);
 						});
 					} catch(Exception ex) {
-						LOG.error(String.format("putimportChoiceDonor failed. "), ex);
+						LOG.error(String.format("putimportChoiceReport failed. "), ex);
 						error(siteRequest, eventHandler, ex);
 					}
 				}
 			} catch(Exception ex) {
-				LOG.error(String.format("putimportChoiceDonor failed. "), ex);
+				LOG.error(String.format("putimportChoiceReport failed. "), ex);
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
@@ -181,18 +181,18 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
-					LOG.error(String.format("putimportChoiceDonor failed. ", ex2));
+					LOG.error(String.format("putimportChoiceReport failed. ", ex2));
 					error(null, eventHandler, ex2);
 				}
 			} else {
-				LOG.error(String.format("putimportChoiceDonor failed. "), ex);
+				LOG.error(String.format("putimportChoiceReport failed. "), ex);
 				error(null, eventHandler, ex);
 			}
 		});
 	}
 
 
-	public Future<Void> listPUTImportChoiceDonor(ApiRequest apiRequest, SiteRequestEnUS siteRequest) {
+	public Future<Void> listPUTImportChoiceReport(ApiRequest apiRequest, SiteRequestEnUS siteRequest) {
 		Promise<Void> promise = Promise.promise();
 		List<Future> futures = new ArrayList<>();
 		JsonArray jsonArray = Optional.ofNullable(siteRequest.getJsonObject()).map(o -> o.getJsonArray("list")).orElse(new JsonArray());
@@ -217,10 +217,10 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 					params.put("query", query);
 					JsonObject context = new JsonObject().put("params", params).put("user", Optional.ofNullable(siteRequest.getUser()).map(user -> user.principal()).orElse(null));
 					JsonObject json = new JsonObject().put("context", context);
-					eventBus.request("choice-reports-enUS-ChoiceDonor", json, new DeliveryOptions().addHeader("action", "putimportChoiceDonorFuture")).onSuccess(a -> {
+					eventBus.request("choice-reports-enUS-ChoiceReport", json, new DeliveryOptions().addHeader("action", "putimportChoiceReportFuture")).onSuccess(a -> {
 						promise1.complete();
 					}).onFailure(ex -> {
-						LOG.error(String.format("listPUTImportChoiceDonor failed. "), ex);
+						LOG.error(String.format("listPUTImportChoiceReport failed. "), ex);
 						promise1.fail(ex);
 					});
 				}));
@@ -229,18 +229,18 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 				apiRequest.setNumPATCH(apiRequest.getNumPATCH() + 1);
 				promise.complete();
 			}).onFailure(ex -> {
-				LOG.error(String.format("listPUTImportChoiceDonor failed. "), ex);
+				LOG.error(String.format("listPUTImportChoiceReport failed. "), ex);
 				promise.fail(ex);
 			});
 		} catch(Exception ex) {
-			LOG.error(String.format("listPUTImportChoiceDonor failed. "), ex);
+			LOG.error(String.format("listPUTImportChoiceReport failed. "), ex);
 			promise.fail(ex);
 		}
 		return promise.future();
 	}
 
 	@Override
-	public void putimportChoiceDonorFuture(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
+	public void putimportChoiceReportFuture(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
 		user(serviceRequest).onSuccess(siteRequest -> {
 			try {
 				ApiRequest apiRequest = new ApiRequest();
@@ -254,18 +254,18 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 					siteRequest.getRequestVars().put( "refresh", "false" );
 				}
 
-				SearchList<ChoiceDonor> searchList = new SearchList<ChoiceDonor>();
+				SearchList<ChoiceReport> searchList = new SearchList<ChoiceReport>();
 				searchList.setStore(true);
 				searchList.setQuery("*:*");
-				searchList.setC(ChoiceDonor.class);
+				searchList.setC(ChoiceReport.class);
 				searchList.addFilterQuery("deleted_indexedstored_boolean:false");
 				searchList.addFilterQuery("archived_indexedstored_boolean:false");
 				searchList.addFilterQuery("inheritPk_indexedstored_string:" + ClientUtils.escapeQueryChars(body.getString("pk")));
 				searchList.promiseDeepForClass(siteRequest).onSuccess(a -> {
 					try {
 						if(searchList.size() >= 1) {
-							ChoiceDonor o = searchList.getList().stream().findFirst().orElse(null);
-							ChoiceDonor o2 = new ChoiceDonor();
+							ChoiceReport o = searchList.getList().stream().findFirst().orElse(null);
+							ChoiceReport o2 = new ChoiceReport();
 							JsonObject body2 = new JsonObject();
 							for(String f : body.fieldNames()) {
 								Object bodyVal = body.getValue(f);
@@ -306,35 +306,35 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 							}
 							if(body2.size() > 0) {
 								siteRequest.setJsonObject(body2);
-								patchChoiceDonorFuture(o, true).onSuccess(b -> {
-									LOG.info("Import ChoiceDonor {} succeeded, modified ChoiceDonor. ", body.getValue("pk"));
+								patchChoiceReportFuture(o, true).onSuccess(b -> {
+									LOG.info("Import ChoiceReport {} succeeded, modified ChoiceReport. ", body.getValue("pk"));
 									eventHandler.handle(Future.succeededFuture());
 								}).onFailure(ex -> {
-									LOG.error(String.format("putimportChoiceDonorFuture failed. "), ex);
+									LOG.error(String.format("putimportChoiceReportFuture failed. "), ex);
 									eventHandler.handle(Future.failedFuture(ex));
 								});
 							} else {
 								eventHandler.handle(Future.succeededFuture());
 							}
 						} else {
-							postChoiceDonorFuture(siteRequest, true).onSuccess(b -> {
-								LOG.info("Import ChoiceDonor {} succeeded, created new ChoiceDonor. ", body.getValue("pk"));
+							postChoiceReportFuture(siteRequest, true).onSuccess(b -> {
+								LOG.info("Import ChoiceReport {} succeeded, created new ChoiceReport. ", body.getValue("pk"));
 								eventHandler.handle(Future.succeededFuture());
 							}).onFailure(ex -> {
-								LOG.error(String.format("putimportChoiceDonorFuture failed. "), ex);
+								LOG.error(String.format("putimportChoiceReportFuture failed. "), ex);
 								eventHandler.handle(Future.failedFuture(ex));
 							});
 						}
 					} catch(Exception ex) {
-						LOG.error(String.format("putimportChoiceDonorFuture failed. "), ex);
+						LOG.error(String.format("putimportChoiceReportFuture failed. "), ex);
 						eventHandler.handle(Future.failedFuture(ex));
 					}
 				}).onFailure(ex -> {
-					LOG.error(String.format("putimportChoiceDonorFuture failed. "), ex);
+					LOG.error(String.format("putimportChoiceReportFuture failed. "), ex);
 					eventHandler.handle(Future.failedFuture(ex));
 				});
 			} catch(Exception ex) {
-				LOG.error(String.format("putimportChoiceDonorFuture failed. "), ex);
+				LOG.error(String.format("putimportChoiceReportFuture failed. "), ex);
 				eventHandler.handle(Future.failedFuture(ex));
 			}
 		}).onFailure(ex -> {
@@ -342,24 +342,24 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
-					LOG.error(String.format("putimportChoiceDonor failed. ", ex2));
+					LOG.error(String.format("putimportChoiceReport failed. ", ex2));
 					error(null, eventHandler, ex2);
 				}
 			} else {
-				LOG.error(String.format("putimportChoiceDonor failed. "), ex);
+				LOG.error(String.format("putimportChoiceReport failed. "), ex);
 				error(null, eventHandler, ex);
 			}
 		});
 	}
 
 
-	public Future<ServiceResponse> response200PUTImportChoiceDonor(SiteRequestEnUS siteRequest) {
+	public Future<ServiceResponse> response200PUTImportChoiceReport(SiteRequestEnUS siteRequest) {
 		Promise<ServiceResponse> promise = Promise.promise();
 		try {
 			JsonObject json = new JsonObject();
 			promise.complete(ServiceResponse.completedWithJson(Buffer.buffer(Optional.ofNullable(json).orElse(new JsonObject()).encodePrettily())));
 		} catch(Exception ex) {
-			LOG.error(String.format("response200PUTImportChoiceDonor failed. "), ex);
+			LOG.error(String.format("response200PUTImportChoiceReport failed. "), ex);
 			promise.fail(ex);
 		}
 		return promise.future();
@@ -368,8 +368,8 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 	// POST //
 
 	@Override
-	public void postChoiceDonor(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		LOG.debug(String.format("postChoiceDonor started. "));
+	public void postChoiceReport(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
+		LOG.debug(String.format("postChoiceReport started. "));
 		user(serviceRequest).onSuccess(siteRequest -> {
 			try {
 				siteRequest.setJsonObject(body);
@@ -398,7 +398,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 					apiRequest.setNumPATCH(0L);
 					apiRequest.initDeepApiRequest(siteRequest);
 					siteRequest.setApiRequest_(apiRequest);
-					eventBus.publish("websocketChoiceDonor", JsonObject.mapFrom(apiRequest).toString());
+					eventBus.publish("websocketChoiceReport", JsonObject.mapFrom(apiRequest).toString());
 					JsonObject params = new JsonObject();
 					params.put("body", siteRequest.getJsonObject());
 					params.put("path", new JsonObject());
@@ -417,19 +417,19 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 					params.put("query", query);
 					JsonObject context = new JsonObject().put("params", params).put("user", Optional.ofNullable(siteRequest.getUser()).map(user -> user.principal()).orElse(null));
 					JsonObject json = new JsonObject().put("context", context);
-					eventBus.request("choice-reports-enUS-ChoiceDonor", json, new DeliveryOptions().addHeader("action", "postChoiceDonorFuture")).onSuccess(a -> {
+					eventBus.request("choice-reports-enUS-ChoiceReport", json, new DeliveryOptions().addHeader("action", "postChoiceReportFuture")).onSuccess(a -> {
 						JsonObject responseMessage = (JsonObject)a.body();
 						JsonObject responseBody = new JsonObject(new String(Base64.getDecoder().decode(responseMessage.getString("payload")), Charset.forName("UTF-8")));
 						apiRequest.setPk(Long.parseLong(responseBody.getString("pk")));
 						eventHandler.handle(Future.succeededFuture(ServiceResponse.completedWithJson(Buffer.buffer(responseBody.encodePrettily()))));
-						LOG.debug(String.format("postChoiceDonor succeeded. "));
+						LOG.debug(String.format("postChoiceReport succeeded. "));
 					}).onFailure(ex -> {
-						LOG.error(String.format("postChoiceDonor failed. "), ex);
+						LOG.error(String.format("postChoiceReport failed. "), ex);
 						error(siteRequest, eventHandler, ex);
 					});
 				}
 			} catch(Exception ex) {
-				LOG.error(String.format("postChoiceDonor failed. "), ex);
+				LOG.error(String.format("postChoiceReport failed. "), ex);
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
@@ -437,11 +437,11 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
-					LOG.error(String.format("postChoiceDonor failed. ", ex2));
+					LOG.error(String.format("postChoiceReport failed. ", ex2));
 					error(null, eventHandler, ex2);
 				}
 			} else {
-				LOG.error(String.format("postChoiceDonor failed. "), ex);
+				LOG.error(String.format("postChoiceReport failed. "), ex);
 				error(null, eventHandler, ex);
 			}
 		});
@@ -449,7 +449,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 
 
 	@Override
-	public void postChoiceDonorFuture(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
+	public void postChoiceReportFuture(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
 		user(serviceRequest).onSuccess(siteRequest -> {
 			ApiRequest apiRequest = new ApiRequest();
 			apiRequest.setRows(1);
@@ -460,7 +460,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 			if(Optional.ofNullable(serviceRequest.getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getJsonArray("var")).orElse(new JsonArray()).stream().filter(s -> "refresh:false".equals(s)).count() > 0L) {
 				siteRequest.getRequestVars().put( "refresh", "false" );
 			}
-			postChoiceDonorFuture(siteRequest, false).onSuccess(o -> {
+			postChoiceReportFuture(siteRequest, false).onSuccess(o -> {
 				eventHandler.handle(Future.succeededFuture(ServiceResponse.completedWithJson(Buffer.buffer(JsonObject.mapFrom(o).encodePrettily()))));
 			}).onFailure(ex -> {
 				eventHandler.handle(Future.failedFuture(ex));
@@ -470,29 +470,29 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
-					LOG.error(String.format("postChoiceDonor failed. ", ex2));
+					LOG.error(String.format("postChoiceReport failed. ", ex2));
 					error(null, eventHandler, ex2);
 				}
 			} else {
-				LOG.error(String.format("postChoiceDonor failed. "), ex);
+				LOG.error(String.format("postChoiceReport failed. "), ex);
 				error(null, eventHandler, ex);
 			}
 		});
 	}
 
-	public Future<ChoiceDonor> postChoiceDonorFuture(SiteRequestEnUS siteRequest, Boolean inheritPk) {
-		Promise<ChoiceDonor> promise = Promise.promise();
+	public Future<ChoiceReport> postChoiceReportFuture(SiteRequestEnUS siteRequest, Boolean inheritPk) {
+		Promise<ChoiceReport> promise = Promise.promise();
 
 		try {
 			pgPool.withTransaction(sqlConnection -> {
-				Promise<ChoiceDonor> promise1 = Promise.promise();
+				Promise<ChoiceReport> promise1 = Promise.promise();
 				siteRequest.setSqlConnection(sqlConnection);
-				createChoiceDonor(siteRequest).onSuccess(choiceDonor -> {
-					sqlPOSTChoiceDonor(choiceDonor, inheritPk).onSuccess(b -> {
-						defineChoiceDonor(choiceDonor).onSuccess(c -> {
-							relateChoiceDonor(choiceDonor).onSuccess(d -> {
-								indexChoiceDonor(choiceDonor).onSuccess(e -> {
-									promise1.complete(choiceDonor);
+				createChoiceReport(siteRequest).onSuccess(choiceReport -> {
+					sqlPOSTChoiceReport(choiceReport, inheritPk).onSuccess(b -> {
+						defineChoiceReport(choiceReport).onSuccess(c -> {
+							relateChoiceReport(choiceReport).onSuccess(d -> {
+								indexChoiceReport(choiceReport).onSuccess(e -> {
+									promise1.complete(choiceReport);
 								}).onFailure(ex -> {
 									promise1.fail(ex);
 								});
@@ -514,38 +514,38 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 			}).onFailure(ex -> {
 				siteRequest.setSqlConnection(null);
 				promise.fail(ex);
-			}).compose(choiceDonor -> {
-				Promise<ChoiceDonor> promise2 = Promise.promise();
-				refreshChoiceDonor(choiceDonor).onSuccess(a -> {
+			}).compose(choiceReport -> {
+				Promise<ChoiceReport> promise2 = Promise.promise();
+				refreshChoiceReport(choiceReport).onSuccess(a -> {
 					try {
 						ApiRequest apiRequest = siteRequest.getApiRequest_();
 						if(apiRequest != null) {
 							apiRequest.setNumPATCH(apiRequest.getNumPATCH() + 1);
-							choiceDonor.apiRequestChoiceDonor();
-							eventBus.publish("websocketChoiceDonor", JsonObject.mapFrom(apiRequest).toString());
+							choiceReport.apiRequestChoiceReport();
+							eventBus.publish("websocketChoiceReport", JsonObject.mapFrom(apiRequest).toString());
 						}
-						promise2.complete(choiceDonor);
+						promise2.complete(choiceReport);
 					} catch(Exception ex) {
-						LOG.error(String.format("postChoiceDonorFuture failed. "), ex);
+						LOG.error(String.format("postChoiceReportFuture failed. "), ex);
 						promise.fail(ex);
 					}
 				}).onFailure(ex -> {
 					promise2.fail(ex);
 				});
 				return promise2.future();
-			}).onSuccess(choiceDonor -> {
-				promise.complete(choiceDonor);
+			}).onSuccess(choiceReport -> {
+				promise.complete(choiceReport);
 			}).onFailure(ex -> {
 				promise.fail(ex);
 			});
 		} catch(Exception ex) {
-			LOG.error(String.format("postChoiceDonorFuture failed. "), ex);
+			LOG.error(String.format("postChoiceReportFuture failed. "), ex);
 			promise.fail(ex);
 		}
 		return promise.future();
 	}
 
-	public Future<Void> sqlPOSTChoiceDonor(ChoiceDonor o, Boolean inheritPk) {
+	public Future<Void> sqlPOSTChoiceReport(ChoiceReport o, Boolean inheritPk) {
 		Promise<Void> promise = Promise.promise();
 		try {
 			SiteRequestEnUS siteRequest = o.getSiteRequest_();
@@ -554,11 +554,11 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 			List<String> classes = Optional.ofNullable(apiRequest).map(r -> r.getClasses()).orElse(new ArrayList<>());
 			SqlConnection sqlConnection = siteRequest.getSqlConnection();
 			Integer num = 1;
-			StringBuilder bSql = new StringBuilder("UPDATE ChoiceDonor SET ");
+			StringBuilder bSql = new StringBuilder("UPDATE ChoiceReport SET ");
 			List<Object> bParams = new ArrayList<Object>();
 			Long pk = o.getPk();
 			JsonObject jsonObject = siteRequest.getJsonObject();
-			ChoiceDonor o2 = new ChoiceDonor();
+			ChoiceReport o2 = new ChoiceReport();
 			o2.setSiteRequest_(siteRequest);
 			List<Future> futures1 = new ArrayList<>();
 			List<Future> futures2 = new ArrayList<>();
@@ -584,141 +584,51 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 				Set<String> entityVars = jsonObject.fieldNames();
 				for(String entityVar : entityVars) {
 					switch(entityVar) {
-					case ChoiceDonor.VAR_inheritPk:
+					case ChoiceReport.VAR_inheritPk:
 						o2.setInheritPk(jsonObject.getString(entityVar));
 						if(bParams.size() > 0) {
 							bSql.append(", ");
 						}
-						bSql.append(ChoiceDonor.VAR_inheritPk + "=$" + num);
+						bSql.append(ChoiceReport.VAR_inheritPk + "=$" + num);
 						num++;
 						bParams.add(o2.sqlInheritPk());
 						break;
-					case ChoiceDonor.VAR_archived:
+					case ChoiceReport.VAR_archived:
 						o2.setArchived(jsonObject.getBoolean(entityVar));
 						if(bParams.size() > 0) {
 							bSql.append(", ");
 						}
-						bSql.append(ChoiceDonor.VAR_archived + "=$" + num);
+						bSql.append(ChoiceReport.VAR_archived + "=$" + num);
 						num++;
 						bParams.add(o2.sqlArchived());
 						break;
-					case ChoiceDonor.VAR_deleted:
+					case ChoiceReport.VAR_deleted:
 						o2.setDeleted(jsonObject.getBoolean(entityVar));
 						if(bParams.size() > 0) {
 							bSql.append(", ");
 						}
-						bSql.append(ChoiceDonor.VAR_deleted + "=$" + num);
+						bSql.append(ChoiceReport.VAR_deleted + "=$" + num);
 						num++;
 						bParams.add(o2.sqlDeleted());
 						break;
-					case ChoiceDonor.VAR_donorFullName:
+					case ChoiceReport.VAR_donorFullName:
 						o2.setDonorFullName(jsonObject.getString(entityVar));
 						if(bParams.size() > 0) {
 							bSql.append(", ");
 						}
-						bSql.append(ChoiceDonor.VAR_donorFullName + "=$" + num);
+						bSql.append(ChoiceReport.VAR_donorFullName + "=$" + num);
 						num++;
 						bParams.add(o2.sqlDonorFullName());
 						break;
-					case ChoiceDonor.VAR_donorParentName:
-						o2.setDonorParentName(jsonObject.getString(entityVar));
-						if(bParams.size() > 0) {
-							bSql.append(", ");
-						}
-						bSql.append(ChoiceDonor.VAR_donorParentName + "=$" + num);
-						num++;
-						bParams.add(o2.sqlDonorParentName());
-						break;
-					case ChoiceDonor.VAR_donorId:
-						o2.setDonorId(jsonObject.getString(entityVar));
-						if(bParams.size() > 0) {
-							bSql.append(", ");
-						}
-						bSql.append(ChoiceDonor.VAR_donorId + "=$" + num);
-						num++;
-						bParams.add(o2.sqlDonorId());
-						break;
-					case ChoiceDonor.VAR_donorAttributeId:
-						o2.setDonorAttributeId(jsonObject.getString(entityVar));
-						if(bParams.size() > 0) {
-							bSql.append(", ");
-						}
-						bSql.append(ChoiceDonor.VAR_donorAttributeId + "=$" + num);
-						num++;
-						bParams.add(o2.sqlDonorAttributeId());
-						break;
-					case ChoiceDonor.VAR_donorInKind:
-						o2.setDonorInKind(jsonObject.getString(entityVar));
-						if(bParams.size() > 0) {
-							bSql.append(", ");
-						}
-						bSql.append(ChoiceDonor.VAR_donorInKind + "=$" + num);
-						num++;
-						bParams.add(o2.sqlDonorInKind());
-						break;
-					case ChoiceDonor.VAR_donorTotal:
-						o2.setDonorTotal(jsonObject.getString(entityVar));
-						if(bParams.size() > 0) {
-							bSql.append(", ");
-						}
-						bSql.append(ChoiceDonor.VAR_donorTotal + "=$" + num);
-						num++;
-						bParams.add(o2.sqlDonorTotal());
-						break;
-					case ChoiceDonor.VAR_donorYtd:
-						o2.setDonorYtd(jsonObject.getString(entityVar));
-						if(bParams.size() > 0) {
-							bSql.append(", ");
-						}
-						bSql.append(ChoiceDonor.VAR_donorYtd + "=$" + num);
-						num++;
-						bParams.add(o2.sqlDonorYtd());
-						break;
-					case ChoiceDonor.VAR_donorQ1:
-						o2.setDonorQ1(jsonObject.getString(entityVar));
-						if(bParams.size() > 0) {
-							bSql.append(", ");
-						}
-						bSql.append(ChoiceDonor.VAR_donorQ1 + "=$" + num);
-						num++;
-						bParams.add(o2.sqlDonorQ1());
-						break;
-					case ChoiceDonor.VAR_donorQ2:
-						o2.setDonorQ2(jsonObject.getString(entityVar));
-						if(bParams.size() > 0) {
-							bSql.append(", ");
-						}
-						bSql.append(ChoiceDonor.VAR_donorQ2 + "=$" + num);
-						num++;
-						bParams.add(o2.sqlDonorQ2());
-						break;
-					case ChoiceDonor.VAR_donorQ3:
-						o2.setDonorQ3(jsonObject.getString(entityVar));
-						if(bParams.size() > 0) {
-							bSql.append(", ");
-						}
-						bSql.append(ChoiceDonor.VAR_donorQ3 + "=$" + num);
-						num++;
-						bParams.add(o2.sqlDonorQ3());
-						break;
-					case ChoiceDonor.VAR_donorQ4:
-						o2.setDonorQ4(jsonObject.getString(entityVar));
-						if(bParams.size() > 0) {
-							bSql.append(", ");
-						}
-						bSql.append(ChoiceDonor.VAR_donorQ4 + "=$" + num);
-						num++;
-						bParams.add(o2.sqlDonorQ4());
-						break;
-					case ChoiceDonor.VAR_reportKeys:
+					case ChoiceReport.VAR_donorKeys:
 						Optional.ofNullable(jsonObject.getJsonArray(entityVar)).orElse(new JsonArray()).stream().map(oVal -> oVal.toString()).forEach(val -> {
 							futures2.add(Future.future(promise2 -> {
-								search(siteRequest).query(ChoiceReport.class, val, inheritPk).onSuccess(pk2 -> {
+								search(siteRequest).query(ChoiceDonor.class, val, inheritPk).onSuccess(pk2 -> {
 									if(!pks.contains(pk2)) {
 										pks.add(pk2);
-										classes.add("ChoiceReport");
+										classes.add("ChoiceDonor");
 									}
-									sql(siteRequest).insertInto(ChoiceReport.class, ChoiceReport.VAR_donorKeys, ChoiceDonor.class, ChoiceDonor.VAR_reportKeys).values(pk2, pk).onSuccess(a -> {
+									sql(siteRequest).insertInto(ChoiceReport.class, ChoiceReport.VAR_donorKeys, ChoiceDonor.class, ChoiceDonor.VAR_reportKeys).values(pk, pk2).onSuccess(a -> {
 										promise2.complete();
 									}).onFailure(ex -> {
 										promise2.fail(ex);
@@ -742,8 +652,8 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 							).onSuccess(b -> {
 						a.handle(Future.succeededFuture());
 					}).onFailure(ex -> {
-						RuntimeException ex2 = new RuntimeException("value ChoiceDonor failed", ex);
-						LOG.error(String.format("relateChoiceDonor failed. "), ex2);
+						RuntimeException ex2 = new RuntimeException("value ChoiceReport failed", ex);
+						LOG.error(String.format("relateChoiceReport failed. "), ex2);
 						a.handle(Future.failedFuture(ex2));
 					});
 				}));
@@ -752,29 +662,29 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 				CompositeFuture.all(futures2).onSuccess(b -> {
 					promise.complete();
 				}).onFailure(ex -> {
-					LOG.error(String.format("sqlPOSTChoiceDonor failed. "), ex);
+					LOG.error(String.format("sqlPOSTChoiceReport failed. "), ex);
 					promise.fail(ex);
 				});
 			}).onFailure(ex -> {
-				LOG.error(String.format("sqlPOSTChoiceDonor failed. "), ex);
+				LOG.error(String.format("sqlPOSTChoiceReport failed. "), ex);
 				promise.fail(ex);
 			});
 		} catch(Exception ex) {
-			LOG.error(String.format("sqlPOSTChoiceDonor failed. "), ex);
+			LOG.error(String.format("sqlPOSTChoiceReport failed. "), ex);
 			promise.fail(ex);
 		}
 		return promise.future();
 	}
 
 
-	public Future<ServiceResponse> response200POSTChoiceDonor(ChoiceDonor o) {
+	public Future<ServiceResponse> response200POSTChoiceReport(ChoiceReport o) {
 		Promise<ServiceResponse> promise = Promise.promise();
 		try {
 			SiteRequestEnUS siteRequest = o.getSiteRequest_();
 			JsonObject json = JsonObject.mapFrom(o);
 			promise.complete(ServiceResponse.completedWithJson(Buffer.buffer(Optional.ofNullable(json).orElse(new JsonObject()).encodePrettily())));
 		} catch(Exception ex) {
-			LOG.error(String.format("response200POSTChoiceDonor failed. "), ex);
+			LOG.error(String.format("response200POSTChoiceReport failed. "), ex);
 			promise.fail(ex);
 		}
 		return promise.future();
@@ -783,8 +693,8 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 	// PATCH //
 
 	@Override
-	public void patchChoiceDonor(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		LOG.debug(String.format("patchChoiceDonor started. "));
+	public void patchChoiceReport(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
+		LOG.debug(String.format("patchChoiceReport started. "));
 		user(serviceRequest).onSuccess(siteRequest -> {
 			try {
 				siteRequest.setJsonObject(body);
@@ -807,10 +717,10 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 						)
 					));
 				} else {
-					searchChoiceDonorList(siteRequest, false, true, true).onSuccess(listChoiceDonor -> {
+					searchChoiceReportList(siteRequest, false, true, true).onSuccess(listChoiceReport -> {
 						try {
 							List<String> roles2 = Arrays.asList("SiteAdmin");
-							if(listChoiceDonor.getQueryResponse().getResults().getNumFound() > 1
+							if(listChoiceReport.getQueryResponse().getResults().getNumFound() > 1
 									&& !CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roles2)
 									&& !CollectionUtils.containsAny(siteRequest.getUserRealmRoles(), roles2)
 									) {
@@ -820,40 +730,40 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 							} else {
 
 								ApiRequest apiRequest = new ApiRequest();
-								apiRequest.setRows(listChoiceDonor.getRows());
-								apiRequest.setNumFound(listChoiceDonor.getQueryResponse().getResults().getNumFound());
+								apiRequest.setRows(listChoiceReport.getRows());
+								apiRequest.setNumFound(listChoiceReport.getQueryResponse().getResults().getNumFound());
 								apiRequest.setNumPATCH(0L);
 								apiRequest.initDeepApiRequest(siteRequest);
 								siteRequest.setApiRequest_(apiRequest);
 								if(apiRequest.getNumFound() == 1L)
-									apiRequest.setOriginal(listChoiceDonor.first());
-								apiRequest.setPk(Optional.ofNullable(listChoiceDonor.first()).map(o2 -> o2.getPk()).orElse(null));
-								eventBus.publish("websocketChoiceDonor", JsonObject.mapFrom(apiRequest).toString());
+									apiRequest.setOriginal(listChoiceReport.first());
+								apiRequest.setPk(Optional.ofNullable(listChoiceReport.first()).map(o2 -> o2.getPk()).orElse(null));
+								eventBus.publish("websocketChoiceReport", JsonObject.mapFrom(apiRequest).toString());
 
-								listPATCHChoiceDonor(apiRequest, listChoiceDonor).onSuccess(e -> {
-									response200PATCHChoiceDonor(siteRequest).onSuccess(response -> {
-										LOG.debug(String.format("patchChoiceDonor succeeded. "));
+								listPATCHChoiceReport(apiRequest, listChoiceReport).onSuccess(e -> {
+									response200PATCHChoiceReport(siteRequest).onSuccess(response -> {
+										LOG.debug(String.format("patchChoiceReport succeeded. "));
 										eventHandler.handle(Future.succeededFuture(response));
 									}).onFailure(ex -> {
-										LOG.error(String.format("patchChoiceDonor failed. "), ex);
+										LOG.error(String.format("patchChoiceReport failed. "), ex);
 										error(siteRequest, eventHandler, ex);
 									});
 								}).onFailure(ex -> {
-									LOG.error(String.format("patchChoiceDonor failed. "), ex);
+									LOG.error(String.format("patchChoiceReport failed. "), ex);
 									error(siteRequest, eventHandler, ex);
 								});
 							}
 						} catch(Exception ex) {
-							LOG.error(String.format("patchChoiceDonor failed. "), ex);
+							LOG.error(String.format("patchChoiceReport failed. "), ex);
 							error(siteRequest, eventHandler, ex);
 						}
 					}).onFailure(ex -> {
-						LOG.error(String.format("patchChoiceDonor failed. "), ex);
+						LOG.error(String.format("patchChoiceReport failed. "), ex);
 						error(siteRequest, eventHandler, ex);
 					});
 				}
 			} catch(Exception ex) {
-				LOG.error(String.format("patchChoiceDonor failed. "), ex);
+				LOG.error(String.format("patchChoiceReport failed. "), ex);
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
@@ -861,67 +771,67 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
-					LOG.error(String.format("patchChoiceDonor failed. ", ex2));
+					LOG.error(String.format("patchChoiceReport failed. ", ex2));
 					error(null, eventHandler, ex2);
 				}
 			} else {
-				LOG.error(String.format("patchChoiceDonor failed. "), ex);
+				LOG.error(String.format("patchChoiceReport failed. "), ex);
 				error(null, eventHandler, ex);
 			}
 		});
 	}
 
 
-	public Future<Void> listPATCHChoiceDonor(ApiRequest apiRequest, SearchList<ChoiceDonor> listChoiceDonor) {
+	public Future<Void> listPATCHChoiceReport(ApiRequest apiRequest, SearchList<ChoiceReport> listChoiceReport) {
 		Promise<Void> promise = Promise.promise();
 		List<Future> futures = new ArrayList<>();
-		SiteRequestEnUS siteRequest = listChoiceDonor.getSiteRequest_();
-		listChoiceDonor.getList().forEach(o -> {
+		SiteRequestEnUS siteRequest = listChoiceReport.getSiteRequest_();
+		listChoiceReport.getList().forEach(o -> {
 			SiteRequestEnUS siteRequest2 = generateSiteRequestEnUS(siteRequest.getUser(), siteRequest.getServiceRequest(), siteRequest.getJsonObject());
 			o.setSiteRequest_(siteRequest2);
 			futures.add(Future.future(promise1 -> {
-				patchChoiceDonorFuture(o, false).onSuccess(a -> {
+				patchChoiceReportFuture(o, false).onSuccess(a -> {
 					promise1.complete();
 				}).onFailure(ex -> {
-					LOG.error(String.format("listPATCHChoiceDonor failed. "), ex);
+					LOG.error(String.format("listPATCHChoiceReport failed. "), ex);
 					promise1.fail(ex);
 				});
 			}));
 		});
 		CompositeFuture.all(futures).onSuccess( a -> {
 			if(apiRequest != null) {
-				apiRequest.setNumPATCH(apiRequest.getNumPATCH() + listChoiceDonor.getQueryResponse().getResults().size());
+				apiRequest.setNumPATCH(apiRequest.getNumPATCH() + listChoiceReport.getQueryResponse().getResults().size());
 				if(apiRequest.getNumFound() == 1L)
-					listChoiceDonor.first().apiRequestChoiceDonor();
-				eventBus.publish("websocketChoiceDonor", JsonObject.mapFrom(apiRequest).toString());
+					listChoiceReport.first().apiRequestChoiceReport();
+				eventBus.publish("websocketChoiceReport", JsonObject.mapFrom(apiRequest).toString());
 			}
-			listChoiceDonor.next().onSuccess(next -> {
+			listChoiceReport.next().onSuccess(next -> {
 				if(next) {
-					listPATCHChoiceDonor(apiRequest, listChoiceDonor);
+					listPATCHChoiceReport(apiRequest, listChoiceReport);
 				} else {
 					promise.complete();
 				}
 			}).onFailure(ex -> {
-				LOG.error(String.format("listPATCHChoiceDonor failed. "), ex);
+				LOG.error(String.format("listPATCHChoiceReport failed. "), ex);
 				promise.fail(ex);
 			});
 		}).onFailure(ex -> {
-			LOG.error(String.format("listPATCHChoiceDonor failed. "), ex);
+			LOG.error(String.format("listPATCHChoiceReport failed. "), ex);
 			promise.fail(ex);
 		});
 		return promise.future();
 	}
 
 	@Override
-	public void patchChoiceDonorFuture(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
+	public void patchChoiceReportFuture(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
 		user(serviceRequest).onSuccess(siteRequest -> {
 			try {
 				siteRequest.setJsonObject(body);
 				serviceRequest.getParams().getJsonObject("query").put("rows", 1);
-				searchChoiceDonorList(siteRequest, false, true, true).onSuccess(listChoiceDonor -> {
+				searchChoiceReportList(siteRequest, false, true, true).onSuccess(listChoiceReport -> {
 					try {
-						ChoiceDonor o = listChoiceDonor.first();
-						if(o != null && listChoiceDonor.getQueryResponse().getResults().getNumFound() == 1) {
+						ChoiceReport o = listChoiceReport.first();
+						if(o != null && listChoiceReport.getQueryResponse().getResults().getNumFound() == 1) {
 							ApiRequest apiRequest = new ApiRequest();
 							apiRequest.setRows(1);
 							apiRequest.setNumFound(1L);
@@ -933,9 +843,9 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 							}
 							if(apiRequest.getNumFound() == 1L)
 								apiRequest.setOriginal(o);
-							apiRequest.setPk(Optional.ofNullable(listChoiceDonor.first()).map(o2 -> o2.getPk()).orElse(null));
-							eventBus.publish("websocketChoiceDonor", JsonObject.mapFrom(apiRequest).toString());
-							patchChoiceDonorFuture(o, false).onSuccess(a -> {
+							apiRequest.setPk(Optional.ofNullable(listChoiceReport.first()).map(o2 -> o2.getPk()).orElse(null));
+							eventBus.publish("websocketChoiceReport", JsonObject.mapFrom(apiRequest).toString());
+							patchChoiceReportFuture(o, false).onSuccess(a -> {
 								eventHandler.handle(Future.succeededFuture(ServiceResponse.completedWithJson(Buffer.buffer(new JsonObject().encodePrettily()))));
 							}).onFailure(ex -> {
 								eventHandler.handle(Future.failedFuture(ex));
@@ -944,37 +854,37 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 							eventHandler.handle(Future.succeededFuture(ServiceResponse.completedWithJson(Buffer.buffer(new JsonObject().encodePrettily()))));
 						}
 					} catch(Exception ex) {
-						LOG.error(String.format("patchChoiceDonor failed. "), ex);
+						LOG.error(String.format("patchChoiceReport failed. "), ex);
 						error(siteRequest, eventHandler, ex);
 					}
 				}).onFailure(ex -> {
-					LOG.error(String.format("patchChoiceDonor failed. "), ex);
+					LOG.error(String.format("patchChoiceReport failed. "), ex);
 					error(siteRequest, eventHandler, ex);
 				});
 			} catch(Exception ex) {
-				LOG.error(String.format("patchChoiceDonor failed. "), ex);
+				LOG.error(String.format("patchChoiceReport failed. "), ex);
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
-			LOG.error(String.format("patchChoiceDonor failed. "), ex);
+			LOG.error(String.format("patchChoiceReport failed. "), ex);
 			error(null, eventHandler, ex);
 		});
 	}
 
-	public Future<ChoiceDonor> patchChoiceDonorFuture(ChoiceDonor o, Boolean inheritPk) {
+	public Future<ChoiceReport> patchChoiceReportFuture(ChoiceReport o, Boolean inheritPk) {
 		SiteRequestEnUS siteRequest = o.getSiteRequest_();
-		Promise<ChoiceDonor> promise = Promise.promise();
+		Promise<ChoiceReport> promise = Promise.promise();
 
 		try {
 			ApiRequest apiRequest = siteRequest.getApiRequest_();
 			pgPool.withTransaction(sqlConnection -> {
-				Promise<ChoiceDonor> promise1 = Promise.promise();
+				Promise<ChoiceReport> promise1 = Promise.promise();
 				siteRequest.setSqlConnection(sqlConnection);
-				sqlPATCHChoiceDonor(o, inheritPk).onSuccess(choiceDonor -> {
-					defineChoiceDonor(choiceDonor).onSuccess(c -> {
-						relateChoiceDonor(choiceDonor).onSuccess(d -> {
-							indexChoiceDonor(choiceDonor).onSuccess(e -> {
-								promise1.complete(choiceDonor);
+				sqlPATCHChoiceReport(o, inheritPk).onSuccess(choiceReport -> {
+					defineChoiceReport(choiceReport).onSuccess(c -> {
+						relateChoiceReport(choiceReport).onSuccess(d -> {
+							indexChoiceReport(choiceReport).onSuccess(e -> {
+								promise1.complete(choiceReport);
 							}).onFailure(ex -> {
 								promise1.fail(ex);
 							});
@@ -993,28 +903,28 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 			}).onFailure(ex -> {
 				siteRequest.setSqlConnection(null);
 				promise.fail(ex);
-			}).compose(choiceDonor -> {
-				Promise<ChoiceDonor> promise2 = Promise.promise();
-				refreshChoiceDonor(choiceDonor).onSuccess(a -> {
-					promise2.complete(choiceDonor);
+			}).compose(choiceReport -> {
+				Promise<ChoiceReport> promise2 = Promise.promise();
+				refreshChoiceReport(choiceReport).onSuccess(a -> {
+					promise2.complete(choiceReport);
 				}).onFailure(ex -> {
 					promise2.fail(ex);
 				});
 				return promise2.future();
-			}).onSuccess(choiceDonor -> {
-				promise.complete(choiceDonor);
+			}).onSuccess(choiceReport -> {
+				promise.complete(choiceReport);
 			}).onFailure(ex -> {
 				promise.fail(ex);
 			});
 		} catch(Exception ex) {
-			LOG.error(String.format("patchChoiceDonorFuture failed. "), ex);
+			LOG.error(String.format("patchChoiceReportFuture failed. "), ex);
 			promise.fail(ex);
 		}
 		return promise.future();
 	}
 
-	public Future<ChoiceDonor> sqlPATCHChoiceDonor(ChoiceDonor o, Boolean inheritPk) {
-		Promise<ChoiceDonor> promise = Promise.promise();
+	public Future<ChoiceReport> sqlPATCHChoiceReport(ChoiceReport o, Boolean inheritPk) {
+		Promise<ChoiceReport> promise = Promise.promise();
 		try {
 			SiteRequestEnUS siteRequest = o.getSiteRequest_();
 			ApiRequest apiRequest = siteRequest.getApiRequest_();
@@ -1022,12 +932,12 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 			List<String> classes = Optional.ofNullable(apiRequest).map(r -> r.getClasses()).orElse(new ArrayList<>());
 			SqlConnection sqlConnection = siteRequest.getSqlConnection();
 			Integer num = 1;
-			StringBuilder bSql = new StringBuilder("UPDATE ChoiceDonor SET ");
+			StringBuilder bSql = new StringBuilder("UPDATE ChoiceReport SET ");
 			List<Object> bParams = new ArrayList<Object>();
 			Long pk = o.getPk();
 			JsonObject jsonObject = siteRequest.getJsonObject();
 			Set<String> methodNames = jsonObject.fieldNames();
-			ChoiceDonor o2 = new ChoiceDonor();
+			ChoiceReport o2 = new ChoiceReport();
 			o2.setSiteRequest_(siteRequest);
 			List<Future> futures1 = new ArrayList<>();
 			List<Future> futures2 = new ArrayList<>();
@@ -1038,7 +948,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 							o2.setInheritPk(jsonObject.getString(entityVar));
 							if(bParams.size() > 0)
 								bSql.append(", ");
-							bSql.append(ChoiceDonor.VAR_inheritPk + "=$" + num);
+							bSql.append(ChoiceReport.VAR_inheritPk + "=$" + num);
 							num++;
 							bParams.add(o2.sqlInheritPk());
 						break;
@@ -1046,7 +956,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 							o2.setArchived(jsonObject.getBoolean(entityVar));
 							if(bParams.size() > 0)
 								bSql.append(", ");
-							bSql.append(ChoiceDonor.VAR_archived + "=$" + num);
+							bSql.append(ChoiceReport.VAR_archived + "=$" + num);
 							num++;
 							bParams.add(o2.sqlArchived());
 						break;
@@ -1054,7 +964,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 							o2.setDeleted(jsonObject.getBoolean(entityVar));
 							if(bParams.size() > 0)
 								bSql.append(", ");
-							bSql.append(ChoiceDonor.VAR_deleted + "=$" + num);
+							bSql.append(ChoiceReport.VAR_deleted + "=$" + num);
 							num++;
 							bParams.add(o2.sqlDeleted());
 						break;
@@ -1062,98 +972,18 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 							o2.setDonorFullName(jsonObject.getString(entityVar));
 							if(bParams.size() > 0)
 								bSql.append(", ");
-							bSql.append(ChoiceDonor.VAR_donorFullName + "=$" + num);
+							bSql.append(ChoiceReport.VAR_donorFullName + "=$" + num);
 							num++;
 							bParams.add(o2.sqlDonorFullName());
 						break;
-					case "setDonorParentName":
-							o2.setDonorParentName(jsonObject.getString(entityVar));
-							if(bParams.size() > 0)
-								bSql.append(", ");
-							bSql.append(ChoiceDonor.VAR_donorParentName + "=$" + num);
-							num++;
-							bParams.add(o2.sqlDonorParentName());
-						break;
-					case "setDonorId":
-							o2.setDonorId(jsonObject.getString(entityVar));
-							if(bParams.size() > 0)
-								bSql.append(", ");
-							bSql.append(ChoiceDonor.VAR_donorId + "=$" + num);
-							num++;
-							bParams.add(o2.sqlDonorId());
-						break;
-					case "setDonorAttributeId":
-							o2.setDonorAttributeId(jsonObject.getString(entityVar));
-							if(bParams.size() > 0)
-								bSql.append(", ");
-							bSql.append(ChoiceDonor.VAR_donorAttributeId + "=$" + num);
-							num++;
-							bParams.add(o2.sqlDonorAttributeId());
-						break;
-					case "setDonorInKind":
-							o2.setDonorInKind(jsonObject.getString(entityVar));
-							if(bParams.size() > 0)
-								bSql.append(", ");
-							bSql.append(ChoiceDonor.VAR_donorInKind + "=$" + num);
-							num++;
-							bParams.add(o2.sqlDonorInKind());
-						break;
-					case "setDonorTotal":
-							o2.setDonorTotal(jsonObject.getString(entityVar));
-							if(bParams.size() > 0)
-								bSql.append(", ");
-							bSql.append(ChoiceDonor.VAR_donorTotal + "=$" + num);
-							num++;
-							bParams.add(o2.sqlDonorTotal());
-						break;
-					case "setDonorYtd":
-							o2.setDonorYtd(jsonObject.getString(entityVar));
-							if(bParams.size() > 0)
-								bSql.append(", ");
-							bSql.append(ChoiceDonor.VAR_donorYtd + "=$" + num);
-							num++;
-							bParams.add(o2.sqlDonorYtd());
-						break;
-					case "setDonorQ1":
-							o2.setDonorQ1(jsonObject.getString(entityVar));
-							if(bParams.size() > 0)
-								bSql.append(", ");
-							bSql.append(ChoiceDonor.VAR_donorQ1 + "=$" + num);
-							num++;
-							bParams.add(o2.sqlDonorQ1());
-						break;
-					case "setDonorQ2":
-							o2.setDonorQ2(jsonObject.getString(entityVar));
-							if(bParams.size() > 0)
-								bSql.append(", ");
-							bSql.append(ChoiceDonor.VAR_donorQ2 + "=$" + num);
-							num++;
-							bParams.add(o2.sqlDonorQ2());
-						break;
-					case "setDonorQ3":
-							o2.setDonorQ3(jsonObject.getString(entityVar));
-							if(bParams.size() > 0)
-								bSql.append(", ");
-							bSql.append(ChoiceDonor.VAR_donorQ3 + "=$" + num);
-							num++;
-							bParams.add(o2.sqlDonorQ3());
-						break;
-					case "setDonorQ4":
-							o2.setDonorQ4(jsonObject.getString(entityVar));
-							if(bParams.size() > 0)
-								bSql.append(", ");
-							bSql.append(ChoiceDonor.VAR_donorQ4 + "=$" + num);
-							num++;
-							bParams.add(o2.sqlDonorQ4());
-						break;
-					case "setReportKeys":
-						JsonArray setReportKeysValues = Optional.ofNullable(jsonObject.getJsonArray(entityVar)).orElse(new JsonArray());
-						setReportKeysValues.stream().map(oVal -> oVal.toString()).forEach(val -> {
+					case "setDonorKeys":
+						JsonArray setDonorKeysValues = Optional.ofNullable(jsonObject.getJsonArray(entityVar)).orElse(new JsonArray());
+						setDonorKeysValues.stream().map(oVal -> oVal.toString()).forEach(val -> {
 							futures2.add(Future.future(promise2 -> {
-								search(siteRequest).query(ChoiceReport.class, val, inheritPk).onSuccess(pk2 -> {
+								search(siteRequest).query(ChoiceDonor.class, val, inheritPk).onSuccess(pk2 -> {
 									if(!pks.contains(pk2)) {
 										pks.add(pk2);
-										classes.add("ChoiceReport");
+										classes.add("ChoiceDonor");
 									}
 									sql(siteRequest).insertInto(ChoiceReport.class, ChoiceReport.VAR_donorKeys, ChoiceDonor.class, ChoiceDonor.VAR_reportKeys).values(pk, pk2).onSuccess(a -> {
 										promise2.complete();
@@ -1165,13 +995,13 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 								});
 							}));
 						});
-						Optional.ofNullable(o.getReportKeys()).orElse(Arrays.asList()).stream().filter(oVal -> oVal != null && !setReportKeysValues.contains(oVal.toString())).forEach(pk2 -> {
+						Optional.ofNullable(o.getDonorKeys()).orElse(Arrays.asList()).stream().filter(oVal -> oVal != null && !setDonorKeysValues.contains(oVal.toString())).forEach(pk2 -> {
 							if(!pks.contains(pk2)) {
 								pks.add(pk2);
-								classes.add("ChoiceReport");
+								classes.add("ChoiceDonor");
 							}
 							futures2.add(Future.future(promise2 -> {
-								sql(siteRequest).deleteFrom(ChoiceReport.class, ChoiceReport.VAR_donorKeys, ChoiceDonor.class, ChoiceDonor.VAR_reportKeys).where(pk2, pk).onSuccess(a -> {
+								sql(siteRequest).deleteFrom(ChoiceReport.class, ChoiceReport.VAR_donorKeys, ChoiceDonor.class, ChoiceDonor.VAR_reportKeys).where(pk, pk2).onSuccess(a -> {
 									promise2.complete();
 								}).onFailure(ex -> {
 									promise2.fail(ex);
@@ -1179,14 +1009,14 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 							}));
 						});
 						break;
-					case "addAllReportKeys":
-						JsonArray addAllReportKeysValues = Optional.ofNullable(jsonObject.getJsonArray(entityVar)).orElse(new JsonArray());
-						addAllReportKeysValues.stream().map(oVal -> oVal.toString()).forEach(val -> {
+					case "addAllDonorKeys":
+						JsonArray addAllDonorKeysValues = Optional.ofNullable(jsonObject.getJsonArray(entityVar)).orElse(new JsonArray());
+						addAllDonorKeysValues.stream().map(oVal -> oVal.toString()).forEach(val -> {
 							futures2.add(Future.future(promise2 -> {
-								search(siteRequest).query(ChoiceReport.class, val, inheritPk).onSuccess(pk2 -> {
+								search(siteRequest).query(ChoiceDonor.class, val, inheritPk).onSuccess(pk2 -> {
 									if(!pks.contains(pk2)) {
 										pks.add(pk2);
-										classes.add("ChoiceReport");
+										classes.add("ChoiceDonor");
 									}
 									sql(siteRequest).insertInto(ChoiceReport.class, ChoiceReport.VAR_donorKeys, ChoiceDonor.class, ChoiceDonor.VAR_reportKeys).values(pk, pk2).onSuccess(a -> {
 										promise2.complete();
@@ -1199,13 +1029,13 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 							}));
 						});
 						break;
-					case "addReportKeys":
+					case "addDonorKeys":
 						Optional.ofNullable(jsonObject.getString(entityVar)).ifPresent(val -> {
 							futures2.add(Future.future(promise2 -> {
-								search(siteRequest).query(ChoiceReport.class, val, inheritPk).onSuccess(pk2 -> {
+								search(siteRequest).query(ChoiceDonor.class, val, inheritPk).onSuccess(pk2 -> {
 									if(!pks.contains(pk2)) {
 										pks.add(pk2);
-										classes.add("ChoiceReport");
+										classes.add("ChoiceDonor");
 									}
 									sql(siteRequest).insertInto(ChoiceReport.class, ChoiceReport.VAR_donorKeys, ChoiceDonor.class, ChoiceDonor.VAR_reportKeys).values(pk, pk2).onSuccess(a -> {
 										promise2.complete();
@@ -1218,14 +1048,14 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 							}));
 						});
 						break;
-					case "removeReportKeys":
+					case "removeDonorKeys":
 						Optional.ofNullable(jsonObject.getString(entityVar)).map(val -> Long.parseLong(val)).ifPresent(pk2 -> {
 							if(!pks.contains(pk2)) {
 								pks.add(pk2);
-								classes.add("ChoiceReport");
+								classes.add("ChoiceDonor");
 							}
 							futures2.add(Future.future(promise2 -> {
-								sql(siteRequest).deleteFrom(ChoiceReport.class, ChoiceReport.VAR_donorKeys, ChoiceDonor.class, ChoiceDonor.VAR_reportKeys).where(pk2, pk).onSuccess(a -> {
+								sql(siteRequest).deleteFrom(ChoiceReport.class, ChoiceReport.VAR_donorKeys, ChoiceDonor.class, ChoiceDonor.VAR_reportKeys).where(pk, pk2).onSuccess(a -> {
 									promise2.complete();
 								}).onFailure(ex -> {
 									promise2.fail(ex);
@@ -1245,41 +1075,41 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 							).onSuccess(b -> {
 						a.handle(Future.succeededFuture());
 					}).onFailure(ex -> {
-						RuntimeException ex2 = new RuntimeException("value ChoiceDonor failed", ex);
-						LOG.error(String.format("relateChoiceDonor failed. "), ex2);
+						RuntimeException ex2 = new RuntimeException("value ChoiceReport failed", ex);
+						LOG.error(String.format("relateChoiceReport failed. "), ex2);
 						a.handle(Future.failedFuture(ex2));
 					});
 				}));
 			}
 			CompositeFuture.all(futures1).onSuccess(a -> {
 				CompositeFuture.all(futures2).onSuccess(b -> {
-					ChoiceDonor o3 = new ChoiceDonor();
+					ChoiceReport o3 = new ChoiceReport();
 					o3.setSiteRequest_(o.getSiteRequest_());
 					o3.setPk(pk);
 					promise.complete(o3);
 				}).onFailure(ex -> {
-					LOG.error(String.format("sqlPATCHChoiceDonor failed. "), ex);
+					LOG.error(String.format("sqlPATCHChoiceReport failed. "), ex);
 					promise.fail(ex);
 				});
 			}).onFailure(ex -> {
-				LOG.error(String.format("sqlPATCHChoiceDonor failed. "), ex);
+				LOG.error(String.format("sqlPATCHChoiceReport failed. "), ex);
 				promise.fail(ex);
 			});
 		} catch(Exception ex) {
-			LOG.error(String.format("sqlPATCHChoiceDonor failed. "), ex);
+			LOG.error(String.format("sqlPATCHChoiceReport failed. "), ex);
 			promise.fail(ex);
 		}
 		return promise.future();
 	}
 
 
-	public Future<ServiceResponse> response200PATCHChoiceDonor(SiteRequestEnUS siteRequest) {
+	public Future<ServiceResponse> response200PATCHChoiceReport(SiteRequestEnUS siteRequest) {
 		Promise<ServiceResponse> promise = Promise.promise();
 		try {
 			JsonObject json = new JsonObject();
 			promise.complete(ServiceResponse.completedWithJson(Buffer.buffer(Optional.ofNullable(json).orElse(new JsonObject()).encodePrettily())));
 		} catch(Exception ex) {
-			LOG.error(String.format("response200PATCHChoiceDonor failed. "), ex);
+			LOG.error(String.format("response200PATCHChoiceReport failed. "), ex);
 			promise.fail(ex);
 		}
 		return promise.future();
@@ -1288,7 +1118,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 	// GET //
 
 	@Override
-	public void getChoiceDonor(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
+	public void getChoiceReport(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
 		user(serviceRequest).onSuccess(siteRequest -> {
 			try {
 				siteRequest.setRequestUri(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("uri")).orElse(null));
@@ -1313,21 +1143,21 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 						)
 					));
 				} else {
-					searchChoiceDonorList(siteRequest, false, true, false).onSuccess(listChoiceDonor -> {
-						response200GETChoiceDonor(listChoiceDonor).onSuccess(response -> {
+					searchChoiceReportList(siteRequest, false, true, false).onSuccess(listChoiceReport -> {
+						response200GETChoiceReport(listChoiceReport).onSuccess(response -> {
 							eventHandler.handle(Future.succeededFuture(response));
-							LOG.debug(String.format("getChoiceDonor succeeded. "));
+							LOG.debug(String.format("getChoiceReport succeeded. "));
 						}).onFailure(ex -> {
-							LOG.error(String.format("getChoiceDonor failed. "), ex);
+							LOG.error(String.format("getChoiceReport failed. "), ex);
 							error(siteRequest, eventHandler, ex);
 						});
 					}).onFailure(ex -> {
-						LOG.error(String.format("getChoiceDonor failed. "), ex);
+						LOG.error(String.format("getChoiceReport failed. "), ex);
 						error(siteRequest, eventHandler, ex);
 					});
 				}
 			} catch(Exception ex) {
-				LOG.error(String.format("getChoiceDonor failed. "), ex);
+				LOG.error(String.format("getChoiceReport failed. "), ex);
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
@@ -1335,11 +1165,11 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
-					LOG.error(String.format("getChoiceDonor failed. ", ex2));
+					LOG.error(String.format("getChoiceReport failed. ", ex2));
 					error(null, eventHandler, ex2);
 				}
 			} else {
-				LOG.error(String.format("getChoiceDonor failed. "), ex);
+				LOG.error(String.format("getChoiceReport failed. "), ex);
 				error(null, eventHandler, ex);
 			}
 		});
@@ -1347,16 +1177,16 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 
 
 
-	public Future<ServiceResponse> response200GETChoiceDonor(SearchList<ChoiceDonor> listChoiceDonor) {
+	public Future<ServiceResponse> response200GETChoiceReport(SearchList<ChoiceReport> listChoiceReport) {
 		Promise<ServiceResponse> promise = Promise.promise();
 		try {
-			SiteRequestEnUS siteRequest = listChoiceDonor.getSiteRequest_();
-			SolrDocumentList solrDocuments = listChoiceDonor.getSolrDocumentList();
+			SiteRequestEnUS siteRequest = listChoiceReport.getSiteRequest_();
+			SolrDocumentList solrDocuments = listChoiceReport.getSolrDocumentList();
 
-			JsonObject json = JsonObject.mapFrom(listChoiceDonor.getList().stream().findFirst().orElse(null));
+			JsonObject json = JsonObject.mapFrom(listChoiceReport.getList().stream().findFirst().orElse(null));
 			promise.complete(ServiceResponse.completedWithJson(Buffer.buffer(Optional.ofNullable(json).orElse(new JsonObject()).encodePrettily())));
 		} catch(Exception ex) {
-			LOG.error(String.format("response200GETChoiceDonor failed. "), ex);
+			LOG.error(String.format("response200GETChoiceReport failed. "), ex);
 			promise.fail(ex);
 		}
 		return promise.future();
@@ -1365,7 +1195,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 	// Search //
 
 	@Override
-	public void searchChoiceDonor(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
+	public void searchChoiceReport(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
 		user(serviceRequest).onSuccess(siteRequest -> {
 			try {
 				siteRequest.setRequestUri(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("uri")).orElse(null));
@@ -1390,21 +1220,21 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 						)
 					));
 				} else {
-					searchChoiceDonorList(siteRequest, false, true, false).onSuccess(listChoiceDonor -> {
-						response200SearchChoiceDonor(listChoiceDonor).onSuccess(response -> {
+					searchChoiceReportList(siteRequest, false, true, false).onSuccess(listChoiceReport -> {
+						response200SearchChoiceReport(listChoiceReport).onSuccess(response -> {
 							eventHandler.handle(Future.succeededFuture(response));
-							LOG.debug(String.format("searchChoiceDonor succeeded. "));
+							LOG.debug(String.format("searchChoiceReport succeeded. "));
 						}).onFailure(ex -> {
-							LOG.error(String.format("searchChoiceDonor failed. "), ex);
+							LOG.error(String.format("searchChoiceReport failed. "), ex);
 							error(siteRequest, eventHandler, ex);
 						});
 					}).onFailure(ex -> {
-						LOG.error(String.format("searchChoiceDonor failed. "), ex);
+						LOG.error(String.format("searchChoiceReport failed. "), ex);
 						error(siteRequest, eventHandler, ex);
 					});
 				}
 			} catch(Exception ex) {
-				LOG.error(String.format("searchChoiceDonor failed. "), ex);
+				LOG.error(String.format("searchChoiceReport failed. "), ex);
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
@@ -1412,11 +1242,11 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
-					LOG.error(String.format("searchChoiceDonor failed. ", ex2));
+					LOG.error(String.format("searchChoiceReport failed. ", ex2));
 					error(null, eventHandler, ex2);
 				}
 			} else {
-				LOG.error(String.format("searchChoiceDonor failed. "), ex);
+				LOG.error(String.format("searchChoiceReport failed. "), ex);
 				error(null, eventHandler, ex);
 			}
 		});
@@ -1424,12 +1254,12 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 
 
 
-	public Future<ServiceResponse> response200SearchChoiceDonor(SearchList<ChoiceDonor> listChoiceDonor) {
+	public Future<ServiceResponse> response200SearchChoiceReport(SearchList<ChoiceReport> listChoiceReport) {
 		Promise<ServiceResponse> promise = Promise.promise();
 		try {
-			SiteRequestEnUS siteRequest = listChoiceDonor.getSiteRequest_();
-			QueryResponse responseSearch = listChoiceDonor.getQueryResponse();
-			SolrDocumentList solrDocuments = listChoiceDonor.getSolrDocumentList();
+			SiteRequestEnUS siteRequest = listChoiceReport.getSiteRequest_();
+			QueryResponse responseSearch = listChoiceReport.getQueryResponse();
+			SolrDocumentList solrDocuments = listChoiceReport.getSolrDocumentList();
 			Long searchInMillis = Long.valueOf(responseSearch.getQTime());
 			Long transmissionInMillis = responseSearch.getElapsedTime();
 			Long startNum = responseSearch.getResults().getStart();
@@ -1439,7 +1269,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 			String transmissionTime = String.format("%d.%03d sec", TimeUnit.MILLISECONDS.toSeconds(transmissionInMillis), TimeUnit.MILLISECONDS.toMillis(transmissionInMillis) - TimeUnit.SECONDS.toSeconds(TimeUnit.MILLISECONDS.toSeconds(transmissionInMillis)));
 			String nextCursorMark = responseSearch.getNextCursorMark();
 			Exception exceptionSearch = responseSearch.getException();
-			List<String> fls = listChoiceDonor.getFields();
+			List<String> fls = listChoiceReport.getFields();
 
 			JsonObject json = new JsonObject();
 			json.put("startNum", startNum);
@@ -1453,7 +1283,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 				json.put("nextCursorMark", nextCursorMark);
 			}
 			JsonArray l = new JsonArray();
-			listChoiceDonor.getList().stream().forEach(o -> {
+			listChoiceReport.getList().stream().forEach(o -> {
 				JsonObject json2 = JsonObject.mapFrom(o);
 				if(fls.size() > 0) {
 					Set<String> fieldNames = new HashSet<String>();
@@ -1525,7 +1355,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 					}
 					JsonArray pivotArray = new JsonArray();
 					facetPivotJson.put(StringUtils.join(entityVars, ","), pivotArray);
-					responsePivotSearchChoiceDonor(pivotFields, pivotArray);
+					responsePivotSearchChoiceReport(pivotFields, pivotArray);
 				}
 			}
 			if(exceptionSearch != null) {
@@ -1533,12 +1363,12 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 			}
 			promise.complete(ServiceResponse.completedWithJson(Buffer.buffer(Optional.ofNullable(json).orElse(new JsonObject()).encodePrettily())));
 		} catch(Exception ex) {
-			LOG.error(String.format("response200SearchChoiceDonor failed. "), ex);
+			LOG.error(String.format("response200SearchChoiceReport failed. "), ex);
 			promise.fail(ex);
 		}
 		return promise.future();
 	}
-	public void responsePivotSearchChoiceDonor(List<PivotField> pivotFields, JsonArray pivotArray) {
+	public void responsePivotSearchChoiceReport(List<PivotField> pivotFields, JsonArray pivotArray) {
 		for(PivotField pivotField : pivotFields) {
 			String entityIndexed = pivotField.getField();
 			String entityVar = StringUtils.substringBefore(entityIndexed, "_indexedstored_");
@@ -1568,7 +1398,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 			if(pivotFields2 != null) {
 				JsonArray pivotArray2 = new JsonArray();
 				pivotJson.put("pivot", pivotArray2);
-				responsePivotSearchChoiceDonor(pivotFields2, pivotArray2);
+				responsePivotSearchChoiceReport(pivotFields2, pivotArray2);
 			}
 		}
 	}
@@ -1576,12 +1406,12 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 	// SearchPage //
 
 	@Override
-	public void searchpageChoiceDonorId(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		searchpageChoiceDonor(serviceRequest, eventHandler);
+	public void searchpageChoiceReportId(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
+		searchpageChoiceReport(serviceRequest, eventHandler);
 	}
 
 	@Override
-	public void searchpageChoiceDonor(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
+	public void searchpageChoiceReport(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
 		user(serviceRequest).onSuccess(siteRequest -> {
 			try {
 				siteRequest.setRequestUri(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("uri")).orElse(null));
@@ -1606,21 +1436,21 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 						)
 					));
 				} else {
-					searchChoiceDonorList(siteRequest, false, true, false).onSuccess(listChoiceDonor -> {
-						response200SearchPageChoiceDonor(listChoiceDonor).onSuccess(response -> {
+					searchChoiceReportList(siteRequest, false, true, false).onSuccess(listChoiceReport -> {
+						response200SearchPageChoiceReport(listChoiceReport).onSuccess(response -> {
 							eventHandler.handle(Future.succeededFuture(response));
-							LOG.debug(String.format("searchpageChoiceDonor succeeded. "));
+							LOG.debug(String.format("searchpageChoiceReport succeeded. "));
 						}).onFailure(ex -> {
-							LOG.error(String.format("searchpageChoiceDonor failed. "), ex);
+							LOG.error(String.format("searchpageChoiceReport failed. "), ex);
 							error(siteRequest, eventHandler, ex);
 						});
 					}).onFailure(ex -> {
-						LOG.error(String.format("searchpageChoiceDonor failed. "), ex);
+						LOG.error(String.format("searchpageChoiceReport failed. "), ex);
 						error(siteRequest, eventHandler, ex);
 					});
 				}
 			} catch(Exception ex) {
-				LOG.error(String.format("searchpageChoiceDonor failed. "), ex);
+				LOG.error(String.format("searchpageChoiceReport failed. "), ex);
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
@@ -1628,37 +1458,37 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
-					LOG.error(String.format("searchpageChoiceDonor failed. ", ex2));
+					LOG.error(String.format("searchpageChoiceReport failed. ", ex2));
 					error(null, eventHandler, ex2);
 				}
 			} else {
-				LOG.error(String.format("searchpageChoiceDonor failed. "), ex);
+				LOG.error(String.format("searchpageChoiceReport failed. "), ex);
 				error(null, eventHandler, ex);
 			}
 		});
 	}
 
 
-	public void searchpageChoiceDonorPageInit(ChoiceDonorPage page, SearchList<ChoiceDonor> listChoiceDonor) {
+	public void searchpageChoiceReportPageInit(ChoiceReportPage page, SearchList<ChoiceReport> listChoiceReport) {
 	}
-	public String templateSearchPageChoiceDonor() {
-		return config.getString(ConfigKeys.TEMPLATE_PATH) + "/enUS/ChoiceDonorPage";
+	public String templateSearchPageChoiceReport() {
+		return config.getString(ConfigKeys.TEMPLATE_PATH) + "/enUS/ChoiceReportPage";
 	}
-	public Future<ServiceResponse> response200SearchPageChoiceDonor(SearchList<ChoiceDonor> listChoiceDonor) {
+	public Future<ServiceResponse> response200SearchPageChoiceReport(SearchList<ChoiceReport> listChoiceReport) {
 		Promise<ServiceResponse> promise = Promise.promise();
 		try {
-			SiteRequestEnUS siteRequest = listChoiceDonor.getSiteRequest_();
-			ChoiceDonorPage page = new ChoiceDonorPage();
+			SiteRequestEnUS siteRequest = listChoiceReport.getSiteRequest_();
+			ChoiceReportPage page = new ChoiceReportPage();
 			MultiMap requestHeaders = MultiMap.caseInsensitiveMultiMap();
 			siteRequest.setRequestHeaders(requestHeaders);
 
-			if(listChoiceDonor.size() == 1)
-				siteRequest.setRequestPk(listChoiceDonor.get(0).getPk());
-			page.setSearchListChoiceDonor_(listChoiceDonor);
+			if(listChoiceReport.size() == 1)
+				siteRequest.setRequestPk(listChoiceReport.get(0).getPk());
+			page.setSearchListChoiceReport_(listChoiceReport);
 			page.setSiteRequest_(siteRequest);
-			page.promiseDeepChoiceDonorPage(siteRequest).onSuccess(a -> {
+			page.promiseDeepChoiceReportPage(siteRequest).onSuccess(a -> {
 				JsonObject json = JsonObject.mapFrom(page);
-				templateEngine.render(json, templateSearchPageChoiceDonor()).onSuccess(buffer -> {
+				templateEngine.render(json, templateSearchPageChoiceReport()).onSuccess(buffer -> {
 					promise.complete(new ServiceResponse(200, "OK", buffer, requestHeaders));
 				}).onFailure(ex -> {
 					promise.fail(ex);
@@ -1667,98 +1497,88 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 				promise.fail(ex);
 			});
 		} catch(Exception ex) {
-			LOG.error(String.format("response200SearchPageChoiceDonor failed. "), ex);
+			LOG.error(String.format("response200SearchPageChoiceReport failed. "), ex);
 			promise.fail(ex);
 		}
 		return promise.future();
 	}
 	public static final String VAR_donorFullName = "donorFullName";
-	public static final String VAR_donorParentName = "donorParentName";
-	public static final String VAR_donorId = "donorId";
-	public static final String VAR_donorAttributeId = "donorAttributeId";
-	public static final String VAR_donorInKind = "donorInKind";
-	public static final String VAR_donorTotal = "donorTotal";
-	public static final String VAR_donorYtd = "donorYtd";
-	public static final String VAR_donorQ1 = "donorQ1";
-	public static final String VAR_donorQ2 = "donorQ2";
-	public static final String VAR_donorQ3 = "donorQ3";
-	public static final String VAR_donorQ4 = "donorQ4";
-	public static final String VAR_reportKeys = "reportKeys";
+	public static final String VAR_donorKeys = "donorKeys";
 
 	// General //
 
-	public Future<ChoiceDonor> createChoiceDonor(SiteRequestEnUS siteRequest) {
-		Promise<ChoiceDonor> promise = Promise.promise();
+	public Future<ChoiceReport> createChoiceReport(SiteRequestEnUS siteRequest) {
+		Promise<ChoiceReport> promise = Promise.promise();
 		try {
 			SqlConnection sqlConnection = siteRequest.getSqlConnection();
 			String userId = siteRequest.getUserId();
 			Long userKey = siteRequest.getUserKey();
 			ZonedDateTime created = Optional.ofNullable(siteRequest.getJsonObject()).map(j -> j.getString("created")).map(s -> ZonedDateTime.parse(s, DateTimeFormatter.ISO_DATE_TIME.withZone(ZoneId.of(config.getString(ConfigKeys.SITE_ZONE))))).orElse(ZonedDateTime.now(ZoneId.of(config.getString(ConfigKeys.SITE_ZONE))));
 
-			sqlConnection.preparedQuery("INSERT INTO ChoiceDonor(created, userKey) VALUES($1, $2) RETURNING pk")
+			sqlConnection.preparedQuery("INSERT INTO ChoiceReport(created, userKey) VALUES($1, $2) RETURNING pk")
 					.collecting(Collectors.toList())
 					.execute(Tuple.of(created.toOffsetDateTime(), userKey)).onSuccess(result -> {
 				Row createLine = result.value().stream().findFirst().orElseGet(() -> null);
 				Long pk = createLine.getLong(0);
-				ChoiceDonor o = new ChoiceDonor();
+				ChoiceReport o = new ChoiceReport();
 				o.setPk(pk);
 				o.setSiteRequest_(siteRequest);
 				promise.complete(o);
 			}).onFailure(ex -> {
 				RuntimeException ex2 = new RuntimeException(ex);
-				LOG.error("createChoiceDonor failed. ", ex2);
+				LOG.error("createChoiceReport failed. ", ex2);
 				promise.fail(ex2);
 			});
 		} catch(Exception ex) {
-			LOG.error(String.format("createChoiceDonor failed. "), ex);
+			LOG.error(String.format("createChoiceReport failed. "), ex);
 			promise.fail(ex);
 		}
 		return promise.future();
 	}
 
-	public void searchChoiceDonorQ(SearchList<ChoiceDonor> searchList, String entityVar, String valueIndexed, String varIndexed) {
+	public void searchChoiceReportQ(SearchList<ChoiceReport> searchList, String entityVar, String valueIndexed, String varIndexed) {
 		searchList.setQuery(varIndexed + ":" + ("*".equals(valueIndexed) ? valueIndexed : ClientUtils.escapeQueryChars(valueIndexed)));
 		if(!"*".equals(entityVar)) {
 		}
 	}
 
-	public String searchChoiceDonorFq(SearchList<ChoiceDonor> searchList, String entityVar, String valueIndexed, String varIndexed) {
+	public String searchChoiceReportFq(SearchList<ChoiceReport> searchList, String entityVar, String valueIndexed, String varIndexed) {
 		if(varIndexed == null)
 			throw new RuntimeException(String.format("\"%s\" is not an indexed entity. ", entityVar));
 		if(StringUtils.startsWith(valueIndexed, "[")) {
 			String[] fqs = StringUtils.substringBefore(StringUtils.substringAfter(valueIndexed, "["), "]").split(" TO ");
 			if(fqs.length != 2)
 				throw new RuntimeException(String.format("\"%s\" invalid range query. ", valueIndexed));
-			String fq1 = fqs[0].equals("*") ? fqs[0] : ChoiceDonor.staticSolrFqForClass(entityVar, searchList.getSiteRequest_(), fqs[0]);
-			String fq2 = fqs[1].equals("*") ? fqs[1] : ChoiceDonor.staticSolrFqForClass(entityVar, searchList.getSiteRequest_(), fqs[1]);
+			String fq1 = fqs[0].equals("*") ? fqs[0] : ChoiceReport.staticSolrFqForClass(entityVar, searchList.getSiteRequest_(), fqs[0]);
+			String fq2 = fqs[1].equals("*") ? fqs[1] : ChoiceReport.staticSolrFqForClass(entityVar, searchList.getSiteRequest_(), fqs[1]);
 			 return varIndexed + ":[" + fq1 + " TO " + fq2 + "]";
 		} else {
-			return varIndexed + ":" + ClientUtils.escapeQueryChars(ChoiceDonor.staticSolrFqForClass(entityVar, searchList.getSiteRequest_(), valueIndexed)).replace("\\", "\\\\");
+			return varIndexed + ":" + ClientUtils.escapeQueryChars(ChoiceReport.staticSolrFqForClass(entityVar, searchList.getSiteRequest_(), valueIndexed)).replace("\\", "\\\\");
 		}
 	}
 
-	public void searchChoiceDonorSort(SearchList<ChoiceDonor> searchList, String entityVar, String valueIndexed, String varIndexed) {
+	public void searchChoiceReportSort(SearchList<ChoiceReport> searchList, String entityVar, String valueIndexed, String varIndexed) {
 		if(varIndexed == null)
 			throw new RuntimeException(String.format("\"%s\" is not an indexed entity. ", entityVar));
 		searchList.addSort(varIndexed, ORDER.valueOf(valueIndexed));
 	}
 
-	public void searchChoiceDonorRows(SearchList<ChoiceDonor> searchList, Integer valueRows) {
+	public void searchChoiceReportRows(SearchList<ChoiceReport> searchList, Integer valueRows) {
 			searchList.setRows(valueRows != null ? valueRows : 10);
 	}
 
-	public void searchChoiceDonorStart(SearchList<ChoiceDonor> searchList, Integer valueStart) {
+	public void searchChoiceReportStart(SearchList<ChoiceReport> searchList, Integer valueStart) {
 		searchList.setStart(valueStart);
 	}
 
-	public void searchChoiceDonorVar(SearchList<ChoiceDonor> searchList, String var, String value) {
+	public void searchChoiceReportVar(SearchList<ChoiceReport> searchList, String var, String value) {
 		searchList.getSiteRequest_().getRequestVars().put(var, value);
 	}
 
-	public void searchChoiceDonorUri(SearchList<ChoiceDonor> searchList) {
+	public void searchChoiceReportUri(SearchList<ChoiceReport> searchList) {
 	}
 
-	public Future<ServiceResponse> varsChoiceDonor(SiteRequestEnUS siteRequest) {
+	public Future<ServiceResponse> varsChoiceReport(SiteRequestEnUS siteRequest) {
 		Promise<ServiceResponse> promise = Promise.promise();
 		try {
 			ServiceRequest serviceRequest = siteRequest.getServiceRequest();
@@ -1776,29 +1596,29 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 						siteRequest.getRequestVars().put(entityVar, valueIndexed);
 					}
 				} catch(Exception ex) {
-					LOG.error(String.format("searchChoiceDonor failed. "), ex);
+					LOG.error(String.format("searchChoiceReport failed. "), ex);
 					promise.fail(ex);
 				}
 			});
 			promise.complete();
 		} catch(Exception ex) {
-			LOG.error(String.format("searchChoiceDonor failed. "), ex);
+			LOG.error(String.format("searchChoiceReport failed. "), ex);
 			promise.fail(ex);
 		}
 		return promise.future();
 	}
 
-	public Future<SearchList<ChoiceDonor>> searchChoiceDonorList(SiteRequestEnUS siteRequest, Boolean populate, Boolean store, Boolean modify) {
-		Promise<SearchList<ChoiceDonor>> promise = Promise.promise();
+	public Future<SearchList<ChoiceReport>> searchChoiceReportList(SiteRequestEnUS siteRequest, Boolean populate, Boolean store, Boolean modify) {
+		Promise<SearchList<ChoiceReport>> promise = Promise.promise();
 		try {
 			ServiceRequest serviceRequest = siteRequest.getServiceRequest();
 			String entityListStr = siteRequest.getServiceRequest().getParams().getJsonObject("query").getString("fl");
 			String[] entityList = entityListStr == null ? null : entityListStr.split(",\\s*");
-			SearchList<ChoiceDonor> searchList = new SearchList<ChoiceDonor>();
+			SearchList<ChoiceReport> searchList = new SearchList<ChoiceReport>();
 			searchList.setPopulate(populate);
 			searchList.setStore(store);
 			searchList.setQuery("*:*");
-			searchList.setC(ChoiceDonor.class);
+			searchList.setC(ChoiceReport.class);
 			searchList.setSiteRequest_(siteRequest);
 			if(entityList != null)
 				searchList.addFields(entityList);
@@ -1832,7 +1652,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 							String[] varsIndexed = new String[entityVars.length];
 							for(Integer i = 0; i < entityVars.length; i++) {
 								entityVar = entityVars[i];
-								varsIndexed[i] = ChoiceDonor.varIndexedChoiceDonor(entityVar);
+								varsIndexed[i] = ChoiceReport.varIndexedChoiceReport(entityVar);
 							}
 							searchList.add("facet.pivot", (solrLocalParams == null ? "" : solrLocalParams) + StringUtils.join(varsIndexed, ","));
 						}
@@ -1847,8 +1667,8 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 										while(foundQ) {
 											entityVar = mQ.group(1).trim();
 											valueIndexed = mQ.group(2).trim();
-											varIndexed = ChoiceDonor.varIndexedChoiceDonor(entityVar);
-											String entityQ = searchChoiceDonorFq(searchList, entityVar, valueIndexed, varIndexed);
+											varIndexed = ChoiceReport.varIndexedChoiceReport(entityVar);
+											String entityQ = searchChoiceReportFq(searchList, entityVar, valueIndexed, varIndexed);
 											mQ.appendReplacement(sb, entityQ);
 											foundQ = mQ.find();
 										}
@@ -1864,8 +1684,8 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 										while(foundFq) {
 											entityVar = mFq.group(1).trim();
 											valueIndexed = mFq.group(2).trim();
-											varIndexed = ChoiceDonor.varIndexedChoiceDonor(entityVar);
-											String entityFq = searchChoiceDonorFq(searchList, entityVar, valueIndexed, varIndexed);
+											varIndexed = ChoiceReport.varIndexedChoiceReport(entityVar);
+											String entityFq = searchChoiceReportFq(searchList, entityVar, valueIndexed, varIndexed);
 											mFq.appendReplacement(sb, entityFq);
 											foundFq = mFq.find();
 										}
@@ -1876,16 +1696,16 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 								case "sort":
 									entityVar = StringUtils.trim(StringUtils.substringBefore((String)paramObject, " "));
 									valueIndexed = StringUtils.trim(StringUtils.substringAfter((String)paramObject, " "));
-									varIndexed = ChoiceDonor.varIndexedChoiceDonor(entityVar);
-									searchChoiceDonorSort(searchList, entityVar, valueIndexed, varIndexed);
+									varIndexed = ChoiceReport.varIndexedChoiceReport(entityVar);
+									searchChoiceReportSort(searchList, entityVar, valueIndexed, varIndexed);
 									break;
 								case "start":
 									valueStart = paramObject instanceof Integer ? (Integer)paramObject : Integer.parseInt(paramObject.toString());
-									searchChoiceDonorStart(searchList, valueStart);
+									searchChoiceReportStart(searchList, valueStart);
 									break;
 								case "rows":
 									valueRows = paramObject instanceof Integer ? (Integer)paramObject : Integer.parseInt(paramObject.toString());
-									searchChoiceDonorRows(searchList, valueRows);
+									searchChoiceReportRows(searchList, valueRows);
 									break;
 								case "facet":
 									searchList.add("facet", ((Boolean)paramObject).toString());
@@ -1910,20 +1730,20 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 									if(foundFacetRange) {
 										String solrLocalParams = mFacetRange.group(1);
 										entityVar = mFacetRange.group(2).trim();
-										varIndexed = ChoiceDonor.varIndexedChoiceDonor(entityVar);
+										varIndexed = ChoiceReport.varIndexedChoiceReport(entityVar);
 										searchList.add("facet.range", (solrLocalParams == null ? "" : solrLocalParams) + varIndexed);
 									}
 									break;
 								case "facet.field":
 									entityVar = (String)paramObject;
-									varIndexed = ChoiceDonor.varIndexedChoiceDonor(entityVar);
+									varIndexed = ChoiceReport.varIndexedChoiceReport(entityVar);
 									if(varIndexed != null)
 										searchList.addFacetField(varIndexed);
 									break;
 								case "var":
 									entityVar = StringUtils.trim(StringUtils.substringBefore((String)paramObject, ":"));
 									valueIndexed = URLDecoder.decode(StringUtils.trim(StringUtils.substringAfter((String)paramObject, ":")), "UTF-8");
-									searchChoiceDonorVar(searchList, entityVar, valueIndexed);
+									searchChoiceReportVar(searchList, entityVar, valueIndexed);
 									break;
 								case "cursorMark":
 									valueCursorMark = (String)paramObject;
@@ -1931,7 +1751,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 									break;
 							}
 						}
-						searchChoiceDonorUri(searchList);
+						searchChoiceReportUri(searchList);
 					}
 				} catch(Exception e) {
 					ExceptionUtils.rethrow(e);
@@ -1940,29 +1760,29 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 			if("*:*".equals(searchList.getQuery()) && searchList.getSorts().size() == 0) {
 				searchList.addSort("created_indexedstored_date", ORDER.desc);
 			}
-			searchChoiceDonor2(siteRequest, populate, store, modify, searchList);
+			searchChoiceReport2(siteRequest, populate, store, modify, searchList);
 			searchList.promiseDeepForClass(siteRequest).onSuccess(a -> {
 				promise.complete(searchList);
 			}).onFailure(ex -> {
-				LOG.error(String.format("searchChoiceDonor failed. "), ex);
+				LOG.error(String.format("searchChoiceReport failed. "), ex);
 				promise.fail(ex);
 			});
 		} catch(Exception ex) {
-			LOG.error(String.format("searchChoiceDonor failed. "), ex);
+			LOG.error(String.format("searchChoiceReport failed. "), ex);
 			promise.fail(ex);
 		}
 		return promise.future();
 	}
-	public void searchChoiceDonor2(SiteRequestEnUS siteRequest, Boolean populate, Boolean store, Boolean modify, SearchList<ChoiceDonor> searchList) {
+	public void searchChoiceReport2(SiteRequestEnUS siteRequest, Boolean populate, Boolean store, Boolean modify, SearchList<ChoiceReport> searchList) {
 	}
 
-	public Future<Void> defineChoiceDonor(ChoiceDonor o) {
+	public Future<Void> defineChoiceReport(ChoiceReport o) {
 		Promise<Void> promise = Promise.promise();
 		try {
 			SiteRequestEnUS siteRequest = o.getSiteRequest_();
 			SqlConnection sqlConnection = siteRequest.getSqlConnection();
 			Long pk = o.getPk();
-			sqlConnection.preparedQuery("SELECT * FROM ChoiceDonor WHERE pk=$1")
+			sqlConnection.preparedQuery("SELECT * FROM ChoiceReport WHERE pk=$1")
 					.collecting(Collectors.toList())
 					.execute(Tuple.of(pk)
 					).onSuccess(result -> {
@@ -1975,35 +1795,35 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 								try {
 									o.defineForClass(columnName, columnValue);
 								} catch(Exception e) {
-									LOG.error(String.format("defineChoiceDonor failed. "), e);
+									LOG.error(String.format("defineChoiceReport failed. "), e);
 								}
 							}
 						}
 					}
 					promise.complete();
 				} catch(Exception ex) {
-					LOG.error(String.format("defineChoiceDonor failed. "), ex);
+					LOG.error(String.format("defineChoiceReport failed. "), ex);
 					promise.fail(ex);
 				}
 			}).onFailure(ex -> {
 				RuntimeException ex2 = new RuntimeException(ex);
-				LOG.error(String.format("defineChoiceDonor failed. "), ex2);
+				LOG.error(String.format("defineChoiceReport failed. "), ex2);
 				promise.fail(ex2);
 			});
 		} catch(Exception ex) {
-			LOG.error(String.format("defineChoiceDonor failed. "), ex);
+			LOG.error(String.format("defineChoiceReport failed. "), ex);
 			promise.fail(ex);
 		}
 		return promise.future();
 	}
 
-	public Future<Void> relateChoiceDonor(ChoiceDonor o) {
+	public Future<Void> relateChoiceReport(ChoiceReport o) {
 		Promise<Void> promise = Promise.promise();
 		try {
 			SiteRequestEnUS siteRequest = o.getSiteRequest_();
 			SqlConnection sqlConnection = siteRequest.getSqlConnection();
 			Long pk = o.getPk();
-			sqlConnection.preparedQuery("SELECT pk1, 'reportKeys' from ChoiceReportdonorKeys_ChoiceDonorreportKeys where pk2=$1")
+			sqlConnection.preparedQuery("SELECT pk2, 'donorKeys' from ChoiceReportdonorKeys_ChoiceDonorreportKeys where pk1=$1")
 					.collecting(Collectors.toList())
 					.execute(Tuple.of(pk)
 					).onSuccess(result -> {
@@ -2015,29 +1835,29 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 					}
 					promise.complete();
 				} catch(Exception ex) {
-					LOG.error(String.format("relateChoiceDonor failed. "), ex);
+					LOG.error(String.format("relateChoiceReport failed. "), ex);
 					promise.fail(ex);
 				}
 			}).onFailure(ex -> {
 				RuntimeException ex2 = new RuntimeException(ex);
-				LOG.error(String.format("relateChoiceDonor failed. "), ex2);
+				LOG.error(String.format("relateChoiceReport failed. "), ex2);
 				promise.fail(ex2);
 			});
 		} catch(Exception ex) {
-			LOG.error(String.format("relateChoiceDonor failed. "), ex);
+			LOG.error(String.format("relateChoiceReport failed. "), ex);
 			promise.fail(ex);
 		}
 		return promise.future();
 	}
 
-	public Future<Void> indexChoiceDonor(ChoiceDonor o) {
+	public Future<Void> indexChoiceReport(ChoiceReport o) {
 		Promise<Void> promise = Promise.promise();
 		try {
 			SiteRequestEnUS siteRequest = o.getSiteRequest_();
 			ApiRequest apiRequest = siteRequest.getApiRequest_();
 			o.promiseDeepForClass(siteRequest).onSuccess(a -> {
 				SolrInputDocument document = new SolrInputDocument();
-				o.indexChoiceDonor(document);
+				o.indexChoiceReport(document);
 				String solrHostName = siteRequest.getConfig().getString(ConfigKeys.SOLR_HOST_NAME);
 				Integer solrPort = siteRequest.getConfig().getInteger(ConfigKeys.SOLR_PORT);
 				String solrCollection = siteRequest.getConfig().getString(ConfigKeys.SOLR_COLLECTION);
@@ -2052,21 +1872,21 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 				webClient.post(solrPort, solrHostName, solrRequestUri).putHeader("Content-Type", "application/json").expect(ResponsePredicate.SC_OK).sendBuffer(json.toBuffer()).onSuccess(b -> {
 					promise.complete();
 				}).onFailure(ex -> {
-					LOG.error(String.format("indexChoiceDonor failed. "), new RuntimeException(ex));
+					LOG.error(String.format("indexChoiceReport failed. "), new RuntimeException(ex));
 					promise.fail(ex);
 				});
 			}).onFailure(ex -> {
-				LOG.error(String.format("indexChoiceDonor failed. "), ex);
+				LOG.error(String.format("indexChoiceReport failed. "), ex);
 				promise.fail(ex);
 			});
 		} catch(Exception ex) {
-			LOG.error(String.format("indexChoiceDonor failed. "), ex);
+			LOG.error(String.format("indexChoiceReport failed. "), ex);
 			promise.fail(ex);
 		}
 		return promise.future();
 	}
 
-	public Future<Void> refreshChoiceDonor(ChoiceDonor o) {
+	public Future<Void> refreshChoiceReport(ChoiceReport o) {
 		Promise<Void> promise = Promise.promise();
 		SiteRequestEnUS siteRequest = o.getSiteRequest_();
 		try {
@@ -2081,16 +1901,16 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 					Long pk2 = pks.get(i);
 					String classSimpleName2 = classes.get(i);
 
-					if("ChoiceReport".equals(classSimpleName2) && pk2 != null) {
-						SearchList<ChoiceReport> searchList2 = new SearchList<ChoiceReport>();
+					if("ChoiceDonor".equals(classSimpleName2) && pk2 != null) {
+						SearchList<ChoiceDonor> searchList2 = new SearchList<ChoiceDonor>();
 						searchList2.setStore(true);
 						searchList2.setQuery("*:*");
-						searchList2.setC(ChoiceReport.class);
+						searchList2.setC(ChoiceDonor.class);
 						searchList2.addFilterQuery("pk_indexedstored_long:" + pk2);
 						searchList2.setRows(1);
 						futures.add(Future.future(promise2 -> {
 							searchList2.promiseDeepSearchList(siteRequest).onSuccess(b -> {
-								ChoiceReport o2 = searchList2.getList().stream().findFirst().orElse(null);
+								ChoiceDonor o2 = searchList2.getList().stream().findFirst().orElse(null);
 								if(o2 != null) {
 									JsonObject params = new JsonObject();
 									params.put("body", new JsonObject());
@@ -2099,7 +1919,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 									params.put("query", new JsonObject().put("q", "*:*").put("fq", new JsonArray().add("pk:" + pk2)));
 									JsonObject context = new JsonObject().put("params", params).put("user", Optional.ofNullable(siteRequest.getUser()).map(user -> user.principal()).orElse(null));
 									JsonObject json = new JsonObject().put("context", context);
-									eventBus.request("choice-reports-enUS-ChoiceReport", json, new DeliveryOptions().addHeader("action", "patchChoiceReportFuture")).onSuccess(c -> {
+									eventBus.request("choice-reports-enUS-ChoiceDonor", json, new DeliveryOptions().addHeader("action", "patchChoiceDonorFuture")).onSuccess(c -> {
 						JsonObject responseMessage = (JsonObject)c.body();
 										Integer statusCode = responseMessage.getInteger("statusCode");
 										if(statusCode.equals(200))
@@ -2137,7 +1957,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 					params.put("query", query);
 					JsonObject context = new JsonObject().put("params", params).put("user", Optional.ofNullable(siteRequest.getUser()).map(user -> user.principal()).orElse(null));
 					JsonObject json = new JsonObject().put("context", context);
-					eventBus.request("choice-reports-enUS-ChoiceDonor", json, new DeliveryOptions().addHeader("action", "patchChoiceDonorFuture")).onSuccess(c -> {
+					eventBus.request("choice-reports-enUS-ChoiceReport", json, new DeliveryOptions().addHeader("action", "patchChoiceReportFuture")).onSuccess(c -> {
 						JsonObject responseMessage = (JsonObject)c.body();
 						Integer statusCode = responseMessage.getInteger("statusCode");
 						if(statusCode.equals(200))
@@ -2156,7 +1976,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 				promise.complete();
 			}
 		} catch(Exception ex) {
-			LOG.error(String.format("refreshChoiceDonor failed. "), ex);
+			LOG.error(String.format("refreshChoiceReport failed. "), ex);
 			promise.fail(ex);
 		}
 		return promise.future();

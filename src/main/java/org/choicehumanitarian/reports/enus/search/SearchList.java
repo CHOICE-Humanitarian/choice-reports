@@ -7,12 +7,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -27,6 +29,7 @@ import org.apache.solr.common.util.NamedList;
 import org.apache.solr.common.util.SimpleOrderedMap;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
+import org.choicehumanitarian.reports.enus.user.SiteUser;
 import org.choicehumanitarian.reports.enus.wrap.Wrap;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -37,8 +40,8 @@ import io.vertx.core.json.JsonObject;
 
 /** 
  * Keyword: classSimpleNameSearchList
- */
-public class SearchList<DEV> extends SearchListGen<DEV> {
+ */ 
+public class SearchList<DEV> extends SearchListGen<DEV> implements Iterable<DEV> {
 
 	/**
 	 * {@inheritDoc}
@@ -106,6 +109,7 @@ public class SearchList<DEV> extends SearchListGen<DEV> {
 					Map<String, Object> map = json.getMap();
 					QueryResponse r = generateSolrQueryResponse(map);
 					setQueryResponse(r);
+					Wrap<SolrDocumentList> solrDocumentListWrap = new Wrap<SolrDocumentList>().var("solrDocumentList").o(solrDocumentList);
 					_solrDocumentList(solrDocumentListWrap);
 					setSolrDocumentList(solrDocumentListWrap.o);
 					list.clear();
@@ -138,6 +142,7 @@ public class SearchList<DEV> extends SearchListGen<DEV> {
 				Map<String, Object> map = json.getMap();
 				QueryResponse r = generateSolrQueryResponse(map);
 				setQueryResponse(r);
+				Wrap<SolrDocumentList> solrDocumentListWrap = new Wrap<SolrDocumentList>().var("solrDocumentList").o(solrDocumentList);
 				_solrDocumentList(solrDocumentListWrap);
 				setSolrDocumentList(solrDocumentListWrap.o);
 				list.clear();
@@ -162,7 +167,12 @@ public class SearchList<DEV> extends SearchListGen<DEV> {
 	protected void _queryResponse(Promise<QueryResponse> promise) {        
 		try {
 			if(this.c != null)
-				solrQuery.addFilterQuery("classCanonicalNames_indexedstored_strings:" + ClientUtils.escapeQueryChars(this.c.getCanonicalName()));
+				solrQuery.addFilterQuery("classCanonicalName_indexedstored_string:" + ClientUtils.escapeQueryChars(this.c.getCanonicalName()));
+			SiteUser siteUser = siteRequest_.getSiteUser_();
+			if(siteUser == null || BooleanUtils.isNotTrue(siteUser.getSeeDeleted()))
+				solrQuery.addFilterQuery("deleted_indexedstored_boolean:false");
+			if(siteUser == null || BooleanUtils.isNotTrue(siteUser.getSeeArchived()))
+				solrQuery.addFilterQuery("archived_indexedstored_boolean:false");
 			if(solrQuery.getQuery() != null) {
 				String solrHostName = siteRequest_.getConfig().getString(ConfigKeys.SOLR_HOST_NAME);
 				Integer solrPort = siteRequest_.getConfig().getInteger(ConfigKeys.SOLR_PORT);
@@ -429,6 +439,10 @@ public class SearchList<DEV> extends SearchListGen<DEV> {
 			return list.get(0);
 		else
 			return null;
+	}
+
+	public int getSize() {
+		return list.size();
 	}
 
 	public int size() {
@@ -1010,5 +1024,10 @@ public class SearchList<DEV> extends SearchListGen<DEV> {
 		if(numFound != null)
 			sb.append("numFound: ").append(numFound).append("\n");
 		return sb.toString();
+	}
+
+	@Override
+	public Iterator<DEV> iterator() {
+		return list.iterator();
 	}
 }

@@ -4,17 +4,15 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.common.SolrDocument;
-
 import org.choicehumanitarian.reports.enus.request.api.ApiRequest;
+import org.choicehumanitarian.reports.enus.user.SiteUser;
 import org.choicehumanitarian.reports.enus.wrap.Wrap;
-import org.choicehumanitarian.reports.enus.writer.AllWriter;
 
 import io.vertx.core.MultiMap;
 import io.vertx.core.json.JsonArray;
@@ -142,6 +140,17 @@ public class SiteRequestEnUS extends SiteRequestEnUSGen<Object> implements Seria
 		});
 	}
 
+	protected void _siteUser_(Wrap<SiteUser> c) { 
+		if(userId != null) {
+			SiteUser o = new SiteUser();
+			o.setUserName(userName);
+			o.setUserFirstName(userFirstName);
+			o.setUserLastName(userLastName);
+			o.setUserId(userId);
+			c.o(o);
+		}
+	}
+
 	protected void _solrDocument(Wrap<SolrDocument> c) {  
 	}
 
@@ -155,9 +164,11 @@ public class SiteRequestEnUS extends SiteRequestEnUSGen<Object> implements Seria
 	}
 
 	protected void _requestUri(Wrap<String> c) {
+		c.o(Optional.ofNullable(serviceRequest).map(r -> r.getExtra()).map(extra -> extra.getString("uri")).orElse(null));
 	}
 
 	protected void _requestMethod(Wrap<String> c) {
+		c.o(Optional.ofNullable(serviceRequest).map(r -> r.getExtra()).map(extra -> extra.getString("method")).orElse(null));
 	}
 
 	protected void _sqlConnection(Wrap<SqlConnection> c) {

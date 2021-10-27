@@ -31,7 +31,8 @@ SOLR_URL: http://localhost:8983/solr/choice-reports
 SOLR_URL_COMPUTATE: http://localhost:8983/solr/computate
 API_CONTACT_EMAIL: ...
 SITE_ZONE: America/Denver
-STATIC_BASE_URL: https://example.neocities.org
+SITE_LOCALE: en-US
+STATIC_BASE_URL: http://localhost:10981/static
 STATIC_PATH: /usr/local/src/choice-reports-static
 TEMPLATE_PATH: /usr/local/src/choice-reports-static/template
 EMAIL_HOST: 
@@ -52,6 +53,12 @@ ENABLE_DELETED: true
 # Enable an object in the database to be archived. 
 ENABLE_ARCHIVED: true
 ENABLE_IMPORT_DATA: true
+
+AUTH_ROLES_ADMIN: [ SiteAdmin ]
+AUTH_ROLES_REQUIRED_ChoiceDonor: [ SiteAdmin ]
+AUTH_ROLES_REQUIRED_ChoiceReport: [ SiteAdmin ]
+AUTH_ROLES_REQUIRED_SiteUser: [ SiteAdmin ]
+
 DOMO_HOST_NAME: api.domo.com
 DOMO_PORT: 443
 DOMO_SSL: true

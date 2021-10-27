@@ -1,4 +1,4 @@
-package org.choicehumanitarian.reports.enus.base;
+package org.choicehumanitarian.reports.enus.base;       
 
 import java.text.Normalizer;
 import java.time.ZoneId;
@@ -15,7 +15,8 @@ import org.choicehumanitarian.reports.enus.wrap.Wrap;
 
 /**
  * Indexed: true
- * 
+ * Page: true
+ * SuperPage: PageLayout
  * Keyword: classSimpleNameCluster
  */
 public class BaseModel extends BaseModelGen<Object> {
@@ -150,17 +151,6 @@ public class BaseModel extends BaseModelGen<Object> {
 
 	/**   
 	 * {@inheritDoc}
-	 * Var.enUS: userId
-	 * Indexed: true
-	 * Stored: true
-	 * Define: true
-	 * Modify: false
-	 */                 
-	protected void _userId(Wrap<String> c) {
-	}
-
-	/**   
-	 * {@inheritDoc}
 	 * Var.enUS: userKey
 	 * Indexed: true
 	 * Stored: true
@@ -226,8 +216,8 @@ public class BaseModel extends BaseModelGen<Object> {
 			Class<?> cl = getClass();
 
 			try {
-//				String o = toId(StringUtils.join(StringUtils.splitByCharacterTypeCamelCase((String)FieldUtils.getField(cl, cl.getSimpleName() + "_NameVar").get(this)), "-"));
-//				c.o(o);
+				String o = toId(StringUtils.join(StringUtils.splitByCharacterTypeCamelCase((String)FieldUtils.getField(cl, cl.getSimpleName() + "_NameVar").get(this)), "-"));
+				c.o(o);
 			} catch (Exception e) {
 				ExceptionUtils.rethrow(e);
 			}

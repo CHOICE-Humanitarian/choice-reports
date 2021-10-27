@@ -1,4 +1,4 @@
-package org.choicehumanitarian.reports.enus.user;       
+package org.choicehumanitarian.reports.enus.user;         
 
 import java.util.List;
 
@@ -10,6 +10,7 @@ import org.choicehumanitarian.reports.enus.wrap.Wrap;
  * Model: true
  * Api: true
  * Page: true
+ * SuperPage.enUS: BaseModelPage
  * Indexed: true
  * Map.Integer.sqlSort: 3
  * 
@@ -22,6 +23,7 @@ import org.choicehumanitarian.reports.enus.wrap.Wrap;
  * 
  * ApiMethod.enUS: SearchPage
  * PageSearchPage.enUS: SiteUserPage
+ * PageSuperSearchPage.enUS: BaseModelPage
  * ApiUriSearchPage.enUS: /user
  * 
  * Keyword: classSimpleNameSiteUser
@@ -33,10 +35,11 @@ import org.choicehumanitarian.reports.enus.wrap.Wrap;
  * Color: gray
  * IconGroup: regular
  * IconName: user-cog
+ * NameVar.enUS: user
  * 
  * RoleUser: true
  * Role.enUS: SiteAdmin
- */
+ */ 
 public class SiteUser extends SiteUserGen<BaseModel> {
 
 	/**
@@ -48,13 +51,14 @@ public class SiteUser extends SiteUserGen<BaseModel> {
 		l.add(pk);
 	}
 
-	/**
+	/**   
 	 * {@inheritDoc}
 	 * Indexed: true
 	 * Stored: true
 	 * Define: true
-	 */
-	protected void _userName(Wrap<String> c) {
+	 * Modify: false
+	 */                 
+	protected void _userId(Wrap<String> c) {
 	}
 
 	/**
@@ -63,7 +67,7 @@ public class SiteUser extends SiteUserGen<BaseModel> {
 	 * Stored: true
 	 * Define: true
 	 */
-	protected void _sessionId(Wrap<String> c) {
+	protected void _userName(Wrap<String> c) {
 	}
 
 	/**
@@ -100,5 +104,37 @@ public class SiteUser extends SiteUserGen<BaseModel> {
 	 * Define: true
 	 */
 	protected void _userFullName(Wrap<String> c) {
+		c.o(String.format("%s %s", userFirstName, userLastName));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * Indexed: true
+	 * Stored: true
+	 * Define: true
+	 * HtmlRow: 3
+	 * HtmlCell: 2
+	 * DisplayName.enUS: see archived
+	 */
+	protected void _seeArchived(Wrap<Boolean> c) {
+		c.o(false);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * Indexed: true
+	 * Stored: true
+	 * Define: true
+	 * HtmlRow: 3
+	 * HtmlCell: 3
+	 * DisplayName.enUS: see deleted
+	 */
+	protected void _seeDeleted(Wrap<Boolean> c) {
+		c.o(false);
+	}
+
+	@Override
+	protected void _objectTitle(Wrap<String> c) {
+		c.o(String.format("%s (%s) <%s>", userFullName, userName, userEmail));
 	}
 }

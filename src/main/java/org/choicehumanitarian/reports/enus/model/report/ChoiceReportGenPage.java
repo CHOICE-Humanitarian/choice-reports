@@ -1,9 +1,8 @@
-package org.choicehumanitarian.reports.enus.user;
+package org.choicehumanitarian.reports.enus.model.report;
 
+import java.lang.String;
 import java.util.List;
 import java.lang.Long;
-import java.lang.String;
-import java.lang.Boolean;
 import org.choicehumanitarian.reports.enus.base.BaseModelPage;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import org.choicehumanitarian.reports.enus.user.SiteUser;
@@ -45,34 +44,34 @@ import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 /**
  * Translate: false
  **/
-public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
+public class ChoiceReportGenPage extends ChoiceReportGenPageGen<BaseModelPage> {
 
 	/**
 	 * {@inheritDoc}
 	 * Ignore: true
 	 **/
-	protected void _searchListSiteUser_(Wrap<SearchList<SiteUser>> w) {
+	protected void _searchListChoiceReport_(Wrap<SearchList<ChoiceReport>> w) {
 	}
 
 	/**
 	 * {@inheritDoc}
 	 **/
-	protected void _listSiteUser(JsonArray l) {
-		Optional.ofNullable(searchListSiteUser_).map(o -> o.getList()).orElse(Arrays.asList()).stream().map(o -> JsonObject.mapFrom(o)).forEach(o -> l.add(o));
+	protected void _listChoiceReport(JsonArray l) {
+		Optional.ofNullable(searchListChoiceReport_).map(o -> o.getList()).orElse(Arrays.asList()).stream().map(o -> JsonObject.mapFrom(o)).forEach(o -> l.add(o));
 	}
 
-	protected void _siteUserCount(Wrap<Integer> w) {
-		w.o(searchListSiteUser_ == null ? 0 : searchListSiteUser_.size());
+	protected void _choiceReportCount(Wrap<Integer> w) {
+		w.o(searchListChoiceReport_ == null ? 0 : searchListChoiceReport_.size());
 	}
 
-	protected void _siteUser_(Wrap<SiteUser> w) {
-		if(siteUserCount == 1)
-			w.o(searchListSiteUser_.get(0));
+	protected void _choiceReport_(Wrap<ChoiceReport> w) {
+		if(choiceReportCount == 1)
+			w.o(searchListChoiceReport_.get(0));
 	}
 
 	protected void _pk(Wrap<Long> w) {
-		if(siteUserCount == 1)
-			w.o(siteUser_.getPk());
+		if(choiceReportCount == 1)
+			w.o(choiceReport_.getPk());
 	}
 
 	@Override
@@ -82,24 +81,24 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
 
 	@Override
 	protected void _classSimpleName(Wrap<String> w) {
-		w.o("SiteUser");
+		w.o("ChoiceReport");
 	}
 
 	@Override
 	protected void _pageTitle(Wrap<String> c) {
-		if(siteUser_ != null && siteUser_.getObjectTitle() != null)
-			c.o(siteUser_.getObjectTitle());
-		else if(siteUser_ != null)
-			c.o("site users");
-		else if(searchListSiteUser_ == null || siteUserCount == 0)
-			c.o("no site user found");
+		if(choiceReport_ != null && choiceReport_.getObjectTitle() != null)
+			c.o(choiceReport_.getObjectTitle());
+		else if(choiceReport_ != null)
+			c.o("reports");
+		else if(searchListChoiceReport_ == null || choiceReportCount == 0)
+			c.o("no report found");
 		else
-			c.o("site users");
+			c.o("reports");
 	}
 
 	@Override
 	protected void _pageUri(Wrap<String> c) {
-		c.o("/api/user");
+		c.o("/api/report");
 	}
 
 	@Override
@@ -111,15 +110,15 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
 
 	@Override
 	protected void _rolesRequired(List<String> l) {
-		l.addAll(Optional.ofNullable(siteRequest_.getConfig().getJsonArray(ConfigKeys.AUTH_ROLES_REQUIRED + "_SiteUser")).orElse(new JsonArray()).stream().map(o -> o.toString()).collect(Collectors.toList()));
+		l.addAll(Optional.ofNullable(siteRequest_.getConfig().getJsonArray(ConfigKeys.AUTH_ROLES_REQUIRED + "_ChoiceReport")).orElse(new JsonArray()).stream().map(o -> o.toString()).collect(Collectors.toList()));
 	}
 
 	@Override
 	protected void _pagination(JsonObject pagination) {
 		JsonArray pages = new JsonArray();
-		Long start = searchListSiteUser_.getStart().longValue();
-		Long rows = searchListSiteUser_.getRows().longValue();
-		Long foundNum = searchListSiteUser_.getQueryResponse().getResults().getNumFound();
+		Long start = searchListChoiceReport_.getStart().longValue();
+		Long rows = searchListChoiceReport_.getRows().longValue();
+		Long foundNum = searchListChoiceReport_.getQueryResponse().getResults().getNumFound();
 		Long startNum = start + 1L;
 		Long endNum = start + rows;
 		Long floorMod = Math.floorMod(foundNum, rows);
@@ -165,7 +164,7 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
 		JsonObject params = serviceRequest.getParams();
 
 		JsonObject queryParams = Optional.ofNullable(serviceRequest).map(ServiceRequest::getParams).map(or -> or.getJsonObject("query")).orElse(new JsonObject());
-		Long num = searchListSiteUser_.getQueryResponse().getResults().getNumFound();
+		Long num = searchListChoiceReport_.getQueryResponse().getResults().getNumFound();
 		String q = "*:*";
 		String q1 = "objectText";
 		String q2 = "";
@@ -193,15 +192,15 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
 		}
 		query.put("q", q);
 
-		Integer rows1 = Optional.ofNullable(searchListSiteUser_).map(l -> l.getRows()).orElse(10);
-		Integer start1 = Optional.ofNullable(searchListSiteUser_).map(l -> l.getStart()).orElse(1);
+		Integer rows1 = Optional.ofNullable(searchListChoiceReport_).map(l -> l.getRows()).orElse(10);
+		Integer start1 = Optional.ofNullable(searchListChoiceReport_).map(l -> l.getStart()).orElse(1);
 		Integer start2 = start1 - rows1;
 		Integer start3 = start1 + rows1;
 		Integer rows2 = rows1 / 2;
 		Integer rows3 = rows1 * 2;
 		start2 = start2 < 0 ? 0 : start2;
 		JsonArray fqs = new JsonArray();
-		for(String fq : Optional.ofNullable(searchListSiteUser_).map(l -> l.getFilterQueries()).orElse(new String[0])) {
+		for(String fq : Optional.ofNullable(searchListChoiceReport_).map(l -> l.getFilterQueries()).orElse(new String[0])) {
 			if(!StringUtils.contains(fq, "(")) {
 				String fq1 = StringUtils.substringBefore(fq, "_");
 				String fq2 = StringUtils.substringAfter(fq, ":");
@@ -212,7 +211,7 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
 		query.put("fq", fqs);
 
 		JsonArray sorts = new JsonArray();
-		for(SortClause sort : Optional.ofNullable(searchListSiteUser_).map(l -> l.getSorts()).orElse(Arrays.asList())) {
+		for(SortClause sort : Optional.ofNullable(searchListChoiceReport_).map(l -> l.getSorts()).orElse(Arrays.asList())) {
 			sorts.add(new JsonObject().put("var", StringUtils.substringBefore(sort.getItem(), "_")).put("order", sort.getOrder().name()));
 		}
 		query.put("sort", sorts);
@@ -225,7 +224,7 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
 
 	@Override
 	protected void _pageImageUri(Wrap<String> c) {
-			c.o("/png/api/user-999.png");
+			c.o("/png/api/report-999.png");
 	}
 
 	@Override
@@ -235,6 +234,6 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
 
 	@Override
 	protected void _contextIconName(Wrap<String> c) {
-			c.o("user-cog");
+			c.o("globe-americas");
 	}
 }

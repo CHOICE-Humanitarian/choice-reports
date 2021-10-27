@@ -2,52 +2,53 @@ package org.choicehumanitarian.reports.enus.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Arrays;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import java.util.Date;
 import org.slf4j.LoggerFactory;
-import java.util.HashMap;
-import org.choicehumanitarian.reports.enus.writer.AllWriter;
 import org.apache.commons.lang3.StringUtils;
-import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
-import java.text.NumberFormat;
-import java.util.ArrayList;
 import org.choicehumanitarian.reports.enus.wrap.Wrap;
-import org.apache.commons.collections.CollectionUtils;
 import java.lang.Long;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.choicehumanitarian.reports.enus.java.ZonedDateTimeSerializer;
 import java.util.Map;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.vertx.core.json.JsonObject;
-import java.lang.String;
 import java.math.RoundingMode;
-import org.choicehumanitarian.reports.enus.request.api.ApiRequest;
-import org.slf4j.Logger;
 import java.math.MathContext;
-import org.choicehumanitarian.reports.enus.java.ZonedDateTimeDeserializer;
-import io.vertx.core.Promise;
-import org.apache.solr.client.solrj.response.QueryResponse;
 import java.util.Set;
 import org.choicehumanitarian.reports.enus.java.LocalDateSerializer;
-import org.apache.commons.text.StringEscapeUtils;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.vertx.core.Future;
 import org.choicehumanitarian.reports.enus.base.BaseModel;
-import org.apache.solr.client.solrj.SolrClient;
 import java.util.Objects;
-import io.vertx.core.json.JsonArray;
-import org.apache.solr.common.SolrDocument;
 import java.util.List;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.commons.lang3.math.NumberUtils;
 import java.util.Optional;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import java.util.HashMap;
+import org.choicehumanitarian.reports.enus.writer.AllWriter;
+import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import org.apache.commons.collections.CollectionUtils;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.choicehumanitarian.reports.enus.java.ZonedDateTimeSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.lang.Boolean;
+import java.lang.String;
+import org.choicehumanitarian.reports.enus.request.api.ApiRequest;
+import org.slf4j.Logger;
+import org.choicehumanitarian.reports.enus.java.ZonedDateTimeDeserializer;
+import io.vertx.core.Promise;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.commons.text.StringEscapeUtils;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import org.apache.solr.client.solrj.SolrClient;
+import io.vertx.core.json.JsonArray;
+import org.apache.solr.common.SolrDocument;
+import org.apache.commons.lang3.math.NumberUtils;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 
 /**	
  * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.user.SiteUser&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
@@ -55,9 +56,6 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
  **/
 public abstract class SiteUserGen<DEV> extends BaseModel {
 	protected static final Logger LOG = LoggerFactory.getLogger(SiteUser.class);
-
-	public static final List<String> ROLES = Arrays.asList("SiteAdmin", "SiteAdmin");
-	public static final List<String> ROLE_READS = Arrays.asList("");
 
 	public static final String SiteUser_AName = "a site user";
 	public static final String SiteUser_This = "this ";
@@ -72,7 +70,7 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	public static final String SiteUser_Title = "site users";
 	public static final String SiteUser_ThePluralName = "the site users";
 	public static final String SiteUser_NoNameFound = "no site user found";
-	public static final String SiteUser_NameVar = "siteUser";
+	public static final String SiteUser_NameVar = "user";
 	public static final String SiteUser_OfName = "of site user";
 	public static final String SiteUser_ANameAdjective = "a site user";
 	public static final String SiteUser_NameAdjectiveSingular = "site user";
@@ -93,8 +91,6 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	@JsonSerialize(contentUsing = ToStringSerializer.class)
 	@JsonInclude(Include.NON_NULL)
 	protected List<Long> userKeys = new ArrayList<Long>();
-	@JsonIgnore
-	public Wrap<List<Long>> userKeysWrap = new Wrap<List<Long>>().var("userKeys").o(userKeys);
 
 	/**	<br/> The entity userKeys
 	 *  It is constructed before being initialized with the constructor by default List<Long>(). 
@@ -110,14 +106,12 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 
 	public void setUserKeys(List<Long> userKeys) {
 		this.userKeys = userKeys;
-		this.userKeysWrap.alreadyInitialized = true;
 	}
 	@JsonIgnore
 	public void setUserKeys(String o) {
 		Long l = SiteUser.staticSetUserKeys(siteRequest_, o);
 		if(l != null)
 			addUserKeys(l);
-		this.userKeysWrap.alreadyInitialized = true;
 	}
 	public static Long staticSetUserKeys(SiteRequestEnUS siteRequest_, String o) {
 		if(NumberUtils.isParsable(o))
@@ -151,10 +145,7 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		return (SiteUser)this;
 	}
 	protected SiteUser userKeysInit() {
-		if(!userKeysWrap.alreadyInitialized) {
-			_userKeys(userKeys);
-		}
-		userKeysWrap.alreadyInitialized(true);
+		_userKeys(userKeys);
 		return (SiteUser)this;
 	}
 
@@ -170,32 +161,57 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		return SiteUser.staticSolrStrUserKeys(siteRequest_, SiteUser.staticSolrUserKeys(siteRequest_, SiteUser.staticSetUserKeys(siteRequest_, o)));
 	}
 
-	public List<Long> solrUserKeys() {
-		List<Long> l = new ArrayList<Long>();
-		for(Long o : userKeys) {
-			l.add(SiteUser.staticSolrUserKeys(siteRequest_, o));
+	////////////
+	// userId //
+	////////////
+
+	/**	 The entity userId
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String userId;
+
+	/**	<br/> The entity userId
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.user.SiteUser&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userId">Find the entity userId in Solr</a>
+	 * <br/>
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _userId(Wrap<String> c);
+
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String o) {
+		this.userId = SiteUser.staticSetUserId(siteRequest_, o);
+	}
+	public static String staticSetUserId(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected SiteUser userIdInit() {
+		Wrap<String> userIdWrap = new Wrap<String>().var("userId");
+		if(userId == null) {
+			_userId(userIdWrap);
+			setUserId(userIdWrap.o);
 		}
-		return l;
+		return (SiteUser)this;
 	}
 
-	public String strUserKeys() {
-		return userKeys == null ? "" : userKeys.toString();
+	public static String staticSolrUserId(SiteRequestEnUS siteRequest_, String o) {
+		return o;
 	}
 
-	public List<Long> sqlUserKeys() {
-		return userKeys;
+	public static String staticSolrStrUserId(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
 	}
 
-	public String jsonUserKeys() {
-		return userKeys == null ? "" : userKeys.toString();
+	public static String staticSolrFqUserId(SiteRequestEnUS siteRequest_, String o) {
+		return SiteUser.staticSolrStrUserId(siteRequest_, SiteUser.staticSolrUserId(siteRequest_, SiteUser.staticSetUserId(siteRequest_, o)));
 	}
 
-	public String htmTooltipUserKeys() {
-		return null;
-	}
-
-	public String htmlUserKeys() {
-		return userKeys == null ? "" : StringEscapeUtils.escapeHtml4(strUserKeys());
+	public String sqlUserId() {
+		return userId;
 	}
 
 	//////////////
@@ -208,8 +224,6 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected String userName;
-	@JsonIgnore
-	public Wrap<String> userNameWrap = new Wrap<String>().var("userName").o(userName);
 
 	/**	<br/> The entity userName
 	 *  is defined as null before being initialized. 
@@ -224,19 +238,16 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	}
 	public void setUserName(String o) {
 		this.userName = SiteUser.staticSetUserName(siteRequest_, o);
-		this.userNameWrap.alreadyInitialized = true;
 	}
 	public static String staticSetUserName(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 	protected SiteUser userNameInit() {
-		if(!userNameWrap.alreadyInitialized) {
+		Wrap<String> userNameWrap = new Wrap<String>().var("userName");
+		if(userName == null) {
 			_userName(userNameWrap);
-			if(userName == null)
-				setUserName(userNameWrap.o);
-			userNameWrap.o(null);
+			setUserName(userNameWrap.o);
 		}
-		userNameWrap.alreadyInitialized(true);
 		return (SiteUser)this;
 	}
 
@@ -252,106 +263,8 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		return SiteUser.staticSolrStrUserName(siteRequest_, SiteUser.staticSolrUserName(siteRequest_, SiteUser.staticSetUserName(siteRequest_, o)));
 	}
 
-	public String solrUserName() {
-		return SiteUser.staticSolrUserName(siteRequest_, userName);
-	}
-
-	public String strUserName() {
-		return userName == null ? "" : userName;
-	}
-
 	public String sqlUserName() {
 		return userName;
-	}
-
-	public String jsonUserName() {
-		return userName == null ? "" : userName;
-	}
-
-	public String htmTooltipUserName() {
-		return null;
-	}
-
-	public String htmlUserName() {
-		return userName == null ? "" : StringEscapeUtils.escapeHtml4(strUserName());
-	}
-
-	///////////////
-	// sessionId //
-	///////////////
-
-	/**	 The entity sessionId
-	 *	 is defined as null before being initialized. 
-	 */
-	@JsonProperty
-	@JsonInclude(Include.NON_NULL)
-	protected String sessionId;
-	@JsonIgnore
-	public Wrap<String> sessionIdWrap = new Wrap<String>().var("sessionId").o(sessionId);
-
-	/**	<br/> The entity sessionId
-	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.user.SiteUser&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:sessionId">Find the entity sessionId in Solr</a>
-	 * <br/>
-	 * @param c is for wrapping a value to assign to this entity during initialization. 
-	 **/
-	protected abstract void _sessionId(Wrap<String> c);
-
-	public String getSessionId() {
-		return sessionId;
-	}
-	public void setSessionId(String o) {
-		this.sessionId = SiteUser.staticSetSessionId(siteRequest_, o);
-		this.sessionIdWrap.alreadyInitialized = true;
-	}
-	public static String staticSetSessionId(SiteRequestEnUS siteRequest_, String o) {
-		return o;
-	}
-	protected SiteUser sessionIdInit() {
-		if(!sessionIdWrap.alreadyInitialized) {
-			_sessionId(sessionIdWrap);
-			if(sessionId == null)
-				setSessionId(sessionIdWrap.o);
-			sessionIdWrap.o(null);
-		}
-		sessionIdWrap.alreadyInitialized(true);
-		return (SiteUser)this;
-	}
-
-	public static String staticSolrSessionId(SiteRequestEnUS siteRequest_, String o) {
-		return o;
-	}
-
-	public static String staticSolrStrSessionId(SiteRequestEnUS siteRequest_, String o) {
-		return o == null ? null : o.toString();
-	}
-
-	public static String staticSolrFqSessionId(SiteRequestEnUS siteRequest_, String o) {
-		return SiteUser.staticSolrStrSessionId(siteRequest_, SiteUser.staticSolrSessionId(siteRequest_, SiteUser.staticSetSessionId(siteRequest_, o)));
-	}
-
-	public String solrSessionId() {
-		return SiteUser.staticSolrSessionId(siteRequest_, sessionId);
-	}
-
-	public String strSessionId() {
-		return sessionId == null ? "" : sessionId;
-	}
-
-	public String sqlSessionId() {
-		return sessionId;
-	}
-
-	public String jsonSessionId() {
-		return sessionId == null ? "" : sessionId;
-	}
-
-	public String htmTooltipSessionId() {
-		return null;
-	}
-
-	public String htmlSessionId() {
-		return sessionId == null ? "" : StringEscapeUtils.escapeHtml4(strSessionId());
 	}
 
 	///////////////
@@ -364,8 +277,6 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected String userEmail;
-	@JsonIgnore
-	public Wrap<String> userEmailWrap = new Wrap<String>().var("userEmail").o(userEmail);
 
 	/**	<br/> The entity userEmail
 	 *  is defined as null before being initialized. 
@@ -380,19 +291,16 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	}
 	public void setUserEmail(String o) {
 		this.userEmail = SiteUser.staticSetUserEmail(siteRequest_, o);
-		this.userEmailWrap.alreadyInitialized = true;
 	}
 	public static String staticSetUserEmail(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 	protected SiteUser userEmailInit() {
-		if(!userEmailWrap.alreadyInitialized) {
+		Wrap<String> userEmailWrap = new Wrap<String>().var("userEmail");
+		if(userEmail == null) {
 			_userEmail(userEmailWrap);
-			if(userEmail == null)
-				setUserEmail(userEmailWrap.o);
-			userEmailWrap.o(null);
+			setUserEmail(userEmailWrap.o);
 		}
-		userEmailWrap.alreadyInitialized(true);
 		return (SiteUser)this;
 	}
 
@@ -408,28 +316,8 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		return SiteUser.staticSolrStrUserEmail(siteRequest_, SiteUser.staticSolrUserEmail(siteRequest_, SiteUser.staticSetUserEmail(siteRequest_, o)));
 	}
 
-	public String solrUserEmail() {
-		return SiteUser.staticSolrUserEmail(siteRequest_, userEmail);
-	}
-
-	public String strUserEmail() {
-		return userEmail == null ? "" : userEmail;
-	}
-
 	public String sqlUserEmail() {
 		return userEmail;
-	}
-
-	public String jsonUserEmail() {
-		return userEmail == null ? "" : userEmail;
-	}
-
-	public String htmTooltipUserEmail() {
-		return null;
-	}
-
-	public String htmlUserEmail() {
-		return userEmail == null ? "" : StringEscapeUtils.escapeHtml4(strUserEmail());
 	}
 
 	///////////////////
@@ -442,8 +330,6 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected String userFirstName;
-	@JsonIgnore
-	public Wrap<String> userFirstNameWrap = new Wrap<String>().var("userFirstName").o(userFirstName);
 
 	/**	<br/> The entity userFirstName
 	 *  is defined as null before being initialized. 
@@ -458,19 +344,16 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	}
 	public void setUserFirstName(String o) {
 		this.userFirstName = SiteUser.staticSetUserFirstName(siteRequest_, o);
-		this.userFirstNameWrap.alreadyInitialized = true;
 	}
 	public static String staticSetUserFirstName(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 	protected SiteUser userFirstNameInit() {
-		if(!userFirstNameWrap.alreadyInitialized) {
+		Wrap<String> userFirstNameWrap = new Wrap<String>().var("userFirstName");
+		if(userFirstName == null) {
 			_userFirstName(userFirstNameWrap);
-			if(userFirstName == null)
-				setUserFirstName(userFirstNameWrap.o);
-			userFirstNameWrap.o(null);
+			setUserFirstName(userFirstNameWrap.o);
 		}
-		userFirstNameWrap.alreadyInitialized(true);
 		return (SiteUser)this;
 	}
 
@@ -486,28 +369,8 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		return SiteUser.staticSolrStrUserFirstName(siteRequest_, SiteUser.staticSolrUserFirstName(siteRequest_, SiteUser.staticSetUserFirstName(siteRequest_, o)));
 	}
 
-	public String solrUserFirstName() {
-		return SiteUser.staticSolrUserFirstName(siteRequest_, userFirstName);
-	}
-
-	public String strUserFirstName() {
-		return userFirstName == null ? "" : userFirstName;
-	}
-
 	public String sqlUserFirstName() {
 		return userFirstName;
-	}
-
-	public String jsonUserFirstName() {
-		return userFirstName == null ? "" : userFirstName;
-	}
-
-	public String htmTooltipUserFirstName() {
-		return null;
-	}
-
-	public String htmlUserFirstName() {
-		return userFirstName == null ? "" : StringEscapeUtils.escapeHtml4(strUserFirstName());
 	}
 
 	//////////////////
@@ -520,8 +383,6 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected String userLastName;
-	@JsonIgnore
-	public Wrap<String> userLastNameWrap = new Wrap<String>().var("userLastName").o(userLastName);
 
 	/**	<br/> The entity userLastName
 	 *  is defined as null before being initialized. 
@@ -536,19 +397,16 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	}
 	public void setUserLastName(String o) {
 		this.userLastName = SiteUser.staticSetUserLastName(siteRequest_, o);
-		this.userLastNameWrap.alreadyInitialized = true;
 	}
 	public static String staticSetUserLastName(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 	protected SiteUser userLastNameInit() {
-		if(!userLastNameWrap.alreadyInitialized) {
+		Wrap<String> userLastNameWrap = new Wrap<String>().var("userLastName");
+		if(userLastName == null) {
 			_userLastName(userLastNameWrap);
-			if(userLastName == null)
-				setUserLastName(userLastNameWrap.o);
-			userLastNameWrap.o(null);
+			setUserLastName(userLastNameWrap.o);
 		}
-		userLastNameWrap.alreadyInitialized(true);
 		return (SiteUser)this;
 	}
 
@@ -564,28 +422,8 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		return SiteUser.staticSolrStrUserLastName(siteRequest_, SiteUser.staticSolrUserLastName(siteRequest_, SiteUser.staticSetUserLastName(siteRequest_, o)));
 	}
 
-	public String solrUserLastName() {
-		return SiteUser.staticSolrUserLastName(siteRequest_, userLastName);
-	}
-
-	public String strUserLastName() {
-		return userLastName == null ? "" : userLastName;
-	}
-
 	public String sqlUserLastName() {
 		return userLastName;
-	}
-
-	public String jsonUserLastName() {
-		return userLastName == null ? "" : userLastName;
-	}
-
-	public String htmTooltipUserLastName() {
-		return null;
-	}
-
-	public String htmlUserLastName() {
-		return userLastName == null ? "" : StringEscapeUtils.escapeHtml4(strUserLastName());
 	}
 
 	//////////////////
@@ -598,8 +436,6 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected String userFullName;
-	@JsonIgnore
-	public Wrap<String> userFullNameWrap = new Wrap<String>().var("userFullName").o(userFullName);
 
 	/**	<br/> The entity userFullName
 	 *  is defined as null before being initialized. 
@@ -614,19 +450,16 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	}
 	public void setUserFullName(String o) {
 		this.userFullName = SiteUser.staticSetUserFullName(siteRequest_, o);
-		this.userFullNameWrap.alreadyInitialized = true;
 	}
 	public static String staticSetUserFullName(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 	protected SiteUser userFullNameInit() {
-		if(!userFullNameWrap.alreadyInitialized) {
+		Wrap<String> userFullNameWrap = new Wrap<String>().var("userFullName");
+		if(userFullName == null) {
 			_userFullName(userFullNameWrap);
-			if(userFullName == null)
-				setUserFullName(userFullNameWrap.o);
-			userFullNameWrap.o(null);
+			setUserFullName(userFullNameWrap.o);
 		}
-		userFullNameWrap.alreadyInitialized(true);
 		return (SiteUser)this;
 	}
 
@@ -642,44 +475,133 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		return SiteUser.staticSolrStrUserFullName(siteRequest_, SiteUser.staticSolrUserFullName(siteRequest_, SiteUser.staticSetUserFullName(siteRequest_, o)));
 	}
 
-	public String solrUserFullName() {
-		return SiteUser.staticSolrUserFullName(siteRequest_, userFullName);
-	}
-
-	public String strUserFullName() {
-		return userFullName == null ? "" : userFullName;
-	}
-
 	public String sqlUserFullName() {
 		return userFullName;
 	}
 
-	public String jsonUserFullName() {
-		return userFullName == null ? "" : userFullName;
+	/////////////////
+	// seeArchived //
+	/////////////////
+
+	/**	 The entity seeArchived
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected Boolean seeArchived;
+
+	/**	<br/> The entity seeArchived
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.user.SiteUser&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:seeArchived">Find the entity seeArchived in Solr</a>
+	 * <br/>
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _seeArchived(Wrap<Boolean> c);
+
+	public Boolean getSeeArchived() {
+		return seeArchived;
 	}
 
-	public String htmTooltipUserFullName() {
-		return null;
+	public void setSeeArchived(Boolean seeArchived) {
+		this.seeArchived = seeArchived;
+	}
+	@JsonIgnore
+	public void setSeeArchived(String o) {
+		this.seeArchived = SiteUser.staticSetSeeArchived(siteRequest_, o);
+	}
+	public static Boolean staticSetSeeArchived(SiteRequestEnUS siteRequest_, String o) {
+		return Boolean.parseBoolean(o);
+	}
+	protected SiteUser seeArchivedInit() {
+		Wrap<Boolean> seeArchivedWrap = new Wrap<Boolean>().var("seeArchived");
+		if(seeArchived == null) {
+			_seeArchived(seeArchivedWrap);
+			setSeeArchived(seeArchivedWrap.o);
+		}
+		return (SiteUser)this;
 	}
 
-	public String htmlUserFullName() {
-		return userFullName == null ? "" : StringEscapeUtils.escapeHtml4(strUserFullName());
+	public static Boolean staticSolrSeeArchived(SiteRequestEnUS siteRequest_, Boolean o) {
+		return o;
+	}
+
+	public static String staticSolrStrSeeArchived(SiteRequestEnUS siteRequest_, Boolean o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqSeeArchived(SiteRequestEnUS siteRequest_, String o) {
+		return SiteUser.staticSolrStrSeeArchived(siteRequest_, SiteUser.staticSolrSeeArchived(siteRequest_, SiteUser.staticSetSeeArchived(siteRequest_, o)));
+	}
+
+	public Boolean sqlSeeArchived() {
+		return seeArchived;
+	}
+
+	////////////////
+	// seeDeleted //
+	////////////////
+
+	/**	 The entity seeDeleted
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected Boolean seeDeleted;
+
+	/**	<br/> The entity seeDeleted
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.user.SiteUser&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:seeDeleted">Find the entity seeDeleted in Solr</a>
+	 * <br/>
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _seeDeleted(Wrap<Boolean> c);
+
+	public Boolean getSeeDeleted() {
+		return seeDeleted;
+	}
+
+	public void setSeeDeleted(Boolean seeDeleted) {
+		this.seeDeleted = seeDeleted;
+	}
+	@JsonIgnore
+	public void setSeeDeleted(String o) {
+		this.seeDeleted = SiteUser.staticSetSeeDeleted(siteRequest_, o);
+	}
+	public static Boolean staticSetSeeDeleted(SiteRequestEnUS siteRequest_, String o) {
+		return Boolean.parseBoolean(o);
+	}
+	protected SiteUser seeDeletedInit() {
+		Wrap<Boolean> seeDeletedWrap = new Wrap<Boolean>().var("seeDeleted");
+		if(seeDeleted == null) {
+			_seeDeleted(seeDeletedWrap);
+			setSeeDeleted(seeDeletedWrap.o);
+		}
+		return (SiteUser)this;
+	}
+
+	public static Boolean staticSolrSeeDeleted(SiteRequestEnUS siteRequest_, Boolean o) {
+		return o;
+	}
+
+	public static String staticSolrStrSeeDeleted(SiteRequestEnUS siteRequest_, Boolean o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqSeeDeleted(SiteRequestEnUS siteRequest_, String o) {
+		return SiteUser.staticSolrStrSeeDeleted(siteRequest_, SiteUser.staticSolrSeeDeleted(siteRequest_, SiteUser.staticSetSeeDeleted(siteRequest_, o)));
+	}
+
+	public Boolean sqlSeeDeleted() {
+		return seeDeleted;
 	}
 
 	//////////////
 	// initDeep //
 	//////////////
 
-	protected boolean alreadyInitializedSiteUser = false;
-
 	public Future<Void> promiseDeepSiteUser(SiteRequestEnUS siteRequest_) {
 		setSiteRequest_(siteRequest_);
-		if(!alreadyInitializedSiteUser) {
-			alreadyInitializedSiteUser = true;
-			return promiseDeepSiteUser();
-		} else {
-			return Future.succeededFuture();
-		}
+		return promiseDeepSiteUser();
 	}
 
 	public Future<Void> promiseDeepSiteUser() {
@@ -703,12 +625,14 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 			Promise<Void> promise2 = Promise.promise();
 			try {
 				userKeysInit();
+				userIdInit();
 				userNameInit();
-				sessionIdInit();
 				userEmailInit();
 				userFirstNameInit();
 				userLastNameInit();
 				userFullNameInit();
+				seeArchivedInit();
+				seeDeletedInit();
 				promise2.complete();
 			} catch(Exception ex) {
 				promise2.fail(ex);
@@ -764,10 +688,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		switch(var) {
 			case "userKeys":
 				return oSiteUser.userKeys;
+			case "userId":
+				return oSiteUser.userId;
 			case "userName":
 				return oSiteUser.userName;
-			case "sessionId":
-				return oSiteUser.sessionId;
 			case "userEmail":
 				return oSiteUser.userEmail;
 			case "userFirstName":
@@ -776,33 +700,37 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 				return oSiteUser.userLastName;
 			case "userFullName":
 				return oSiteUser.userFullName;
+			case "seeArchived":
+				return oSiteUser.seeArchived;
+			case "seeDeleted":
+				return oSiteUser.seeDeleted;
 			default:
 				return super.obtainBaseModel(var);
 		}
 	}
 
 	///////////////
-	// attribute //
+	// relate //
 	///////////////
 
-	@Override public boolean attributeForClass(String var, Object val) {
+	@Override public boolean relateForClass(String var, Object val) {
 		String[] vars = StringUtils.split(var, ".");
 		Object o = null;
 		for(String v : vars) {
 			if(o == null)
-				o = attributeSiteUser(v, val);
+				o = relateSiteUser(v, val);
 			else if(o instanceof BaseModel) {
 				BaseModel baseModel = (BaseModel)o;
-				o = baseModel.attributeForClass(v, val);
+				o = baseModel.relateForClass(v, val);
 			}
 		}
 		return o != null;
 	}
-	public Object attributeSiteUser(String var, Object val) {
+	public Object relateSiteUser(String var, Object val) {
 		SiteUser oSiteUser = (SiteUser)this;
 		switch(var) {
 			default:
-				return super.attributeBaseModel(var, val);
+				return super.relateBaseModel(var, val);
 		}
 	}
 
@@ -817,10 +745,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		switch(entityVar) {
 		case "userKeys":
 			return SiteUser.staticSetUserKeys(siteRequest_, o);
+		case "userId":
+			return SiteUser.staticSetUserId(siteRequest_, o);
 		case "userName":
 			return SiteUser.staticSetUserName(siteRequest_, o);
-		case "sessionId":
-			return SiteUser.staticSetSessionId(siteRequest_, o);
 		case "userEmail":
 			return SiteUser.staticSetUserEmail(siteRequest_, o);
 		case "userFirstName":
@@ -829,6 +757,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 			return SiteUser.staticSetUserLastName(siteRequest_, o);
 		case "userFullName":
 			return SiteUser.staticSetUserFullName(siteRequest_, o);
+		case "seeArchived":
+			return SiteUser.staticSetSeeArchived(siteRequest_, o);
+		case "seeDeleted":
+			return SiteUser.staticSetSeeDeleted(siteRequest_, o);
 			default:
 				return BaseModel.staticSetBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -845,10 +777,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		switch(entityVar) {
 		case "userKeys":
 			return SiteUser.staticSolrUserKeys(siteRequest_, (Long)o);
+		case "userId":
+			return SiteUser.staticSolrUserId(siteRequest_, (String)o);
 		case "userName":
 			return SiteUser.staticSolrUserName(siteRequest_, (String)o);
-		case "sessionId":
-			return SiteUser.staticSolrSessionId(siteRequest_, (String)o);
 		case "userEmail":
 			return SiteUser.staticSolrUserEmail(siteRequest_, (String)o);
 		case "userFirstName":
@@ -857,6 +789,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 			return SiteUser.staticSolrUserLastName(siteRequest_, (String)o);
 		case "userFullName":
 			return SiteUser.staticSolrUserFullName(siteRequest_, (String)o);
+		case "seeArchived":
+			return SiteUser.staticSolrSeeArchived(siteRequest_, (Boolean)o);
+		case "seeDeleted":
+			return SiteUser.staticSolrSeeDeleted(siteRequest_, (Boolean)o);
 			default:
 				return BaseModel.staticSolrBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -873,10 +809,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		switch(entityVar) {
 		case "userKeys":
 			return SiteUser.staticSolrStrUserKeys(siteRequest_, (Long)o);
+		case "userId":
+			return SiteUser.staticSolrStrUserId(siteRequest_, (String)o);
 		case "userName":
 			return SiteUser.staticSolrStrUserName(siteRequest_, (String)o);
-		case "sessionId":
-			return SiteUser.staticSolrStrSessionId(siteRequest_, (String)o);
 		case "userEmail":
 			return SiteUser.staticSolrStrUserEmail(siteRequest_, (String)o);
 		case "userFirstName":
@@ -885,6 +821,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 			return SiteUser.staticSolrStrUserLastName(siteRequest_, (String)o);
 		case "userFullName":
 			return SiteUser.staticSolrStrUserFullName(siteRequest_, (String)o);
+		case "seeArchived":
+			return SiteUser.staticSolrStrSeeArchived(siteRequest_, (Boolean)o);
+		case "seeDeleted":
+			return SiteUser.staticSolrStrSeeDeleted(siteRequest_, (Boolean)o);
 			default:
 				return BaseModel.staticSolrStrBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -901,10 +841,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		switch(entityVar) {
 		case "userKeys":
 			return SiteUser.staticSolrFqUserKeys(siteRequest_, o);
+		case "userId":
+			return SiteUser.staticSolrFqUserId(siteRequest_, o);
 		case "userName":
 			return SiteUser.staticSolrFqUserName(siteRequest_, o);
-		case "sessionId":
-			return SiteUser.staticSolrFqSessionId(siteRequest_, o);
 		case "userEmail":
 			return SiteUser.staticSolrFqUserEmail(siteRequest_, o);
 		case "userFirstName":
@@ -913,6 +853,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 			return SiteUser.staticSolrFqUserLastName(siteRequest_, o);
 		case "userFullName":
 			return SiteUser.staticSolrFqUserFullName(siteRequest_, o);
+		case "seeArchived":
+			return SiteUser.staticSolrFqSeeArchived(siteRequest_, o);
+		case "seeDeleted":
+			return SiteUser.staticSolrFqSeeDeleted(siteRequest_, o);
 			default:
 				return BaseModel.staticSolrFqBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -921,58 +865,6 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	/////////////
 	// define //
 	/////////////
-
-	@Override public boolean defineForClass(String var, String val) {
-		String[] vars = StringUtils.split(var, ".");
-		Object o = null;
-		if(val != null) {
-			for(String v : vars) {
-				if(o == null)
-					o = defineSiteUser(v, val);
-				else if(o instanceof BaseModel) {
-					BaseModel oBaseModel = (BaseModel)o;
-					o = oBaseModel.defineForClass(v, val);
-				}
-			}
-		}
-		return o != null;
-	}
-	public Object defineSiteUser(String var, String val) {
-		switch(var.toLowerCase()) {
-			case "username":
-				if(val != null)
-					setUserName(val);
-				saves.add("userName");
-				return val;
-			case "sessionid":
-				if(val != null)
-					setSessionId(val);
-				saves.add("sessionId");
-				return val;
-			case "useremail":
-				if(val != null)
-					setUserEmail(val);
-				saves.add("userEmail");
-				return val;
-			case "userfirstname":
-				if(val != null)
-					setUserFirstName(val);
-				saves.add("userFirstName");
-				return val;
-			case "userlastname":
-				if(val != null)
-					setUserLastName(val);
-				saves.add("userLastName");
-				return val;
-			case "userfullname":
-				if(val != null)
-					setUserFullName(val);
-				saves.add("userFullName");
-				return val;
-			default:
-				return super.defineBaseModel(var, val);
-		}
-	}
 
 	@Override public boolean defineForClass(String var, Object val) {
 		String[] vars = StringUtils.split(var, ".");
@@ -991,15 +883,15 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	}
 	public Object defineSiteUser(String var, Object val) {
 		switch(var.toLowerCase()) {
+			case "userid":
+				if(val instanceof String)
+					setUserId((String)val);
+				saves.add("userId");
+				return val;
 			case "username":
 				if(val instanceof String)
 					setUserName((String)val);
 				saves.add("userName");
-				return val;
-			case "sessionid":
-				if(val instanceof String)
-					setSessionId((String)val);
-				saves.add("sessionId");
 				return val;
 			case "useremail":
 				if(val instanceof String)
@@ -1020,6 +912,16 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 				if(val instanceof String)
 					setUserFullName((String)val);
 				saves.add("userFullName");
+				return val;
+			case "seearchived":
+				if(val instanceof Boolean)
+					setSeeArchived((Boolean)val);
+				saves.add("seeArchived");
+				return val;
+			case "seedeleted":
+				if(val instanceof Boolean)
+					setSeeDeleted((Boolean)val);
+				saves.add("seeDeleted");
 				return val;
 			default:
 				return super.defineBaseModel(var, val);
@@ -1044,16 +946,16 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 					oSiteUser.userKeys.addAll(userKeys);
 			}
 
+			if(saves.contains("userId")) {
+				String userId = (String)solrDocument.get("userId_indexedstored_string");
+				if(userId != null)
+					oSiteUser.setUserId(userId);
+			}
+
 			if(saves.contains("userName")) {
 				String userName = (String)solrDocument.get("userName_indexedstored_string");
 				if(userName != null)
 					oSiteUser.setUserName(userName);
-			}
-
-			if(saves.contains("sessionId")) {
-				String sessionId = (String)solrDocument.get("sessionId_indexedstored_string");
-				if(sessionId != null)
-					oSiteUser.setSessionId(sessionId);
 			}
 
 			if(saves.contains("userEmail")) {
@@ -1079,6 +981,18 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 				if(userFullName != null)
 					oSiteUser.setUserFullName(userFullName);
 			}
+
+			if(saves.contains("seeArchived")) {
+				Boolean seeArchived = (Boolean)solrDocument.get("seeArchived_indexedstored_boolean");
+				if(seeArchived != null)
+					oSiteUser.setSeeArchived(seeArchived);
+			}
+
+			if(saves.contains("seeDeleted")) {
+				Boolean seeDeleted = (Boolean)solrDocument.get("seeDeleted_indexedstored_boolean");
+				if(seeDeleted != null)
+					oSiteUser.setSeeDeleted(seeDeleted);
+			}
 		}
 
 		super.populateBaseModel(solrDocument);
@@ -1090,11 +1004,11 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 				document.addField("userKeys_indexedstored_longs", o);
 			}
 		}
+		if(userId != null) {
+			document.addField("userId_indexedstored_string", userId);
+		}
 		if(userName != null) {
 			document.addField("userName_indexedstored_string", userName);
-		}
-		if(sessionId != null) {
-			document.addField("sessionId_indexedstored_string", sessionId);
 		}
 		if(userEmail != null) {
 			document.addField("userEmail_indexedstored_string", userEmail);
@@ -1108,6 +1022,12 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		if(userFullName != null) {
 			document.addField("userFullName_indexedstored_string", userFullName);
 		}
+		if(seeArchived != null) {
+			document.addField("seeArchived_indexedstored_boolean", seeArchived);
+		}
+		if(seeDeleted != null) {
+			document.addField("seeDeleted_indexedstored_boolean", seeDeleted);
+		}
 		super.indexBaseModel(document);
 
 	}
@@ -1116,10 +1036,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		switch(entityVar) {
 			case "userKeys":
 				return "userKeys_indexedstored_longs";
+			case "userId":
+				return "userId_indexedstored_string";
 			case "userName":
 				return "userName_indexedstored_string";
-			case "sessionId":
-				return "sessionId_indexedstored_string";
 			case "userEmail":
 				return "userEmail_indexedstored_string";
 			case "userFirstName":
@@ -1128,6 +1048,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 				return "userLastName_indexedstored_string";
 			case "userFullName":
 				return "userFullName_indexedstored_string";
+			case "seeArchived":
+				return "seeArchived_indexedstored_boolean";
+			case "seeDeleted":
+				return "seeDeleted_indexedstored_boolean";
 			default:
 				return BaseModel.varIndexedBaseModel(entityVar);
 		}
@@ -1160,12 +1084,14 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		Optional.ofNullable((List<?>)solrDocument.get("userKeys_indexedstored_longs")).orElse(Arrays.asList()).stream().filter(v -> v != null).forEach(v -> {
 			oSiteUser.addUserKeys(v.toString());
 		});
+		oSiteUser.setUserId(Optional.ofNullable(solrDocument.get("userId_indexedstored_string")).map(v -> v.toString()).orElse(null));
 		oSiteUser.setUserName(Optional.ofNullable(solrDocument.get("userName_indexedstored_string")).map(v -> v.toString()).orElse(null));
-		oSiteUser.setSessionId(Optional.ofNullable(solrDocument.get("sessionId_indexedstored_string")).map(v -> v.toString()).orElse(null));
 		oSiteUser.setUserEmail(Optional.ofNullable(solrDocument.get("userEmail_indexedstored_string")).map(v -> v.toString()).orElse(null));
 		oSiteUser.setUserFirstName(Optional.ofNullable(solrDocument.get("userFirstName_indexedstored_string")).map(v -> v.toString()).orElse(null));
 		oSiteUser.setUserLastName(Optional.ofNullable(solrDocument.get("userLastName_indexedstored_string")).map(v -> v.toString()).orElse(null));
 		oSiteUser.setUserFullName(Optional.ofNullable(solrDocument.get("userFullName_indexedstored_string")).map(v -> v.toString()).orElse(null));
+		oSiteUser.setSeeArchived(Optional.ofNullable(solrDocument.get("seeArchived_indexedstored_boolean")).map(v -> v.toString()).orElse(null));
+		oSiteUser.setSeeDeleted(Optional.ofNullable(solrDocument.get("seeDeleted_indexedstored_boolean")).map(v -> v.toString()).orElse(null));
 
 		super.storeBaseModel(solrDocument);
 	}
@@ -1181,10 +1107,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 			SiteUser original = (SiteUser)o;
 			if(!Objects.equals(userKeys, original.getUserKeys()))
 				apiRequest.addVars("userKeys");
+			if(!Objects.equals(userId, original.getUserId()))
+				apiRequest.addVars("userId");
 			if(!Objects.equals(userName, original.getUserName()))
 				apiRequest.addVars("userName");
-			if(!Objects.equals(sessionId, original.getSessionId()))
-				apiRequest.addVars("sessionId");
 			if(!Objects.equals(userEmail, original.getUserEmail()))
 				apiRequest.addVars("userEmail");
 			if(!Objects.equals(userFirstName, original.getUserFirstName()))
@@ -1193,36 +1119,12 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 				apiRequest.addVars("userLastName");
 			if(!Objects.equals(userFullName, original.getUserFullName()))
 				apiRequest.addVars("userFullName");
+			if(!Objects.equals(seeArchived, original.getSeeArchived()))
+				apiRequest.addVars("seeArchived");
+			if(!Objects.equals(seeDeleted, original.getSeeDeleted()))
+				apiRequest.addVars("seeDeleted");
 			super.apiRequestBaseModel();
 		}
-	}
-
-	//////////////
-	// hashCode //
-	//////////////
-
-	@Override public int hashCode() {
-		return Objects.hash(super.hashCode(), userKeys, userName, sessionId, userEmail, userFirstName, userLastName, userFullName);
-	}
-
-	////////////
-	// equals //
-	////////////
-
-	@Override public boolean equals(Object o) {
-		if(this == o)
-			return true;
-		if(!(o instanceof SiteUser))
-			return false;
-		SiteUser that = (SiteUser)o;
-		return super.equals(o)
-				&& Objects.equals( userKeys, that.userKeys )
-				&& Objects.equals( userName, that.userName )
-				&& Objects.equals( sessionId, that.sessionId )
-				&& Objects.equals( userEmail, that.userEmail )
-				&& Objects.equals( userFirstName, that.userFirstName )
-				&& Objects.equals( userLastName, that.userLastName )
-				&& Objects.equals( userFullName, that.userFullName );
 	}
 
 	//////////////
@@ -1234,21 +1136,25 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		sb.append(super.toString() + "\n");
 		sb.append("SiteUser { ");
 		sb.append( "userKeys: " ).append(userKeys);
+		sb.append( ", userId: \"" ).append(userId).append( "\"" );
 		sb.append( ", userName: \"" ).append(userName).append( "\"" );
-		sb.append( ", sessionId: \"" ).append(sessionId).append( "\"" );
 		sb.append( ", userEmail: \"" ).append(userEmail).append( "\"" );
 		sb.append( ", userFirstName: \"" ).append(userFirstName).append( "\"" );
 		sb.append( ", userLastName: \"" ).append(userLastName).append( "\"" );
 		sb.append( ", userFullName: \"" ).append(userFullName).append( "\"" );
+		sb.append( ", seeArchived: " ).append(seeArchived);
+		sb.append( ", seeDeleted: " ).append(seeDeleted);
 		sb.append(" }");
 		return sb.toString();
 	}
 
 	public static final String VAR_userKeys = "userKeys";
+	public static final String VAR_userId = "userId";
 	public static final String VAR_userName = "userName";
-	public static final String VAR_sessionId = "sessionId";
 	public static final String VAR_userEmail = "userEmail";
 	public static final String VAR_userFirstName = "userFirstName";
 	public static final String VAR_userLastName = "userLastName";
 	public static final String VAR_userFullName = "userFullName";
+	public static final String VAR_seeArchived = "seeArchived";
+	public static final String VAR_seeDeleted = "seeDeleted";
 }

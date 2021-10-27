@@ -61,8 +61,6 @@ public abstract class SearchListGen<DEV> {
 	@JsonIgnore
 	@JsonInclude(Include.NON_NULL)
 	protected Class<?> c;
-	@JsonIgnore
-	public Wrap<Class<?>> cWrap = new Wrap<Class<?>>().var("c").o(c);
 
 	/**	<br/> The entity c
 	 *  is defined as null before being initialized. 
@@ -78,19 +76,16 @@ public abstract class SearchListGen<DEV> {
 
 	public void setC(Class<?> c) {
 		this.c = c;
-		this.cWrap.alreadyInitialized = true;
 	}
 	public static Class<?> staticSetC(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
 	protected SearchList cInit() {
-		if(!cWrap.alreadyInitialized) {
+		Wrap<Class<?>> cWrap = new Wrap<Class<?>>().var("c");
+		if(c == null) {
 			_c(cWrap);
-			if(c == null)
-				setC(cWrap.o);
-			cWrap.o(null);
+			setC(cWrap.o);
 		}
-		cWrap.alreadyInitialized(true);
 		return (SearchList)this;
 	}
 
@@ -104,8 +99,6 @@ public abstract class SearchListGen<DEV> {
 	@JsonIgnore
 	@JsonInclude(Include.NON_NULL)
 	protected SiteRequestEnUS siteRequest_;
-	@JsonIgnore
-	public Wrap<SiteRequestEnUS> siteRequest_Wrap = new Wrap<SiteRequestEnUS>().var("siteRequest_").o(siteRequest_);
 
 	/**	<br/> The entity siteRequest_
 	 *  is defined as null before being initialized. 
@@ -121,19 +114,16 @@ public abstract class SearchListGen<DEV> {
 
 	public void setSiteRequest_(SiteRequestEnUS siteRequest_) {
 		this.siteRequest_ = siteRequest_;
-		this.siteRequest_Wrap.alreadyInitialized = true;
 	}
 	public static SiteRequestEnUS staticSetSiteRequest_(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
 	protected SearchList siteRequest_Init() {
-		if(!siteRequest_Wrap.alreadyInitialized) {
+		Wrap<SiteRequestEnUS> siteRequest_Wrap = new Wrap<SiteRequestEnUS>().var("siteRequest_");
+		if(siteRequest_ == null) {
 			_siteRequest_(siteRequest_Wrap);
-			if(siteRequest_ == null)
-				setSiteRequest_(siteRequest_Wrap.o);
-			siteRequest_Wrap.o(null);
+			setSiteRequest_(siteRequest_Wrap.o);
 		}
-		siteRequest_Wrap.alreadyInitialized(true);
 		return (SearchList)this;
 	}
 
@@ -147,8 +137,6 @@ public abstract class SearchListGen<DEV> {
 	@JsonIgnore
 	@JsonInclude(Include.NON_NULL)
 	protected Boolean store;
-	@JsonIgnore
-	public Wrap<Boolean> storeWrap = new Wrap<Boolean>().var("store").o(store);
 
 	/**	<br/> The entity store
 	 *  is defined as null before being initialized. 
@@ -164,24 +152,20 @@ public abstract class SearchListGen<DEV> {
 
 	public void setStore(Boolean store) {
 		this.store = store;
-		this.storeWrap.alreadyInitialized = true;
 	}
 	@JsonIgnore
 	public void setStore(String o) {
 		this.store = SearchList.staticSetStore(siteRequest_, o);
-		this.storeWrap.alreadyInitialized = true;
 	}
 	public static Boolean staticSetStore(SiteRequestEnUS siteRequest_, String o) {
 		return Boolean.parseBoolean(o);
 	}
 	protected SearchList storeInit() {
-		if(!storeWrap.alreadyInitialized) {
+		Wrap<Boolean> storeWrap = new Wrap<Boolean>().var("store");
+		if(store == null) {
 			_store(storeWrap);
-			if(store == null)
-				setStore(storeWrap.o);
-			storeWrap.o(null);
+			setStore(storeWrap.o);
 		}
-		storeWrap.alreadyInitialized(true);
 		return (SearchList)this;
 	}
 
@@ -197,22 +181,6 @@ public abstract class SearchListGen<DEV> {
 		return SearchList.staticSolrStrStore(siteRequest_, SearchList.staticSolrStore(siteRequest_, SearchList.staticSetStore(siteRequest_, o)));
 	}
 
-	public Boolean solrStore() {
-		return SearchList.staticSolrStore(siteRequest_, store);
-	}
-
-	public String strStore() {
-		return store == null ? "" : store.toString();
-	}
-
-	public Boolean sqlStore() {
-		return store;
-	}
-
-	public String jsonStore() {
-		return store == null ? "" : store.toString();
-	}
-
 	//////////////
 	// populate //
 	//////////////
@@ -223,8 +191,6 @@ public abstract class SearchListGen<DEV> {
 	@JsonIgnore
 	@JsonInclude(Include.NON_NULL)
 	protected Boolean populate;
-	@JsonIgnore
-	public Wrap<Boolean> populateWrap = new Wrap<Boolean>().var("populate").o(populate);
 
 	/**	<br/> The entity populate
 	 *  is defined as null before being initialized. 
@@ -240,24 +206,20 @@ public abstract class SearchListGen<DEV> {
 
 	public void setPopulate(Boolean populate) {
 		this.populate = populate;
-		this.populateWrap.alreadyInitialized = true;
 	}
 	@JsonIgnore
 	public void setPopulate(String o) {
 		this.populate = SearchList.staticSetPopulate(siteRequest_, o);
-		this.populateWrap.alreadyInitialized = true;
 	}
 	public static Boolean staticSetPopulate(SiteRequestEnUS siteRequest_, String o) {
 		return Boolean.parseBoolean(o);
 	}
 	protected SearchList populateInit() {
-		if(!populateWrap.alreadyInitialized) {
+		Wrap<Boolean> populateWrap = new Wrap<Boolean>().var("populate");
+		if(populate == null) {
 			_populate(populateWrap);
-			if(populate == null)
-				setPopulate(populateWrap.o);
-			populateWrap.o(null);
+			setPopulate(populateWrap.o);
 		}
-		populateWrap.alreadyInitialized(true);
 		return (SearchList)this;
 	}
 
@@ -273,22 +235,6 @@ public abstract class SearchListGen<DEV> {
 		return SearchList.staticSolrStrPopulate(siteRequest_, SearchList.staticSolrPopulate(siteRequest_, SearchList.staticSetPopulate(siteRequest_, o)));
 	}
 
-	public Boolean solrPopulate() {
-		return SearchList.staticSolrPopulate(siteRequest_, populate);
-	}
-
-	public String strPopulate() {
-		return populate == null ? "" : populate.toString();
-	}
-
-	public Boolean sqlPopulate() {
-		return populate;
-	}
-
-	public String jsonPopulate() {
-		return populate == null ? "" : populate.toString();
-	}
-
 	////////////
 	// fields //
 	////////////
@@ -299,8 +245,6 @@ public abstract class SearchListGen<DEV> {
 	@JsonIgnore
 	@JsonInclude(Include.NON_NULL)
 	protected List<String> fields = new ArrayList<String>();
-	@JsonIgnore
-	public Wrap<List<String>> fieldsWrap = new Wrap<List<String>>().var("fields").o(fields);
 
 	/**	<br/> The entity fields
 	 *  It is constructed before being initialized with the constructor by default List<String>(). 
@@ -316,7 +260,6 @@ public abstract class SearchListGen<DEV> {
 
 	public void setFields(List<String> fields) {
 		this.fields = fields;
-		this.fieldsWrap.alreadyInitialized = true;
 	}
 	public static String staticSetFields(SiteRequestEnUS siteRequest_, String o) {
 		return o;
@@ -341,10 +284,7 @@ public abstract class SearchListGen<DEV> {
 		}
 	}
 	protected SearchList fieldsInit() {
-		if(!fieldsWrap.alreadyInitialized) {
-			_fields(fields);
-		}
-		fieldsWrap.alreadyInitialized(true);
+		_fields(fields);
 		return (SearchList)this;
 	}
 
@@ -360,26 +300,6 @@ public abstract class SearchListGen<DEV> {
 		return SearchList.staticSolrStrFields(siteRequest_, SearchList.staticSolrFields(siteRequest_, SearchList.staticSetFields(siteRequest_, o)));
 	}
 
-	public List<String> solrFields() {
-		List<String> l = new ArrayList<String>();
-		for(String o : fields) {
-			l.add(SearchList.staticSolrFields(siteRequest_, o));
-		}
-		return l;
-	}
-
-	public String strFields() {
-		return fields == null ? "" : fields.toString();
-	}
-
-	public List<String> sqlFields() {
-		return fields;
-	}
-
-	public String jsonFields() {
-		return fields == null ? "" : fields.toString();
-	}
-
 	///////////////
 	// solrQuery //
 	///////////////
@@ -390,8 +310,6 @@ public abstract class SearchListGen<DEV> {
 	@JsonIgnore
 	@JsonInclude(Include.NON_NULL)
 	protected SolrQuery solrQuery = new SolrQuery();
-	@JsonIgnore
-	public Wrap<SolrQuery> solrQueryWrap = new Wrap<SolrQuery>().var("solrQuery").o(solrQuery);
 
 	/**	<br/> The entity solrQuery
 	 *  It is constructed before being initialized with the constructor by default SolrQuery(). 
@@ -407,16 +325,12 @@ public abstract class SearchListGen<DEV> {
 
 	public void setSolrQuery(SolrQuery solrQuery) {
 		this.solrQuery = solrQuery;
-		this.solrQueryWrap.alreadyInitialized = true;
 	}
 	public static SolrQuery staticSetSolrQuery(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
 	protected SearchList solrQueryInit() {
-		if(!solrQueryWrap.alreadyInitialized) {
-			_solrQuery(solrQuery);
-		}
-		solrQueryWrap.alreadyInitialized(true);
+		_solrQuery(solrQuery);
 		return (SearchList)this;
 	}
 
@@ -430,8 +344,6 @@ public abstract class SearchListGen<DEV> {
 	@JsonIgnore
 	@JsonInclude(Include.NON_NULL)
 	protected QueryResponse queryResponse;
-	@JsonIgnore
-	public Wrap<QueryResponse> queryResponseWrap = new Wrap<QueryResponse>().var("queryResponse").o(queryResponse);
 
 	/**	<br/> The entity queryResponse
 	 *  is defined as null before being initialized. 
@@ -447,26 +359,20 @@ public abstract class SearchListGen<DEV> {
 
 	public void setQueryResponse(QueryResponse queryResponse) {
 		this.queryResponse = queryResponse;
-		this.queryResponseWrap.alreadyInitialized = true;
 	}
 	public static QueryResponse staticSetQueryResponse(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
 	protected Future<QueryResponse> queryResponsePromise() {
 		Promise<QueryResponse> promise = Promise.promise();
-		if(!queryResponseWrap.alreadyInitialized) {
-			Promise<QueryResponse> promise2 = Promise.promise();
-			_queryResponse(promise2);
-			promise2.future().onSuccess(o -> {
-				setQueryResponse(o);
-				queryResponseWrap.alreadyInitialized(true);
-				promise.complete(o);
-			}).onFailure(ex -> {
-				promise.fail(ex);
-			});
-		} else {
-			promise.complete();
-		}
+		Promise<QueryResponse> promise2 = Promise.promise();
+		_queryResponse(promise2);
+		promise2.future().onSuccess(o -> {
+			setQueryResponse(o);
+			promise.complete(o);
+		}).onFailure(ex -> {
+			promise.fail(ex);
+		});
 		return promise.future();
 	}
 
@@ -480,8 +386,6 @@ public abstract class SearchListGen<DEV> {
 	@JsonIgnore
 	@JsonInclude(Include.NON_NULL)
 	protected SolrDocumentList solrDocumentList;
-	@JsonIgnore
-	public Wrap<SolrDocumentList> solrDocumentListWrap = new Wrap<SolrDocumentList>().var("solrDocumentList").o(solrDocumentList);
 
 	/**	<br/> The entity solrDocumentList
 	 *  is defined as null before being initialized. 
@@ -497,19 +401,16 @@ public abstract class SearchListGen<DEV> {
 
 	public void setSolrDocumentList(SolrDocumentList solrDocumentList) {
 		this.solrDocumentList = solrDocumentList;
-		this.solrDocumentListWrap.alreadyInitialized = true;
 	}
 	public static SolrDocumentList staticSetSolrDocumentList(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
 	protected SearchList solrDocumentListInit() {
-		if(!solrDocumentListWrap.alreadyInitialized) {
+		Wrap<SolrDocumentList> solrDocumentListWrap = new Wrap<SolrDocumentList>().var("solrDocumentList");
+		if(solrDocumentList == null) {
 			_solrDocumentList(solrDocumentListWrap);
-			if(solrDocumentList == null)
-				setSolrDocumentList(solrDocumentListWrap.o);
-			solrDocumentListWrap.o(null);
+			setSolrDocumentList(solrDocumentListWrap.o);
 		}
-		solrDocumentListWrap.alreadyInitialized(true);
 		return (SearchList)this;
 	}
 
@@ -524,8 +425,6 @@ public abstract class SearchListGen<DEV> {
 	@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 	@JsonInclude(Include.NON_NULL)
 	protected List<DEV> list = new ArrayList<DEV>();
-	@JsonIgnore
-	public Wrap<List<DEV>> listWrap = new Wrap<List<DEV>>().var("list").o(list);
 
 	/**	<br/> The entity list
 	 *  It is constructed before being initialized with the constructor by default List<DEV>(). 
@@ -541,7 +440,6 @@ public abstract class SearchListGen<DEV> {
 
 	public void setList(List<DEV> list) {
 		this.list = list;
-		this.listWrap.alreadyInitialized = true;
 	}
 	public SearchList addList(DEV...objets) {
 		for(DEV o : objets) {
@@ -555,10 +453,7 @@ public abstract class SearchListGen<DEV> {
 		return (SearchList)this;
 	}
 	protected SearchList listInit() {
-		if(!listWrap.alreadyInitialized) {
-			_list(list);
-		}
-		listWrap.alreadyInitialized(true);
+		_list(list);
 		return (SearchList)this;
 	}
 
@@ -572,8 +467,6 @@ public abstract class SearchListGen<DEV> {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected Object first;
-	@JsonIgnore
-	public Wrap<Object> firstWrap = new Wrap<Object>().var("first").o(first);
 
 	/**	<br/> The entity first
 	 *  is defined as null before being initialized. 
@@ -589,19 +482,16 @@ public abstract class SearchListGen<DEV> {
 
 	public void setFirst(Object first) {
 		this.first = first;
-		this.firstWrap.alreadyInitialized = true;
 	}
 	public static Object staticSetFirst(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
 	protected SearchList firstInit() {
-		if(!firstWrap.alreadyInitialized) {
+		Wrap<Object> firstWrap = new Wrap<Object>().var("first");
+		if(first == null) {
 			_first(firstWrap);
-			if(first == null)
-				setFirst(firstWrap.o);
-			firstWrap.o(null);
+			setFirst(firstWrap.o);
 		}
-		firstWrap.alreadyInitialized(true);
 		return (SearchList)this;
 	}
 
@@ -609,16 +499,9 @@ public abstract class SearchListGen<DEV> {
 	// initDeep //
 	//////////////
 
-	protected boolean alreadyInitializedSearchList = false;
-
 	public Future<Void> promiseDeepSearchList(SiteRequestEnUS siteRequest_) {
 		setSiteRequest_(siteRequest_);
-		if(!alreadyInitializedSearchList) {
-			alreadyInitializedSearchList = true;
-			return promiseDeepSearchList();
-		} else {
-			return Future.succeededFuture();
-		}
+		return promiseDeepSearchList();
 	}
 
 	public Future<Void> promiseDeepSearchList() {
@@ -740,23 +623,23 @@ public abstract class SearchListGen<DEV> {
 	}
 
 	///////////////
-	// attribute //
+	// relate //
 	///////////////
 
-	public boolean attributeForClass(String var, Object val) {
+	public boolean relateForClass(String var, Object val) {
 		String[] vars = StringUtils.split(var, ".");
 		Object o = null;
 		for(String v : vars) {
 			if(o == null)
-				o = attributeSearchList(v, val);
+				o = relateSearchList(v, val);
 			else if(o instanceof BaseModel) {
 				BaseModel baseModel = (BaseModel)o;
-				o = baseModel.attributeForClass(v, val);
+				o = baseModel.relateForClass(v, val);
 			}
 		}
 		return o != null;
 	}
-	public Object attributeSearchList(String var, Object val) {
+	public Object relateSearchList(String var, Object val) {
 		SearchList oSearchList = (SearchList)this;
 		switch(var) {
 			default:
@@ -848,28 +731,6 @@ public abstract class SearchListGen<DEV> {
 	// define //
 	/////////////
 
-	public boolean defineForClass(String var, String val) {
-		String[] vars = StringUtils.split(var, ".");
-		Object o = null;
-		if(val != null) {
-			for(String v : vars) {
-				if(o == null)
-					o = defineSearchList(v, val);
-				else if(o instanceof BaseModel) {
-					BaseModel oBaseModel = (BaseModel)o;
-					o = oBaseModel.defineForClass(v, val);
-				}
-			}
-		}
-		return o != null;
-	}
-	public Object defineSearchList(String var, String val) {
-		switch(var.toLowerCase()) {
-			default:
-				return null;
-		}
-	}
-
 	public boolean defineForClass(String var, Object val) {
 		String[] vars = StringUtils.split(var, ".");
 		Object o = null;
@@ -902,27 +763,6 @@ public abstract class SearchListGen<DEV> {
 		if(o != null && o instanceof SearchList) {
 			SearchList original = (SearchList)o;
 		}
-	}
-
-	//////////////
-	// hashCode //
-	//////////////
-
-	@Override public int hashCode() {
-		return Objects.hash();
-	}
-
-	////////////
-	// equals //
-	////////////
-
-	@Override public boolean equals(Object o) {
-		if(this == o)
-			return true;
-		if(!(o instanceof SearchList))
-			return false;
-		SearchList that = (SearchList)o;
-		return true;
 	}
 
 	//////////////

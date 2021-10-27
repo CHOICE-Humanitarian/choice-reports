@@ -43,6 +43,7 @@ import io.vertx.core.Promise;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.commons.text.StringEscapeUtils;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import org.choicehumanitarian.reports.enus.model.report.ChoiceReport;
 import org.apache.solr.client.solrj.SolrClient;
 import io.vertx.core.json.JsonArray;
 import org.apache.solr.common.SolrDocument;
@@ -56,9 +57,6 @@ import org.choicehumanitarian.reports.enus.config.ConfigKeys;
  **/
 public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	protected static final Logger LOG = LoggerFactory.getLogger(ChoiceDonor.class);
-
-	public static final List<String> ROLES = Arrays.asList("SiteAdmin");
-	public static final List<String> ROLE_READS = Arrays.asList("");
 
 	public static final String ChoiceDonor_AName = "a donor";
 	public static final String ChoiceDonor_This = "this ";
@@ -93,8 +91,6 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected String donorFullName;
-	@JsonIgnore
-	public Wrap<String> donorFullNameWrap = new Wrap<String>().var("donorFullName").o(donorFullName);
 
 	/**	<br/> The entity donorFullName
 	 *  is defined as null before being initialized. 
@@ -109,19 +105,16 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	}
 	public void setDonorFullName(String o) {
 		this.donorFullName = ChoiceDonor.staticSetDonorFullName(siteRequest_, o);
-		this.donorFullNameWrap.alreadyInitialized = true;
 	}
 	public static String staticSetDonorFullName(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 	protected ChoiceDonor donorFullNameInit() {
-		if(!donorFullNameWrap.alreadyInitialized) {
+		Wrap<String> donorFullNameWrap = new Wrap<String>().var("donorFullName");
+		if(donorFullName == null) {
 			_donorFullName(donorFullNameWrap);
-			if(donorFullName == null)
-				setDonorFullName(donorFullNameWrap.o);
-			donorFullNameWrap.o(null);
+			setDonorFullName(donorFullNameWrap.o);
 		}
-		donorFullNameWrap.alreadyInitialized(true);
 		return (ChoiceDonor)this;
 	}
 
@@ -137,28 +130,8 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return ChoiceDonor.staticSolrStrDonorFullName(siteRequest_, ChoiceDonor.staticSolrDonorFullName(siteRequest_, ChoiceDonor.staticSetDonorFullName(siteRequest_, o)));
 	}
 
-	public String solrDonorFullName() {
-		return ChoiceDonor.staticSolrDonorFullName(siteRequest_, donorFullName);
-	}
-
-	public String strDonorFullName() {
-		return donorFullName == null ? "" : donorFullName;
-	}
-
 	public String sqlDonorFullName() {
 		return donorFullName;
-	}
-
-	public String jsonDonorFullName() {
-		return donorFullName == null ? "" : donorFullName;
-	}
-
-	public String htmTooltipDonorFullName() {
-		return null;
-	}
-
-	public String htmlDonorFullName() {
-		return donorFullName == null ? "" : StringEscapeUtils.escapeHtml4(strDonorFullName());
 	}
 
 	/////////////////////
@@ -171,8 +144,6 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected String donorParentName;
-	@JsonIgnore
-	public Wrap<String> donorParentNameWrap = new Wrap<String>().var("donorParentName").o(donorParentName);
 
 	/**	<br/> The entity donorParentName
 	 *  is defined as null before being initialized. 
@@ -187,19 +158,16 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	}
 	public void setDonorParentName(String o) {
 		this.donorParentName = ChoiceDonor.staticSetDonorParentName(siteRequest_, o);
-		this.donorParentNameWrap.alreadyInitialized = true;
 	}
 	public static String staticSetDonorParentName(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 	protected ChoiceDonor donorParentNameInit() {
-		if(!donorParentNameWrap.alreadyInitialized) {
+		Wrap<String> donorParentNameWrap = new Wrap<String>().var("donorParentName");
+		if(donorParentName == null) {
 			_donorParentName(donorParentNameWrap);
-			if(donorParentName == null)
-				setDonorParentName(donorParentNameWrap.o);
-			donorParentNameWrap.o(null);
+			setDonorParentName(donorParentNameWrap.o);
 		}
-		donorParentNameWrap.alreadyInitialized(true);
 		return (ChoiceDonor)this;
 	}
 
@@ -215,28 +183,8 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return ChoiceDonor.staticSolrStrDonorParentName(siteRequest_, ChoiceDonor.staticSolrDonorParentName(siteRequest_, ChoiceDonor.staticSetDonorParentName(siteRequest_, o)));
 	}
 
-	public String solrDonorParentName() {
-		return ChoiceDonor.staticSolrDonorParentName(siteRequest_, donorParentName);
-	}
-
-	public String strDonorParentName() {
-		return donorParentName == null ? "" : donorParentName;
-	}
-
 	public String sqlDonorParentName() {
 		return donorParentName;
-	}
-
-	public String jsonDonorParentName() {
-		return donorParentName == null ? "" : donorParentName;
-	}
-
-	public String htmTooltipDonorParentName() {
-		return null;
-	}
-
-	public String htmlDonorParentName() {
-		return donorParentName == null ? "" : StringEscapeUtils.escapeHtml4(strDonorParentName());
 	}
 
 	/////////////
@@ -250,8 +198,6 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	@JsonSerialize(using = ToStringSerializer.class)
 	@JsonInclude(Include.NON_NULL)
 	protected Long donorId;
-	@JsonIgnore
-	public Wrap<Long> donorIdWrap = new Wrap<Long>().var("donorId").o(donorId);
 
 	/**	<br/> The entity donorId
 	 *  is defined as null before being initialized. 
@@ -267,12 +213,10 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 
 	public void setDonorId(Long donorId) {
 		this.donorId = donorId;
-		this.donorIdWrap.alreadyInitialized = true;
 	}
 	@JsonIgnore
 	public void setDonorId(String o) {
 		this.donorId = ChoiceDonor.staticSetDonorId(siteRequest_, o);
-		this.donorIdWrap.alreadyInitialized = true;
 	}
 	public static Long staticSetDonorId(SiteRequestEnUS siteRequest_, String o) {
 		if(NumberUtils.isParsable(o))
@@ -280,13 +224,11 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return null;
 	}
 	protected ChoiceDonor donorIdInit() {
-		if(!donorIdWrap.alreadyInitialized) {
+		Wrap<Long> donorIdWrap = new Wrap<Long>().var("donorId");
+		if(donorId == null) {
 			_donorId(donorIdWrap);
-			if(donorId == null)
-				setDonorId(donorIdWrap.o);
-			donorIdWrap.o(null);
+			setDonorId(donorIdWrap.o);
 		}
-		donorIdWrap.alreadyInitialized(true);
 		return (ChoiceDonor)this;
 	}
 
@@ -302,28 +244,8 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return ChoiceDonor.staticSolrStrDonorId(siteRequest_, ChoiceDonor.staticSolrDonorId(siteRequest_, ChoiceDonor.staticSetDonorId(siteRequest_, o)));
 	}
 
-	public Long solrDonorId() {
-		return ChoiceDonor.staticSolrDonorId(siteRequest_, donorId);
-	}
-
-	public String strDonorId() {
-		return donorId == null ? "" : donorId.toString();
-	}
-
 	public Long sqlDonorId() {
 		return donorId;
-	}
-
-	public String jsonDonorId() {
-		return donorId == null ? "" : donorId.toString();
-	}
-
-	public String htmTooltipDonorId() {
-		return null;
-	}
-
-	public String htmlDonorId() {
-		return donorId == null ? "" : StringEscapeUtils.escapeHtml4(strDonorId());
 	}
 
 	//////////////////////
@@ -336,8 +258,6 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected String donorAttributeId;
-	@JsonIgnore
-	public Wrap<String> donorAttributeIdWrap = new Wrap<String>().var("donorAttributeId").o(donorAttributeId);
 
 	/**	<br/> The entity donorAttributeId
 	 *  is defined as null before being initialized. 
@@ -352,19 +272,16 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	}
 	public void setDonorAttributeId(String o) {
 		this.donorAttributeId = ChoiceDonor.staticSetDonorAttributeId(siteRequest_, o);
-		this.donorAttributeIdWrap.alreadyInitialized = true;
 	}
 	public static String staticSetDonorAttributeId(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 	protected ChoiceDonor donorAttributeIdInit() {
-		if(!donorAttributeIdWrap.alreadyInitialized) {
+		Wrap<String> donorAttributeIdWrap = new Wrap<String>().var("donorAttributeId");
+		if(donorAttributeId == null) {
 			_donorAttributeId(donorAttributeIdWrap);
-			if(donorAttributeId == null)
-				setDonorAttributeId(donorAttributeIdWrap.o);
-			donorAttributeIdWrap.o(null);
+			setDonorAttributeId(donorAttributeIdWrap.o);
 		}
-		donorAttributeIdWrap.alreadyInitialized(true);
 		return (ChoiceDonor)this;
 	}
 
@@ -380,28 +297,8 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return ChoiceDonor.staticSolrStrDonorAttributeId(siteRequest_, ChoiceDonor.staticSolrDonorAttributeId(siteRequest_, ChoiceDonor.staticSetDonorAttributeId(siteRequest_, o)));
 	}
 
-	public String solrDonorAttributeId() {
-		return ChoiceDonor.staticSolrDonorAttributeId(siteRequest_, donorAttributeId);
-	}
-
-	public String strDonorAttributeId() {
-		return donorAttributeId == null ? "" : donorAttributeId;
-	}
-
 	public String sqlDonorAttributeId() {
 		return donorAttributeId;
-	}
-
-	public String jsonDonorAttributeId() {
-		return donorAttributeId == null ? "" : donorAttributeId;
-	}
-
-	public String htmTooltipDonorAttributeId() {
-		return null;
-	}
-
-	public String htmlDonorAttributeId() {
-		return donorAttributeId == null ? "" : StringEscapeUtils.escapeHtml4(strDonorAttributeId());
 	}
 
 	/////////////////
@@ -415,8 +312,6 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	@JsonSerialize(using = ToStringSerializer.class)
 	@JsonInclude(Include.NON_NULL)
 	protected Long donorInKind;
-	@JsonIgnore
-	public Wrap<Long> donorInKindWrap = new Wrap<Long>().var("donorInKind").o(donorInKind);
 
 	/**	<br/> The entity donorInKind
 	 *  is defined as null before being initialized. 
@@ -432,12 +327,10 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 
 	public void setDonorInKind(Long donorInKind) {
 		this.donorInKind = donorInKind;
-		this.donorInKindWrap.alreadyInitialized = true;
 	}
 	@JsonIgnore
 	public void setDonorInKind(String o) {
 		this.donorInKind = ChoiceDonor.staticSetDonorInKind(siteRequest_, o);
-		this.donorInKindWrap.alreadyInitialized = true;
 	}
 	public static Long staticSetDonorInKind(SiteRequestEnUS siteRequest_, String o) {
 		if(NumberUtils.isParsable(o))
@@ -445,13 +338,11 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return null;
 	}
 	protected ChoiceDonor donorInKindInit() {
-		if(!donorInKindWrap.alreadyInitialized) {
+		Wrap<Long> donorInKindWrap = new Wrap<Long>().var("donorInKind");
+		if(donorInKind == null) {
 			_donorInKind(donorInKindWrap);
-			if(donorInKind == null)
-				setDonorInKind(donorInKindWrap.o);
-			donorInKindWrap.o(null);
+			setDonorInKind(donorInKindWrap.o);
 		}
-		donorInKindWrap.alreadyInitialized(true);
 		return (ChoiceDonor)this;
 	}
 
@@ -467,28 +358,8 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return ChoiceDonor.staticSolrStrDonorInKind(siteRequest_, ChoiceDonor.staticSolrDonorInKind(siteRequest_, ChoiceDonor.staticSetDonorInKind(siteRequest_, o)));
 	}
 
-	public Long solrDonorInKind() {
-		return ChoiceDonor.staticSolrDonorInKind(siteRequest_, donorInKind);
-	}
-
-	public String strDonorInKind() {
-		return donorInKind == null ? "" : donorInKind.toString();
-	}
-
 	public Long sqlDonorInKind() {
 		return donorInKind;
-	}
-
-	public String jsonDonorInKind() {
-		return donorInKind == null ? "" : donorInKind.toString();
-	}
-
-	public String htmTooltipDonorInKind() {
-		return null;
-	}
-
-	public String htmlDonorInKind() {
-		return donorInKind == null ? "" : StringEscapeUtils.escapeHtml4(strDonorInKind());
 	}
 
 	////////////////
@@ -502,8 +373,6 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	@JsonSerialize(using = ToStringSerializer.class)
 	@JsonInclude(Include.NON_NULL)
 	protected BigDecimal donorTotal;
-	@JsonIgnore
-	public Wrap<BigDecimal> donorTotalWrap = new Wrap<BigDecimal>().var("donorTotal").o(donorTotal);
 
 	/**	<br/> The entity donorTotal
 	 *  is defined as null before being initialized. 
@@ -519,12 +388,10 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 
 	public void setDonorTotal(BigDecimal donorTotal) {
 		this.donorTotal = donorTotal;
-		this.donorTotalWrap.alreadyInitialized = true;
 	}
 	@JsonIgnore
 	public void setDonorTotal(String o) {
 		this.donorTotal = ChoiceDonor.staticSetDonorTotal(siteRequest_, o);
-		this.donorTotalWrap.alreadyInitialized = true;
 	}
 	public static BigDecimal staticSetDonorTotal(SiteRequestEnUS siteRequest_, String o) {
 		o = StringUtils.removeAll(o, "[^\\d\\.]");
@@ -535,21 +402,17 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	@JsonIgnore
 	public void setDonorTotal(Double o) {
 			this.donorTotal = new BigDecimal(o, MathContext.DECIMAL64).setScale(2, RoundingMode.HALF_UP);
-		this.donorTotalWrap.alreadyInitialized = true;
 	}
 	@JsonIgnore
 	public void setDonorTotal(Integer o) {
 			this.donorTotal = new BigDecimal(o, MathContext.DECIMAL64).setScale(2, RoundingMode.HALF_UP);
-		this.donorTotalWrap.alreadyInitialized = true;
 	}
 	protected ChoiceDonor donorTotalInit() {
-		if(!donorTotalWrap.alreadyInitialized) {
+		Wrap<BigDecimal> donorTotalWrap = new Wrap<BigDecimal>().var("donorTotal");
+		if(donorTotal == null) {
 			_donorTotal(donorTotalWrap);
-			if(donorTotal == null)
-				setDonorTotal(donorTotalWrap.o);
-			donorTotalWrap.o(null);
+			setDonorTotal(donorTotalWrap.o);
 		}
-		donorTotalWrap.alreadyInitialized(true);
 		return (ChoiceDonor)this;
 	}
 
@@ -565,28 +428,8 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return ChoiceDonor.staticSolrStrDonorTotal(siteRequest_, ChoiceDonor.staticSolrDonorTotal(siteRequest_, ChoiceDonor.staticSetDonorTotal(siteRequest_, o)));
 	}
 
-	public Double solrDonorTotal() {
-		return ChoiceDonor.staticSolrDonorTotal(siteRequest_, donorTotal);
-	}
-
-	public String strDonorTotal() {
-		return donorTotal == null ? "" : donorTotal.setScale(2, RoundingMode.HALF_UP).toString();
-	}
-
 	public BigDecimal sqlDonorTotal() {
 		return donorTotal;
-	}
-
-	public String jsonDonorTotal() {
-		return donorTotal == null ? "" : donorTotal.toString();
-	}
-
-	public String htmTooltipDonorTotal() {
-		return null;
-	}
-
-	public String htmlDonorTotal() {
-		return donorTotal == null ? "" : StringEscapeUtils.escapeHtml4(strDonorTotal());
 	}
 
 	//////////////
@@ -600,8 +443,6 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	@JsonSerialize(using = ToStringSerializer.class)
 	@JsonInclude(Include.NON_NULL)
 	protected BigDecimal donorYtd;
-	@JsonIgnore
-	public Wrap<BigDecimal> donorYtdWrap = new Wrap<BigDecimal>().var("donorYtd").o(donorYtd);
 
 	/**	<br/> The entity donorYtd
 	 *  is defined as null before being initialized. 
@@ -617,12 +458,10 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 
 	public void setDonorYtd(BigDecimal donorYtd) {
 		this.donorYtd = donorYtd;
-		this.donorYtdWrap.alreadyInitialized = true;
 	}
 	@JsonIgnore
 	public void setDonorYtd(String o) {
 		this.donorYtd = ChoiceDonor.staticSetDonorYtd(siteRequest_, o);
-		this.donorYtdWrap.alreadyInitialized = true;
 	}
 	public static BigDecimal staticSetDonorYtd(SiteRequestEnUS siteRequest_, String o) {
 		o = StringUtils.removeAll(o, "[^\\d\\.]");
@@ -633,21 +472,17 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	@JsonIgnore
 	public void setDonorYtd(Double o) {
 			this.donorYtd = new BigDecimal(o, MathContext.DECIMAL64).setScale(2, RoundingMode.HALF_UP);
-		this.donorYtdWrap.alreadyInitialized = true;
 	}
 	@JsonIgnore
 	public void setDonorYtd(Integer o) {
 			this.donorYtd = new BigDecimal(o, MathContext.DECIMAL64).setScale(2, RoundingMode.HALF_UP);
-		this.donorYtdWrap.alreadyInitialized = true;
 	}
 	protected ChoiceDonor donorYtdInit() {
-		if(!donorYtdWrap.alreadyInitialized) {
+		Wrap<BigDecimal> donorYtdWrap = new Wrap<BigDecimal>().var("donorYtd");
+		if(donorYtd == null) {
 			_donorYtd(donorYtdWrap);
-			if(donorYtd == null)
-				setDonorYtd(donorYtdWrap.o);
-			donorYtdWrap.o(null);
+			setDonorYtd(donorYtdWrap.o);
 		}
-		donorYtdWrap.alreadyInitialized(true);
 		return (ChoiceDonor)this;
 	}
 
@@ -663,28 +498,8 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return ChoiceDonor.staticSolrStrDonorYtd(siteRequest_, ChoiceDonor.staticSolrDonorYtd(siteRequest_, ChoiceDonor.staticSetDonorYtd(siteRequest_, o)));
 	}
 
-	public Double solrDonorYtd() {
-		return ChoiceDonor.staticSolrDonorYtd(siteRequest_, donorYtd);
-	}
-
-	public String strDonorYtd() {
-		return donorYtd == null ? "" : donorYtd.setScale(2, RoundingMode.HALF_UP).toString();
-	}
-
 	public BigDecimal sqlDonorYtd() {
 		return donorYtd;
-	}
-
-	public String jsonDonorYtd() {
-		return donorYtd == null ? "" : donorYtd.toString();
-	}
-
-	public String htmTooltipDonorYtd() {
-		return null;
-	}
-
-	public String htmlDonorYtd() {
-		return donorYtd == null ? "" : StringEscapeUtils.escapeHtml4(strDonorYtd());
 	}
 
 	/////////////
@@ -698,8 +513,6 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	@JsonSerialize(using = ToStringSerializer.class)
 	@JsonInclude(Include.NON_NULL)
 	protected BigDecimal donorQ1;
-	@JsonIgnore
-	public Wrap<BigDecimal> donorQ1Wrap = new Wrap<BigDecimal>().var("donorQ1").o(donorQ1);
 
 	/**	<br/> The entity donorQ1
 	 *  is defined as null before being initialized. 
@@ -715,12 +528,10 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 
 	public void setDonorQ1(BigDecimal donorQ1) {
 		this.donorQ1 = donorQ1;
-		this.donorQ1Wrap.alreadyInitialized = true;
 	}
 	@JsonIgnore
 	public void setDonorQ1(String o) {
 		this.donorQ1 = ChoiceDonor.staticSetDonorQ1(siteRequest_, o);
-		this.donorQ1Wrap.alreadyInitialized = true;
 	}
 	public static BigDecimal staticSetDonorQ1(SiteRequestEnUS siteRequest_, String o) {
 		o = StringUtils.removeAll(o, "[^\\d\\.]");
@@ -731,21 +542,17 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	@JsonIgnore
 	public void setDonorQ1(Double o) {
 			this.donorQ1 = new BigDecimal(o, MathContext.DECIMAL64).setScale(2, RoundingMode.HALF_UP);
-		this.donorQ1Wrap.alreadyInitialized = true;
 	}
 	@JsonIgnore
 	public void setDonorQ1(Integer o) {
 			this.donorQ1 = new BigDecimal(o, MathContext.DECIMAL64).setScale(2, RoundingMode.HALF_UP);
-		this.donorQ1Wrap.alreadyInitialized = true;
 	}
 	protected ChoiceDonor donorQ1Init() {
-		if(!donorQ1Wrap.alreadyInitialized) {
+		Wrap<BigDecimal> donorQ1Wrap = new Wrap<BigDecimal>().var("donorQ1");
+		if(donorQ1 == null) {
 			_donorQ1(donorQ1Wrap);
-			if(donorQ1 == null)
-				setDonorQ1(donorQ1Wrap.o);
-			donorQ1Wrap.o(null);
+			setDonorQ1(donorQ1Wrap.o);
 		}
-		donorQ1Wrap.alreadyInitialized(true);
 		return (ChoiceDonor)this;
 	}
 
@@ -761,28 +568,8 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return ChoiceDonor.staticSolrStrDonorQ1(siteRequest_, ChoiceDonor.staticSolrDonorQ1(siteRequest_, ChoiceDonor.staticSetDonorQ1(siteRequest_, o)));
 	}
 
-	public Double solrDonorQ1() {
-		return ChoiceDonor.staticSolrDonorQ1(siteRequest_, donorQ1);
-	}
-
-	public String strDonorQ1() {
-		return donorQ1 == null ? "" : donorQ1.setScale(2, RoundingMode.HALF_UP).toString();
-	}
-
 	public BigDecimal sqlDonorQ1() {
 		return donorQ1;
-	}
-
-	public String jsonDonorQ1() {
-		return donorQ1 == null ? "" : donorQ1.toString();
-	}
-
-	public String htmTooltipDonorQ1() {
-		return null;
-	}
-
-	public String htmlDonorQ1() {
-		return donorQ1 == null ? "" : StringEscapeUtils.escapeHtml4(strDonorQ1());
 	}
 
 	/////////////
@@ -796,8 +583,6 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	@JsonSerialize(using = ToStringSerializer.class)
 	@JsonInclude(Include.NON_NULL)
 	protected BigDecimal donorQ2;
-	@JsonIgnore
-	public Wrap<BigDecimal> donorQ2Wrap = new Wrap<BigDecimal>().var("donorQ2").o(donorQ2);
 
 	/**	<br/> The entity donorQ2
 	 *  is defined as null before being initialized. 
@@ -813,12 +598,10 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 
 	public void setDonorQ2(BigDecimal donorQ2) {
 		this.donorQ2 = donorQ2;
-		this.donorQ2Wrap.alreadyInitialized = true;
 	}
 	@JsonIgnore
 	public void setDonorQ2(String o) {
 		this.donorQ2 = ChoiceDonor.staticSetDonorQ2(siteRequest_, o);
-		this.donorQ2Wrap.alreadyInitialized = true;
 	}
 	public static BigDecimal staticSetDonorQ2(SiteRequestEnUS siteRequest_, String o) {
 		o = StringUtils.removeAll(o, "[^\\d\\.]");
@@ -829,21 +612,17 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	@JsonIgnore
 	public void setDonorQ2(Double o) {
 			this.donorQ2 = new BigDecimal(o, MathContext.DECIMAL64).setScale(2, RoundingMode.HALF_UP);
-		this.donorQ2Wrap.alreadyInitialized = true;
 	}
 	@JsonIgnore
 	public void setDonorQ2(Integer o) {
 			this.donorQ2 = new BigDecimal(o, MathContext.DECIMAL64).setScale(2, RoundingMode.HALF_UP);
-		this.donorQ2Wrap.alreadyInitialized = true;
 	}
 	protected ChoiceDonor donorQ2Init() {
-		if(!donorQ2Wrap.alreadyInitialized) {
+		Wrap<BigDecimal> donorQ2Wrap = new Wrap<BigDecimal>().var("donorQ2");
+		if(donorQ2 == null) {
 			_donorQ2(donorQ2Wrap);
-			if(donorQ2 == null)
-				setDonorQ2(donorQ2Wrap.o);
-			donorQ2Wrap.o(null);
+			setDonorQ2(donorQ2Wrap.o);
 		}
-		donorQ2Wrap.alreadyInitialized(true);
 		return (ChoiceDonor)this;
 	}
 
@@ -859,28 +638,8 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return ChoiceDonor.staticSolrStrDonorQ2(siteRequest_, ChoiceDonor.staticSolrDonorQ2(siteRequest_, ChoiceDonor.staticSetDonorQ2(siteRequest_, o)));
 	}
 
-	public Double solrDonorQ2() {
-		return ChoiceDonor.staticSolrDonorQ2(siteRequest_, donorQ2);
-	}
-
-	public String strDonorQ2() {
-		return donorQ2 == null ? "" : donorQ2.setScale(2, RoundingMode.HALF_UP).toString();
-	}
-
 	public BigDecimal sqlDonorQ2() {
 		return donorQ2;
-	}
-
-	public String jsonDonorQ2() {
-		return donorQ2 == null ? "" : donorQ2.toString();
-	}
-
-	public String htmTooltipDonorQ2() {
-		return null;
-	}
-
-	public String htmlDonorQ2() {
-		return donorQ2 == null ? "" : StringEscapeUtils.escapeHtml4(strDonorQ2());
 	}
 
 	/////////////
@@ -894,8 +653,6 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	@JsonSerialize(using = ToStringSerializer.class)
 	@JsonInclude(Include.NON_NULL)
 	protected BigDecimal donorQ3;
-	@JsonIgnore
-	public Wrap<BigDecimal> donorQ3Wrap = new Wrap<BigDecimal>().var("donorQ3").o(donorQ3);
 
 	/**	<br/> The entity donorQ3
 	 *  is defined as null before being initialized. 
@@ -911,12 +668,10 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 
 	public void setDonorQ3(BigDecimal donorQ3) {
 		this.donorQ3 = donorQ3;
-		this.donorQ3Wrap.alreadyInitialized = true;
 	}
 	@JsonIgnore
 	public void setDonorQ3(String o) {
 		this.donorQ3 = ChoiceDonor.staticSetDonorQ3(siteRequest_, o);
-		this.donorQ3Wrap.alreadyInitialized = true;
 	}
 	public static BigDecimal staticSetDonorQ3(SiteRequestEnUS siteRequest_, String o) {
 		o = StringUtils.removeAll(o, "[^\\d\\.]");
@@ -927,21 +682,17 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	@JsonIgnore
 	public void setDonorQ3(Double o) {
 			this.donorQ3 = new BigDecimal(o, MathContext.DECIMAL64).setScale(2, RoundingMode.HALF_UP);
-		this.donorQ3Wrap.alreadyInitialized = true;
 	}
 	@JsonIgnore
 	public void setDonorQ3(Integer o) {
 			this.donorQ3 = new BigDecimal(o, MathContext.DECIMAL64).setScale(2, RoundingMode.HALF_UP);
-		this.donorQ3Wrap.alreadyInitialized = true;
 	}
 	protected ChoiceDonor donorQ3Init() {
-		if(!donorQ3Wrap.alreadyInitialized) {
+		Wrap<BigDecimal> donorQ3Wrap = new Wrap<BigDecimal>().var("donorQ3");
+		if(donorQ3 == null) {
 			_donorQ3(donorQ3Wrap);
-			if(donorQ3 == null)
-				setDonorQ3(donorQ3Wrap.o);
-			donorQ3Wrap.o(null);
+			setDonorQ3(donorQ3Wrap.o);
 		}
-		donorQ3Wrap.alreadyInitialized(true);
 		return (ChoiceDonor)this;
 	}
 
@@ -957,28 +708,8 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return ChoiceDonor.staticSolrStrDonorQ3(siteRequest_, ChoiceDonor.staticSolrDonorQ3(siteRequest_, ChoiceDonor.staticSetDonorQ3(siteRequest_, o)));
 	}
 
-	public Double solrDonorQ3() {
-		return ChoiceDonor.staticSolrDonorQ3(siteRequest_, donorQ3);
-	}
-
-	public String strDonorQ3() {
-		return donorQ3 == null ? "" : donorQ3.setScale(2, RoundingMode.HALF_UP).toString();
-	}
-
 	public BigDecimal sqlDonorQ3() {
 		return donorQ3;
-	}
-
-	public String jsonDonorQ3() {
-		return donorQ3 == null ? "" : donorQ3.toString();
-	}
-
-	public String htmTooltipDonorQ3() {
-		return null;
-	}
-
-	public String htmlDonorQ3() {
-		return donorQ3 == null ? "" : StringEscapeUtils.escapeHtml4(strDonorQ3());
 	}
 
 	/////////////
@@ -992,8 +723,6 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	@JsonSerialize(using = ToStringSerializer.class)
 	@JsonInclude(Include.NON_NULL)
 	protected BigDecimal donorQ4;
-	@JsonIgnore
-	public Wrap<BigDecimal> donorQ4Wrap = new Wrap<BigDecimal>().var("donorQ4").o(donorQ4);
 
 	/**	<br/> The entity donorQ4
 	 *  is defined as null before being initialized. 
@@ -1009,12 +738,10 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 
 	public void setDonorQ4(BigDecimal donorQ4) {
 		this.donorQ4 = donorQ4;
-		this.donorQ4Wrap.alreadyInitialized = true;
 	}
 	@JsonIgnore
 	public void setDonorQ4(String o) {
 		this.donorQ4 = ChoiceDonor.staticSetDonorQ4(siteRequest_, o);
-		this.donorQ4Wrap.alreadyInitialized = true;
 	}
 	public static BigDecimal staticSetDonorQ4(SiteRequestEnUS siteRequest_, String o) {
 		o = StringUtils.removeAll(o, "[^\\d\\.]");
@@ -1025,21 +752,17 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	@JsonIgnore
 	public void setDonorQ4(Double o) {
 			this.donorQ4 = new BigDecimal(o, MathContext.DECIMAL64).setScale(2, RoundingMode.HALF_UP);
-		this.donorQ4Wrap.alreadyInitialized = true;
 	}
 	@JsonIgnore
 	public void setDonorQ4(Integer o) {
 			this.donorQ4 = new BigDecimal(o, MathContext.DECIMAL64).setScale(2, RoundingMode.HALF_UP);
-		this.donorQ4Wrap.alreadyInitialized = true;
 	}
 	protected ChoiceDonor donorQ4Init() {
-		if(!donorQ4Wrap.alreadyInitialized) {
+		Wrap<BigDecimal> donorQ4Wrap = new Wrap<BigDecimal>().var("donorQ4");
+		if(donorQ4 == null) {
 			_donorQ4(donorQ4Wrap);
-			if(donorQ4 == null)
-				setDonorQ4(donorQ4Wrap.o);
-			donorQ4Wrap.o(null);
+			setDonorQ4(donorQ4Wrap.o);
 		}
-		donorQ4Wrap.alreadyInitialized(true);
 		return (ChoiceDonor)this;
 	}
 
@@ -1055,44 +778,103 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return ChoiceDonor.staticSolrStrDonorQ4(siteRequest_, ChoiceDonor.staticSolrDonorQ4(siteRequest_, ChoiceDonor.staticSetDonorQ4(siteRequest_, o)));
 	}
 
-	public Double solrDonorQ4() {
-		return ChoiceDonor.staticSolrDonorQ4(siteRequest_, donorQ4);
-	}
-
-	public String strDonorQ4() {
-		return donorQ4 == null ? "" : donorQ4.setScale(2, RoundingMode.HALF_UP).toString();
-	}
-
 	public BigDecimal sqlDonorQ4() {
 		return donorQ4;
 	}
 
-	public String jsonDonorQ4() {
-		return donorQ4 == null ? "" : donorQ4.toString();
+	////////////////
+	// reportKeys //
+	////////////////
+
+	/**	 The entity reportKeys
+	 *	Il est construit avant d'être initialisé avec le constructeur par défaut List<Long>(). 
+	 */
+	@JsonProperty
+	@JsonFormat(shape = JsonFormat.Shape.ARRAY)
+	@JsonSerialize(contentUsing = ToStringSerializer.class)
+	@JsonInclude(Include.NON_NULL)
+	protected List<Long> reportKeys = new ArrayList<Long>();
+
+	/**	<br/> The entity reportKeys
+	 *  It is constructed before being initialized with the constructor by default List<Long>(). 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:reportKeys">Find the entity reportKeys in Solr</a>
+	 * <br/>
+	 * @param reportKeys is the entity already constructed. 
+	 **/
+	protected abstract void _reportKeys(List<Long> c);
+
+	public List<Long> getReportKeys() {
+		return reportKeys;
 	}
 
-	public String htmTooltipDonorQ4() {
+	public void setReportKeys(List<Long> reportKeys) {
+		this.reportKeys = reportKeys;
+	}
+	@JsonIgnore
+	public void setReportKeys(String o) {
+		Long l = ChoiceDonor.staticSetReportKeys(siteRequest_, o);
+		if(l != null)
+			addReportKeys(l);
+	}
+	public static Long staticSetReportKeys(SiteRequestEnUS siteRequest_, String o) {
+		if(NumberUtils.isParsable(o))
+			return Long.parseLong(o);
 		return null;
 	}
+	public ChoiceDonor addReportKeys(Long...objets) {
+		for(Long o : objets) {
+			addReportKeys(o);
+		}
+		return (ChoiceDonor)this;
+	}
+	public ChoiceDonor addReportKeys(Long o) {
+		if(o != null && !reportKeys.contains(o))
+			this.reportKeys.add(o);
+		return (ChoiceDonor)this;
+	}
+	@JsonIgnore
+	public void setReportKeys(JsonArray objets) {
+		reportKeys.clear();
+		for(int i = 0; i < objets.size(); i++) {
+			Long o = objets.getLong(i);
+			addReportKeys(o);
+		}
+	}
+	public ChoiceDonor addReportKeys(String o) {
+		if(NumberUtils.isParsable(o)) {
+			Long p = Long.parseLong(o);
+			addReportKeys(p);
+		}
+		return (ChoiceDonor)this;
+	}
+	protected ChoiceDonor reportKeysInit() {
+		_reportKeys(reportKeys);
+		return (ChoiceDonor)this;
+	}
 
-	public String htmlDonorQ4() {
-		return donorQ4 == null ? "" : StringEscapeUtils.escapeHtml4(strDonorQ4());
+	public static Long staticSolrReportKeys(SiteRequestEnUS siteRequest_, Long o) {
+		return o;
+	}
+
+	public static String staticSolrStrReportKeys(SiteRequestEnUS siteRequest_, Long o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqReportKeys(SiteRequestEnUS siteRequest_, String o) {
+		return ChoiceDonor.staticSolrStrReportKeys(siteRequest_, ChoiceDonor.staticSolrReportKeys(siteRequest_, ChoiceDonor.staticSetReportKeys(siteRequest_, o)));
+	}
+
+	public List<Long> sqlReportKeys() {
+		return reportKeys;
 	}
 
 	//////////////
 	// initDeep //
 	//////////////
 
-	protected boolean alreadyInitializedChoiceDonor = false;
-
 	public Future<Void> promiseDeepChoiceDonor(SiteRequestEnUS siteRequest_) {
 		setSiteRequest_(siteRequest_);
-		if(!alreadyInitializedChoiceDonor) {
-			alreadyInitializedChoiceDonor = true;
-			return promiseDeepChoiceDonor();
-		} else {
-			return Future.succeededFuture();
-		}
+		return promiseDeepChoiceDonor();
 	}
 
 	public Future<Void> promiseDeepChoiceDonor() {
@@ -1126,6 +908,7 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 				donorQ2Init();
 				donorQ3Init();
 				donorQ4Init();
+				reportKeysInit();
 				promise2.complete();
 			} catch(Exception ex) {
 				promise2.fail(ex);
@@ -1201,33 +984,40 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 				return oChoiceDonor.donorQ3;
 			case "donorQ4":
 				return oChoiceDonor.donorQ4;
+			case "reportKeys":
+				return oChoiceDonor.reportKeys;
 			default:
 				return super.obtainBaseModel(var);
 		}
 	}
 
 	///////////////
-	// attribute //
+	// relate //
 	///////////////
 
-	@Override public boolean attributeForClass(String var, Object val) {
+	@Override public boolean relateForClass(String var, Object val) {
 		String[] vars = StringUtils.split(var, ".");
 		Object o = null;
 		for(String v : vars) {
 			if(o == null)
-				o = attributeChoiceDonor(v, val);
+				o = relateChoiceDonor(v, val);
 			else if(o instanceof BaseModel) {
 				BaseModel baseModel = (BaseModel)o;
-				o = baseModel.attributeForClass(v, val);
+				o = baseModel.relateForClass(v, val);
 			}
 		}
 		return o != null;
 	}
-	public Object attributeChoiceDonor(String var, Object val) {
+	public Object relateChoiceDonor(String var, Object val) {
 		ChoiceDonor oChoiceDonor = (ChoiceDonor)this;
 		switch(var) {
+			case "reportKeys":
+				oChoiceDonor.addReportKeys((Long)val);
+				if(!saves.contains("reportKeys"))
+					saves.add("reportKeys");
+				return val;
 			default:
-				return super.attributeBaseModel(var, val);
+				return super.relateBaseModel(var, val);
 		}
 	}
 
@@ -1262,6 +1052,8 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 			return ChoiceDonor.staticSetDonorQ3(siteRequest_, o);
 		case "donorQ4":
 			return ChoiceDonor.staticSetDonorQ4(siteRequest_, o);
+		case "reportKeys":
+			return ChoiceDonor.staticSetReportKeys(siteRequest_, o);
 			default:
 				return BaseModel.staticSetBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -1298,6 +1090,8 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 			return ChoiceDonor.staticSolrDonorQ3(siteRequest_, (BigDecimal)o);
 		case "donorQ4":
 			return ChoiceDonor.staticSolrDonorQ4(siteRequest_, (BigDecimal)o);
+		case "reportKeys":
+			return ChoiceDonor.staticSolrReportKeys(siteRequest_, (Long)o);
 			default:
 				return BaseModel.staticSolrBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -1334,6 +1128,8 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 			return ChoiceDonor.staticSolrStrDonorQ3(siteRequest_, (Double)o);
 		case "donorQ4":
 			return ChoiceDonor.staticSolrStrDonorQ4(siteRequest_, (Double)o);
+		case "reportKeys":
+			return ChoiceDonor.staticSolrStrReportKeys(siteRequest_, (Long)o);
 			default:
 				return BaseModel.staticSolrStrBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -1370,6 +1166,8 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 			return ChoiceDonor.staticSolrFqDonorQ3(siteRequest_, o);
 		case "donorQ4":
 			return ChoiceDonor.staticSolrFqDonorQ4(siteRequest_, o);
+		case "reportKeys":
+			return ChoiceDonor.staticSolrFqReportKeys(siteRequest_, o);
 			default:
 				return BaseModel.staticSolrFqBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -1378,83 +1176,6 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	/////////////
 	// define //
 	/////////////
-
-	@Override public boolean defineForClass(String var, String val) {
-		String[] vars = StringUtils.split(var, ".");
-		Object o = null;
-		if(val != null) {
-			for(String v : vars) {
-				if(o == null)
-					o = defineChoiceDonor(v, val);
-				else if(o instanceof BaseModel) {
-					BaseModel oBaseModel = (BaseModel)o;
-					o = oBaseModel.defineForClass(v, val);
-				}
-			}
-		}
-		return o != null;
-	}
-	public Object defineChoiceDonor(String var, String val) {
-		switch(var.toLowerCase()) {
-			case "donorfullname":
-				if(val != null)
-					setDonorFullName(val);
-				saves.add("donorFullName");
-				return val;
-			case "donorparentname":
-				if(val != null)
-					setDonorParentName(val);
-				saves.add("donorParentName");
-				return val;
-			case "donorid":
-				if(val != null)
-					setDonorId(val);
-				saves.add("donorId");
-				return val;
-			case "donorattributeid":
-				if(val != null)
-					setDonorAttributeId(val);
-				saves.add("donorAttributeId");
-				return val;
-			case "donorinkind":
-				if(val != null)
-					setDonorInKind(val);
-				saves.add("donorInKind");
-				return val;
-			case "donortotal":
-				if(val != null)
-					setDonorTotal(val);
-				saves.add("donorTotal");
-				return val;
-			case "donorytd":
-				if(val != null)
-					setDonorYtd(val);
-				saves.add("donorYtd");
-				return val;
-			case "donorq1":
-				if(val != null)
-					setDonorQ1(val);
-				saves.add("donorQ1");
-				return val;
-			case "donorq2":
-				if(val != null)
-					setDonorQ2(val);
-				saves.add("donorQ2");
-				return val;
-			case "donorq3":
-				if(val != null)
-					setDonorQ3(val);
-				saves.add("donorQ3");
-				return val;
-			case "donorq4":
-				if(val != null)
-					setDonorQ4(val);
-				saves.add("donorQ4");
-				return val;
-			default:
-				return super.defineBaseModel(var, val);
-		}
-	}
 
 	@Override public boolean defineForClass(String var, Object val) {
 		String[] vars = StringUtils.split(var, ".");
@@ -1622,6 +1343,10 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 				if(donorQ4 != null)
 					oChoiceDonor.setDonorQ4(donorQ4);
 			}
+
+			List<Long> reportKeys = (List<Long>)solrDocument.get("reportKeys_indexedstored_longs");
+			if(reportKeys != null)
+				oChoiceDonor.reportKeys.addAll(reportKeys);
 		}
 
 		super.populateBaseModel(solrDocument);
@@ -1661,6 +1386,11 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		if(donorQ4 != null) {
 			document.addField("donorQ4_indexedstored_double", donorQ4.doubleValue());
 		}
+		if(reportKeys != null) {
+			for(java.lang.Long o : reportKeys) {
+				document.addField("reportKeys_indexedstored_longs", o);
+			}
+		}
 		super.indexBaseModel(document);
 
 	}
@@ -1689,6 +1419,8 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 				return "donorQ3_indexedstored_double";
 			case "donorQ4":
 				return "donorQ4_indexedstored_double";
+			case "reportKeys":
+				return "reportKeys_indexedstored_longs";
 			default:
 				return BaseModel.varIndexedBaseModel(entityVar);
 		}
@@ -1729,6 +1461,9 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		oChoiceDonor.setDonorQ2(Optional.ofNullable(solrDocument.get("donorQ2_indexedstored_double")).map(v -> v.toString()).orElse(null));
 		oChoiceDonor.setDonorQ3(Optional.ofNullable(solrDocument.get("donorQ3_indexedstored_double")).map(v -> v.toString()).orElse(null));
 		oChoiceDonor.setDonorQ4(Optional.ofNullable(solrDocument.get("donorQ4_indexedstored_double")).map(v -> v.toString()).orElse(null));
+		Optional.ofNullable((List<?>)solrDocument.get("reportKeys_indexedstored_longs")).orElse(Arrays.asList()).stream().filter(v -> v != null).forEach(v -> {
+			oChoiceDonor.addReportKeys(v.toString());
+		});
 
 		super.storeBaseModel(solrDocument);
 	}
@@ -1764,40 +1499,10 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 				apiRequest.addVars("donorQ3");
 			if(!Objects.equals(donorQ4, original.getDonorQ4()))
 				apiRequest.addVars("donorQ4");
+			if(!Objects.equals(reportKeys, original.getReportKeys()))
+				apiRequest.addVars("reportKeys");
 			super.apiRequestBaseModel();
 		}
-	}
-
-	//////////////
-	// hashCode //
-	//////////////
-
-	@Override public int hashCode() {
-		return Objects.hash(super.hashCode(), donorFullName, donorParentName, donorId, donorAttributeId, donorInKind, donorTotal, donorYtd, donorQ1, donorQ2, donorQ3, donorQ4);
-	}
-
-	////////////
-	// equals //
-	////////////
-
-	@Override public boolean equals(Object o) {
-		if(this == o)
-			return true;
-		if(!(o instanceof ChoiceDonor))
-			return false;
-		ChoiceDonor that = (ChoiceDonor)o;
-		return super.equals(o)
-				&& Objects.equals( donorFullName, that.donorFullName )
-				&& Objects.equals( donorParentName, that.donorParentName )
-				&& Objects.equals( donorId, that.donorId )
-				&& Objects.equals( donorAttributeId, that.donorAttributeId )
-				&& Objects.equals( donorInKind, that.donorInKind )
-				&& Objects.equals( donorTotal, that.donorTotal )
-				&& Objects.equals( donorYtd, that.donorYtd )
-				&& Objects.equals( donorQ1, that.donorQ1 )
-				&& Objects.equals( donorQ2, that.donorQ2 )
-				&& Objects.equals( donorQ3, that.donorQ3 )
-				&& Objects.equals( donorQ4, that.donorQ4 );
 	}
 
 	//////////////
@@ -1819,6 +1524,7 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		sb.append( ", donorQ2: " ).append(donorQ2);
 		sb.append( ", donorQ3: " ).append(donorQ3);
 		sb.append( ", donorQ4: " ).append(donorQ4);
+		sb.append( ", reportKeys: " ).append(reportKeys);
 		sb.append(" }");
 		return sb.toString();
 	}
@@ -1834,4 +1540,5 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	public static final String VAR_donorQ2 = "donorQ2";
 	public static final String VAR_donorQ3 = "donorQ3";
 	public static final String VAR_donorQ4 = "donorQ4";
+	public static final String VAR_reportKeys = "reportKeys";
 }

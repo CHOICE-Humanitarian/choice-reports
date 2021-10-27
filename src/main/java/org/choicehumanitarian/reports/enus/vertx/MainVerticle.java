@@ -19,6 +19,7 @@ import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 import org.choicehumanitarian.reports.enus.model.donor.ChoiceDonorEnUSGenApiService;
+import org.choicehumanitarian.reports.enus.model.report.ChoiceReportEnUSGenApiService;
 import org.choicehumanitarian.reports.enus.user.SiteUserEnUSGenApiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +38,9 @@ import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
 import io.vertx.core.WorkerExecutor;
+import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.EventBusOptions;
+import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.http.Cookie;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.http.HttpServerOptions;
@@ -228,9 +231,23 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 					workerVerticleDeploymentOptions.setConfig(config);
 					workerVerticleDeploymentOptions.setInstances(1);
 		
+					DeploymentOptions ceylonVerticleDeploymentOptions = new DeploymentOptions();
+					ceylonVerticleDeploymentOptions.setConfig(config);
+					ceylonVerticleDeploymentOptions.setInstances(1);
+		
 					vertx.deployVerticle(MainVerticle.class, deploymentOptions).onSuccess(a -> {
-						vertx.deployVerticle(WorkerVerticle.class, workerVerticleDeploymentOptions);
 						LOG.info("Started main verticle. ");
+						vertx.deployVerticle(WorkerVerticle.class, workerVerticleDeploymentOptions).onSuccess(b -> {
+							LOG.info("Started worker verticle. ");
+							vertx.deployVerticle(AppCeylonVerticle.class, ceylonVerticleDeploymentOptions).onSuccess(c -> {
+								scheduling(vertx);
+								LOG.info("Started scheduler verticle. ");
+							}).onFailure(ex -> {
+								LOG.error("Failed to start scheduler verticle. ", ex);
+							});
+						}).onFailure(ex -> {
+							LOG.error("Failed to start worker verticle. ", ex);
+						});
 					}).onFailure(ex -> {
 						LOG.error("Failed to start main verticle. ", ex);
 					});
@@ -249,6 +266,35 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 		}).onFailure(ex -> {
 			LOG.error("Creating clustered Vertx failed. ", ex);
 			ExceptionUtils.rethrow(ex);
+		});
+	}
+
+	// Scheduling with Chime
+	static void scheduling(Vertx vertx) {
+		EventBus eventBus = vertx.eventBus();
+		// Consumer of the timer events
+		MessageConsumer<JsonObject> consumer = eventBus.consumer("scheduler:timer");
+		// Listens and prints timer events. When timer completes stops the Vertx 
+		consumer.handler (
+			message -> {
+				JsonObject event = message.body();
+				if (event.getString("event").equals("complete")) {
+					System.out.println("completed");
+					vertx.close();
+				}
+				else {
+					System.out.println(event);
+				}
+		  	}
+		);
+		// Create new timer
+		eventBus.request("chime",
+			(new JsonObject()).put("operation", "create").put("name", "scheduler:timer")
+				.put("publish", false).put("max count", 3)
+				.put("description", (new JsonObject()).put("type", "interval").put("delay", 1))).onSuccess(a -> {
+			LOG.info("scheduling succeeded");
+		}).onFailure(ex -> {
+			LOG.error("Scheduling failed. ", ex);
 		});
 	}
 
@@ -639,6 +685,7 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 
 			SiteUserEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine, vertx);
 			ChoiceDonorEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine, vertx);
+			ChoiceReportEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine, vertx);
 
 			LOG.info(configureApiComplete);
 			promise.complete();
@@ -660,11 +707,12 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 			String staticBaseUrl = config().getString(ConfigKeys.STATIC_BASE_URL);
 			String siteBaseUrl = config().getString(ConfigKeys.SITE_BASE_URL);
 			Handlebars handlebars = (Handlebars)templateEngine.unwrap();
-			TemplateHandler templateHandler = TemplateHandler.create(templateEngine, staticPath + "/template", "text/html");
+			TemplateHandler templateHandler = TemplateHandler.create(templateEngine, staticPath + "/template/enUS", "text/html");
 
 			handlebars.registerHelpers(ConditionalHelpers.class);
 			handlebars.registerHelpers(StringHelpers.class);
 			handlebars.registerHelpers(AuthHelpers.class);
+			handlebars.registerHelpers(DateHelpers.class);
 
 			router.get("/").handler(a -> {
 				a.reroute("/template/home-page");

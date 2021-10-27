@@ -1,6 +1,7 @@
-package org.choicehumanitarian.reports.enus.model.donor;              
+package org.choicehumanitarian.reports.enus.model.donor;                 
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.choicehumanitarian.reports.enus.base.BaseModel;
 import org.choicehumanitarian.reports.enus.wrap.Wrap;
@@ -9,6 +10,7 @@ import org.choicehumanitarian.reports.enus.wrap.Wrap;
  * Model: true
  * Api: true
  * Page: true
+ * SuperPage.enUS: BaseModelPage
  * Indexed: true
  * Saved: true
  * Map.Integer.sqlSort: 5
@@ -25,6 +27,7 @@ import org.choicehumanitarian.reports.enus.wrap.Wrap;
  * 
  * ApiMethod.enUS: SearchPage
  * PageSearchPage.enUS: ChoiceDonorPage
+ * PageSuperSearchPage.enUS: BaseModelPage
  * ApiUriSearchPage.enUS: /donor
  * 
  * AName.enUS: a donor
@@ -36,7 +39,7 @@ import org.choicehumanitarian.reports.enus.wrap.Wrap;
  * Role.enUS: SiteAdmin
  * 
  * Rows: 100
-**/        
+**/         
 public class ChoiceDonor extends ChoiceDonorGen<BaseModel> {
 
 	/**  
@@ -143,7 +146,7 @@ public class ChoiceDonor extends ChoiceDonorGen<BaseModel> {
 	 * HtmlRow: 6
 	 * HtmlCell: 2
 	 * DisplayName.enUS: Q2
-	 */  
+	 */   
 	protected void _donorQ2(Wrap<BigDecimal> c) {
 	}
 
@@ -169,5 +172,21 @@ public class ChoiceDonor extends ChoiceDonorGen<BaseModel> {
 	 * DisplayName.enUS: Q4
 	 */  
 	protected void _donorQ4(Wrap<BigDecimal> c) {
+	}
+
+	/**  
+	 * {@inheritDoc}
+	 * Indexed: true
+	 * Stored: true
+	 * Relate: ChoiceReport.donorKeys
+	 * HtmlRow: 10
+	 * HtmlCell: 1
+	 * DisplayName.enUS: reports
+	 */         
+	protected void _reportKeys(List<Long> c) {}
+
+	@Override
+	protected void _objectTitle(Wrap<String> c) {
+		c.o(donorFullName);
 	}
 }

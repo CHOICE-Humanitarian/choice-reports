@@ -57,8 +57,6 @@ public abstract class SearchResultGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected SiteRequestEnUS siteRequest_;
-	@JsonIgnore
-	public Wrap<SiteRequestEnUS> siteRequest_Wrap = new Wrap<SiteRequestEnUS>().var("siteRequest_").o(siteRequest_);
 
 	/**	<br/> The entity siteRequest_
 	 *  is defined as null before being initialized. 
@@ -74,19 +72,16 @@ public abstract class SearchResultGen<DEV> extends Object {
 
 	public void setSiteRequest_(SiteRequestEnUS siteRequest_) {
 		this.siteRequest_ = siteRequest_;
-		this.siteRequest_Wrap.alreadyInitialized = true;
 	}
 	public static SiteRequestEnUS staticSetSiteRequest_(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
 	protected SearchResult siteRequest_Init() {
-		if(!siteRequest_Wrap.alreadyInitialized) {
+		Wrap<SiteRequestEnUS> siteRequest_Wrap = new Wrap<SiteRequestEnUS>().var("siteRequest_");
+		if(siteRequest_ == null) {
 			_siteRequest_(siteRequest_Wrap);
-			if(siteRequest_ == null)
-				setSiteRequest_(siteRequest_Wrap.o);
-			siteRequest_Wrap.o(null);
+			setSiteRequest_(siteRequest_Wrap.o);
 		}
-		siteRequest_Wrap.alreadyInitialized(true);
 		return (SearchResult)this;
 	}
 
@@ -100,8 +95,6 @@ public abstract class SearchResultGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected SolrDocument solrDocument;
-	@JsonIgnore
-	public Wrap<SolrDocument> solrDocumentWrap = new Wrap<SolrDocument>().var("solrDocument").o(solrDocument);
 
 	/**	<br/> The entity solrDocument
 	 *  is defined as null before being initialized. 
@@ -117,19 +110,16 @@ public abstract class SearchResultGen<DEV> extends Object {
 
 	public void setSolrDocument(SolrDocument solrDocument) {
 		this.solrDocument = solrDocument;
-		this.solrDocumentWrap.alreadyInitialized = true;
 	}
 	public static SolrDocument staticSetSolrDocument(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
 	protected SearchResult solrDocumentInit() {
-		if(!solrDocumentWrap.alreadyInitialized) {
+		Wrap<SolrDocument> solrDocumentWrap = new Wrap<SolrDocument>().var("solrDocument");
+		if(solrDocument == null) {
 			_solrDocument(solrDocumentWrap);
-			if(solrDocument == null)
-				setSolrDocument(solrDocumentWrap.o);
-			solrDocumentWrap.o(null);
+			setSolrDocument(solrDocumentWrap.o);
 		}
-		solrDocumentWrap.alreadyInitialized(true);
 		return (SearchResult)this;
 	}
 
@@ -144,8 +134,6 @@ public abstract class SearchResultGen<DEV> extends Object {
 	@JsonSerialize(using = ToStringSerializer.class)
 	@JsonInclude(Include.NON_NULL)
 	protected Long resultIndex;
-	@JsonIgnore
-	public Wrap<Long> resultIndexWrap = new Wrap<Long>().var("resultIndex").o(resultIndex);
 
 	/**	<br/> The entity resultIndex
 	 *  is defined as null before being initialized. 
@@ -161,12 +149,10 @@ public abstract class SearchResultGen<DEV> extends Object {
 
 	public void setResultIndex(Long resultIndex) {
 		this.resultIndex = resultIndex;
-		this.resultIndexWrap.alreadyInitialized = true;
 	}
 	@JsonIgnore
 	public void setResultIndex(String o) {
 		this.resultIndex = SearchResult.staticSetResultIndex(siteRequest_, o);
-		this.resultIndexWrap.alreadyInitialized = true;
 	}
 	public static Long staticSetResultIndex(SiteRequestEnUS siteRequest_, String o) {
 		if(NumberUtils.isParsable(o))
@@ -174,13 +160,11 @@ public abstract class SearchResultGen<DEV> extends Object {
 		return null;
 	}
 	protected SearchResult resultIndexInit() {
-		if(!resultIndexWrap.alreadyInitialized) {
+		Wrap<Long> resultIndexWrap = new Wrap<Long>().var("resultIndex");
+		if(resultIndex == null) {
 			_resultIndex(resultIndexWrap);
-			if(resultIndex == null)
-				setResultIndex(resultIndexWrap.o);
-			resultIndexWrap.o(null);
+			setResultIndex(resultIndexWrap.o);
 		}
-		resultIndexWrap.alreadyInitialized(true);
 		return (SearchResult)this;
 	}
 
@@ -196,34 +180,13 @@ public abstract class SearchResultGen<DEV> extends Object {
 		return SearchResult.staticSolrStrResultIndex(siteRequest_, SearchResult.staticSolrResultIndex(siteRequest_, SearchResult.staticSetResultIndex(siteRequest_, o)));
 	}
 
-	public Long solrResultIndex() {
-		return SearchResult.staticSolrResultIndex(siteRequest_, resultIndex);
-	}
-
-	public String strResultIndex() {
-		return resultIndex == null ? "" : resultIndex.toString();
-	}
-
-	public Long sqlResultIndex() {
-		return resultIndex;
-	}
-
-	public String jsonResultIndex() {
-		return resultIndex == null ? "" : resultIndex.toString();
-	}
-
 	//////////////
 	// initDeep //
 	//////////////
 
-	protected boolean alreadyInitializedSearchResult = false;
-
 	public SearchResult initDeepSearchResult(SiteRequestEnUS siteRequest_) {
 		setSiteRequest_(siteRequest_);
-		if(!alreadyInitializedSearchResult) {
-			alreadyInitializedSearchResult = true;
-			initDeepSearchResult();
-		}
+		initDeepSearchResult();
 		return (SearchResult)this;
 	}
 
@@ -288,23 +251,23 @@ public abstract class SearchResultGen<DEV> extends Object {
 	}
 
 	///////////////
-	// attribute //
+	// relate //
 	///////////////
 
-	public boolean attributeForClass(String var, Object val) {
+	public boolean relateForClass(String var, Object val) {
 		String[] vars = StringUtils.split(var, ".");
 		Object o = null;
 		for(String v : vars) {
 			if(o == null)
-				o = attributeSearchResult(v, val);
+				o = relateSearchResult(v, val);
 			else if(o instanceof BaseModel) {
 				BaseModel baseModel = (BaseModel)o;
-				o = baseModel.attributeForClass(v, val);
+				o = baseModel.relateForClass(v, val);
 			}
 		}
 		return o != null;
 	}
-	public Object attributeSearchResult(String var, Object val) {
+	public Object relateSearchResult(String var, Object val) {
 		SearchResult oSearchResult = (SearchResult)this;
 		switch(var) {
 			default:
@@ -380,28 +343,6 @@ public abstract class SearchResultGen<DEV> extends Object {
 	// define //
 	/////////////
 
-	public boolean defineForClass(String var, String val) {
-		String[] vars = StringUtils.split(var, ".");
-		Object o = null;
-		if(val != null) {
-			for(String v : vars) {
-				if(o == null)
-					o = defineSearchResult(v, val);
-				else if(o instanceof BaseModel) {
-					BaseModel oBaseModel = (BaseModel)o;
-					o = oBaseModel.defineForClass(v, val);
-				}
-			}
-		}
-		return o != null;
-	}
-	public Object defineSearchResult(String var, String val) {
-		switch(var.toLowerCase()) {
-			default:
-				return null;
-		}
-	}
-
 	public boolean defineForClass(String var, Object val) {
 		String[] vars = StringUtils.split(var, ".");
 		Object o = null;
@@ -434,27 +375,6 @@ public abstract class SearchResultGen<DEV> extends Object {
 		if(o != null && o instanceof SearchResult) {
 			SearchResult original = (SearchResult)o;
 		}
-	}
-
-	//////////////
-	// hashCode //
-	//////////////
-
-	@Override public int hashCode() {
-		return Objects.hash();
-	}
-
-	////////////
-	// equals //
-	////////////
-
-	@Override public boolean equals(Object o) {
-		if(this == o)
-			return true;
-		if(!(o instanceof SearchResult))
-			return false;
-		SearchResult that = (SearchResult)o;
-		return true;
 	}
 
 	//////////////

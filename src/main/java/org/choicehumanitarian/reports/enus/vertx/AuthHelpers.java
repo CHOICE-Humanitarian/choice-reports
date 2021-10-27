@@ -26,7 +26,7 @@ public enum AuthHelpers implements Helper<Object> {
 			List<String> userRoles = options.param(4, null);
 			List<String> requiredRoles = Optional.ofNullable(options.param(5, null)).map(o -> o instanceof List ? (List<String>)o : Arrays.asList(o.toString())).orElse(Arrays.asList());
 
-			Boolean result = expectedUserKeys.contains(userKey) 
+			Boolean result = userKey != null && expectedUserKeys.contains(userKey) 
 					|| Objects.equals(sessionId, expectedSessionId)
 					|| CollectionUtils.containsAny(userRoles, requiredRoles)
 					;
@@ -62,7 +62,7 @@ public enum AuthHelpers implements Helper<Object> {
 			List<Long> expectedUserKeys = options.param(0, null);
 			Long userKey = options.param(1, null);
 
-			Boolean result = expectedUserKeys.contains(userKey) 
+			Boolean result = userKey != null && expectedUserKeys.contains(userKey) 
 					;
 			if (options.tagType == TagType.SECTION) {
 				return result ? options.fn() : options.inverse();

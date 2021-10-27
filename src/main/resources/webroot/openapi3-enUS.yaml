@@ -786,6 +786,762 @@ paths:
             text/html; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/SearchPageChoiceDonorResponse'
+  /api/report:
+    post:
+      operationId: postChoiceReport
+      x-vertx-event-bus: choice-reports-enUS-ChoiceReport
+      security:
+        - openIdConnect:
+          - DefaultAuthScope
+      description: >+
+      summary: >+
+      tags:
+        - Report
+      requestBody:
+        description: >+
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/POSTChoiceReportRequest'
+      responses:
+        '200':
+          description: >+
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/POSTChoiceReportResponse'
+    patch:
+      operationId: patchChoiceReport
+      x-vertx-event-bus: choice-reports-enUS-ChoiceReport
+      security:
+        - openIdConnect:
+          - DefaultAuthScope
+      description: >+
+      summary: >+
+      tags:
+        - Report
+      parameters:
+        - name: vertx-web.session
+          in: cookie
+          schema:
+            type: string
+        - name: sessionIdBefore
+          in: cookie
+          schema:
+            type: string
+        - in: query
+          name: q
+          description: ''
+          required: false
+          schema:
+            type: string
+            default: '*:*'
+        - in: query
+          name: fq
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: fl
+          description: ''
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: start
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - in: query
+          name: rows
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 100
+            minimum: 0
+        - in: query
+          name: var
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: facet
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: boolean
+        - in: query
+          name: facet.range.start
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.end
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.gap
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.pivot
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.field
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      requestBody:
+        description: >+
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PATCHChoiceReportRequest'
+      responses:
+        '200':
+          description: >+
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/PATCHChoiceReportResponse'
+    get:
+      operationId: searchChoiceReport
+      x-vertx-event-bus: choice-reports-enUS-ChoiceReport
+      security:
+        - openIdConnect:
+          - DefaultAuthScope
+      description: >+
+      summary: >+
+      tags:
+        - Report
+      parameters:
+        - name: vertx-web.session
+          in: cookie
+          schema:
+            type: string
+        - name: sessionIdBefore
+          in: cookie
+          schema:
+            type: string
+        - in: query
+          name: q
+          description: ''
+          required: false
+          schema:
+            type: string
+            default: '*:*'
+        - in: query
+          name: fq
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: fl
+          description: ''
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: start
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - in: query
+          name: rows
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 100
+            minimum: 0
+        - in: query
+          name: var
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: facet
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: boolean
+        - in: query
+          name: facet.range.start
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.end
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.gap
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.pivot
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.field
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: >+
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SearchChoiceReportResponse'
+  /api/report/import:
+    put:
+      operationId: putimportChoiceReport
+      x-vertx-event-bus: choice-reports-enUS-ChoiceReport
+      security:
+        - openIdConnect:
+          - DefaultAuthScope
+      description: >+
+      summary: >+
+      tags:
+        - Report
+      parameters:
+        - name: vertx-web.session
+          in: cookie
+          schema:
+            type: string
+        - name: sessionIdBefore
+          in: cookie
+          schema:
+            type: string
+        - in: query
+          name: q
+          description: ''
+          required: false
+          schema:
+            type: string
+            default: '*:*'
+        - in: query
+          name: fq
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: fl
+          description: ''
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: start
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - in: query
+          name: rows
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 100
+            minimum: 0
+        - in: query
+          name: var
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: facet
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: boolean
+        - in: query
+          name: facet.range.start
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.end
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.gap
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.pivot
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.field
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      requestBody:
+        description: >+
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PUTImportChoiceReportRequest'
+      responses:
+        '200':
+          description: >+
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/PUTImportChoiceReportResponse'
+  /api/report/{id}:
+    get:
+      operationId: getChoiceReport
+      x-vertx-event-bus: choice-reports-enUS-ChoiceReport
+      security:
+        - openIdConnect:
+          - DefaultAuthScope
+      description: >+
+      summary: >+
+      tags:
+        - Report
+      parameters:
+        - name: vertx-web.session
+          in: cookie
+          schema:
+            type: string
+        - name: sessionIdBefore
+          in: cookie
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: >+
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: >+
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/GETChoiceReportResponse'
+  /report:
+    get:
+      operationId: searchpageChoiceReport
+      x-vertx-event-bus: choice-reports-enUS-ChoiceReport
+      security:
+        - openIdConnect:
+          - DefaultAuthScope
+      description: >+
+      summary: >+
+      tags:
+        - Report
+      parameters:
+        - name: vertx-web.session
+          in: cookie
+          schema:
+            type: string
+        - name: sessionIdBefore
+          in: cookie
+          schema:
+            type: string
+        - in: query
+          name: q
+          description: ''
+          required: false
+          schema:
+            type: string
+            default: '*:*'
+        - in: query
+          name: fq
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: fl
+          description: ''
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: start
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - in: query
+          name: rows
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 100
+            minimum: 0
+        - in: query
+          name: var
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: facet
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: boolean
+        - in: query
+          name: facet.range.start
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.end
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.gap
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.pivot
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.field
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: >+
+          content:
+            text/html; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SearchPageChoiceReportResponse'
+  /report/{id}:
+    get:
+      operationId: searchpageChoiceReportId
+      x-vertx-event-bus: choice-reports-enUS-ChoiceReport
+      security:
+        - openIdConnect:
+          - DefaultAuthScope
+      description: >+
+      summary: >+
+      tags:
+        - Report
+      parameters:
+        - name: vertx-web.session
+          in: cookie
+          schema:
+            type: string
+        - name: sessionIdBefore
+          in: cookie
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: >+
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: q
+          description: ''
+          required: false
+          schema:
+            type: string
+            default: '*:*'
+        - in: query
+          name: fq
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: fl
+          description: ''
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: start
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - in: query
+          name: rows
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 100
+            minimum: 0
+        - in: query
+          name: var
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: facet
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: boolean
+        - in: query
+          name: facet.range.start
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.end
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.gap
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.pivot
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.field
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: >+
+          content:
+            text/html; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SearchPageChoiceReportResponse'
   /api/user:
     get:
       operationId: searchSiteUser
@@ -1088,6 +1844,284 @@ paths:
             application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/POSTSiteUserResponse'
+  /user:
+    get:
+      operationId: searchpageSiteUser
+      x-vertx-event-bus: choice-reports-enUS-SiteUser
+      security:
+        - openIdConnect:
+          - DefaultAuthScope
+      description: >+
+      summary: >+
+      tags:
+        - User
+      parameters:
+        - name: vertx-web.session
+          in: cookie
+          schema:
+            type: string
+        - name: sessionIdBefore
+          in: cookie
+          schema:
+            type: string
+        - in: query
+          name: q
+          description: ''
+          required: false
+          schema:
+            type: string
+            default: '*:*'
+        - in: query
+          name: fq
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: fl
+          description: ''
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: start
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - in: query
+          name: rows
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 10
+            minimum: 0
+        - in: query
+          name: var
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: facet
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: boolean
+        - in: query
+          name: facet.range.start
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.end
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.gap
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.pivot
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.field
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: >+
+          content:
+            text/html; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SearchPageSiteUserResponse'
+  /user/{id}:
+    get:
+      operationId: searchpageSiteUserId
+      x-vertx-event-bus: choice-reports-enUS-SiteUser
+      security:
+        - openIdConnect:
+          - DefaultAuthScope
+      description: >+
+      summary: >+
+      tags:
+        - User
+      parameters:
+        - name: vertx-web.session
+          in: cookie
+          schema:
+            type: string
+        - name: sessionIdBefore
+          in: cookie
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: >+
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: q
+          description: ''
+          required: false
+          schema:
+            type: string
+            default: '*:*'
+        - in: query
+          name: fq
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: fl
+          description: ''
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: start
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - in: query
+          name: rows
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 10
+            minimum: 0
+        - in: query
+          name: var
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: facet
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: boolean
+        - in: query
+          name: facet.range.start
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.end
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.gap
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.pivot
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.field
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: >+
+          content:
+            text/html; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SearchPageSiteUserResponse'
 components:
   securitySchemes:
     basicAuth:
@@ -1142,6 +2176,51 @@ components:
         text/html; charset=utf-8:
           schema:
             $ref: '#/components/schemas/SearchPageChoiceDonorResponse'
+    POSTChoiceReportRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/POSTChoiceReportRequest'
+    POSTChoiceReportResponse:
+      content:
+        application/json; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/POSTChoiceReportResponse'
+    PATCHChoiceReportRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PATCHChoiceReportRequest'
+    PATCHChoiceReportResponse:
+      content:
+        application/json; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/PATCHChoiceReportResponse'
+    SearchChoiceReportResponse:
+      content:
+        application/json; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/SearchChoiceReportResponse'
+    PUTImportChoiceReportRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PUTImportChoiceReportRequest'
+    PUTImportChoiceReportResponse:
+      content:
+        application/json; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/PUTImportChoiceReportResponse'
+    GETChoiceReportResponse:
+      content:
+        application/json; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/GETChoiceReportResponse'
+    SearchPageChoiceReportResponse:
+      content:
+        text/html; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/SearchPageChoiceReportResponse'
     SearchSiteUserResponse:
       content:
         application/json; charset=utf-8:
@@ -1167,6 +2246,11 @@ components:
         application/json; charset=utf-8:
           schema:
             $ref: '#/components/schemas/POSTSiteUserResponse'
+    SearchPageSiteUserResponse:
+      content:
+        text/html; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/SearchPageSiteUserResponse'
   schemas:
     POSTChoiceDonorRequest:
       allOf:
@@ -1174,6 +2258,8 @@ components:
           properties:
             donorFullName:
               type: string
+            donorParentName:
+              type: string
             donorId:
               type: string
             donorAttributeId:
@@ -1192,14 +2278,18 @@ components:
               type: string
             donorQ4:
               type: string
-            donorParentName:
-              type: string
+            reportKeys:
+              type: array
+              items:
+                type: string
     POSTChoiceDonorResponse:
       allOf:
         - type: object
           properties:
             donorFullName:
               type: string
+            donorParentName:
+              type: string
             donorId:
               type: string
             donorAttributeId:
@@ -1218,8 +2308,10 @@ components:
               type: string
             donorQ4:
               type: string
-            donorParentName:
-              type: string
+            reportKeys:
+              type: array
+              items:
+                type: string
     PATCHChoiceDonorRequest:
       allOf:
         - type: object
@@ -1231,6 +2323,13 @@ components:
               type: string
             removeAllDonorFullName:
               type: string
+            setDonorParentName:
+              type: string
+              nullable: true
+            removeDonorParentName:
+              type: string
+            removeAllDonorParentName:
+              type: string
             setDonorId:
               type: string
               nullable: true
@@ -1294,13 +2393,23 @@ components:
               type: string
             removeAllDonorQ4:
               type: string
-            setDonorParentName:
-              type: string
+            setReportKeys:
+              type: array
               nullable: true
-            removeDonorParentName:
+              items:
+                type: string
+            removeReportKeys:
               type: string
-            removeAllDonorParentName:
+            removeAllReportKeys:
+              type: array
+              items:
+                type: string
+            addReportKeys:
               type: string
+            addAllReportKeys:
+              type: array
+              items:
+                type: string
     PATCHChoiceDonorResponse:
       allOf:
         - type: object
@@ -1312,6 +2421,13 @@ components:
               type: string
             removeAllDonorFullName:
               type: string
+            setDonorParentName:
+              type: string
+              nullable: true
+            removeDonorParentName:
+              type: string
+            removeAllDonorParentName:
+              type: string
             setDonorId:
               type: string
               nullable: true
@@ -1375,13 +2491,23 @@ components:
               type: string
             removeAllDonorQ4:
               type: string
-            setDonorParentName:
-              type: string
+            setReportKeys:
+              type: array
               nullable: true
-            removeDonorParentName:
+              items:
+                type: string
+            removeReportKeys:
               type: string
-            removeAllDonorParentName:
+            removeAllReportKeys:
+              type: array
+              items:
+                type: string
+            addReportKeys:
               type: string
+            addAllReportKeys:
+              type: array
+              items:
+                type: string
     SearchChoiceDonorResponse:
       allOf:
         - type: array
@@ -1389,6 +2515,8 @@ components:
             type: object
             properties:
               donorFullName:
+                type: string
+              donorParentName:
                 type: string
               donorId:
                 type: string
@@ -1408,14 +2536,18 @@ components:
                 type: string
               donorQ4:
                 type: string
-              donorParentName:
-                type: string
+              reportKeys:
+                type: array
+                items:
+                  type: string
     PUTImportChoiceDonorRequest:
       allOf:
         - type: object
           properties:
             donorFullName:
               type: string
+            donorParentName:
+              type: string
             donorId:
               type: string
             donorAttributeId:
@@ -1434,14 +2566,18 @@ components:
               type: string
             donorQ4:
               type: string
-            donorParentName:
-              type: string
+            reportKeys:
+              type: array
+              items:
+                type: string
     PUTImportChoiceDonorResponse:
       allOf:
         - type: object
           properties:
             donorFullName:
               type: string
+            donorParentName:
+              type: string
             donorId:
               type: string
             donorAttributeId:
@@ -1460,14 +2596,18 @@ components:
               type: string
             donorQ4:
               type: string
-            donorParentName:
-              type: string
+            reportKeys:
+              type: array
+              items:
+                type: string
     GETChoiceDonorResponse:
       allOf:
         - type: object
           properties:
             donorFullName:
               type: string
+            donorParentName:
+              type: string
             donorId:
               type: string
             donorAttributeId:
@@ -1486,9 +2626,132 @@ components:
               type: string
             donorQ4:
               type: string
-            donorParentName:
-              type: string
+            reportKeys:
+              type: array
+              items:
+                type: string
     SearchPageChoiceDonorResponse:
+      allOf:
+        - type: string
+    POSTChoiceReportRequest:
+      allOf:
+        - type: object
+          properties:
+            donorFullName:
+              type: string
+            donorKeys:
+              type: array
+              items:
+                type: string
+    POSTChoiceReportResponse:
+      allOf:
+        - type: object
+          properties:
+            donorFullName:
+              type: string
+            donorKeys:
+              type: array
+              items:
+                type: string
+    PATCHChoiceReportRequest:
+      allOf:
+        - type: object
+          properties:
+            setDonorFullName:
+              type: string
+              nullable: true
+            removeDonorFullName:
+              type: string
+            removeAllDonorFullName:
+              type: string
+            setDonorKeys:
+              type: array
+              nullable: true
+              items:
+                type: string
+            removeDonorKeys:
+              type: string
+            removeAllDonorKeys:
+              type: array
+              items:
+                type: string
+            addDonorKeys:
+              type: string
+            addAllDonorKeys:
+              type: array
+              items:
+                type: string
+    PATCHChoiceReportResponse:
+      allOf:
+        - type: object
+          properties:
+            setDonorFullName:
+              type: string
+              nullable: true
+            removeDonorFullName:
+              type: string
+            removeAllDonorFullName:
+              type: string
+            setDonorKeys:
+              type: array
+              nullable: true
+              items:
+                type: string
+            removeDonorKeys:
+              type: string
+            removeAllDonorKeys:
+              type: array
+              items:
+                type: string
+            addDonorKeys:
+              type: string
+            addAllDonorKeys:
+              type: array
+              items:
+                type: string
+    SearchChoiceReportResponse:
+      allOf:
+        - type: array
+          items:
+            type: object
+            properties:
+              donorFullName:
+                type: string
+              donorKeys:
+                type: array
+                items:
+                  type: string
+    PUTImportChoiceReportRequest:
+      allOf:
+        - type: object
+          properties:
+            donorFullName:
+              type: string
+            donorKeys:
+              type: array
+              items:
+                type: string
+    PUTImportChoiceReportResponse:
+      allOf:
+        - type: object
+          properties:
+            donorFullName:
+              type: string
+            donorKeys:
+              type: array
+              items:
+                type: string
+    GETChoiceReportResponse:
+      allOf:
+        - type: object
+          properties:
+            donorFullName:
+              type: string
+            donorKeys:
+              type: array
+              items:
+                type: string
+    SearchPageChoiceReportResponse:
       allOf:
         - type: string
     SearchSiteUserResponse:
@@ -1503,8 +2766,6 @@ components:
                   type: string
               userName:
                 type: string
-              sessionId:
-                type: string
               userEmail:
                 type: string
               userFirstName:
@@ -1513,6 +2774,10 @@ components:
                 type: string
               userFullName:
                 type: string
+              seeArchived:
+                type: boolean
+              seeDeleted:
+                type: boolean
     PATCHSiteUserRequest:
       allOf:
         - type: object
@@ -1541,13 +2806,6 @@ components:
               type: string
             removeAllUserName:
               type: string
-            setSessionId:
-              type: string
-              nullable: true
-            removeSessionId:
-              type: string
-            removeAllSessionId:
-              type: string
             setUserEmail:
               type: string
               nullable: true
@@ -1576,6 +2834,20 @@ components:
               type: string
             removeAllUserFullName:
               type: string
+            setSeeArchived:
+              type: boolean
+              nullable: true
+            removeSeeArchived:
+              type: boolean
+            removeAllSeeArchived:
+              type: boolean
+            setSeeDeleted:
+              type: boolean
+              nullable: true
+            removeSeeDeleted:
+              type: boolean
+            removeAllSeeDeleted:
+              type: boolean
     PATCHSiteUserResponse:
       allOf:
         - type: object
@@ -1604,13 +2876,6 @@ components:
               type: string
             removeAllUserName:
               type: string
-            setSessionId:
-              type: string
-              nullable: true
-            removeSessionId:
-              type: string
-            removeAllSessionId:
-              type: string
             setUserEmail:
               type: string
               nullable: true
@@ -1639,6 +2904,20 @@ components:
               type: string
             removeAllUserFullName:
               type: string
+            setSeeArchived:
+              type: boolean
+              nullable: true
+            removeSeeArchived:
+              type: boolean
+            removeAllSeeArchived:
+              type: boolean
+            setSeeDeleted:
+              type: boolean
+              nullable: true
+            removeSeeDeleted:
+              type: boolean
+            removeAllSeeDeleted:
+              type: boolean
     POSTSiteUserRequest:
       allOf:
         - type: object
@@ -1649,8 +2928,6 @@ components:
                 type: string
             userName:
               type: string
-            sessionId:
-              type: string
             userEmail:
               type: string
             userFirstName:
@@ -1659,6 +2936,10 @@ components:
               type: string
             userFullName:
               type: string
+            seeArchived:
+              type: boolean
+            seeDeleted:
+              type: boolean
     POSTSiteUserResponse:
       allOf:
         - type: object
@@ -1669,8 +2950,6 @@ components:
                 type: string
             userName:
               type: string
-            sessionId:
-              type: string
             userEmail:
               type: string
             userFirstName:
@@ -1679,3 +2958,10 @@ components:
               type: string
             userFullName:
               type: string
+            seeArchived:
+              type: boolean
+            seeDeleted:
+              type: boolean
+    SearchPageSiteUserResponse:
+      allOf:
+        - type: string

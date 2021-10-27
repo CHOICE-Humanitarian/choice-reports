@@ -121,6 +121,21 @@ public class ConfigKeys {
 	public static final String AUTH_SSL_REQUIRED = "AUTH_SSL_REQUIRED";
 
 	/**
+	 * JsonArray of user roles required for an action. 
+	 **/
+	public static final String AUTH_ROLES_REQUIRED = "AUTH_ROLES_REQUIRED";
+
+	/**
+	 * JsonArray of user roles required for read access. 
+	 **/
+	public static final String AUTH_ROLES_READ_REQUIRED = "AUTH_ROLES_READ_REQUIRED";
+
+	/**
+	 * JsonArray of admin user roles. 
+	 **/
+	public static final String AUTH_ROLES_ADMIN = "AUTH_ROLES_ADMIN";
+
+	/**
 	 * Enable SSL Passthrough. 
 	 **/
 	public static final String SSL_PASSTHROUGH = "SSL_PASSTHROUGH";
@@ -379,6 +394,11 @@ public class ConfigKeys {
 	 * The default timezone of the site. 
 	 **/
 	public static final String SITE_ZONE = "SITE_ZONE";
+
+	/**
+	 * The default locale of the site. 
+	 **/
+	public static final String SITE_LOCALE = "SITE_LOCALE";
 
 	/**
 	 * 

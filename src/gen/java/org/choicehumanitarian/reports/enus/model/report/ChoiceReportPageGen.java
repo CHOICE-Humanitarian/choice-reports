@@ -1,11 +1,10 @@
-package org.choicehumanitarian.reports.enus.vertx;
+package org.choicehumanitarian.reports.enus.model.report;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Arrays;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.slf4j.LoggerFactory;
 import java.util.HashMap;
-import org.choicehumanitarian.reports.enus.vertx.AppSwagger2;
 import org.choicehumanitarian.reports.enus.writer.AllWriter;
 import org.apache.commons.lang3.StringUtils;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
@@ -27,6 +26,7 @@ import org.choicehumanitarian.reports.enus.java.LocalDateSerializer;
 import org.apache.commons.text.StringEscapeUtils;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.choicehumanitarian.reports.enus.model.report.ChoiceReportGenPage;
 import io.vertx.core.Future;
 import org.choicehumanitarian.reports.enus.base.BaseModel;
 import java.util.Objects;
@@ -38,44 +38,68 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 
 /**	
- * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.AppOpenApi3&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
+ * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.ChoiceReportPage&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
  * <br/>
  **/
-public abstract class AppOpenApi3Gen<DEV> extends AppSwagger2 {
-	protected static final Logger LOG = LoggerFactory.getLogger(AppOpenApi3.class);
+public abstract class ChoiceReportPageGen<DEV> extends ChoiceReportGenPage {
+	protected static final Logger LOG = LoggerFactory.getLogger(ChoiceReportPage.class);
 
 	//////////////
 	// initDeep //
 	//////////////
 
-	public AppOpenApi3 initDeepAppOpenApi3(SiteRequestEnUS siteRequest_) {
+	public Future<Void> promiseDeepChoiceReportPage(SiteRequestEnUS siteRequest_) {
 		setSiteRequest_(siteRequest_);
-		initDeepAppOpenApi3();
-		return (AppOpenApi3)this;
+		return promiseDeepChoiceReportPage();
 	}
 
-	public void initDeepAppOpenApi3() {
-		initAppOpenApi3();
-		super.initDeepAppSwagger2(siteRequest_);
+	public Future<Void> promiseDeepChoiceReportPage() {
+		Promise<Void> promise = Promise.promise();
+		Promise<Void> promise2 = Promise.promise();
+		promiseChoiceReportPage(promise2);
+		promise2.future().onSuccess(a -> {
+			super.promiseDeepChoiceReportGenPage(siteRequest_).onSuccess(b -> {
+				promise.complete();
+			}).onFailure(ex -> {
+				promise.fail(ex);
+			});
+		}).onFailure(ex -> {
+			promise.fail(ex);
+		});
+		return promise.future();
 	}
 
-	public void initAppOpenApi3() {
+	public Future<Void> promiseChoiceReportPage(Promise<Void> promise) {
+		Future.future(a -> a.complete()).compose(a -> {
+			Promise<Void> promise2 = Promise.promise();
+			try {
+				promise2.complete();
+			} catch(Exception ex) {
+				promise2.fail(ex);
+			}
+			return promise2.future();
+		}).onSuccess(a -> {
+			promise.complete();
+		}).onFailure(ex -> {
+			promise.fail(ex);
+		});
+		return promise.future();
 	}
 
-	@Override public void initDeepForClass(SiteRequestEnUS siteRequest_) {
-		initDeepAppOpenApi3(siteRequest_);
+	@Override public Future<Void> promiseDeepForClass(SiteRequestEnUS siteRequest_) {
+		return promiseDeepChoiceReportPage(siteRequest_);
 	}
 
 	/////////////////
 	// siteRequest //
 	/////////////////
 
-	public void siteRequestAppOpenApi3(SiteRequestEnUS siteRequest_) {
-			super.siteRequestAppSwagger2(siteRequest_);
+	public void siteRequestChoiceReportPage(SiteRequestEnUS siteRequest_) {
+			super.siteRequestChoiceReportGenPage(siteRequest_);
 	}
 
 	public void siteRequestForClass(SiteRequestEnUS siteRequest_) {
-		siteRequestAppOpenApi3(siteRequest_);
+		siteRequestChoiceReportPage(siteRequest_);
 	}
 
 	/////////////
@@ -87,7 +111,7 @@ public abstract class AppOpenApi3Gen<DEV> extends AppSwagger2 {
 		Object o = null;
 		for(String v : vars) {
 			if(o == null)
-				o = obtainAppOpenApi3(v);
+				o = obtainChoiceReportPage(v);
 			else if(o instanceof BaseModel) {
 				BaseModel baseModel = (BaseModel)o;
 				o = baseModel.obtainForClass(v);
@@ -99,11 +123,11 @@ public abstract class AppOpenApi3Gen<DEV> extends AppSwagger2 {
 		}
 		return o;
 	}
-	public Object obtainAppOpenApi3(String var) {
-		AppOpenApi3 oAppOpenApi3 = (AppOpenApi3)this;
+	public Object obtainChoiceReportPage(String var) {
+		ChoiceReportPage oChoiceReportPage = (ChoiceReportPage)this;
 		switch(var) {
 			default:
-				return super.obtainAppSwagger2(var);
+				return super.obtainChoiceReportGenPage(var);
 		}
 	}
 
@@ -116,7 +140,7 @@ public abstract class AppOpenApi3Gen<DEV> extends AppSwagger2 {
 		Object o = null;
 		for(String v : vars) {
 			if(o == null)
-				o = relateAppOpenApi3(v, val);
+				o = relateChoiceReportPage(v, val);
 			else if(o instanceof BaseModel) {
 				BaseModel baseModel = (BaseModel)o;
 				o = baseModel.relateForClass(v, val);
@@ -124,11 +148,11 @@ public abstract class AppOpenApi3Gen<DEV> extends AppSwagger2 {
 		}
 		return o != null;
 	}
-	public Object relateAppOpenApi3(String var, Object val) {
-		AppOpenApi3 oAppOpenApi3 = (AppOpenApi3)this;
+	public Object relateChoiceReportPage(String var, Object val) {
+		ChoiceReportPage oChoiceReportPage = (ChoiceReportPage)this;
 		switch(var) {
 			default:
-				return super.relateAppSwagger2(var, val);
+				return super.relateChoiceReportGenPage(var, val);
 		}
 	}
 
@@ -137,12 +161,12 @@ public abstract class AppOpenApi3Gen<DEV> extends AppSwagger2 {
 	///////////////
 
 	public static Object staticSetForClass(String entityVar, SiteRequestEnUS siteRequest_, String o) {
-		return staticSetAppOpenApi3(entityVar,  siteRequest_, o);
+		return staticSetChoiceReportPage(entityVar,  siteRequest_, o);
 	}
-	public static Object staticSetAppOpenApi3(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+	public static Object staticSetChoiceReportPage(String entityVar, SiteRequestEnUS siteRequest_, String o) {
 		switch(entityVar) {
 			default:
-				return AppSwagger2.staticSetAppSwagger2(entityVar,  siteRequest_, o);
+				return ChoiceReportGenPage.staticSetChoiceReportGenPage(entityVar,  siteRequest_, o);
 		}
 	}
 
@@ -151,12 +175,12 @@ public abstract class AppOpenApi3Gen<DEV> extends AppSwagger2 {
 	////////////////
 
 	public static Object staticSolrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
-		return staticSolrAppOpenApi3(entityVar,  siteRequest_, o);
+		return staticSolrChoiceReportPage(entityVar,  siteRequest_, o);
 	}
-	public static Object staticSolrAppOpenApi3(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+	public static Object staticSolrChoiceReportPage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
 		switch(entityVar) {
 			default:
-				return AppSwagger2.staticSolrAppSwagger2(entityVar,  siteRequest_, o);
+				return ChoiceReportGenPage.staticSolrChoiceReportGenPage(entityVar,  siteRequest_, o);
 		}
 	}
 
@@ -165,12 +189,12 @@ public abstract class AppOpenApi3Gen<DEV> extends AppSwagger2 {
 	///////////////////
 
 	public static String staticSolrStrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
-		return staticSolrStrAppOpenApi3(entityVar,  siteRequest_, o);
+		return staticSolrStrChoiceReportPage(entityVar,  siteRequest_, o);
 	}
-	public static String staticSolrStrAppOpenApi3(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+	public static String staticSolrStrChoiceReportPage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
 		switch(entityVar) {
 			default:
-				return AppSwagger2.staticSolrStrAppSwagger2(entityVar,  siteRequest_, o);
+				return ChoiceReportGenPage.staticSolrStrChoiceReportGenPage(entityVar,  siteRequest_, o);
 		}
 	}
 
@@ -179,12 +203,12 @@ public abstract class AppOpenApi3Gen<DEV> extends AppSwagger2 {
 	//////////////////
 
 	public static String staticSolrFqForClass(String entityVar, SiteRequestEnUS siteRequest_, String o) {
-		return staticSolrFqAppOpenApi3(entityVar,  siteRequest_, o);
+		return staticSolrFqChoiceReportPage(entityVar,  siteRequest_, o);
 	}
-	public static String staticSolrFqAppOpenApi3(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrFqChoiceReportPage(String entityVar, SiteRequestEnUS siteRequest_, String o) {
 		switch(entityVar) {
 			default:
-				return AppSwagger2.staticSolrFqAppSwagger2(entityVar,  siteRequest_, o);
+				return ChoiceReportGenPage.staticSolrFqChoiceReportGenPage(entityVar,  siteRequest_, o);
 		}
 	}
 
@@ -198,7 +222,7 @@ public abstract class AppOpenApi3Gen<DEV> extends AppSwagger2 {
 		if(val != null) {
 			for(String v : vars) {
 				if(o == null)
-					o = defineAppOpenApi3(v, val);
+					o = defineChoiceReportPage(v, val);
 				else if(o instanceof BaseModel) {
 					BaseModel oBaseModel = (BaseModel)o;
 					o = oBaseModel.defineForClass(v, val);
@@ -207,10 +231,10 @@ public abstract class AppOpenApi3Gen<DEV> extends AppSwagger2 {
 		}
 		return o != null;
 	}
-	public Object defineAppOpenApi3(String var, Object val) {
+	public Object defineChoiceReportPage(String var, Object val) {
 		switch(var.toLowerCase()) {
 			default:
-				return super.defineAppSwagger2(var, val);
+				return super.defineChoiceReportGenPage(var, val);
 		}
 	}
 
@@ -218,12 +242,12 @@ public abstract class AppOpenApi3Gen<DEV> extends AppSwagger2 {
 	// apiRequest //
 	//////////////////
 
-	public void apiRequestAppOpenApi3() {
+	public void apiRequestChoiceReportPage() {
 		ApiRequest apiRequest = Optional.ofNullable(siteRequest_).map(SiteRequestEnUS::getApiRequest_).orElse(null);
 		Object o = Optional.ofNullable(apiRequest).map(ApiRequest::getOriginal).orElse(null);
-		if(o != null && o instanceof AppOpenApi3) {
-			AppOpenApi3 original = (AppOpenApi3)o;
-			super.apiRequestAppSwagger2();
+		if(o != null && o instanceof ChoiceReportPage) {
+			ChoiceReportPage original = (ChoiceReportPage)o;
+			super.apiRequestChoiceReportGenPage();
 		}
 	}
 
@@ -234,7 +258,7 @@ public abstract class AppOpenApi3Gen<DEV> extends AppSwagger2 {
 	@Override public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(super.toString() + "\n");
-		sb.append("AppOpenApi3 { ");
+		sb.append("ChoiceReportPage { ");
 		sb.append(" }");
 		return sb.toString();
 	}

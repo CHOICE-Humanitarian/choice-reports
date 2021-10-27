@@ -48,16 +48,9 @@ public abstract class ChoiceDonorPageGen<DEV> extends ChoiceDonorGenPage {
 	// initDeep //
 	//////////////
 
-	protected boolean alreadyInitializedChoiceDonorPage = false;
-
 	public Future<Void> promiseDeepChoiceDonorPage(SiteRequestEnUS siteRequest_) {
 		setSiteRequest_(siteRequest_);
-		if(!alreadyInitializedChoiceDonorPage) {
-			alreadyInitializedChoiceDonorPage = true;
-			return promiseDeepChoiceDonorPage();
-		} else {
-			return Future.succeededFuture();
-		}
+		return promiseDeepChoiceDonorPage();
 	}
 
 	public Future<Void> promiseDeepChoiceDonorPage() {
@@ -139,27 +132,27 @@ public abstract class ChoiceDonorPageGen<DEV> extends ChoiceDonorGenPage {
 	}
 
 	///////////////
-	// attribute //
+	// relate //
 	///////////////
 
-	@Override public boolean attributeForClass(String var, Object val) {
+	@Override public boolean relateForClass(String var, Object val) {
 		String[] vars = StringUtils.split(var, ".");
 		Object o = null;
 		for(String v : vars) {
 			if(o == null)
-				o = attributeChoiceDonorPage(v, val);
+				o = relateChoiceDonorPage(v, val);
 			else if(o instanceof BaseModel) {
 				BaseModel baseModel = (BaseModel)o;
-				o = baseModel.attributeForClass(v, val);
+				o = baseModel.relateForClass(v, val);
 			}
 		}
 		return o != null;
 	}
-	public Object attributeChoiceDonorPage(String var, Object val) {
+	public Object relateChoiceDonorPage(String var, Object val) {
 		ChoiceDonorPage oChoiceDonorPage = (ChoiceDonorPage)this;
 		switch(var) {
 			default:
-				return super.attributeChoiceDonorGenPage(var, val);
+				return super.relateChoiceDonorGenPage(var, val);
 		}
 	}
 
@@ -223,28 +216,6 @@ public abstract class ChoiceDonorPageGen<DEV> extends ChoiceDonorGenPage {
 	// define //
 	/////////////
 
-	@Override public boolean defineForClass(String var, String val) {
-		String[] vars = StringUtils.split(var, ".");
-		Object o = null;
-		if(val != null) {
-			for(String v : vars) {
-				if(o == null)
-					o = defineChoiceDonorPage(v, val);
-				else if(o instanceof BaseModel) {
-					BaseModel oBaseModel = (BaseModel)o;
-					o = oBaseModel.defineForClass(v, val);
-				}
-			}
-		}
-		return o != null;
-	}
-	public Object defineChoiceDonorPage(String var, String val) {
-		switch(var.toLowerCase()) {
-			default:
-				return super.defineChoiceDonorGenPage(var, val);
-		}
-	}
-
 	@Override public boolean defineForClass(String var, Object val) {
 		String[] vars = StringUtils.split(var, ".");
 		Object o = null;
@@ -278,27 +249,6 @@ public abstract class ChoiceDonorPageGen<DEV> extends ChoiceDonorGenPage {
 			ChoiceDonorPage original = (ChoiceDonorPage)o;
 			super.apiRequestChoiceDonorGenPage();
 		}
-	}
-
-	//////////////
-	// hashCode //
-	//////////////
-
-	@Override public int hashCode() {
-		return Objects.hash(super.hashCode());
-	}
-
-	////////////
-	// equals //
-	////////////
-
-	@Override public boolean equals(Object o) {
-		if(this == o)
-			return true;
-		if(!(o instanceof ChoiceDonorPage))
-			return false;
-		ChoiceDonorPage that = (ChoiceDonorPage)o;
-		return super.equals(o);
 	}
 
 	//////////////

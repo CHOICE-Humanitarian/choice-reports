@@ -53,14 +53,53 @@ CREATE TABLE SiteUser(
 	, userId text
 	, userKey bigint
 	, userName text
-	, sessionId text
 	, userEmail text
 	, userFirstName text
 	, userLastName text
 	, userFullName text
+	, seeArchived boolean
+	, seeDeleted boolean
+	);
+CREATE TABLE ChoiceDonor(
+	pk bigserial primary key
+	, inheritPk text
+	, created timestamp with time zone
+	, archived boolean
+	, deleted boolean
+	, userId text
+	, userKey bigint
+	, donorFullName text
+	, donorParentName text
+	, donorId bigint
+	, donorAttributeId text
+	, donorInKind bigint
+	, donorTotal decimal
+	, donorYtd decimal
+	, donorQ1 decimal
+	, donorQ2 decimal
+	, donorQ3 decimal
+	, donorQ4 decimal
+	);
+CREATE TABLE ChoiceReport(
+	pk bigserial primary key
+	, inheritPk text
+	, created timestamp with time zone
+	, archived boolean
+	, deleted boolean
+	, userId text
+	, userKey bigint
+	, donorFullName text
+	);
+CREATE TABLE ChoiceReportDonorKeys_ChoiceDonorReportKeys(
+	pk bigserial primary key
+	, pk1 bigint references ChoiceReport(pk)
+	, pk2 bigint references ChoiceDonor(pk)
 	);
 
 DROP TABLE SiteUser CASCADE;
+DROP TABLE ChoiceDonor CASCADE;
+DROP TABLE ChoiceReport CASCADE;
+DROP TABLE ChoiceReportDonorKeys_ChoiceDonorReportKeys CASCADE;
 */
 
 	protected static final Logger LOG = LoggerFactory.getLogger(MainVerticle.class);
@@ -140,13 +179,8 @@ DROP TABLE SiteUser CASCADE;
 	// initDeep //
 	//////////////
 
-	protected boolean alreadyInitializedMainVerticle = false;
-
 	public MainVerticle initDeepMainVerticle(SiteRequestEnUS siteRequest_) {
-		if(!alreadyInitializedMainVerticle) {
-			alreadyInitializedMainVerticle = true;
-			initDeepMainVerticle();
-		}
+		initDeepMainVerticle();
 		return (MainVerticle)this;
 	}
 
@@ -191,23 +225,23 @@ DROP TABLE SiteUser CASCADE;
 	}
 
 	///////////////
-	// attribute //
+	// relate //
 	///////////////
 
-	public boolean attributeForClass(String var, Object val) {
+	public boolean relateForClass(String var, Object val) {
 		String[] vars = StringUtils.split(var, ".");
 		Object o = null;
 		for(String v : vars) {
 			if(o == null)
-				o = attributeMainVerticle(v, val);
+				o = relateMainVerticle(v, val);
 			else if(o instanceof BaseModel) {
 				BaseModel baseModel = (BaseModel)o;
-				o = baseModel.attributeForClass(v, val);
+				o = baseModel.relateForClass(v, val);
 			}
 		}
 		return o != null;
 	}
-	public Object attributeMainVerticle(String var, Object val) {
+	public Object relateMainVerticle(String var, Object val) {
 		MainVerticle oMainVerticle = (MainVerticle)this;
 		switch(var) {
 			default:
@@ -275,28 +309,6 @@ DROP TABLE SiteUser CASCADE;
 	// define //
 	/////////////
 
-	public boolean defineForClass(String var, String val) {
-		String[] vars = StringUtils.split(var, ".");
-		Object o = null;
-		if(val != null) {
-			for(String v : vars) {
-				if(o == null)
-					o = defineMainVerticle(v, val);
-				else if(o instanceof BaseModel) {
-					BaseModel oBaseModel = (BaseModel)o;
-					o = oBaseModel.defineForClass(v, val);
-				}
-			}
-		}
-		return o != null;
-	}
-	public Object defineMainVerticle(String var, String val) {
-		switch(var.toLowerCase()) {
-			default:
-				return null;
-		}
-	}
-
 	public boolean defineForClass(String var, Object val) {
 		String[] vars = StringUtils.split(var, ".");
 		Object o = null;
@@ -317,27 +329,6 @@ DROP TABLE SiteUser CASCADE;
 			default:
 				return null;
 		}
-	}
-
-	//////////////
-	// hashCode //
-	//////////////
-
-	@Override public int hashCode() {
-		return Objects.hash();
-	}
-
-	////////////
-	// equals //
-	////////////
-
-	@Override public boolean equals(Object o) {
-		if(this == o)
-			return true;
-		if(!(o instanceof MainVerticle))
-			return false;
-		MainVerticle that = (MainVerticle)o;
-		return true;
 	}
 
 	//////////////

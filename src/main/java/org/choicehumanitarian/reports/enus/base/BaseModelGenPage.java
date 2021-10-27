@@ -1,24 +1,23 @@
-package org.choicehumanitarian.reports.enus.user;
+package org.choicehumanitarian.reports.enus.base;
 
-import java.util.List;
+import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import java.lang.Long;
 import java.lang.String;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.lang.Boolean;
-import org.choicehumanitarian.reports.enus.base.BaseModelPage;
-import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
+import java.util.List;
+import org.choicehumanitarian.reports.enus.page.PageLayout;
 import org.choicehumanitarian.reports.enus.user.SiteUser;
 import java.io.IOException;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
 import org.choicehumanitarian.reports.enus.search.SearchList;
 import org.choicehumanitarian.reports.enus.wrap.Wrap;
-import org.choicehumanitarian.reports.enus.page.PageLayout;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.api.service.ServiceRequest;
 import io.vertx.core.json.JsonArray;
@@ -45,34 +44,34 @@ import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 /**
  * Translate: false
  **/
-public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
+public class BaseModelGenPage extends BaseModelGenPageGen<PageLayout> {
 
 	/**
 	 * {@inheritDoc}
 	 * Ignore: true
 	 **/
-	protected void _searchListSiteUser_(Wrap<SearchList<SiteUser>> w) {
+	protected void _searchListBaseModel_(Wrap<SearchList<BaseModel>> w) {
 	}
 
 	/**
 	 * {@inheritDoc}
 	 **/
-	protected void _listSiteUser(JsonArray l) {
-		Optional.ofNullable(searchListSiteUser_).map(o -> o.getList()).orElse(Arrays.asList()).stream().map(o -> JsonObject.mapFrom(o)).forEach(o -> l.add(o));
+	protected void _listBaseModel(JsonArray l) {
+		Optional.ofNullable(searchListBaseModel_).map(o -> o.getList()).orElse(Arrays.asList()).stream().map(o -> JsonObject.mapFrom(o)).forEach(o -> l.add(o));
 	}
 
-	protected void _siteUserCount(Wrap<Integer> w) {
-		w.o(searchListSiteUser_ == null ? 0 : searchListSiteUser_.size());
+	protected void _baseModelCount(Wrap<Integer> w) {
+		w.o(searchListBaseModel_ == null ? 0 : searchListBaseModel_.size());
 	}
 
-	protected void _siteUser_(Wrap<SiteUser> w) {
-		if(siteUserCount == 1)
-			w.o(searchListSiteUser_.get(0));
+	protected void _baseModel_(Wrap<BaseModel> w) {
+		if(baseModelCount == 1)
+			w.o(searchListBaseModel_.get(0));
 	}
 
 	protected void _pk(Wrap<Long> w) {
-		if(siteUserCount == 1)
-			w.o(siteUser_.getPk());
+		if(baseModelCount == 1)
+			w.o(baseModel_.getPk());
 	}
 
 	@Override
@@ -82,24 +81,22 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
 
 	@Override
 	protected void _classSimpleName(Wrap<String> w) {
-		w.o("SiteUser");
+		w.o("BaseModel");
 	}
 
 	@Override
 	protected void _pageTitle(Wrap<String> c) {
-		if(siteUser_ != null && siteUser_.getObjectTitle() != null)
-			c.o(siteUser_.getObjectTitle());
-		else if(siteUser_ != null)
-			c.o("site users");
-		else if(searchListSiteUser_ == null || siteUserCount == 0)
-			c.o("no site user found");
-		else
-			c.o("site users");
+		if(baseModel_ != null && baseModel_.getObjectTitle() != null)
+			c.o(baseModel_.getObjectTitle());
+		else if(baseModel_ != null)
+			c.o("");
+		else if(searchListBaseModel_ == null || baseModelCount == 0)
+			c.o("");
 	}
 
 	@Override
 	protected void _pageUri(Wrap<String> c) {
-		c.o("/api/user");
+		c.o("");
 	}
 
 	@Override
@@ -110,16 +107,11 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
 	}
 
 	@Override
-	protected void _rolesRequired(List<String> l) {
-		l.addAll(Optional.ofNullable(siteRequest_.getConfig().getJsonArray(ConfigKeys.AUTH_ROLES_REQUIRED + "_SiteUser")).orElse(new JsonArray()).stream().map(o -> o.toString()).collect(Collectors.toList()));
-	}
-
-	@Override
 	protected void _pagination(JsonObject pagination) {
 		JsonArray pages = new JsonArray();
-		Long start = searchListSiteUser_.getStart().longValue();
-		Long rows = searchListSiteUser_.getRows().longValue();
-		Long foundNum = searchListSiteUser_.getQueryResponse().getResults().getNumFound();
+		Long start = searchListBaseModel_.getStart().longValue();
+		Long rows = searchListBaseModel_.getRows().longValue();
+		Long foundNum = searchListBaseModel_.getQueryResponse().getResults().getNumFound();
 		Long startNum = start + 1L;
 		Long endNum = start + rows;
 		Long floorMod = Math.floorMod(foundNum, rows);
@@ -165,7 +157,7 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
 		JsonObject params = serviceRequest.getParams();
 
 		JsonObject queryParams = Optional.ofNullable(serviceRequest).map(ServiceRequest::getParams).map(or -> or.getJsonObject("query")).orElse(new JsonObject());
-		Long num = searchListSiteUser_.getQueryResponse().getResults().getNumFound();
+		Long num = searchListBaseModel_.getQueryResponse().getResults().getNumFound();
 		String q = "*:*";
 		String q1 = "objectText";
 		String q2 = "";
@@ -193,15 +185,15 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
 		}
 		query.put("q", q);
 
-		Integer rows1 = Optional.ofNullable(searchListSiteUser_).map(l -> l.getRows()).orElse(10);
-		Integer start1 = Optional.ofNullable(searchListSiteUser_).map(l -> l.getStart()).orElse(1);
+		Integer rows1 = Optional.ofNullable(searchListBaseModel_).map(l -> l.getRows()).orElse(10);
+		Integer start1 = Optional.ofNullable(searchListBaseModel_).map(l -> l.getStart()).orElse(1);
 		Integer start2 = start1 - rows1;
 		Integer start3 = start1 + rows1;
 		Integer rows2 = rows1 / 2;
 		Integer rows3 = rows1 * 2;
 		start2 = start2 < 0 ? 0 : start2;
 		JsonArray fqs = new JsonArray();
-		for(String fq : Optional.ofNullable(searchListSiteUser_).map(l -> l.getFilterQueries()).orElse(new String[0])) {
+		for(String fq : Optional.ofNullable(searchListBaseModel_).map(l -> l.getFilterQueries()).orElse(new String[0])) {
 			if(!StringUtils.contains(fq, "(")) {
 				String fq1 = StringUtils.substringBefore(fq, "_");
 				String fq2 = StringUtils.substringAfter(fq, ":");
@@ -212,7 +204,7 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
 		query.put("fq", fqs);
 
 		JsonArray sorts = new JsonArray();
-		for(SortClause sort : Optional.ofNullable(searchListSiteUser_).map(l -> l.getSorts()).orElse(Arrays.asList())) {
+		for(SortClause sort : Optional.ofNullable(searchListBaseModel_).map(l -> l.getSorts()).orElse(Arrays.asList())) {
 			sorts.add(new JsonObject().put("var", StringUtils.substringBefore(sort.getItem(), "_")).put("order", sort.getOrder().name()));
 		}
 		query.put("sort", sorts);
@@ -225,16 +217,6 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
 
 	@Override
 	protected void _pageImageUri(Wrap<String> c) {
-			c.o("/png/api/user-999.png");
-	}
-
-	@Override
-	protected void _contextIconGroup(Wrap<String> c) {
-			c.o("regular");
-	}
-
-	@Override
-	protected void _contextIconName(Wrap<String> c) {
-			c.o("user-cog");
+			c.o("/png-999.png");
 	}
 }
