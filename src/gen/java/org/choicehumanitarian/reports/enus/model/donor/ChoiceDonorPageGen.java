@@ -257,9 +257,7 @@ public abstract class ChoiceDonorPageGen<DEV> extends ChoiceDonorGenPage {
 
 	@Override public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(super.toString() + "\n");
-		sb.append("ChoiceDonorPage { ");
-		sb.append(" }");
+		sb.append(super.toString());
 		return sb.toString();
 	}
 

@@ -122,10 +122,8 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 		user(serviceRequest).onSuccess(siteRequest -> {
 			try {
 				siteRequest.setJsonObject(body);
-				siteRequest.setRequestUri(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("uri")).orElse(null));
-				siteRequest.setRequestMethod(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("method")).orElse(null));
 
-				List<String> roles = Arrays.asList("SiteAdmin");
+				List<String> roles = Optional.ofNullable(config.getJsonArray(ConfigKeys.AUTH_ROLES_REQUIRED + "_ChoiceDonor")).orElse(new JsonArray()).getList();
 				if(
 						!CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roles)
 						&& !CollectionUtils.containsAny(siteRequest.getUserRealmRoles(), roles)
@@ -177,7 +175,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -338,7 +336,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 				eventHandler.handle(Future.failedFuture(ex));
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -373,10 +371,8 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 		user(serviceRequest).onSuccess(siteRequest -> {
 			try {
 				siteRequest.setJsonObject(body);
-				siteRequest.setRequestUri(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("uri")).orElse(null));
-				siteRequest.setRequestMethod(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("method")).orElse(null));
 
-				List<String> roles = Arrays.asList("SiteAdmin");
+				List<String> roles = Optional.ofNullable(config.getJsonArray(ConfigKeys.AUTH_ROLES_REQUIRED + "_ChoiceDonor")).orElse(new JsonArray()).getList();
 				if(
 						!CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roles)
 						&& !CollectionUtils.containsAny(siteRequest.getUserRealmRoles(), roles)
@@ -433,7 +429,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -466,7 +462,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 				eventHandler.handle(Future.failedFuture(ex));
 			});
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -710,6 +706,15 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 						num++;
 						bParams.add(o2.sqlDonorQ4());
 						break;
+					case ChoiceDonor.VAR_donorLogoFilename:
+						o2.setDonorLogoFilename(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(ChoiceDonor.VAR_donorLogoFilename + "=$" + num);
+						num++;
+						bParams.add(o2.sqlDonorLogoFilename());
+						break;
 					case ChoiceDonor.VAR_reportKeys:
 						Optional.ofNullable(jsonObject.getJsonArray(entityVar)).orElse(new JsonArray()).stream().map(oVal -> oVal.toString()).forEach(val -> {
 							futures2.add(Future.future(promise2 -> {
@@ -718,7 +723,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 										pks.add(pk2);
 										classes.add("ChoiceReport");
 									}
-									sql(siteRequest).insertInto(ChoiceReport.class, ChoiceReport.VAR_donorKeys, ChoiceDonor.class, ChoiceDonor.VAR_reportKeys).values(pk2, pk).onSuccess(a -> {
+									sql(siteRequest).update(ChoiceReport.class, pk2).set(ChoiceReport.VAR_donorKey, ChoiceDonor.class, pk).onSuccess(a -> {
 										promise2.complete();
 									}).onFailure(ex -> {
 										promise2.fail(ex);
@@ -788,10 +793,8 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 		user(serviceRequest).onSuccess(siteRequest -> {
 			try {
 				siteRequest.setJsonObject(body);
-				siteRequest.setRequestUri(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("uri")).orElse(null));
-				siteRequest.setRequestMethod(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("method")).orElse(null));
 
-				List<String> roles = Arrays.asList("SiteAdmin");
+				List<String> roles = Optional.ofNullable(config.getJsonArray(ConfigKeys.AUTH_ROLES_REQUIRED + "_ChoiceDonor")).orElse(new JsonArray()).getList();
 				if(
 						!CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roles)
 						&& !CollectionUtils.containsAny(siteRequest.getUserRealmRoles(), roles)
@@ -809,7 +812,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 				} else {
 					searchChoiceDonorList(siteRequest, false, true, true).onSuccess(listChoiceDonor -> {
 						try {
-							List<String> roles2 = Arrays.asList("SiteAdmin");
+							List<String> roles2 = Optional.ofNullable(config.getJsonArray(ConfigKeys.AUTH_ROLES_ADMIN)).orElse(new JsonArray()).getList();
 							if(listChoiceDonor.getQueryResponse().getResults().getNumFound() > 1
 									&& !CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roles2)
 									&& !CollectionUtils.containsAny(siteRequest.getUserRealmRoles(), roles2)
@@ -857,7 +860,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -1146,6 +1149,14 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 							num++;
 							bParams.add(o2.sqlDonorQ4());
 						break;
+					case "setDonorLogoFilename":
+							o2.setDonorLogoFilename(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(ChoiceDonor.VAR_donorLogoFilename + "=$" + num);
+							num++;
+							bParams.add(o2.sqlDonorLogoFilename());
+						break;
 					case "setReportKeys":
 						JsonArray setReportKeysValues = Optional.ofNullable(jsonObject.getJsonArray(entityVar)).orElse(new JsonArray());
 						setReportKeysValues.stream().map(oVal -> oVal.toString()).forEach(val -> {
@@ -1155,7 +1166,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 										pks.add(pk2);
 										classes.add("ChoiceReport");
 									}
-									sql(siteRequest).insertInto(ChoiceReport.class, ChoiceReport.VAR_donorKeys, ChoiceDonor.class, ChoiceDonor.VAR_reportKeys).values(pk, pk2).onSuccess(a -> {
+									sql(siteRequest).update(ChoiceReport.class, pk2).set(ChoiceReport.VAR_donorKey, ChoiceDonor.class, pk).onSuccess(a -> {
 										promise2.complete();
 									}).onFailure(ex -> {
 										promise2.fail(ex);
@@ -1171,7 +1182,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 								classes.add("ChoiceReport");
 							}
 							futures2.add(Future.future(promise2 -> {
-								sql(siteRequest).deleteFrom(ChoiceReport.class, ChoiceReport.VAR_donorKeys, ChoiceDonor.class, ChoiceDonor.VAR_reportKeys).where(pk2, pk).onSuccess(a -> {
+								sql(siteRequest).update(ChoiceReport.class, pk2).setToNull(ChoiceReport.VAR_donorKey, ChoiceDonor.class, pk2).onSuccess(a -> {
 									promise2.complete();
 								}).onFailure(ex -> {
 									promise2.fail(ex);
@@ -1188,7 +1199,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 										pks.add(pk2);
 										classes.add("ChoiceReport");
 									}
-									sql(siteRequest).insertInto(ChoiceReport.class, ChoiceReport.VAR_donorKeys, ChoiceDonor.class, ChoiceDonor.VAR_reportKeys).values(pk, pk2).onSuccess(a -> {
+									sql(siteRequest).update(ChoiceReport.class, pk2).set(ChoiceReport.VAR_donorKey, ChoiceDonor.class, pk).onSuccess(a -> {
 										promise2.complete();
 									}).onFailure(ex -> {
 										promise2.fail(ex);
@@ -1207,7 +1218,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 										pks.add(pk2);
 										classes.add("ChoiceReport");
 									}
-									sql(siteRequest).insertInto(ChoiceReport.class, ChoiceReport.VAR_donorKeys, ChoiceDonor.class, ChoiceDonor.VAR_reportKeys).values(pk, pk2).onSuccess(a -> {
+									sql(siteRequest).update(ChoiceReport.class, pk2).set(ChoiceReport.VAR_donorKey, ChoiceDonor.class, pk).onSuccess(a -> {
 										promise2.complete();
 									}).onFailure(ex -> {
 										promise2.fail(ex);
@@ -1225,7 +1236,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 								classes.add("ChoiceReport");
 							}
 							futures2.add(Future.future(promise2 -> {
-								sql(siteRequest).deleteFrom(ChoiceReport.class, ChoiceReport.VAR_donorKeys, ChoiceDonor.class, ChoiceDonor.VAR_reportKeys).where(pk2, pk).onSuccess(a -> {
+								sql(siteRequest).update(ChoiceReport.class, pk2).setToNull(ChoiceReport.VAR_donorKey, ChoiceDonor.class, pk2).onSuccess(a -> {
 									promise2.complete();
 								}).onFailure(ex -> {
 									promise2.fail(ex);
@@ -1291,10 +1302,8 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 	public void getChoiceDonor(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
 		user(serviceRequest).onSuccess(siteRequest -> {
 			try {
-				siteRequest.setRequestUri(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("uri")).orElse(null));
-				siteRequest.setRequestMethod(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("method")).orElse(null));
 
-				List<String> roles = Arrays.asList("SiteAdmin");
+				List<String> roles = Optional.ofNullable(config.getJsonArray(ConfigKeys.AUTH_ROLES_REQUIRED + "_ChoiceDonor")).orElse(new JsonArray()).getList();
 				List<String> roleReads = Arrays.asList("");
 				if(
 						!CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roles)
@@ -1331,7 +1340,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -1368,10 +1377,8 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 	public void searchChoiceDonor(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
 		user(serviceRequest).onSuccess(siteRequest -> {
 			try {
-				siteRequest.setRequestUri(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("uri")).orElse(null));
-				siteRequest.setRequestMethod(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("method")).orElse(null));
 
-				List<String> roles = Arrays.asList("SiteAdmin");
+				List<String> roles = Optional.ofNullable(config.getJsonArray(ConfigKeys.AUTH_ROLES_REQUIRED + "_ChoiceDonor")).orElse(new JsonArray()).getList();
 				List<String> roleReads = Arrays.asList("");
 				if(
 						!CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roles)
@@ -1408,7 +1415,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -1584,10 +1591,8 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 	public void searchpageChoiceDonor(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
 		user(serviceRequest).onSuccess(siteRequest -> {
 			try {
-				siteRequest.setRequestUri(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("uri")).orElse(null));
-				siteRequest.setRequestMethod(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("method")).orElse(null));
 
-				List<String> roles = Arrays.asList("SiteAdmin");
+				List<String> roles = Optional.ofNullable(config.getJsonArray(ConfigKeys.AUTH_ROLES_REQUIRED + "_ChoiceDonor")).orElse(new JsonArray()).getList();
 				List<String> roleReads = Arrays.asList("");
 				if(
 						!CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roles)
@@ -1624,7 +1629,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -1672,18 +1677,6 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 		}
 		return promise.future();
 	}
-	public static final String VAR_donorFullName = "donorFullName";
-	public static final String VAR_donorParentName = "donorParentName";
-	public static final String VAR_donorId = "donorId";
-	public static final String VAR_donorAttributeId = "donorAttributeId";
-	public static final String VAR_donorInKind = "donorInKind";
-	public static final String VAR_donorTotal = "donorTotal";
-	public static final String VAR_donorYtd = "donorYtd";
-	public static final String VAR_donorQ1 = "donorQ1";
-	public static final String VAR_donorQ2 = "donorQ2";
-	public static final String VAR_donorQ3 = "donorQ3";
-	public static final String VAR_donorQ4 = "donorQ4";
-	public static final String VAR_reportKeys = "reportKeys";
 
 	// General //
 
@@ -2003,7 +1996,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 			SiteRequestEnUS siteRequest = o.getSiteRequest_();
 			SqlConnection sqlConnection = siteRequest.getSqlConnection();
 			Long pk = o.getPk();
-			sqlConnection.preparedQuery("SELECT pk1, 'reportKeys' from ChoiceReportdonorKeys_ChoiceDonorreportKeys where pk2=$1")
+			sqlConnection.preparedQuery("SELECT pk as pk1, 'reportKeys' from ChoiceReport where donorKey=$1")
 					.collecting(Collectors.toList())
 					.execute(Tuple.of(pk)
 					).onSuccess(result -> {

@@ -6,7 +6,6 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
@@ -52,13 +51,6 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 	private WebClient webClient;
 
 	WorkerExecutor workerExecutor;
-
-	Semaphore semaphore;
-
-	public WorkerVerticle setSemaphore(Semaphore semaphore) {
-		this.semaphore = semaphore;
-		return this;
-	}
 
 	/**	
 	 *	This is called by Vert.x when the verticle instance is deployed. 

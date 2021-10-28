@@ -656,7 +656,7 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return (BaseModel)this;
 	}
 	public BaseModel addClassCanonicalNames(String o) {
-		if(o != null && !classCanonicalNames.contains(o))
+		if(o != null)
 			this.classCanonicalNames.add(o);
 		return (BaseModel)this;
 	}
@@ -732,6 +732,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 
 	public static String staticSolrFqSessionId(SiteRequestEnUS siteRequest_, String o) {
 		return BaseModel.staticSolrStrSessionId(siteRequest_, BaseModel.staticSolrSessionId(siteRequest_, BaseModel.staticSetSessionId(siteRequest_, o)));
+	}
+
+	public String sqlSessionId() {
+		return sessionId;
 	}
 
 	/////////////
@@ -832,7 +836,7 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return (BaseModel)this;
 	}
 	public BaseModel addSaves(String o) {
-		if(o != null && !saves.contains(o))
+		if(o != null)
 			this.saves.add(o);
 		return (BaseModel)this;
 	}
@@ -1753,6 +1757,11 @@ public abstract class BaseModelGen<DEV> extends Object {
 					setDeleted((Boolean)val);
 				saves.add("deleted");
 				return val;
+			case "sessionid":
+				if(val instanceof String)
+					setSessionId((String)val);
+				saves.add("sessionId");
+				return val;
 			case "userkey":
 				if(val instanceof Long)
 					setUserKey((Long)val);
@@ -2000,27 +2009,25 @@ public abstract class BaseModelGen<DEV> extends Object {
 
 	@Override public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("BaseModel { ");
-		sb.append( "pk: " ).append(pk);
-		sb.append( ", inheritPk: \"" ).append(inheritPk).append( "\"" );
-		sb.append( ", id: \"" ).append(id).append( "\"" );
-		sb.append( ", created: " ).append(created);
-		sb.append( ", modified: " ).append(modified);
-		sb.append( ", archived: " ).append(archived);
-		sb.append( ", deleted: " ).append(deleted);
-		sb.append( ", classCanonicalName: \"" ).append(classCanonicalName).append( "\"" );
-		sb.append( ", classSimpleName: \"" ).append(classSimpleName).append( "\"" );
-		sb.append( ", classCanonicalNames: " ).append(classCanonicalNames);
-		sb.append( ", sessionId: \"" ).append(sessionId).append( "\"" );
-		sb.append( ", userKey: " ).append(userKey);
-		sb.append( ", saves: " ).append(saves);
-		sb.append( ", objectTitle: \"" ).append(objectTitle).append( "\"" );
-		sb.append( ", objectId: \"" ).append(objectId).append( "\"" );
-		sb.append( ", objectSuggest: \"" ).append(objectSuggest).append( "\"" );
-		sb.append( ", objectText: \"" ).append(objectText).append( "\"" );
-		sb.append( ", pageUrlId: \"" ).append(pageUrlId).append( "\"" );
-		sb.append( ", pageUrlPk: \"" ).append(pageUrlPk).append( "\"" );
-		sb.append(" }");
+		sb.append(Optional.ofNullable(pk).map(v -> "pk: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(inheritPk).map(v -> "inheritPk: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(id).map(v -> "id: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(created).map(v -> "created: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(modified).map(v -> "modified: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(archived).map(v -> "archived: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(deleted).map(v -> "deleted: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(classCanonicalName).map(v -> "classCanonicalName: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(classSimpleName).map(v -> "classSimpleName: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(classCanonicalNames).map(v -> "classCanonicalNames: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(sessionId).map(v -> "sessionId: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(userKey).map(v -> "userKey: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(saves).map(v -> "saves: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(objectTitle).map(v -> "objectTitle: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(objectId).map(v -> "objectId: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(objectSuggest).map(v -> "objectSuggest: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(objectText).map(v -> "objectText: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(pageUrlId).map(v -> "pageUrlId: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(pageUrlPk).map(v -> "pageUrlPk: \"" + v + "\"\n" ).orElse(""));
 		return sb.toString();
 	}
 

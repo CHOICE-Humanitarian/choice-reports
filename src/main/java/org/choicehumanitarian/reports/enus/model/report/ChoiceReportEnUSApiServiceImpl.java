@@ -1,5 +1,7 @@
 package org.choicehumanitarian.reports.enus.model.report;
 
+import org.choicehumanitarian.reports.enus.config.ConfigKeys;
+
 import io.vertx.core.WorkerExecutor;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.json.JsonObject;
@@ -16,5 +18,10 @@ public class ChoiceReportEnUSApiServiceImpl extends ChoiceReportEnUSGenApiServic
 
 	public ChoiceReportEnUSApiServiceImpl(EventBus eventBus, JsonObject config, WorkerExecutor workerExecutor, PgPool pgPool, WebClient webClient, OAuth2Auth oauth2AuthenticationProvider, AuthorizationProvider authorizationProvider, HandlebarsTemplateEngine templateEngine) {
 		super(eventBus, config, workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine);
+	}
+
+	@Override
+	public String templateChoiceReportDisplaySearchPageChoiceReport() {
+		return config.getString(ConfigKeys.TEMPLATE_PATH) + "/enUS/ChoiceReportDisplayPage";
 	}
 }

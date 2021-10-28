@@ -122,10 +122,8 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 		user(serviceRequest).onSuccess(siteRequest -> {
 			try {
 				siteRequest.setJsonObject(body);
-				siteRequest.setRequestUri(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("uri")).orElse(null));
-				siteRequest.setRequestMethod(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("method")).orElse(null));
 
-				List<String> roles = Arrays.asList("SiteAdmin");
+				List<String> roles = Optional.ofNullable(config.getJsonArray(ConfigKeys.AUTH_ROLES_REQUIRED + "_ChoiceReport")).orElse(new JsonArray()).getList();
 				if(
 						!CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roles)
 						&& !CollectionUtils.containsAny(siteRequest.getUserRealmRoles(), roles)
@@ -177,7 +175,7 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -338,7 +336,7 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 				eventHandler.handle(Future.failedFuture(ex));
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -373,10 +371,8 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 		user(serviceRequest).onSuccess(siteRequest -> {
 			try {
 				siteRequest.setJsonObject(body);
-				siteRequest.setRequestUri(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("uri")).orElse(null));
-				siteRequest.setRequestMethod(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("method")).orElse(null));
 
-				List<String> roles = Arrays.asList("SiteAdmin");
+				List<String> roles = Optional.ofNullable(config.getJsonArray(ConfigKeys.AUTH_ROLES_REQUIRED + "_ChoiceReport")).orElse(new JsonArray()).getList();
 				if(
 						!CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roles)
 						&& !CollectionUtils.containsAny(siteRequest.getUserRealmRoles(), roles)
@@ -433,7 +429,7 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -466,7 +462,7 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 				eventHandler.handle(Future.failedFuture(ex));
 			});
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -611,24 +607,15 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 						num++;
 						bParams.add(o2.sqlDeleted());
 						break;
-					case ChoiceReport.VAR_donorFullName:
-						o2.setDonorFullName(jsonObject.getString(entityVar));
-						if(bParams.size() > 0) {
-							bSql.append(", ");
-						}
-						bSql.append(ChoiceReport.VAR_donorFullName + "=$" + num);
-						num++;
-						bParams.add(o2.sqlDonorFullName());
-						break;
-					case ChoiceReport.VAR_donorKeys:
-						Optional.ofNullable(jsonObject.getJsonArray(entityVar)).orElse(new JsonArray()).stream().map(oVal -> oVal.toString()).forEach(val -> {
-							futures2.add(Future.future(promise2 -> {
+					case ChoiceReport.VAR_donorKey:
+						Optional.ofNullable(jsonObject.getString(entityVar)).ifPresent(val -> {
+							futures1.add(Future.future(promise2 -> {
 								search(siteRequest).query(ChoiceDonor.class, val, inheritPk).onSuccess(pk2 -> {
 									if(!pks.contains(pk2)) {
 										pks.add(pk2);
 										classes.add("ChoiceDonor");
 									}
-									sql(siteRequest).insertInto(ChoiceReport.class, ChoiceReport.VAR_donorKeys, ChoiceDonor.class, ChoiceDonor.VAR_reportKeys).values(pk, pk2).onSuccess(a -> {
+									sql(siteRequest).update(ChoiceReport.class, pk).set(ChoiceReport.VAR_donorKey, ChoiceDonor.class, pk2).onSuccess(a -> {
 										promise2.complete();
 									}).onFailure(ex -> {
 										promise2.fail(ex);
@@ -638,6 +625,114 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 								});
 							}));
 						});
+						break;
+					case ChoiceReport.VAR_donorFullName:
+						o2.setDonorFullName(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(ChoiceReport.VAR_donorFullName + "=$" + num);
+						num++;
+						bParams.add(o2.sqlDonorFullName());
+						break;
+					case ChoiceReport.VAR_donorParentName:
+						o2.setDonorParentName(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(ChoiceReport.VAR_donorParentName + "=$" + num);
+						num++;
+						bParams.add(o2.sqlDonorParentName());
+						break;
+					case ChoiceReport.VAR_donorId:
+						o2.setDonorId(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(ChoiceReport.VAR_donorId + "=$" + num);
+						num++;
+						bParams.add(o2.sqlDonorId());
+						break;
+					case ChoiceReport.VAR_donorAttributeId:
+						o2.setDonorAttributeId(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(ChoiceReport.VAR_donorAttributeId + "=$" + num);
+						num++;
+						bParams.add(o2.sqlDonorAttributeId());
+						break;
+					case ChoiceReport.VAR_donorInKind:
+						o2.setDonorInKind(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(ChoiceReport.VAR_donorInKind + "=$" + num);
+						num++;
+						bParams.add(o2.sqlDonorInKind());
+						break;
+					case ChoiceReport.VAR_donorTotal:
+						o2.setDonorTotal(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(ChoiceReport.VAR_donorTotal + "=$" + num);
+						num++;
+						bParams.add(o2.sqlDonorTotal());
+						break;
+					case ChoiceReport.VAR_donorYtd:
+						o2.setDonorYtd(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(ChoiceReport.VAR_donorYtd + "=$" + num);
+						num++;
+						bParams.add(o2.sqlDonorYtd());
+						break;
+					case ChoiceReport.VAR_donorQ1:
+						o2.setDonorQ1(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(ChoiceReport.VAR_donorQ1 + "=$" + num);
+						num++;
+						bParams.add(o2.sqlDonorQ1());
+						break;
+					case ChoiceReport.VAR_donorQ2:
+						o2.setDonorQ2(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(ChoiceReport.VAR_donorQ2 + "=$" + num);
+						num++;
+						bParams.add(o2.sqlDonorQ2());
+						break;
+					case ChoiceReport.VAR_donorQ3:
+						o2.setDonorQ3(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(ChoiceReport.VAR_donorQ3 + "=$" + num);
+						num++;
+						bParams.add(o2.sqlDonorQ3());
+						break;
+					case ChoiceReport.VAR_donorQ4:
+						o2.setDonorQ4(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(ChoiceReport.VAR_donorQ4 + "=$" + num);
+						num++;
+						bParams.add(o2.sqlDonorQ4());
+						break;
+					case ChoiceReport.VAR_donorLogoFilename:
+						o2.setDonorLogoFilename(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(ChoiceReport.VAR_donorLogoFilename + "=$" + num);
+						num++;
+						bParams.add(o2.sqlDonorLogoFilename());
 						break;
 					}
 				}
@@ -698,10 +793,8 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 		user(serviceRequest).onSuccess(siteRequest -> {
 			try {
 				siteRequest.setJsonObject(body);
-				siteRequest.setRequestUri(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("uri")).orElse(null));
-				siteRequest.setRequestMethod(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("method")).orElse(null));
 
-				List<String> roles = Arrays.asList("SiteAdmin");
+				List<String> roles = Optional.ofNullable(config.getJsonArray(ConfigKeys.AUTH_ROLES_REQUIRED + "_ChoiceReport")).orElse(new JsonArray()).getList();
 				if(
 						!CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roles)
 						&& !CollectionUtils.containsAny(siteRequest.getUserRealmRoles(), roles)
@@ -719,7 +812,7 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 				} else {
 					searchChoiceReportList(siteRequest, false, true, true).onSuccess(listChoiceReport -> {
 						try {
-							List<String> roles2 = Arrays.asList("SiteAdmin");
+							List<String> roles2 = Optional.ofNullable(config.getJsonArray(ConfigKeys.AUTH_ROLES_ADMIN)).orElse(new JsonArray()).getList();
 							if(listChoiceReport.getQueryResponse().getResults().getNumFound() > 1
 									&& !CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roles2)
 									&& !CollectionUtils.containsAny(siteRequest.getUserRealmRoles(), roles2)
@@ -767,7 +860,7 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -968,6 +1061,25 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 							num++;
 							bParams.add(o2.sqlDeleted());
 						break;
+					case "setDonorKey":
+						Optional.ofNullable(jsonObject.getString(entityVar)).ifPresent(val -> {
+							futures1.add(Future.future(promise2 -> {
+								search(siteRequest).query(ChoiceDonor.class, val, inheritPk).onSuccess(pk2 -> {
+									if(!pks.contains(pk2)) {
+										pks.add(pk2);
+										classes.add("ChoiceDonor");
+									}
+									sql(siteRequest).update(ChoiceReport.class, pk).set(ChoiceReport.VAR_donorKey, ChoiceDonor.class, pk2).onSuccess(a -> {
+										promise2.complete();
+									}).onFailure(ex -> {
+										promise2.fail(ex);
+									});
+								}).onFailure(ex -> {
+									promise2.fail(ex);
+								});
+							}));
+						});
+						break;
 					case "setDonorFullName":
 							o2.setDonorFullName(jsonObject.getString(entityVar));
 							if(bParams.size() > 0)
@@ -976,92 +1088,93 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 							num++;
 							bParams.add(o2.sqlDonorFullName());
 						break;
-					case "setDonorKeys":
-						JsonArray setDonorKeysValues = Optional.ofNullable(jsonObject.getJsonArray(entityVar)).orElse(new JsonArray());
-						setDonorKeysValues.stream().map(oVal -> oVal.toString()).forEach(val -> {
-							futures2.add(Future.future(promise2 -> {
-								search(siteRequest).query(ChoiceDonor.class, val, inheritPk).onSuccess(pk2 -> {
-									if(!pks.contains(pk2)) {
-										pks.add(pk2);
-										classes.add("ChoiceDonor");
-									}
-									sql(siteRequest).insertInto(ChoiceReport.class, ChoiceReport.VAR_donorKeys, ChoiceDonor.class, ChoiceDonor.VAR_reportKeys).values(pk, pk2).onSuccess(a -> {
-										promise2.complete();
-									}).onFailure(ex -> {
-										promise2.fail(ex);
-									});
-								}).onFailure(ex -> {
-									promise2.fail(ex);
-								});
-							}));
-						});
-						Optional.ofNullable(o.getDonorKeys()).orElse(Arrays.asList()).stream().filter(oVal -> oVal != null && !setDonorKeysValues.contains(oVal.toString())).forEach(pk2 -> {
-							if(!pks.contains(pk2)) {
-								pks.add(pk2);
-								classes.add("ChoiceDonor");
-							}
-							futures2.add(Future.future(promise2 -> {
-								sql(siteRequest).deleteFrom(ChoiceReport.class, ChoiceReport.VAR_donorKeys, ChoiceDonor.class, ChoiceDonor.VAR_reportKeys).where(pk, pk2).onSuccess(a -> {
-									promise2.complete();
-								}).onFailure(ex -> {
-									promise2.fail(ex);
-								});
-							}));
-						});
+					case "setDonorParentName":
+							o2.setDonorParentName(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(ChoiceReport.VAR_donorParentName + "=$" + num);
+							num++;
+							bParams.add(o2.sqlDonorParentName());
 						break;
-					case "addAllDonorKeys":
-						JsonArray addAllDonorKeysValues = Optional.ofNullable(jsonObject.getJsonArray(entityVar)).orElse(new JsonArray());
-						addAllDonorKeysValues.stream().map(oVal -> oVal.toString()).forEach(val -> {
-							futures2.add(Future.future(promise2 -> {
-								search(siteRequest).query(ChoiceDonor.class, val, inheritPk).onSuccess(pk2 -> {
-									if(!pks.contains(pk2)) {
-										pks.add(pk2);
-										classes.add("ChoiceDonor");
-									}
-									sql(siteRequest).insertInto(ChoiceReport.class, ChoiceReport.VAR_donorKeys, ChoiceDonor.class, ChoiceDonor.VAR_reportKeys).values(pk, pk2).onSuccess(a -> {
-										promise2.complete();
-									}).onFailure(ex -> {
-										promise2.fail(ex);
-									});
-								}).onFailure(ex -> {
-									promise2.fail(ex);
-								});
-							}));
-						});
+					case "setDonorId":
+							o2.setDonorId(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(ChoiceReport.VAR_donorId + "=$" + num);
+							num++;
+							bParams.add(o2.sqlDonorId());
 						break;
-					case "addDonorKeys":
-						Optional.ofNullable(jsonObject.getString(entityVar)).ifPresent(val -> {
-							futures2.add(Future.future(promise2 -> {
-								search(siteRequest).query(ChoiceDonor.class, val, inheritPk).onSuccess(pk2 -> {
-									if(!pks.contains(pk2)) {
-										pks.add(pk2);
-										classes.add("ChoiceDonor");
-									}
-									sql(siteRequest).insertInto(ChoiceReport.class, ChoiceReport.VAR_donorKeys, ChoiceDonor.class, ChoiceDonor.VAR_reportKeys).values(pk, pk2).onSuccess(a -> {
-										promise2.complete();
-									}).onFailure(ex -> {
-										promise2.fail(ex);
-									});
-								}).onFailure(ex -> {
-									promise2.fail(ex);
-								});
-							}));
-						});
+					case "setDonorAttributeId":
+							o2.setDonorAttributeId(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(ChoiceReport.VAR_donorAttributeId + "=$" + num);
+							num++;
+							bParams.add(o2.sqlDonorAttributeId());
 						break;
-					case "removeDonorKeys":
-						Optional.ofNullable(jsonObject.getString(entityVar)).map(val -> Long.parseLong(val)).ifPresent(pk2 -> {
-							if(!pks.contains(pk2)) {
-								pks.add(pk2);
-								classes.add("ChoiceDonor");
-							}
-							futures2.add(Future.future(promise2 -> {
-								sql(siteRequest).deleteFrom(ChoiceReport.class, ChoiceReport.VAR_donorKeys, ChoiceDonor.class, ChoiceDonor.VAR_reportKeys).where(pk, pk2).onSuccess(a -> {
-									promise2.complete();
-								}).onFailure(ex -> {
-									promise2.fail(ex);
-								});
-							}));
-						});
+					case "setDonorInKind":
+							o2.setDonorInKind(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(ChoiceReport.VAR_donorInKind + "=$" + num);
+							num++;
+							bParams.add(o2.sqlDonorInKind());
+						break;
+					case "setDonorTotal":
+							o2.setDonorTotal(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(ChoiceReport.VAR_donorTotal + "=$" + num);
+							num++;
+							bParams.add(o2.sqlDonorTotal());
+						break;
+					case "setDonorYtd":
+							o2.setDonorYtd(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(ChoiceReport.VAR_donorYtd + "=$" + num);
+							num++;
+							bParams.add(o2.sqlDonorYtd());
+						break;
+					case "setDonorQ1":
+							o2.setDonorQ1(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(ChoiceReport.VAR_donorQ1 + "=$" + num);
+							num++;
+							bParams.add(o2.sqlDonorQ1());
+						break;
+					case "setDonorQ2":
+							o2.setDonorQ2(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(ChoiceReport.VAR_donorQ2 + "=$" + num);
+							num++;
+							bParams.add(o2.sqlDonorQ2());
+						break;
+					case "setDonorQ3":
+							o2.setDonorQ3(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(ChoiceReport.VAR_donorQ3 + "=$" + num);
+							num++;
+							bParams.add(o2.sqlDonorQ3());
+						break;
+					case "setDonorQ4":
+							o2.setDonorQ4(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(ChoiceReport.VAR_donorQ4 + "=$" + num);
+							num++;
+							bParams.add(o2.sqlDonorQ4());
+						break;
+					case "setDonorLogoFilename":
+							o2.setDonorLogoFilename(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(ChoiceReport.VAR_donorLogoFilename + "=$" + num);
+							num++;
+							bParams.add(o2.sqlDonorLogoFilename());
 						break;
 				}
 			}
@@ -1121,10 +1234,8 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 	public void getChoiceReport(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
 		user(serviceRequest).onSuccess(siteRequest -> {
 			try {
-				siteRequest.setRequestUri(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("uri")).orElse(null));
-				siteRequest.setRequestMethod(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("method")).orElse(null));
 
-				List<String> roles = Arrays.asList("SiteAdmin");
+				List<String> roles = Optional.ofNullable(config.getJsonArray(ConfigKeys.AUTH_ROLES_REQUIRED + "_ChoiceReport")).orElse(new JsonArray()).getList();
 				List<String> roleReads = Arrays.asList("");
 				if(
 						!CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roles)
@@ -1161,7 +1272,7 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -1198,10 +1309,8 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 	public void searchChoiceReport(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
 		user(serviceRequest).onSuccess(siteRequest -> {
 			try {
-				siteRequest.setRequestUri(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("uri")).orElse(null));
-				siteRequest.setRequestMethod(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("method")).orElse(null));
 
-				List<String> roles = Arrays.asList("SiteAdmin");
+				List<String> roles = Optional.ofNullable(config.getJsonArray(ConfigKeys.AUTH_ROLES_REQUIRED + "_ChoiceReport")).orElse(new JsonArray()).getList();
 				List<String> roleReads = Arrays.asList("");
 				if(
 						!CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roles)
@@ -1238,7 +1347,7 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -1414,10 +1523,8 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 	public void searchpageChoiceReport(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
 		user(serviceRequest).onSuccess(siteRequest -> {
 			try {
-				siteRequest.setRequestUri(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("uri")).orElse(null));
-				siteRequest.setRequestMethod(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("method")).orElse(null));
 
-				List<String> roles = Arrays.asList("SiteAdmin");
+				List<String> roles = Optional.ofNullable(config.getJsonArray(ConfigKeys.AUTH_ROLES_REQUIRED + "_ChoiceReport")).orElse(new JsonArray()).getList();
 				List<String> roleReads = Arrays.asList("");
 				if(
 						!CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roles)
@@ -1454,7 +1561,7 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -1502,8 +1609,202 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 		}
 		return promise.future();
 	}
-	public static final String VAR_donorFullName = "donorFullName";
-	public static final String VAR_donorKeys = "donorKeys";
+
+	// ChoiceReportDisplaySearchPage //
+
+	@Override
+	public void choicereportdisplaysearchpageChoiceReportId(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
+		choicereportdisplaysearchpageChoiceReport(serviceRequest, eventHandler);
+	}
+
+	@Override
+	public void choicereportdisplaysearchpageChoiceReport(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
+		user(serviceRequest).onSuccess(siteRequest -> {
+			try {
+
+				List<String> roles = Optional.ofNullable(config.getJsonArray(ConfigKeys.AUTH_ROLES_REQUIRED + "_ChoiceReport")).orElse(new JsonArray()).getList();
+				List<String> roleReads = Arrays.asList("");
+				if(
+						!CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roles)
+						&& !CollectionUtils.containsAny(siteRequest.getUserRealmRoles(), roles)
+						&& !CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roleReads)
+						&& !CollectionUtils.containsAny(siteRequest.getUserRealmRoles(), roleReads)
+						) {
+					eventHandler.handle(Future.succeededFuture(
+						new ServiceResponse(401, "UNAUTHORIZED", 
+							Buffer.buffer().appendString(
+								new JsonObject()
+									.put("errorCode", "401")
+									.put("errorMessage", "roles required: " + String.join(", ", roles))
+									.encodePrettily()
+								), MultiMap.caseInsensitiveMultiMap()
+						)
+					));
+				} else {
+					searchChoiceReportList(siteRequest, false, true, false).onSuccess(listChoiceReport -> {
+						response200ChoiceReportDisplaySearchPageChoiceReport(listChoiceReport).onSuccess(response -> {
+							eventHandler.handle(Future.succeededFuture(response));
+							LOG.debug(String.format("choicereportdisplaysearchpageChoiceReport succeeded. "));
+						}).onFailure(ex -> {
+							LOG.error(String.format("choicereportdisplaysearchpageChoiceReport failed. "), ex);
+							error(siteRequest, eventHandler, ex);
+						});
+					}).onFailure(ex -> {
+						LOG.error(String.format("choicereportdisplaysearchpageChoiceReport failed. "), ex);
+						error(siteRequest, eventHandler, ex);
+					});
+				}
+			} catch(Exception ex) {
+				LOG.error(String.format("choicereportdisplaysearchpageChoiceReport failed. "), ex);
+				error(null, eventHandler, ex);
+			}
+		}).onFailure(ex -> {
+			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
+				try {
+					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
+				} catch(Exception ex2) {
+					LOG.error(String.format("choicereportdisplaysearchpageChoiceReport failed. ", ex2));
+					error(null, eventHandler, ex2);
+				}
+			} else {
+				LOG.error(String.format("choicereportdisplaysearchpageChoiceReport failed. "), ex);
+				error(null, eventHandler, ex);
+			}
+		});
+	}
+
+
+	public void choicereportdisplaysearchpageChoiceReportPageInit(ChoiceReportPage page, SearchList<ChoiceReport> listChoiceReport) {
+	}
+	public String templateChoiceReportDisplaySearchPageChoiceReport() {
+		return config.getString(ConfigKeys.TEMPLATE_PATH) + "/enUS/ChoiceReportPage";
+	}
+	public Future<ServiceResponse> response200ChoiceReportDisplaySearchPageChoiceReport(SearchList<ChoiceReport> listChoiceReport) {
+		Promise<ServiceResponse> promise = Promise.promise();
+		try {
+			SiteRequestEnUS siteRequest = listChoiceReport.getSiteRequest_();
+			ChoiceReportPage page = new ChoiceReportPage();
+			MultiMap requestHeaders = MultiMap.caseInsensitiveMultiMap();
+			siteRequest.setRequestHeaders(requestHeaders);
+
+			if(listChoiceReport.size() == 1)
+				siteRequest.setRequestPk(listChoiceReport.get(0).getPk());
+			page.setSearchListChoiceReport_(listChoiceReport);
+			page.setSiteRequest_(siteRequest);
+			page.promiseDeepChoiceReportPage(siteRequest).onSuccess(a -> {
+				JsonObject json = JsonObject.mapFrom(page);
+				templateEngine.render(json, templateChoiceReportDisplaySearchPageChoiceReport()).onSuccess(buffer -> {
+					promise.complete(new ServiceResponse(200, "OK", buffer, requestHeaders));
+				}).onFailure(ex -> {
+					promise.fail(ex);
+				});
+			}).onFailure(ex -> {
+				promise.fail(ex);
+			});
+		} catch(Exception ex) {
+			LOG.error(String.format("response200ChoiceReportDisplaySearchPageChoiceReport failed. "), ex);
+			promise.fail(ex);
+		}
+		return promise.future();
+	}
+
+	// ChoiceReportPdfSearchPage //
+
+	@Override
+	public void choicereportpdfsearchpageChoiceReportId(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
+		choicereportpdfsearchpageChoiceReport(serviceRequest, eventHandler);
+	}
+
+	@Override
+	public void choicereportpdfsearchpageChoiceReport(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
+		user(serviceRequest).onSuccess(siteRequest -> {
+			try {
+
+				List<String> roles = Optional.ofNullable(config.getJsonArray(ConfigKeys.AUTH_ROLES_REQUIRED + "_ChoiceReport")).orElse(new JsonArray()).getList();
+				List<String> roleReads = Arrays.asList("");
+				if(
+						!CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roles)
+						&& !CollectionUtils.containsAny(siteRequest.getUserRealmRoles(), roles)
+						&& !CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roleReads)
+						&& !CollectionUtils.containsAny(siteRequest.getUserRealmRoles(), roleReads)
+						) {
+					eventHandler.handle(Future.succeededFuture(
+						new ServiceResponse(401, "UNAUTHORIZED", 
+							Buffer.buffer().appendString(
+								new JsonObject()
+									.put("errorCode", "401")
+									.put("errorMessage", "roles required: " + String.join(", ", roles))
+									.encodePrettily()
+								), MultiMap.caseInsensitiveMultiMap()
+						)
+					));
+				} else {
+					searchChoiceReportList(siteRequest, false, true, false).onSuccess(listChoiceReport -> {
+						response200ChoiceReportPdfSearchPageChoiceReport(listChoiceReport).onSuccess(response -> {
+							eventHandler.handle(Future.succeededFuture(response));
+							LOG.debug(String.format("choicereportpdfsearchpageChoiceReport succeeded. "));
+						}).onFailure(ex -> {
+							LOG.error(String.format("choicereportpdfsearchpageChoiceReport failed. "), ex);
+							error(siteRequest, eventHandler, ex);
+						});
+					}).onFailure(ex -> {
+						LOG.error(String.format("choicereportpdfsearchpageChoiceReport failed. "), ex);
+						error(siteRequest, eventHandler, ex);
+					});
+				}
+			} catch(Exception ex) {
+				LOG.error(String.format("choicereportpdfsearchpageChoiceReport failed. "), ex);
+				error(null, eventHandler, ex);
+			}
+		}).onFailure(ex -> {
+			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
+				try {
+					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
+				} catch(Exception ex2) {
+					LOG.error(String.format("choicereportpdfsearchpageChoiceReport failed. ", ex2));
+					error(null, eventHandler, ex2);
+				}
+			} else {
+				LOG.error(String.format("choicereportpdfsearchpageChoiceReport failed. "), ex);
+				error(null, eventHandler, ex);
+			}
+		});
+	}
+
+
+	public void choicereportpdfsearchpageChoiceReportPageInit(ChoiceReportPage page, SearchList<ChoiceReport> listChoiceReport) {
+	}
+	public String templateChoiceReportPdfSearchPageChoiceReport() {
+		return config.getString(ConfigKeys.TEMPLATE_PATH) + "/enUS/ChoiceReportPage";
+	}
+	public Future<ServiceResponse> response200ChoiceReportPdfSearchPageChoiceReport(SearchList<ChoiceReport> listChoiceReport) {
+		Promise<ServiceResponse> promise = Promise.promise();
+		try {
+			SiteRequestEnUS siteRequest = listChoiceReport.getSiteRequest_();
+			ChoiceReportPage page = new ChoiceReportPage();
+			MultiMap requestHeaders = MultiMap.caseInsensitiveMultiMap();
+			siteRequest.setRequestHeaders(requestHeaders);
+
+			if(listChoiceReport.size() == 1)
+				siteRequest.setRequestPk(listChoiceReport.get(0).getPk());
+			page.setSearchListChoiceReport_(listChoiceReport);
+			page.setSiteRequest_(siteRequest);
+			page.promiseDeepChoiceReportPage(siteRequest).onSuccess(a -> {
+				JsonObject json = JsonObject.mapFrom(page);
+				templateEngine.render(json, templateChoiceReportPdfSearchPageChoiceReport()).onSuccess(buffer -> {
+					promise.complete(new ServiceResponse(200, "OK", buffer, requestHeaders));
+				}).onFailure(ex -> {
+					promise.fail(ex);
+				});
+			}).onFailure(ex -> {
+				promise.fail(ex);
+			});
+		} catch(Exception ex) {
+			LOG.error(String.format("response200ChoiceReportPdfSearchPageChoiceReport failed. "), ex);
+			promise.fail(ex);
+		}
+		return promise.future();
+	}
 
 	// General //
 
@@ -1823,7 +2124,7 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 			SiteRequestEnUS siteRequest = o.getSiteRequest_();
 			SqlConnection sqlConnection = siteRequest.getSqlConnection();
 			Long pk = o.getPk();
-			sqlConnection.preparedQuery("SELECT pk2, 'donorKeys' from ChoiceReportdonorKeys_ChoiceDonorreportKeys where pk1=$1")
+			sqlConnection.preparedQuery("SELECT donorKey as pk2, 'donorKey' from ChoiceReport where pk=$1")
 					.collecting(Collectors.toList())
 					.execute(Tuple.of(pk)
 					).onSuccess(result -> {

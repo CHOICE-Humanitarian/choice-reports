@@ -257,9 +257,7 @@ public abstract class ChoiceReportPageGen<DEV> extends ChoiceReportGenPage {
 
 	@Override public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(super.toString() + "\n");
-		sb.append("ChoiceReportPage { ");
-		sb.append(" }");
+		sb.append(super.toString());
 		return sb.toString();
 	}
 

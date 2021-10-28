@@ -516,9 +516,7 @@ public abstract class ChoiceDonorGenPageGen<DEV> extends BaseModelPage {
 
 	@Override public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(super.toString() + "\n");
-		sb.append("ChoiceDonorGenPage { ");
-		sb.append(" }");
+		sb.append(super.toString());
 		return sb.toString();
 	}
 

@@ -50,8 +50,9 @@ CREATE TABLE SiteUser(
 	, created timestamp with time zone
 	, archived boolean
 	, deleted boolean
-	, userId text
+	, sessionId text
 	, userKey bigint
+	, userId text
 	, userName text
 	, userEmail text
 	, userFirstName text
@@ -66,7 +67,7 @@ CREATE TABLE ChoiceDonor(
 	, created timestamp with time zone
 	, archived boolean
 	, deleted boolean
-	, userId text
+	, sessionId text
 	, userKey bigint
 	, donorFullName text
 	, donorParentName text
@@ -79,6 +80,7 @@ CREATE TABLE ChoiceDonor(
 	, donorQ2 decimal
 	, donorQ3 decimal
 	, donorQ4 decimal
+	, donorLogoFilename text
 	);
 CREATE TABLE ChoiceReport(
 	pk bigserial primary key
@@ -86,20 +88,26 @@ CREATE TABLE ChoiceReport(
 	, created timestamp with time zone
 	, archived boolean
 	, deleted boolean
-	, userId text
+	, sessionId text
 	, userKey bigint
+	, donorKey bigint references ChoiceDonor(pk)
 	, donorFullName text
-	);
-CREATE TABLE ChoiceReportDonorKeys_ChoiceDonorReportKeys(
-	pk bigserial primary key
-	, pk1 bigint references ChoiceReport(pk)
-	, pk2 bigint references ChoiceDonor(pk)
+	, donorParentName text
+	, donorId bigint
+	, donorAttributeId text
+	, donorInKind bigint
+	, donorTotal decimal
+	, donorYtd decimal
+	, donorQ1 decimal
+	, donorQ2 decimal
+	, donorQ3 decimal
+	, donorQ4 decimal
+	, donorLogoFilename text
 	);
 
 DROP TABLE SiteUser CASCADE;
 DROP TABLE ChoiceDonor CASCADE;
 DROP TABLE ChoiceReport CASCADE;
-DROP TABLE ChoiceReportDonorKeys_ChoiceDonorReportKeys CASCADE;
 */
 
 	protected static final Logger LOG = LoggerFactory.getLogger(MainVerticle.class);
@@ -337,8 +345,6 @@ DROP TABLE ChoiceReportDonorKeys_ChoiceDonorReportKeys CASCADE;
 
 	@Override public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("MainVerticle { ");
-		sb.append(" }");
 		return sb.toString();
 	}
 

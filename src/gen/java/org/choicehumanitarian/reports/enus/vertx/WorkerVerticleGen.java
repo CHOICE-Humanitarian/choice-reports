@@ -264,8 +264,6 @@ public abstract class WorkerVerticleGen<DEV> extends AbstractVerticle {
 
 	@Override public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("WorkerVerticle { ");
-		sb.append(" }");
 		return sb.toString();
 	}
 

@@ -257,9 +257,7 @@ public abstract class BaseModelPageGen<DEV> extends BaseModelGenPage {
 
 	@Override public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(super.toString() + "\n");
-		sb.append("BaseModelPage { ");
-		sb.append(" }");
+		sb.append(super.toString());
 		return sb.toString();
 	}
 

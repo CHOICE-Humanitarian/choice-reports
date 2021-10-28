@@ -51,7 +51,7 @@ public class ChoiceDonor extends ChoiceDonorGen<BaseModel> {
 	 * HtmlCell: 1
 	 * DisplayName.enUS: donor full name
 	 */  
-	protected void _donorFullName(Wrap<String> c) {
+	protected void _donorFullName(Wrap<String> w) {
 	}
 
 	/**   
@@ -63,7 +63,7 @@ public class ChoiceDonor extends ChoiceDonorGen<BaseModel> {
 	 * HtmlCell: 2
 	 * DisplayName.enUS: donor parent name
 	 */  
-	protected void _donorParentName(Wrap<String> c) {
+	protected void _donorParentName(Wrap<String> w) {
 	}
 
 	/**   
@@ -75,7 +75,7 @@ public class ChoiceDonor extends ChoiceDonorGen<BaseModel> {
 	 * HtmlCell: 1
 	 * DisplayName.enUS: donor ID
 	 */  
-	protected void _donorId(Wrap<Long> c) {
+	protected void _donorId(Wrap<Long> w) {
 	}
 
 	/**   
@@ -87,7 +87,7 @@ public class ChoiceDonor extends ChoiceDonorGen<BaseModel> {
 	 * HtmlCell: 2
 	 * DisplayName.enUS: donor attribute ID
 	 */  
-	protected void _donorAttributeId(Wrap<String> c) {
+	protected void _donorAttributeId(Wrap<String> w) {
 	}
 
 	/**   
@@ -99,7 +99,7 @@ public class ChoiceDonor extends ChoiceDonorGen<BaseModel> {
 	 * HtmlCell: 3
 	 * DisplayName.enUS: in kind?
 	 */  
-	protected void _donorInKind(Wrap<Long> c) {
+	protected void _donorInKind(Wrap<Long> w) {
 	}
 
 	/**   
@@ -111,7 +111,7 @@ public class ChoiceDonor extends ChoiceDonorGen<BaseModel> {
 	 * HtmlCell: 1
 	 * DisplayName.enUS: total
 	 */  
-	protected void _donorTotal(Wrap<BigDecimal> c) {
+	protected void _donorTotal(Wrap<BigDecimal> w) {
 	}
 
 	/**   
@@ -123,7 +123,7 @@ public class ChoiceDonor extends ChoiceDonorGen<BaseModel> {
 	 * HtmlCell: 2
 	 * DisplayName.enUS: YTD
 	 */  
-	protected void _donorYtd(Wrap<BigDecimal> c) {
+	protected void _donorYtd(Wrap<BigDecimal> w) {
 	}
 
 	/**   
@@ -135,7 +135,7 @@ public class ChoiceDonor extends ChoiceDonorGen<BaseModel> {
 	 * HtmlCell: 1
 	 * DisplayName.enUS: Q1
 	 */  
-	protected void _donorQ1(Wrap<BigDecimal> c) {
+	protected void _donorQ1(Wrap<BigDecimal> w) {
 	}
 
 	/**   
@@ -147,7 +147,7 @@ public class ChoiceDonor extends ChoiceDonorGen<BaseModel> {
 	 * HtmlCell: 2
 	 * DisplayName.enUS: Q2
 	 */   
-	protected void _donorQ2(Wrap<BigDecimal> c) {
+	protected void _donorQ2(Wrap<BigDecimal> w) {
 	}
 
 	/**   
@@ -159,7 +159,7 @@ public class ChoiceDonor extends ChoiceDonorGen<BaseModel> {
 	 * HtmlCell: 3
 	 * DisplayName.enUS: Q3
 	 */  
-	protected void _donorQ3(Wrap<BigDecimal> c) {
+	protected void _donorQ3(Wrap<BigDecimal> w) {
 	}
 
 	/**   
@@ -171,22 +171,34 @@ public class ChoiceDonor extends ChoiceDonorGen<BaseModel> {
 	 * HtmlCell: 4
 	 * DisplayName.enUS: Q4
 	 */  
-	protected void _donorQ4(Wrap<BigDecimal> c) {
+	protected void _donorQ4(Wrap<BigDecimal> w) {
+	}
+
+	/**   
+	 * {@inheritDoc}
+	 * Indexed: true
+	 * Stored: true
+	 * Define: true
+	 * HtmlRow: 7
+	 * HtmlCell: 1
+	 * DisplayName.enUS: Logo Filename
+	 */  
+	protected void _donorLogoFilename(Wrap<String> w) {
 	}
 
 	/**  
 	 * {@inheritDoc}
 	 * Indexed: true
 	 * Stored: true
-	 * Relate: ChoiceReport.donorKeys
+	 * Relate: ChoiceReport.donorKey
 	 * HtmlRow: 10
 	 * HtmlCell: 1
 	 * DisplayName.enUS: reports
 	 */         
-	protected void _reportKeys(List<Long> c) {}
+	protected void _reportKeys(List<Long> w) {}
 
 	@Override
-	protected void _objectTitle(Wrap<String> c) {
-		c.o(donorFullName);
+	protected void _objectTitle(Wrap<String> w) {
+		w.o(donorFullName);
 	}
 }

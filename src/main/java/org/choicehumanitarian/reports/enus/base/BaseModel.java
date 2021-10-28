@@ -145,7 +145,9 @@ public class BaseModel extends BaseModelGen<Object> {
 	 * {@inheritDoc}
 	 * Indexed: true
 	 * Stored: true
-	 */ 
+	 * Define: true
+	 * Modify: false
+	 */  
 	protected void _sessionId(Wrap<String> c) {
 	}
 
@@ -303,7 +305,7 @@ public class BaseModel extends BaseModelGen<Object> {
 	protected void _pageH1(Wrap<String> c) {
 		try {
 			Class<?> cl = getClass();
-//			c.o((String)FieldUtils.getField(cl, cl.getSimpleName() + "_NameSingular").get(this) + ": " + objectTitle);
+			c.o((String)FieldUtils.getField(cl, cl.getSimpleName() + "_NameSingular").get(this) + ": " + objectTitle);
 		} catch (Exception e) {
 			ExceptionUtils.rethrow(e);
 		}
