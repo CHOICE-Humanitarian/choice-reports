@@ -5,7 +5,6 @@ import java.util.Arrays;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.slf4j.LoggerFactory;
 import java.util.HashMap;
-import org.choicehumanitarian.reports.enus.writer.AllWriter;
 import org.apache.commons.lang3.StringUtils;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import java.text.NumberFormat;
@@ -14,7 +13,6 @@ import org.choicehumanitarian.reports.enus.wrap.Wrap;
 import org.apache.commons.collections.CollectionUtils;
 import java.lang.Long;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.choicehumanitarian.reports.enus.java.ZonedDateTimeSerializer;
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.lang.String;
@@ -22,9 +20,7 @@ import java.math.RoundingMode;
 import org.choicehumanitarian.reports.enus.request.api.ApiRequest;
 import org.slf4j.Logger;
 import java.math.MathContext;
-import org.choicehumanitarian.reports.enus.java.ZonedDateTimeDeserializer;
 import io.vertx.core.Promise;
-import org.choicehumanitarian.reports.enus.java.LocalDateSerializer;
 import org.apache.commons.text.StringEscapeUtils;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -383,8 +379,6 @@ public abstract class SearchResultGen<DEV> extends Object {
 
 	@Override public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("SearchResult { ");
-		sb.append(" }");
 		return sb.toString();
 	}
 

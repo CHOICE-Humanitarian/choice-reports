@@ -5,7 +5,6 @@ import java.util.Arrays;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.slf4j.LoggerFactory;
 import java.util.HashMap;
-import org.choicehumanitarian.reports.enus.writer.AllWriter;
 import org.apache.commons.lang3.StringUtils;
 import java.lang.Integer;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
@@ -1067,7 +1066,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 		return (PageLayout)this;
 	}
 	public PageLayout addRoles(String o) {
-		if(o != null && !roles.contains(o))
+		if(o != null)
 			this.roles.add(o);
 		return (PageLayout)this;
 	}
@@ -1133,7 +1132,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 		return (PageLayout)this;
 	}
 	public PageLayout addRolesRequired(String o) {
-		if(o != null && !rolesRequired.contains(o))
+		if(o != null)
 			this.rolesRequired.add(o);
 		return (PageLayout)this;
 	}
@@ -1199,7 +1198,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 		return (PageLayout)this;
 	}
 	public PageLayout addAuthRolesAdmin(String o) {
-		if(o != null && !authRolesAdmin.contains(o))
+		if(o != null)
 			this.authRolesAdmin.add(o);
 		return (PageLayout)this;
 	}
@@ -1983,8 +1982,6 @@ public abstract class PageLayoutGen<DEV> extends Object {
 
 	@Override public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("PageLayout { ");
-		sb.append(" }");
 		return sb.toString();
 	}
 

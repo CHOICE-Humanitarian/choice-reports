@@ -2,53 +2,49 @@ package org.choicehumanitarian.reports.enus.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Arrays;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import java.util.Date;
 import org.slf4j.LoggerFactory;
-import org.apache.commons.lang3.StringUtils;
-import org.choicehumanitarian.reports.enus.wrap.Wrap;
-import java.lang.Long;
-import java.util.Map;
-import io.vertx.core.json.JsonObject;
-import java.math.RoundingMode;
-import java.math.MathContext;
-import java.util.Set;
-import org.choicehumanitarian.reports.enus.java.LocalDateSerializer;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import io.vertx.core.Future;
-import org.choicehumanitarian.reports.enus.base.BaseModel;
-import java.util.Objects;
-import java.util.List;
-import org.apache.solr.client.solrj.SolrQuery;
-import java.util.Optional;
-import org.apache.solr.client.solrj.util.ClientUtils;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import org.apache.solr.common.SolrInputDocument;
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import java.util.HashMap;
-import org.choicehumanitarian.reports.enus.writer.AllWriter;
+import org.apache.commons.lang3.StringUtils;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import org.choicehumanitarian.reports.enus.wrap.Wrap;
 import org.apache.commons.collections.CollectionUtils;
+import java.lang.Long;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.choicehumanitarian.reports.enus.java.ZonedDateTimeSerializer;
+import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.lang.Boolean;
+import io.vertx.core.json.JsonObject;
 import java.lang.String;
+import java.math.RoundingMode;
 import org.choicehumanitarian.reports.enus.request.api.ApiRequest;
 import org.slf4j.Logger;
-import org.choicehumanitarian.reports.enus.java.ZonedDateTimeDeserializer;
+import java.math.MathContext;
 import io.vertx.core.Promise;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import java.util.Set;
 import org.apache.commons.text.StringEscapeUtils;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.vertx.core.Future;
+import org.choicehumanitarian.reports.enus.base.BaseModel;
 import org.apache.solr.client.solrj.SolrClient;
+import java.util.Objects;
 import io.vertx.core.json.JsonArray;
 import org.apache.solr.common.SolrDocument;
+import java.util.List;
+import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.commons.lang3.math.NumberUtils;
+import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.apache.solr.client.solrj.util.ClientUtils;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
+import org.apache.solr.common.SolrInputDocument;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 /**	
  * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.user.SiteUser&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
@@ -125,7 +121,7 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		return (SiteUser)this;
 	}
 	public SiteUser addUserKeys(Long o) {
-		if(o != null && !userKeys.contains(o))
+		if(o != null)
 			this.userKeys.add(o);
 		return (SiteUser)this;
 	}
@@ -1133,18 +1129,16 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 
 	@Override public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(super.toString() + "\n");
-		sb.append("SiteUser { ");
-		sb.append( "userKeys: " ).append(userKeys);
-		sb.append( ", userId: \"" ).append(userId).append( "\"" );
-		sb.append( ", userName: \"" ).append(userName).append( "\"" );
-		sb.append( ", userEmail: \"" ).append(userEmail).append( "\"" );
-		sb.append( ", userFirstName: \"" ).append(userFirstName).append( "\"" );
-		sb.append( ", userLastName: \"" ).append(userLastName).append( "\"" );
-		sb.append( ", userFullName: \"" ).append(userFullName).append( "\"" );
-		sb.append( ", seeArchived: " ).append(seeArchived);
-		sb.append( ", seeDeleted: " ).append(seeDeleted);
-		sb.append(" }");
+		sb.append(super.toString());
+		sb.append(Optional.ofNullable(userKeys).map(v -> "userKeys: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(userId).map(v -> "userId: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(userName).map(v -> "userName: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(userEmail).map(v -> "userEmail: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(userFirstName).map(v -> "userFirstName: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(userLastName).map(v -> "userLastName: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(userFullName).map(v -> "userFullName: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(seeArchived).map(v -> "seeArchived: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(seeDeleted).map(v -> "seeDeleted: " + v + "\n").orElse(""));
 		return sb.toString();
 	}
 

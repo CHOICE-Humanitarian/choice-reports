@@ -4,15 +4,12 @@ import java.util.List;
 import java.lang.Long;
 import java.lang.String;
 import java.lang.Boolean;
-import org.choicehumanitarian.reports.enus.base.BaseModelPage;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
-import org.choicehumanitarian.reports.enus.user.SiteUser;
 import java.io.IOException;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
 import org.choicehumanitarian.reports.enus.search.SearchList;
 import org.choicehumanitarian.reports.enus.wrap.Wrap;
-import org.choicehumanitarian.reports.enus.page.PageLayout;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.LocalDate;
@@ -45,7 +42,13 @@ import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 /**
  * Translate: false
  **/
-public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
+public class SiteUserGenPage extends SiteUserGenPageGen<Object> {
+
+	/**
+	 * Ignore: true
+	**/
+	protected void _siteRequest_(Wrap<SiteRequestEnUS> c) {
+	}
 
 	/**
 	 * {@inheritDoc}
@@ -75,17 +78,17 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
 			w.o(siteUser_.getPk());
 	}
 
-	@Override
+	/**
+	 * Ignore: true
+	**/
 	protected void _promiseBefore(Promise<Void> promise) {
 		promise.complete();
 	}
 
-	@Override
 	protected void _classSimpleName(Wrap<String> w) {
 		w.o("SiteUser");
 	}
 
-	@Override
 	protected void _pageTitle(Wrap<String> c) {
 		if(siteUser_ != null && siteUser_.getObjectTitle() != null)
 			c.o(siteUser_.getObjectTitle());
@@ -97,24 +100,20 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
 			c.o("site users");
 	}
 
-	@Override
 	protected void _pageUri(Wrap<String> c) {
 		c.o("/api/user");
 	}
 
-	@Override
 	protected void _roles(List<String> l) {
 		if(siteRequest_ != null) {
 			l.addAll(Stream.concat(siteRequest_.getUserResourceRoles().stream(), siteRequest_.getUserRealmRoles().stream()).distinct().collect(Collectors.toList()));
 		}
 	}
 
-	@Override
 	protected void _rolesRequired(List<String> l) {
 		l.addAll(Optional.ofNullable(siteRequest_.getConfig().getJsonArray(ConfigKeys.AUTH_ROLES_REQUIRED + "_SiteUser")).orElse(new JsonArray()).stream().map(o -> o.toString()).collect(Collectors.toList()));
 	}
 
-	@Override
 	protected void _pagination(JsonObject pagination) {
 		JsonArray pages = new JsonArray();
 		Long start = searchListSiteUser_.getStart().longValue();
@@ -159,7 +158,6 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
 		}
 	}
 
-	@Override
 	protected void _query(JsonObject query) {
 		ServiceRequest serviceRequest = siteRequest_.getServiceRequest();
 		JsonObject params = serviceRequest.getParams();
@@ -218,22 +216,21 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
 		query.put("sort", sorts);
 	}
 
-	@Override
+	/**
+	 * Ignore: true
+	**/
 	protected void _promiseAfter(Promise<Void> promise) {
 		promise.complete();
 	}
 
-	@Override
 	protected void _pageImageUri(Wrap<String> c) {
 			c.o("/png/api/user-999.png");
 	}
 
-	@Override
 	protected void _contextIconGroup(Wrap<String> c) {
 			c.o("regular");
 	}
 
-	@Override
 	protected void _contextIconName(Wrap<String> c) {
 			c.o("user-cog");
 	}

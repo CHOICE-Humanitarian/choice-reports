@@ -7,16 +7,15 @@ import org.slf4j.LoggerFactory;
 import org.choicehumanitarian.reports.enus.writer.AllWriters;
 import java.util.HashMap;
 import org.choicehumanitarian.reports.enus.vertx.AppSwagger2;
-import org.choicehumanitarian.reports.enus.writer.AllWriter;
 import org.apache.commons.lang3.StringUtils;
 import java.lang.Integer;
+import org.choicehumanitarian.reports.enus.writer.AllWriter;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import org.choicehumanitarian.reports.enus.wrap.Wrap;
 import org.apache.commons.collections.CollectionUtils;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.choicehumanitarian.reports.enus.java.ZonedDateTimeSerializer;
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.lang.Boolean;
@@ -26,9 +25,7 @@ import java.math.RoundingMode;
 import org.choicehumanitarian.reports.enus.request.api.ApiRequest;
 import org.slf4j.Logger;
 import java.math.MathContext;
-import org.choicehumanitarian.reports.enus.java.ZonedDateTimeDeserializer;
 import io.vertx.core.Promise;
-import org.choicehumanitarian.reports.enus.java.LocalDateSerializer;
 import org.apache.commons.text.StringEscapeUtils;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -319,8 +316,6 @@ public abstract class ApiWriterGen<DEV> extends Object {
 			_appSwagger2(appSwagger2Wrap);
 			setAppSwagger2(appSwagger2Wrap.o);
 		}
-		if(appSwagger2 != null)
-			appSwagger2.initDeepForClass(siteRequest_);
 		return (ApiWriter)this;
 	}
 
@@ -361,7 +356,7 @@ public abstract class ApiWriterGen<DEV> extends Object {
 		return (ApiWriter)this;
 	}
 	public ApiWriter addClassUris(String o) {
-		if(o != null && !classUris.contains(o))
+		if(o != null)
 			this.classUris.add(o);
 		return (ApiWriter)this;
 	}
@@ -1970,7 +1965,7 @@ public abstract class ApiWriterGen<DEV> extends Object {
 		return (ApiWriter)this;
 	}
 	public ApiWriter addClassKeywords(String o) {
-		if(o != null && !classKeywords.contains(o))
+		if(o != null)
 			this.classKeywords.add(o);
 		return (ApiWriter)this;
 	}
@@ -2310,7 +2305,7 @@ public abstract class ApiWriterGen<DEV> extends Object {
 		return (ApiWriter)this;
 	}
 	public ApiWriter addClassRoles(String o) {
-		if(o != null && !classRoles.contains(o))
+		if(o != null)
 			this.classRoles.add(o);
 		return (ApiWriter)this;
 	}
@@ -2380,7 +2375,7 @@ public abstract class ApiWriterGen<DEV> extends Object {
 		return (ApiWriter)this;
 	}
 	public ApiWriter addClassRolesLanguage(String o) {
-		if(o != null && !classRolesLanguage.contains(o))
+		if(o != null)
 			this.classRolesLanguage.add(o);
 		return (ApiWriter)this;
 	}
@@ -2576,8 +2571,6 @@ public abstract class ApiWriterGen<DEV> extends Object {
 	/////////////////
 
 	public void siteRequestApiWriter(SiteRequestEnUS siteRequest_) {
-		if(appSwagger2 != null)
-			appSwagger2.setSiteRequest_(siteRequest_);
 		if(wPaths != null)
 			wPaths.setSiteRequest_(siteRequest_);
 		if(wRequestBodies != null)
@@ -3124,8 +3117,6 @@ public abstract class ApiWriterGen<DEV> extends Object {
 
 	@Override public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("ApiWriter { ");
-		sb.append(" }");
 		return sb.toString();
 	}
 
