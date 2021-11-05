@@ -100,7 +100,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.choicehumanitarian.reports.enus.user.SiteUserEnUSApiServiceImpl;
 import org.choicehumanitarian.reports.enus.search.SearchList;
-import org.choicehumanitarian.reports.enus.writer.AllWriter;
 
 
 /**

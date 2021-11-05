@@ -5,6 +5,7 @@ import java.util.Arrays;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.slf4j.LoggerFactory;
 import java.util.HashMap;
+import org.choicehumanitarian.reports.enus.base.BaseModelPage;
 import org.choicehumanitarian.reports.enus.search.SearchList;
 import org.apache.commons.lang3.StringUtils;
 import java.lang.Integer;
@@ -19,10 +20,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.choicehumanitarian.reports.enus.java.ZonedDateTimeSerializer;
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.vertx.core.json.JsonObject;
 import java.lang.String;
 import java.math.RoundingMode;
-import java.lang.Void;
 import org.choicehumanitarian.reports.enus.request.api.ApiRequest;
 import org.slf4j.Logger;
 import java.math.MathContext;
@@ -36,11 +35,9 @@ import io.vertx.core.Future;
 import org.choicehumanitarian.reports.enus.base.BaseModel;
 import java.util.Objects;
 import io.vertx.core.json.JsonArray;
-import java.util.List;
 import org.apache.commons.lang3.math.NumberUtils;
 import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import java.lang.Object;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 
@@ -48,46 +45,8 @@ import org.choicehumanitarian.reports.enus.config.ConfigKeys;
  * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.user.SiteUserGenPage&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
  * <br/>
  **/
-public abstract class SiteUserGenPageGen<DEV> extends Object {
+public abstract class SiteUserGenPageGen<DEV> extends BaseModelPage {
 	protected static final Logger LOG = LoggerFactory.getLogger(SiteUserGenPage.class);
-
-	//////////////////
-	// siteRequest_ //
-	//////////////////
-
-	/**	 The entity siteRequest_
-	 *	 is defined as null before being initialized. 
-	 */
-	@JsonIgnore
-	@JsonInclude(Include.NON_NULL)
-	protected SiteRequestEnUS siteRequest_;
-
-	/**	<br/> The entity siteRequest_
-	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.user.SiteUserGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:siteRequest_">Find the entity siteRequest_ in Solr</a>
-	 * <br/>
-	 * @param c is for wrapping a value to assign to this entity during initialization. 
-	 **/
-	protected abstract void _siteRequest_(Wrap<SiteRequestEnUS> c);
-
-	public SiteRequestEnUS getSiteRequest_() {
-		return siteRequest_;
-	}
-
-	public void setSiteRequest_(SiteRequestEnUS siteRequest_) {
-		this.siteRequest_ = siteRequest_;
-	}
-	public static SiteRequestEnUS staticSetSiteRequest_(SiteRequestEnUS siteRequest_, String o) {
-		return null;
-	}
-	protected SiteUserGenPage siteRequest_Init() {
-		Wrap<SiteRequestEnUS> siteRequest_Wrap = new Wrap<SiteRequestEnUS>().var("siteRequest_");
-		if(siteRequest_ == null) {
-			_siteRequest_(siteRequest_Wrap);
-			setSiteRequest_(siteRequest_Wrap.o);
-		}
-		return (SiteUserGenPage)this;
-	}
 
 	/////////////////////////
 	// searchListSiteUser_ //
@@ -312,582 +271,6 @@ public abstract class SiteUserGenPageGen<DEV> extends Object {
 		return SiteUserGenPage.staticSolrStrPk(siteRequest_, SiteUserGenPage.staticSolrPk(siteRequest_, SiteUserGenPage.staticSetPk(siteRequest_, o)));
 	}
 
-	///////////////////
-	// promiseBefore //
-	///////////////////
-
-	/**	 The entity promiseBefore
-	 *	 is defined as null before being initialized. 
-	 */
-	@JsonIgnore
-	@JsonInclude(Include.NON_NULL)
-	protected Void promiseBefore;
-
-	/**	<br/> The entity promiseBefore
-	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.user.SiteUserGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:promiseBefore">Find the entity promiseBefore in Solr</a>
-	 * <br/>
-	 * @param promise is for wrapping a value to assign to this entity during initialization. 
-	 **/
-	protected abstract void _promiseBefore(Promise<Void> promise);
-
-	public Void getPromiseBefore() {
-		return promiseBefore;
-	}
-
-	public void setPromiseBefore(Void promiseBefore) {
-		this.promiseBefore = promiseBefore;
-	}
-	public static Void staticSetPromiseBefore(SiteRequestEnUS siteRequest_, String o) {
-		return null;
-	}
-	protected Future<Void> promiseBeforePromise() {
-		Promise<Void> promise = Promise.promise();
-		Promise<Void> promise2 = Promise.promise();
-		_promiseBefore(promise2);
-		promise2.future().onSuccess(o -> {
-			setPromiseBefore(o);
-			promise.complete(o);
-		}).onFailure(ex -> {
-			promise.fail(ex);
-		});
-		return promise.future();
-	}
-
-	/////////////////////
-	// classSimpleName //
-	/////////////////////
-
-	/**	 The entity classSimpleName
-	 *	 is defined as null before being initialized. 
-	 */
-	@JsonProperty
-	@JsonInclude(Include.NON_NULL)
-	protected String classSimpleName;
-
-	/**	<br/> The entity classSimpleName
-	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.user.SiteUserGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:classSimpleName">Find the entity classSimpleName in Solr</a>
-	 * <br/>
-	 * @param w is for wrapping a value to assign to this entity during initialization. 
-	 **/
-	protected abstract void _classSimpleName(Wrap<String> w);
-
-	public String getClassSimpleName() {
-		return classSimpleName;
-	}
-	public void setClassSimpleName(String o) {
-		this.classSimpleName = SiteUserGenPage.staticSetClassSimpleName(siteRequest_, o);
-	}
-	public static String staticSetClassSimpleName(SiteRequestEnUS siteRequest_, String o) {
-		return o;
-	}
-	protected SiteUserGenPage classSimpleNameInit() {
-		Wrap<String> classSimpleNameWrap = new Wrap<String>().var("classSimpleName");
-		if(classSimpleName == null) {
-			_classSimpleName(classSimpleNameWrap);
-			setClassSimpleName(classSimpleNameWrap.o);
-		}
-		return (SiteUserGenPage)this;
-	}
-
-	public static String staticSolrClassSimpleName(SiteRequestEnUS siteRequest_, String o) {
-		return o;
-	}
-
-	public static String staticSolrStrClassSimpleName(SiteRequestEnUS siteRequest_, String o) {
-		return o == null ? null : o.toString();
-	}
-
-	public static String staticSolrFqClassSimpleName(SiteRequestEnUS siteRequest_, String o) {
-		return SiteUserGenPage.staticSolrStrClassSimpleName(siteRequest_, SiteUserGenPage.staticSolrClassSimpleName(siteRequest_, SiteUserGenPage.staticSetClassSimpleName(siteRequest_, o)));
-	}
-
-	///////////////
-	// pageTitle //
-	///////////////
-
-	/**	 The entity pageTitle
-	 *	 is defined as null before being initialized. 
-	 */
-	@JsonProperty
-	@JsonInclude(Include.NON_NULL)
-	protected String pageTitle;
-
-	/**	<br/> The entity pageTitle
-	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.user.SiteUserGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pageTitle">Find the entity pageTitle in Solr</a>
-	 * <br/>
-	 * @param c is for wrapping a value to assign to this entity during initialization. 
-	 **/
-	protected abstract void _pageTitle(Wrap<String> c);
-
-	public String getPageTitle() {
-		return pageTitle;
-	}
-	public void setPageTitle(String o) {
-		this.pageTitle = SiteUserGenPage.staticSetPageTitle(siteRequest_, o);
-	}
-	public static String staticSetPageTitle(SiteRequestEnUS siteRequest_, String o) {
-		return o;
-	}
-	protected SiteUserGenPage pageTitleInit() {
-		Wrap<String> pageTitleWrap = new Wrap<String>().var("pageTitle");
-		if(pageTitle == null) {
-			_pageTitle(pageTitleWrap);
-			setPageTitle(pageTitleWrap.o);
-		}
-		return (SiteUserGenPage)this;
-	}
-
-	public static String staticSolrPageTitle(SiteRequestEnUS siteRequest_, String o) {
-		return o;
-	}
-
-	public static String staticSolrStrPageTitle(SiteRequestEnUS siteRequest_, String o) {
-		return o == null ? null : o.toString();
-	}
-
-	public static String staticSolrFqPageTitle(SiteRequestEnUS siteRequest_, String o) {
-		return SiteUserGenPage.staticSolrStrPageTitle(siteRequest_, SiteUserGenPage.staticSolrPageTitle(siteRequest_, SiteUserGenPage.staticSetPageTitle(siteRequest_, o)));
-	}
-
-	/////////////
-	// pageUri //
-	/////////////
-
-	/**	 The entity pageUri
-	 *	 is defined as null before being initialized. 
-	 */
-	@JsonProperty
-	@JsonInclude(Include.NON_NULL)
-	protected String pageUri;
-
-	/**	<br/> The entity pageUri
-	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.user.SiteUserGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pageUri">Find the entity pageUri in Solr</a>
-	 * <br/>
-	 * @param c is for wrapping a value to assign to this entity during initialization. 
-	 **/
-	protected abstract void _pageUri(Wrap<String> c);
-
-	public String getPageUri() {
-		return pageUri;
-	}
-	public void setPageUri(String o) {
-		this.pageUri = SiteUserGenPage.staticSetPageUri(siteRequest_, o);
-	}
-	public static String staticSetPageUri(SiteRequestEnUS siteRequest_, String o) {
-		return o;
-	}
-	protected SiteUserGenPage pageUriInit() {
-		Wrap<String> pageUriWrap = new Wrap<String>().var("pageUri");
-		if(pageUri == null) {
-			_pageUri(pageUriWrap);
-			setPageUri(pageUriWrap.o);
-		}
-		return (SiteUserGenPage)this;
-	}
-
-	public static String staticSolrPageUri(SiteRequestEnUS siteRequest_, String o) {
-		return o;
-	}
-
-	public static String staticSolrStrPageUri(SiteRequestEnUS siteRequest_, String o) {
-		return o == null ? null : o.toString();
-	}
-
-	public static String staticSolrFqPageUri(SiteRequestEnUS siteRequest_, String o) {
-		return SiteUserGenPage.staticSolrStrPageUri(siteRequest_, SiteUserGenPage.staticSolrPageUri(siteRequest_, SiteUserGenPage.staticSetPageUri(siteRequest_, o)));
-	}
-
-	///////////
-	// roles //
-	///////////
-
-	/**	 The entity roles
-	 *	Il est construit avant d'être initialisé avec le constructeur par défaut List<String>(). 
-	 */
-	@JsonProperty
-	@JsonFormat(shape = JsonFormat.Shape.ARRAY)
-	@JsonInclude(Include.NON_NULL)
-	protected List<String> roles = new ArrayList<String>();
-
-	/**	<br/> The entity roles
-	 *  It is constructed before being initialized with the constructor by default List<String>(). 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.user.SiteUserGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:roles">Find the entity roles in Solr</a>
-	 * <br/>
-	 * @param roles is the entity already constructed. 
-	 **/
-	protected abstract void _roles(List<String> l);
-
-	public List<String> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(List<String> roles) {
-		this.roles = roles;
-	}
-	public static String staticSetRoles(SiteRequestEnUS siteRequest_, String o) {
-		return o;
-	}
-	public SiteUserGenPage addRoles(String...objets) {
-		for(String o : objets) {
-			addRoles(o);
-		}
-		return (SiteUserGenPage)this;
-	}
-	public SiteUserGenPage addRoles(String o) {
-		if(o != null)
-			this.roles.add(o);
-		return (SiteUserGenPage)this;
-	}
-	@JsonIgnore
-	public void setRoles(JsonArray objets) {
-		roles.clear();
-		for(int i = 0; i < objets.size(); i++) {
-			String o = objets.getString(i);
-			addRoles(o);
-		}
-	}
-	protected SiteUserGenPage rolesInit() {
-		_roles(roles);
-		return (SiteUserGenPage)this;
-	}
-
-	public static String staticSolrRoles(SiteRequestEnUS siteRequest_, String o) {
-		return o;
-	}
-
-	public static String staticSolrStrRoles(SiteRequestEnUS siteRequest_, String o) {
-		return o == null ? null : o.toString();
-	}
-
-	public static String staticSolrFqRoles(SiteRequestEnUS siteRequest_, String o) {
-		return SiteUserGenPage.staticSolrStrRoles(siteRequest_, SiteUserGenPage.staticSolrRoles(siteRequest_, SiteUserGenPage.staticSetRoles(siteRequest_, o)));
-	}
-
-	///////////////////
-	// rolesRequired //
-	///////////////////
-
-	/**	 The entity rolesRequired
-	 *	Il est construit avant d'être initialisé avec le constructeur par défaut List<String>(). 
-	 */
-	@JsonProperty
-	@JsonFormat(shape = JsonFormat.Shape.ARRAY)
-	@JsonInclude(Include.NON_NULL)
-	protected List<String> rolesRequired = new ArrayList<String>();
-
-	/**	<br/> The entity rolesRequired
-	 *  It is constructed before being initialized with the constructor by default List<String>(). 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.user.SiteUserGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:rolesRequired">Find the entity rolesRequired in Solr</a>
-	 * <br/>
-	 * @param rolesRequired is the entity already constructed. 
-	 **/
-	protected abstract void _rolesRequired(List<String> l);
-
-	public List<String> getRolesRequired() {
-		return rolesRequired;
-	}
-
-	public void setRolesRequired(List<String> rolesRequired) {
-		this.rolesRequired = rolesRequired;
-	}
-	public static String staticSetRolesRequired(SiteRequestEnUS siteRequest_, String o) {
-		return o;
-	}
-	public SiteUserGenPage addRolesRequired(String...objets) {
-		for(String o : objets) {
-			addRolesRequired(o);
-		}
-		return (SiteUserGenPage)this;
-	}
-	public SiteUserGenPage addRolesRequired(String o) {
-		if(o != null)
-			this.rolesRequired.add(o);
-		return (SiteUserGenPage)this;
-	}
-	@JsonIgnore
-	public void setRolesRequired(JsonArray objets) {
-		rolesRequired.clear();
-		for(int i = 0; i < objets.size(); i++) {
-			String o = objets.getString(i);
-			addRolesRequired(o);
-		}
-	}
-	protected SiteUserGenPage rolesRequiredInit() {
-		_rolesRequired(rolesRequired);
-		return (SiteUserGenPage)this;
-	}
-
-	public static String staticSolrRolesRequired(SiteRequestEnUS siteRequest_, String o) {
-		return o;
-	}
-
-	public static String staticSolrStrRolesRequired(SiteRequestEnUS siteRequest_, String o) {
-		return o == null ? null : o.toString();
-	}
-
-	public static String staticSolrFqRolesRequired(SiteRequestEnUS siteRequest_, String o) {
-		return SiteUserGenPage.staticSolrStrRolesRequired(siteRequest_, SiteUserGenPage.staticSolrRolesRequired(siteRequest_, SiteUserGenPage.staticSetRolesRequired(siteRequest_, o)));
-	}
-
-	////////////////
-	// pagination //
-	////////////////
-
-	/**	 The entity pagination
-	 *	Il est construit avant d'être initialisé avec le constructeur par défaut JsonObject(). 
-	 */
-	@JsonInclude(Include.NON_NULL)
-	protected JsonObject pagination = new JsonObject();
-
-	/**	<br/> The entity pagination
-	 *  It is constructed before being initialized with the constructor by default JsonObject(). 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.user.SiteUserGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pagination">Find the entity pagination in Solr</a>
-	 * <br/>
-	 * @param pagination is the entity already constructed. 
-	 **/
-	protected abstract void _pagination(JsonObject pagination);
-
-	public JsonObject getPagination() {
-		return pagination;
-	}
-
-	public void setPagination(JsonObject pagination) {
-		this.pagination = pagination;
-	}
-	public static JsonObject staticSetPagination(SiteRequestEnUS siteRequest_, String o) {
-		return null;
-	}
-	protected SiteUserGenPage paginationInit() {
-		_pagination(pagination);
-		return (SiteUserGenPage)this;
-	}
-
-	///////////
-	// query //
-	///////////
-
-	/**	 The entity query
-	 *	Il est construit avant d'être initialisé avec le constructeur par défaut JsonObject(). 
-	 */
-	@JsonInclude(Include.NON_NULL)
-	protected JsonObject query = new JsonObject();
-
-	/**	<br/> The entity query
-	 *  It is constructed before being initialized with the constructor by default JsonObject(). 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.user.SiteUserGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:query">Find the entity query in Solr</a>
-	 * <br/>
-	 * @param query is the entity already constructed. 
-	 **/
-	protected abstract void _query(JsonObject query);
-
-	public JsonObject getQuery() {
-		return query;
-	}
-
-	public void setQuery(JsonObject query) {
-		this.query = query;
-	}
-	public static JsonObject staticSetQuery(SiteRequestEnUS siteRequest_, String o) {
-		return null;
-	}
-	protected SiteUserGenPage queryInit() {
-		_query(query);
-		return (SiteUserGenPage)this;
-	}
-
-	//////////////////
-	// promiseAfter //
-	//////////////////
-
-	/**	 The entity promiseAfter
-	 *	 is defined as null before being initialized. 
-	 */
-	@JsonIgnore
-	@JsonInclude(Include.NON_NULL)
-	protected Void promiseAfter;
-
-	/**	<br/> The entity promiseAfter
-	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.user.SiteUserGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:promiseAfter">Find the entity promiseAfter in Solr</a>
-	 * <br/>
-	 * @param promise is for wrapping a value to assign to this entity during initialization. 
-	 **/
-	protected abstract void _promiseAfter(Promise<Void> promise);
-
-	public Void getPromiseAfter() {
-		return promiseAfter;
-	}
-
-	public void setPromiseAfter(Void promiseAfter) {
-		this.promiseAfter = promiseAfter;
-	}
-	public static Void staticSetPromiseAfter(SiteRequestEnUS siteRequest_, String o) {
-		return null;
-	}
-	protected Future<Void> promiseAfterPromise() {
-		Promise<Void> promise = Promise.promise();
-		Promise<Void> promise2 = Promise.promise();
-		_promiseAfter(promise2);
-		promise2.future().onSuccess(o -> {
-			setPromiseAfter(o);
-			promise.complete(o);
-		}).onFailure(ex -> {
-			promise.fail(ex);
-		});
-		return promise.future();
-	}
-
-	//////////////////
-	// pageImageUri //
-	//////////////////
-
-	/**	 The entity pageImageUri
-	 *	 is defined as null before being initialized. 
-	 */
-	@JsonProperty
-	@JsonInclude(Include.NON_NULL)
-	protected String pageImageUri;
-
-	/**	<br/> The entity pageImageUri
-	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.user.SiteUserGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pageImageUri">Find the entity pageImageUri in Solr</a>
-	 * <br/>
-	 * @param c is for wrapping a value to assign to this entity during initialization. 
-	 **/
-	protected abstract void _pageImageUri(Wrap<String> c);
-
-	public String getPageImageUri() {
-		return pageImageUri;
-	}
-	public void setPageImageUri(String o) {
-		this.pageImageUri = SiteUserGenPage.staticSetPageImageUri(siteRequest_, o);
-	}
-	public static String staticSetPageImageUri(SiteRequestEnUS siteRequest_, String o) {
-		return o;
-	}
-	protected SiteUserGenPage pageImageUriInit() {
-		Wrap<String> pageImageUriWrap = new Wrap<String>().var("pageImageUri");
-		if(pageImageUri == null) {
-			_pageImageUri(pageImageUriWrap);
-			setPageImageUri(pageImageUriWrap.o);
-		}
-		return (SiteUserGenPage)this;
-	}
-
-	public static String staticSolrPageImageUri(SiteRequestEnUS siteRequest_, String o) {
-		return o;
-	}
-
-	public static String staticSolrStrPageImageUri(SiteRequestEnUS siteRequest_, String o) {
-		return o == null ? null : o.toString();
-	}
-
-	public static String staticSolrFqPageImageUri(SiteRequestEnUS siteRequest_, String o) {
-		return SiteUserGenPage.staticSolrStrPageImageUri(siteRequest_, SiteUserGenPage.staticSolrPageImageUri(siteRequest_, SiteUserGenPage.staticSetPageImageUri(siteRequest_, o)));
-	}
-
-	//////////////////////
-	// contextIconGroup //
-	//////////////////////
-
-	/**	 The entity contextIconGroup
-	 *	 is defined as null before being initialized. 
-	 */
-	@JsonProperty
-	@JsonInclude(Include.NON_NULL)
-	protected String contextIconGroup;
-
-	/**	<br/> The entity contextIconGroup
-	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.user.SiteUserGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:contextIconGroup">Find the entity contextIconGroup in Solr</a>
-	 * <br/>
-	 * @param c is for wrapping a value to assign to this entity during initialization. 
-	 **/
-	protected abstract void _contextIconGroup(Wrap<String> c);
-
-	public String getContextIconGroup() {
-		return contextIconGroup;
-	}
-	public void setContextIconGroup(String o) {
-		this.contextIconGroup = SiteUserGenPage.staticSetContextIconGroup(siteRequest_, o);
-	}
-	public static String staticSetContextIconGroup(SiteRequestEnUS siteRequest_, String o) {
-		return o;
-	}
-	protected SiteUserGenPage contextIconGroupInit() {
-		Wrap<String> contextIconGroupWrap = new Wrap<String>().var("contextIconGroup");
-		if(contextIconGroup == null) {
-			_contextIconGroup(contextIconGroupWrap);
-			setContextIconGroup(contextIconGroupWrap.o);
-		}
-		return (SiteUserGenPage)this;
-	}
-
-	public static String staticSolrContextIconGroup(SiteRequestEnUS siteRequest_, String o) {
-		return o;
-	}
-
-	public static String staticSolrStrContextIconGroup(SiteRequestEnUS siteRequest_, String o) {
-		return o == null ? null : o.toString();
-	}
-
-	public static String staticSolrFqContextIconGroup(SiteRequestEnUS siteRequest_, String o) {
-		return SiteUserGenPage.staticSolrStrContextIconGroup(siteRequest_, SiteUserGenPage.staticSolrContextIconGroup(siteRequest_, SiteUserGenPage.staticSetContextIconGroup(siteRequest_, o)));
-	}
-
-	/////////////////////
-	// contextIconName //
-	/////////////////////
-
-	/**	 The entity contextIconName
-	 *	 is defined as null before being initialized. 
-	 */
-	@JsonProperty
-	@JsonInclude(Include.NON_NULL)
-	protected String contextIconName;
-
-	/**	<br/> The entity contextIconName
-	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.user.SiteUserGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:contextIconName">Find the entity contextIconName in Solr</a>
-	 * <br/>
-	 * @param c is for wrapping a value to assign to this entity during initialization. 
-	 **/
-	protected abstract void _contextIconName(Wrap<String> c);
-
-	public String getContextIconName() {
-		return contextIconName;
-	}
-	public void setContextIconName(String o) {
-		this.contextIconName = SiteUserGenPage.staticSetContextIconName(siteRequest_, o);
-	}
-	public static String staticSetContextIconName(SiteRequestEnUS siteRequest_, String o) {
-		return o;
-	}
-	protected SiteUserGenPage contextIconNameInit() {
-		Wrap<String> contextIconNameWrap = new Wrap<String>().var("contextIconName");
-		if(contextIconName == null) {
-			_contextIconName(contextIconNameWrap);
-			setContextIconName(contextIconNameWrap.o);
-		}
-		return (SiteUserGenPage)this;
-	}
-
-	public static String staticSolrContextIconName(SiteRequestEnUS siteRequest_, String o) {
-		return o;
-	}
-
-	public static String staticSolrStrContextIconName(SiteRequestEnUS siteRequest_, String o) {
-		return o == null ? null : o.toString();
-	}
-
-	public static String staticSolrFqContextIconName(SiteRequestEnUS siteRequest_, String o) {
-		return SiteUserGenPage.staticSolrStrContextIconName(siteRequest_, SiteUserGenPage.staticSolrContextIconName(siteRequest_, SiteUserGenPage.staticSetContextIconName(siteRequest_, o)));
-	}
-
 	//////////////
 	// initDeep //
 	//////////////
@@ -902,7 +285,11 @@ public abstract class SiteUserGenPageGen<DEV> extends Object {
 		Promise<Void> promise2 = Promise.promise();
 		promiseSiteUserGenPage(promise2);
 		promise2.future().onSuccess(a -> {
-			promise.complete();
+			super.promiseDeepBaseModelPage(siteRequest_).onSuccess(b -> {
+				promise.complete();
+			}).onFailure(ex -> {
+				promise.fail(ex);
+			});
 		}).onFailure(ex -> {
 			promise.fail(ex);
 		});
@@ -913,54 +300,11 @@ public abstract class SiteUserGenPageGen<DEV> extends Object {
 		Future.future(a -> a.complete()).compose(a -> {
 			Promise<Void> promise2 = Promise.promise();
 			try {
-				siteRequest_Init();
 				searchListSiteUser_Init();
 				listSiteUserInit();
 				siteUserCountInit();
 				siteUser_Init();
 				pkInit();
-				promise2.complete();
-			} catch(Exception ex) {
-				promise2.fail(ex);
-			}
-			return promise2.future();
-		}).compose(a -> {
-			Promise<Void> promise2 = Promise.promise();
-			promiseBeforePromise().onSuccess(promiseBefore -> {
-				promise2.complete();
-			}).onFailure(ex -> {
-				promise2.fail(ex);
-			});
-			return promise2.future();
-		}).compose(a -> {
-			Promise<Void> promise2 = Promise.promise();
-			try {
-				classSimpleNameInit();
-				pageTitleInit();
-				pageUriInit();
-				rolesInit();
-				rolesRequiredInit();
-				paginationInit();
-				queryInit();
-				promise2.complete();
-			} catch(Exception ex) {
-				promise2.fail(ex);
-			}
-			return promise2.future();
-		}).compose(a -> {
-			Promise<Void> promise2 = Promise.promise();
-			promiseAfterPromise().onSuccess(promiseAfter -> {
-				promise2.complete();
-			}).onFailure(ex -> {
-				promise2.fail(ex);
-			});
-			return promise2.future();
-		}).compose(a -> {
-			Promise<Void> promise2 = Promise.promise();
-			try {
-				pageImageUriInit();
-				contextIconGroupInit();
-				contextIconNameInit();
 				promise2.complete();
 			} catch(Exception ex) {
 				promise2.fail(ex);
@@ -974,7 +318,7 @@ public abstract class SiteUserGenPageGen<DEV> extends Object {
 		return promise.future();
 	}
 
-	public Future<Void> promiseDeepForClass(SiteRequestEnUS siteRequest_) {
+	@Override public Future<Void> promiseDeepForClass(SiteRequestEnUS siteRequest_) {
 		return promiseDeepSiteUserGenPage(siteRequest_);
 	}
 
@@ -983,6 +327,7 @@ public abstract class SiteUserGenPageGen<DEV> extends Object {
 	/////////////////
 
 	public void siteRequestSiteUserGenPage(SiteRequestEnUS siteRequest_) {
+			super.siteRequestBaseModelPage(siteRequest_);
 	}
 
 	public void siteRequestForClass(SiteRequestEnUS siteRequest_) {
@@ -993,7 +338,7 @@ public abstract class SiteUserGenPageGen<DEV> extends Object {
 	// obtain //
 	/////////////
 
-	public Object obtainForClass(String var) {
+	@Override public Object obtainForClass(String var) {
 		String[] vars = StringUtils.split(var, ".");
 		Object o = null;
 		for(String v : vars) {
@@ -1013,8 +358,6 @@ public abstract class SiteUserGenPageGen<DEV> extends Object {
 	public Object obtainSiteUserGenPage(String var) {
 		SiteUserGenPage oSiteUserGenPage = (SiteUserGenPage)this;
 		switch(var) {
-			case "siteRequest_":
-				return oSiteUserGenPage.siteRequest_;
 			case "searchListSiteUser_":
 				return oSiteUserGenPage.searchListSiteUser_;
 			case "listSiteUser":
@@ -1025,32 +368,8 @@ public abstract class SiteUserGenPageGen<DEV> extends Object {
 				return oSiteUserGenPage.siteUser_;
 			case "pk":
 				return oSiteUserGenPage.pk;
-			case "promiseBefore":
-				return oSiteUserGenPage.promiseBefore;
-			case "classSimpleName":
-				return oSiteUserGenPage.classSimpleName;
-			case "pageTitle":
-				return oSiteUserGenPage.pageTitle;
-			case "pageUri":
-				return oSiteUserGenPage.pageUri;
-			case "roles":
-				return oSiteUserGenPage.roles;
-			case "rolesRequired":
-				return oSiteUserGenPage.rolesRequired;
-			case "pagination":
-				return oSiteUserGenPage.pagination;
-			case "query":
-				return oSiteUserGenPage.query;
-			case "promiseAfter":
-				return oSiteUserGenPage.promiseAfter;
-			case "pageImageUri":
-				return oSiteUserGenPage.pageImageUri;
-			case "contextIconGroup":
-				return oSiteUserGenPage.contextIconGroup;
-			case "contextIconName":
-				return oSiteUserGenPage.contextIconName;
 			default:
-				return null;
+				return super.obtainBaseModelPage(var);
 		}
 	}
 
@@ -1058,7 +377,7 @@ public abstract class SiteUserGenPageGen<DEV> extends Object {
 	// relate //
 	///////////////
 
-	public boolean relateForClass(String var, Object val) {
+	@Override public boolean relateForClass(String var, Object val) {
 		String[] vars = StringUtils.split(var, ".");
 		Object o = null;
 		for(String v : vars) {
@@ -1075,7 +394,7 @@ public abstract class SiteUserGenPageGen<DEV> extends Object {
 		SiteUserGenPage oSiteUserGenPage = (SiteUserGenPage)this;
 		switch(var) {
 			default:
-				return null;
+				return super.relateBaseModelPage(var, val);
 		}
 	}
 
@@ -1092,24 +411,8 @@ public abstract class SiteUserGenPageGen<DEV> extends Object {
 			return SiteUserGenPage.staticSetSiteUserCount(siteRequest_, o);
 		case "pk":
 			return SiteUserGenPage.staticSetPk(siteRequest_, o);
-		case "classSimpleName":
-			return SiteUserGenPage.staticSetClassSimpleName(siteRequest_, o);
-		case "pageTitle":
-			return SiteUserGenPage.staticSetPageTitle(siteRequest_, o);
-		case "pageUri":
-			return SiteUserGenPage.staticSetPageUri(siteRequest_, o);
-		case "roles":
-			return SiteUserGenPage.staticSetRoles(siteRequest_, o);
-		case "rolesRequired":
-			return SiteUserGenPage.staticSetRolesRequired(siteRequest_, o);
-		case "pageImageUri":
-			return SiteUserGenPage.staticSetPageImageUri(siteRequest_, o);
-		case "contextIconGroup":
-			return SiteUserGenPage.staticSetContextIconGroup(siteRequest_, o);
-		case "contextIconName":
-			return SiteUserGenPage.staticSetContextIconName(siteRequest_, o);
 			default:
-				return null;
+				return BaseModelPage.staticSetBaseModelPage(entityVar,  siteRequest_, o);
 		}
 	}
 
@@ -1126,24 +429,8 @@ public abstract class SiteUserGenPageGen<DEV> extends Object {
 			return SiteUserGenPage.staticSolrSiteUserCount(siteRequest_, (Integer)o);
 		case "pk":
 			return SiteUserGenPage.staticSolrPk(siteRequest_, (Long)o);
-		case "classSimpleName":
-			return SiteUserGenPage.staticSolrClassSimpleName(siteRequest_, (String)o);
-		case "pageTitle":
-			return SiteUserGenPage.staticSolrPageTitle(siteRequest_, (String)o);
-		case "pageUri":
-			return SiteUserGenPage.staticSolrPageUri(siteRequest_, (String)o);
-		case "roles":
-			return SiteUserGenPage.staticSolrRoles(siteRequest_, (String)o);
-		case "rolesRequired":
-			return SiteUserGenPage.staticSolrRolesRequired(siteRequest_, (String)o);
-		case "pageImageUri":
-			return SiteUserGenPage.staticSolrPageImageUri(siteRequest_, (String)o);
-		case "contextIconGroup":
-			return SiteUserGenPage.staticSolrContextIconGroup(siteRequest_, (String)o);
-		case "contextIconName":
-			return SiteUserGenPage.staticSolrContextIconName(siteRequest_, (String)o);
 			default:
-				return null;
+				return BaseModelPage.staticSolrBaseModelPage(entityVar,  siteRequest_, o);
 		}
 	}
 
@@ -1160,24 +447,8 @@ public abstract class SiteUserGenPageGen<DEV> extends Object {
 			return SiteUserGenPage.staticSolrStrSiteUserCount(siteRequest_, (Integer)o);
 		case "pk":
 			return SiteUserGenPage.staticSolrStrPk(siteRequest_, (Long)o);
-		case "classSimpleName":
-			return SiteUserGenPage.staticSolrStrClassSimpleName(siteRequest_, (String)o);
-		case "pageTitle":
-			return SiteUserGenPage.staticSolrStrPageTitle(siteRequest_, (String)o);
-		case "pageUri":
-			return SiteUserGenPage.staticSolrStrPageUri(siteRequest_, (String)o);
-		case "roles":
-			return SiteUserGenPage.staticSolrStrRoles(siteRequest_, (String)o);
-		case "rolesRequired":
-			return SiteUserGenPage.staticSolrStrRolesRequired(siteRequest_, (String)o);
-		case "pageImageUri":
-			return SiteUserGenPage.staticSolrStrPageImageUri(siteRequest_, (String)o);
-		case "contextIconGroup":
-			return SiteUserGenPage.staticSolrStrContextIconGroup(siteRequest_, (String)o);
-		case "contextIconName":
-			return SiteUserGenPage.staticSolrStrContextIconName(siteRequest_, (String)o);
 			default:
-				return null;
+				return BaseModelPage.staticSolrStrBaseModelPage(entityVar,  siteRequest_, o);
 		}
 	}
 
@@ -1194,24 +465,8 @@ public abstract class SiteUserGenPageGen<DEV> extends Object {
 			return SiteUserGenPage.staticSolrFqSiteUserCount(siteRequest_, o);
 		case "pk":
 			return SiteUserGenPage.staticSolrFqPk(siteRequest_, o);
-		case "classSimpleName":
-			return SiteUserGenPage.staticSolrFqClassSimpleName(siteRequest_, o);
-		case "pageTitle":
-			return SiteUserGenPage.staticSolrFqPageTitle(siteRequest_, o);
-		case "pageUri":
-			return SiteUserGenPage.staticSolrFqPageUri(siteRequest_, o);
-		case "roles":
-			return SiteUserGenPage.staticSolrFqRoles(siteRequest_, o);
-		case "rolesRequired":
-			return SiteUserGenPage.staticSolrFqRolesRequired(siteRequest_, o);
-		case "pageImageUri":
-			return SiteUserGenPage.staticSolrFqPageImageUri(siteRequest_, o);
-		case "contextIconGroup":
-			return SiteUserGenPage.staticSolrFqContextIconGroup(siteRequest_, o);
-		case "contextIconName":
-			return SiteUserGenPage.staticSolrFqContextIconName(siteRequest_, o);
 			default:
-				return null;
+				return BaseModelPage.staticSolrFqBaseModelPage(entityVar,  siteRequest_, o);
 		}
 	}
 
@@ -1219,7 +474,7 @@ public abstract class SiteUserGenPageGen<DEV> extends Object {
 	// define //
 	/////////////
 
-	public boolean defineForClass(String var, Object val) {
+	@Override public boolean defineForClass(String var, Object val) {
 		String[] vars = StringUtils.split(var, ".");
 		Object o = null;
 		if(val != null) {
@@ -1237,7 +492,7 @@ public abstract class SiteUserGenPageGen<DEV> extends Object {
 	public Object defineSiteUserGenPage(String var, Object val) {
 		switch(var.toLowerCase()) {
 			default:
-				return null;
+				return super.defineBaseModelPage(var, val);
 		}
 	}
 
@@ -1250,6 +505,7 @@ public abstract class SiteUserGenPageGen<DEV> extends Object {
 		Object o = Optional.ofNullable(apiRequest).map(ApiRequest::getOriginal).orElse(null);
 		if(o != null && o instanceof SiteUserGenPage) {
 			SiteUserGenPage original = (SiteUserGenPage)o;
+			super.apiRequestBaseModelPage();
 		}
 	}
 
@@ -1259,25 +515,13 @@ public abstract class SiteUserGenPageGen<DEV> extends Object {
 
 	@Override public String toString() {
 		StringBuilder sb = new StringBuilder();
+		sb.append(super.toString());
 		return sb.toString();
 	}
 
-	public static final String VAR_siteRequest_ = "siteRequest_";
 	public static final String VAR_searchListSiteUser_ = "searchListSiteUser_";
 	public static final String VAR_listSiteUser = "listSiteUser";
 	public static final String VAR_siteUserCount = "siteUserCount";
 	public static final String VAR_siteUser_ = "siteUser_";
 	public static final String VAR_pk = "pk";
-	public static final String VAR_promiseBefore = "promiseBefore";
-	public static final String VAR_classSimpleName = "classSimpleName";
-	public static final String VAR_pageTitle = "pageTitle";
-	public static final String VAR_pageUri = "pageUri";
-	public static final String VAR_roles = "roles";
-	public static final String VAR_rolesRequired = "rolesRequired";
-	public static final String VAR_pagination = "pagination";
-	public static final String VAR_query = "query";
-	public static final String VAR_promiseAfter = "promiseAfter";
-	public static final String VAR_pageImageUri = "pageImageUri";
-	public static final String VAR_contextIconGroup = "contextIconGroup";
-	public static final String VAR_contextIconName = "contextIconName";
 }

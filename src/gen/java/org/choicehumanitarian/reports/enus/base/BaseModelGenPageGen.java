@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import org.choicehumanitarian.reports.enus.search.SearchList;
-import org.choicehumanitarian.reports.enus.writer.AllWriter;
 import org.apache.commons.lang3.StringUtils;
 import java.lang.Integer;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;

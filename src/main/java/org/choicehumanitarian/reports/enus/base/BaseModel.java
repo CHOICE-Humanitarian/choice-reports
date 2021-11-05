@@ -1,4 +1,4 @@
-package org.choicehumanitarian.reports.enus.base;       
+package org.choicehumanitarian.reports.enus.base;     
 
 import java.text.Normalizer;
 import java.time.ZoneId;

@@ -25,4 +25,5 @@ touch /usr/local/src/choice-reports/src/main/java/org/choicehumanitarian/reports
 touch /usr/local/src/choice-reports/src/main/java/org/choicehumanitarian/reports/enus/java/ZonedDateTimeSerializer.java
 touch /usr/local/src/choice-reports/src/main/java/org/choicehumanitarian/reports/enus/java/ZonedDateTimeDeserializer.java
 touch /usr/local/src/choice-reports/src/main/java/org/choicehumanitarian/reports/enus/page/PageLayout.java
-touch /usr/local/src/choice-reports/src/main/java/org/choicehumanitarian/reports/enus/donor/ChoiceDonor.java
+touch /usr/local/src/choice-reports/src/main/java/org/choicehumanitarian/reports/enus/model/donor/ChoiceDonor.java
+touch /usr/local/src/choice-reports/src/main/java/org/choicehumanitarian/reports/enus/model/report/ChoiceReport.java

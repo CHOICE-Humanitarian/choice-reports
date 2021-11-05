@@ -2,48 +2,52 @@ package org.choicehumanitarian.reports.enus.request.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Arrays;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import java.util.Date;
 import java.time.ZonedDateTime;
 import org.slf4j.LoggerFactory;
-import java.time.LocalDateTime;
-import java.util.HashMap;
 import org.apache.commons.lang3.StringUtils;
 import java.lang.Integer;
-import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
-import java.text.NumberFormat;
-import java.util.ArrayList;
 import org.choicehumanitarian.reports.enus.wrap.Wrap;
-import org.apache.commons.collections.CollectionUtils;
 import java.lang.Long;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.util.Locale;
 import java.util.Map;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.ZoneOffset;
-import java.lang.String;
 import java.math.RoundingMode;
-import org.slf4j.Logger;
 import java.math.MathContext;
-import io.vertx.core.Promise;
-import org.apache.commons.text.StringEscapeUtils;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import org.choicehumanitarian.reports.enus.java.LocalDateSerializer;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.Instant;
 import io.vertx.core.Future;
 import java.time.ZoneId;
 import org.choicehumanitarian.reports.enus.base.BaseModel;
 import java.util.Objects;
-import io.vertx.core.json.JsonArray;
 import java.util.List;
-import java.time.temporal.ChronoUnit;
 import java.time.OffsetDateTime;
+import java.util.Optional;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import org.apache.commons.collections.CollectionUtils;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.choicehumanitarian.reports.enus.java.ZonedDateTimeSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.lang.String;
+import org.choicehumanitarian.reports.enus.request.api.ApiRequest;
+import org.slf4j.Logger;
+import org.choicehumanitarian.reports.enus.java.ZonedDateTimeDeserializer;
+import io.vertx.core.Promise;
+import org.apache.commons.text.StringEscapeUtils;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import io.vertx.core.json.JsonArray;
+import java.time.temporal.ChronoUnit;
 import java.time.format.DateTimeFormatter;
 import org.apache.commons.lang3.math.NumberUtils;
-import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.lang.Object;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 
 /**	
@@ -100,7 +104,7 @@ public abstract class ApiRequestGen<DEV> extends Object {
 	 */
 	@JsonProperty
 	@JsonDeserialize(using = ZonedDateTimeDeserializer.class)
-	@JsonSerialize(using = ToStringSerializer.class)
+	@JsonSerialize(using = ZonedDateTimeSerializer.class)
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSSV'['VV']'")
 	@JsonInclude(Include.NON_NULL)
 	protected ZonedDateTime created;

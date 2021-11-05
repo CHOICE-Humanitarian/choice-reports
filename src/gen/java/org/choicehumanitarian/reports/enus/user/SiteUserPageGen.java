@@ -13,13 +13,16 @@ import java.util.ArrayList;
 import org.choicehumanitarian.reports.enus.wrap.Wrap;
 import org.apache.commons.collections.CollectionUtils;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.choicehumanitarian.reports.enus.java.ZonedDateTimeSerializer;
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.math.RoundingMode;
 import org.choicehumanitarian.reports.enus.request.api.ApiRequest;
 import org.slf4j.Logger;
 import java.math.MathContext;
+import org.choicehumanitarian.reports.enus.java.ZonedDateTimeDeserializer;
 import io.vertx.core.Promise;
+import org.choicehumanitarian.reports.enus.java.LocalDateSerializer;
 import org.apache.commons.text.StringEscapeUtils;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -44,21 +47,46 @@ public abstract class SiteUserPageGen<DEV> extends SiteUserGenPage {
 	// initDeep //
 	//////////////
 
-	public SiteUserPage initDeepSiteUserPage(SiteRequestEnUS siteRequest_) {
+	public Future<Void> promiseDeepSiteUserPage(SiteRequestEnUS siteRequest_) {
 		setSiteRequest_(siteRequest_);
-		initDeepSiteUserPage();
-		return (SiteUserPage)this;
+		return promiseDeepSiteUserPage();
 	}
 
-	public void initDeepSiteUserPage() {
-		initSiteUserPage();
+	public Future<Void> promiseDeepSiteUserPage() {
+		Promise<Void> promise = Promise.promise();
+		Promise<Void> promise2 = Promise.promise();
+		promiseSiteUserPage(promise2);
+		promise2.future().onSuccess(a -> {
+			super.promiseDeepSiteUserGenPage(siteRequest_).onSuccess(b -> {
+				promise.complete();
+			}).onFailure(ex -> {
+				promise.fail(ex);
+			});
+		}).onFailure(ex -> {
+			promise.fail(ex);
+		});
+		return promise.future();
 	}
 
-	public void initSiteUserPage() {
+	public Future<Void> promiseSiteUserPage(Promise<Void> promise) {
+		Future.future(a -> a.complete()).compose(a -> {
+			Promise<Void> promise2 = Promise.promise();
+			try {
+				promise2.complete();
+			} catch(Exception ex) {
+				promise2.fail(ex);
+			}
+			return promise2.future();
+		}).onSuccess(a -> {
+			promise.complete();
+		}).onFailure(ex -> {
+			promise.fail(ex);
+		});
+		return promise.future();
 	}
 
-	public void initDeepForClass(SiteRequestEnUS siteRequest_) {
-		initDeepSiteUserPage(siteRequest_);
+	@Override public Future<Void> promiseDeepForClass(SiteRequestEnUS siteRequest_) {
+		return promiseDeepSiteUserPage(siteRequest_);
 	}
 
 	/////////////////
@@ -66,6 +94,7 @@ public abstract class SiteUserPageGen<DEV> extends SiteUserGenPage {
 	/////////////////
 
 	public void siteRequestSiteUserPage(SiteRequestEnUS siteRequest_) {
+			super.siteRequestSiteUserGenPage(siteRequest_);
 	}
 
 	public void siteRequestForClass(SiteRequestEnUS siteRequest_) {
@@ -76,7 +105,7 @@ public abstract class SiteUserPageGen<DEV> extends SiteUserGenPage {
 	// obtain //
 	/////////////
 
-	public Object obtainForClass(String var) {
+	@Override public Object obtainForClass(String var) {
 		String[] vars = StringUtils.split(var, ".");
 		Object o = null;
 		for(String v : vars) {
@@ -97,7 +126,7 @@ public abstract class SiteUserPageGen<DEV> extends SiteUserGenPage {
 		SiteUserPage oSiteUserPage = (SiteUserPage)this;
 		switch(var) {
 			default:
-				return null;
+				return super.obtainSiteUserGenPage(var);
 		}
 	}
 
@@ -105,7 +134,7 @@ public abstract class SiteUserPageGen<DEV> extends SiteUserGenPage {
 	// relate //
 	///////////////
 
-	public boolean relateForClass(String var, Object val) {
+	@Override public boolean relateForClass(String var, Object val) {
 		String[] vars = StringUtils.split(var, ".");
 		Object o = null;
 		for(String v : vars) {
@@ -122,7 +151,7 @@ public abstract class SiteUserPageGen<DEV> extends SiteUserGenPage {
 		SiteUserPage oSiteUserPage = (SiteUserPage)this;
 		switch(var) {
 			default:
-				return null;
+				return super.relateSiteUserGenPage(var, val);
 		}
 	}
 
@@ -136,7 +165,7 @@ public abstract class SiteUserPageGen<DEV> extends SiteUserGenPage {
 	public static Object staticSetSiteUserPage(String entityVar, SiteRequestEnUS siteRequest_, String o) {
 		switch(entityVar) {
 			default:
-				return null;
+				return SiteUserGenPage.staticSetSiteUserGenPage(entityVar,  siteRequest_, o);
 		}
 	}
 
@@ -150,7 +179,7 @@ public abstract class SiteUserPageGen<DEV> extends SiteUserGenPage {
 	public static Object staticSolrSiteUserPage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
 		switch(entityVar) {
 			default:
-				return null;
+				return SiteUserGenPage.staticSolrSiteUserGenPage(entityVar,  siteRequest_, o);
 		}
 	}
 
@@ -164,7 +193,7 @@ public abstract class SiteUserPageGen<DEV> extends SiteUserGenPage {
 	public static String staticSolrStrSiteUserPage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
 		switch(entityVar) {
 			default:
-				return null;
+				return SiteUserGenPage.staticSolrStrSiteUserGenPage(entityVar,  siteRequest_, o);
 		}
 	}
 
@@ -178,7 +207,7 @@ public abstract class SiteUserPageGen<DEV> extends SiteUserGenPage {
 	public static String staticSolrFqSiteUserPage(String entityVar, SiteRequestEnUS siteRequest_, String o) {
 		switch(entityVar) {
 			default:
-				return null;
+				return SiteUserGenPage.staticSolrFqSiteUserGenPage(entityVar,  siteRequest_, o);
 		}
 	}
 
@@ -186,7 +215,7 @@ public abstract class SiteUserPageGen<DEV> extends SiteUserGenPage {
 	// define //
 	/////////////
 
-	public boolean defineForClass(String var, Object val) {
+	@Override public boolean defineForClass(String var, Object val) {
 		String[] vars = StringUtils.split(var, ".");
 		Object o = null;
 		if(val != null) {
@@ -204,7 +233,7 @@ public abstract class SiteUserPageGen<DEV> extends SiteUserGenPage {
 	public Object defineSiteUserPage(String var, Object val) {
 		switch(var.toLowerCase()) {
 			default:
-				return null;
+				return super.defineSiteUserGenPage(var, val);
 		}
 	}
 
@@ -217,6 +246,7 @@ public abstract class SiteUserPageGen<DEV> extends SiteUserGenPage {
 		Object o = Optional.ofNullable(apiRequest).map(ApiRequest::getOriginal).orElse(null);
 		if(o != null && o instanceof SiteUserPage) {
 			SiteUserPage original = (SiteUserPage)o;
+			super.apiRequestSiteUserGenPage();
 		}
 	}
 
@@ -226,6 +256,7 @@ public abstract class SiteUserPageGen<DEV> extends SiteUserGenPage {
 
 	@Override public String toString() {
 		StringBuilder sb = new StringBuilder();
+		sb.append(super.toString());
 		return sb.toString();
 	}
 
