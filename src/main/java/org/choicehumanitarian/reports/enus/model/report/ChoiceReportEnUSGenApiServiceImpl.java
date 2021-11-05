@@ -122,7 +122,7 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 			try {
 				siteRequest.setJsonObject(body);
 
-				List<String> roles = Optional.ofNullable(config.getJsonArray(ConfigKeys.AUTH_ROLES_REQUIRED + "_ChoiceReport")).orElse(new JsonArray()).getList();
+				List<String> roles = Optional.ofNullable(config.getValue(ConfigKeys.AUTH_ROLES_REQUIRED + "_ChoiceReport")).map(v -> v instanceof JsonArray ? (JsonArray)v : new JsonArray(v.toString())).orElse(new JsonArray()).getList();
 				if(
 						!CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roles)
 						&& !CollectionUtils.containsAny(siteRequest.getUserRealmRoles(), roles)
@@ -371,7 +371,7 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 			try {
 				siteRequest.setJsonObject(body);
 
-				List<String> roles = Optional.ofNullable(config.getJsonArray(ConfigKeys.AUTH_ROLES_REQUIRED + "_ChoiceReport")).orElse(new JsonArray()).getList();
+				List<String> roles = Optional.ofNullable(config.getValue(ConfigKeys.AUTH_ROLES_REQUIRED + "_ChoiceReport")).map(v -> v instanceof JsonArray ? (JsonArray)v : new JsonArray(v.toString())).orElse(new JsonArray()).getList();
 				if(
 						!CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roles)
 						&& !CollectionUtils.containsAny(siteRequest.getUserRealmRoles(), roles)
@@ -793,7 +793,7 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 			try {
 				siteRequest.setJsonObject(body);
 
-				List<String> roles = Optional.ofNullable(config.getJsonArray(ConfigKeys.AUTH_ROLES_REQUIRED + "_ChoiceReport")).orElse(new JsonArray()).getList();
+				List<String> roles = Optional.ofNullable(config.getValue(ConfigKeys.AUTH_ROLES_REQUIRED + "_ChoiceReport")).map(v -> v instanceof JsonArray ? (JsonArray)v : new JsonArray(v.toString())).orElse(new JsonArray()).getList();
 				if(
 						!CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roles)
 						&& !CollectionUtils.containsAny(siteRequest.getUserRealmRoles(), roles)
@@ -811,7 +811,7 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 				} else {
 					searchChoiceReportList(siteRequest, false, true, true).onSuccess(listChoiceReport -> {
 						try {
-							List<String> roles2 = Optional.ofNullable(config.getJsonArray(ConfigKeys.AUTH_ROLES_ADMIN)).orElse(new JsonArray()).getList();
+							List<String> roles2 = Optional.ofNullable(config.getValue(ConfigKeys.AUTH_ROLES_ADMIN)).map(v -> v instanceof JsonArray ? (JsonArray)v : new JsonArray(v.toString())).orElse(new JsonArray()).getList();
 							if(listChoiceReport.getQueryResponse().getResults().getNumFound() > 1
 									&& !CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roles2)
 									&& !CollectionUtils.containsAny(siteRequest.getUserRealmRoles(), roles2)
@@ -1234,7 +1234,7 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 		user(serviceRequest).onSuccess(siteRequest -> {
 			try {
 
-				List<String> roles = Optional.ofNullable(config.getJsonArray(ConfigKeys.AUTH_ROLES_REQUIRED + "_ChoiceReport")).orElse(new JsonArray()).getList();
+				List<String> roles = Optional.ofNullable(config.getValue(ConfigKeys.AUTH_ROLES_REQUIRED + "_ChoiceReport")).map(v -> v instanceof JsonArray ? (JsonArray)v : new JsonArray(v.toString())).orElse(new JsonArray()).getList();
 				List<String> roleReads = Arrays.asList("");
 				if(
 						!CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roles)
@@ -1309,7 +1309,7 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 		user(serviceRequest).onSuccess(siteRequest -> {
 			try {
 
-				List<String> roles = Optional.ofNullable(config.getJsonArray(ConfigKeys.AUTH_ROLES_REQUIRED + "_ChoiceReport")).orElse(new JsonArray()).getList();
+				List<String> roles = Optional.ofNullable(config.getValue(ConfigKeys.AUTH_ROLES_REQUIRED + "_ChoiceReport")).map(v -> v instanceof JsonArray ? (JsonArray)v : new JsonArray(v.toString())).orElse(new JsonArray()).getList();
 				List<String> roleReads = Arrays.asList("");
 				if(
 						!CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roles)
@@ -1523,7 +1523,7 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 		user(serviceRequest).onSuccess(siteRequest -> {
 			try {
 
-				List<String> roles = Optional.ofNullable(config.getJsonArray(ConfigKeys.AUTH_ROLES_REQUIRED + "_ChoiceReport")).orElse(new JsonArray()).getList();
+				List<String> roles = Optional.ofNullable(config.getValue(ConfigKeys.AUTH_ROLES_REQUIRED + "_ChoiceReport")).map(v -> v instanceof JsonArray ? (JsonArray)v : new JsonArray(v.toString())).orElse(new JsonArray()).getList();
 				List<String> roleReads = Arrays.asList("");
 				if(
 						!CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roles)
@@ -1621,7 +1621,7 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 		user(serviceRequest).onSuccess(siteRequest -> {
 			try {
 
-				List<String> roles = Optional.ofNullable(config.getJsonArray(ConfigKeys.AUTH_ROLES_REQUIRED + "_ChoiceReport")).orElse(new JsonArray()).getList();
+				List<String> roles = Optional.ofNullable(config.getValue(ConfigKeys.AUTH_ROLES_REQUIRED + "_ChoiceReport")).map(v -> v instanceof JsonArray ? (JsonArray)v : new JsonArray(v.toString())).orElse(new JsonArray()).getList();
 				List<String> roleReads = Arrays.asList("");
 				if(
 						!CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roles)
@@ -1719,7 +1719,7 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 		user(serviceRequest).onSuccess(siteRequest -> {
 			try {
 
-				List<String> roles = Optional.ofNullable(config.getJsonArray(ConfigKeys.AUTH_ROLES_REQUIRED + "_ChoiceReport")).orElse(new JsonArray()).getList();
+				List<String> roles = Optional.ofNullable(config.getValue(ConfigKeys.AUTH_ROLES_REQUIRED + "_ChoiceReport")).map(v -> v instanceof JsonArray ? (JsonArray)v : new JsonArray(v.toString())).orElse(new JsonArray()).getList();
 				List<String> roleReads = Arrays.asList("");
 				if(
 						!CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roles)

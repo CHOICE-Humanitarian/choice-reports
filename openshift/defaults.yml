@@ -77,11 +77,11 @@ POSTGRES_NAMESPACE: "{{REDHAT_OPENSHIFT_NAMESPACE}}"
 # The PostgreSQL volume size for Solr files.
 POSTGRES_VOLUME_SIZE: 1Gi
 # The default hostname for the PostreSQL database.
-POSTGRES_HOST_NAME: "postgres.{{POSTGRES_NAMESPACE}}.svc"
+POSTGRES_HOST_NAME: "postgresql.{{POSTGRES_NAMESPACE}}.svc"
 # The default username for the PostreSQL database.
 POSTGRES_DB_USER: computate
 # The default PostgreSQL database name.
-POSTGRES_DB_NAME: "{{ APP_NAME }}"
+POSTGRES_DB_NAME: "choice"
 # The default PostgreSQL database password.
 POSTGRES_DB_PASSWORD: "..."
 
@@ -107,11 +107,15 @@ APP_TOKEN: "{{ REDHAT_OPENSHIFT_TOKEN }}"
 # The application OpenShift namespace where application be deployed.
 APP_NAMESPACE: "{{ REDHAT_OPENSHIFT_NAMESPACE }}"
 # The base URL where the static files will point to.
-APP_STATIC_BASE_URL: "https://example.neocities.org"
+APP_STATIC_BASE_URL: "https://computate.neocities.org/choice"
 # Where static files are placed in the pod. 
 APP_STATIC_PATH: "/opt/static"
 # The properties file where the SSL/TLS encryption is configured.
 APP_SSL_PROPERTIES_FILENAME: "{{ APP_NAME }}-keystore.properties"
+# App memory limit. 
+APP_LIMITS_MEMORY: "500Mi"
+# App cpu limit. 
+APP_LIMITS_CPU: "1m"
 
 #########################################
 # application US English defaults #
@@ -122,11 +126,11 @@ APP_DOMAIN_NAME_ENUS: "example.com"
 # The host name of the site.
 APP_SITE_HOST_NAME_ENUS: "{{ APP_NAME }}.{{APP_DOMAIN_NAME_ENUS}}"
 # The port of the site.
-APP_SITE_PORT_ENUS: "10581"
+APP_SITE_PORT_ENUS: "8080"
 # The base URL of the site.
-APP_SITE_BASE_URL_ENUS: "https://{{APP_SITE_HOST_NAME_ENUS}}:{{APP_SITE_PORT_ENUS}}"
+APP_SITE_BASE_URL_ENUS: "https://{{APP_SITE_HOST_NAME_ENUS}}"
 # The Solr collection of the site.
-APP_SOLR_COLLECTION_ENUS: "site"
+APP_SOLR_COLLECTION_ENUS: "{{ APP_NAME }}"
 # The timezone of the site.
 APP_SITE_ZONE_ENUS: "America/Denver"
 # The PostgreSQL database host name of the site.
@@ -143,6 +147,24 @@ APP_JAVA_MAIN_CLASS_ENUS: org.choicehumanitarian.reports.enus.vertx.MainVerticle
 APP_BACKUP_DIR_ENUS: "{{ lookup('env', 'ODP_ANSIBLE_STATIC') }}/data/enUS"
 # The restore directory of the site.
 APP_RESTORE_DIR_ENUS: /opt/ftp-dev/enUS
+
+###########################
+# choice-reports defaults #
+###########################
+
+AUTH_ROLES_ADMIN: [ SiteAdmin ]
+AUTH_ROLES_REQUIRED_ChoiceDonor: [ SiteAdmin ]
+AUTH_ROLES_REQUIRED_ChoiceReport: [ SiteAdmin ]
+AUTH_ROLES_REQUIRED_SiteUser: [ SiteAdmin ]
+
+DOMO_HOST_NAME: api.domo.com
+DOMO_PORT: 443
+DOMO_SSL: true
+DOMO_AUTH_TOKEN_URI: /oauth/token
+DOMO_AUTH_SCOPE: data workflow audit buzz user account dashboard
+DOMO_AUTH_CLIENT_ID: "..."
+DOMO_AUTH_CLIENT_SECRET: "..."
+DOMO_DATASET_CPP_URI: "..."
 
 #################
 # SMTP defaults #
@@ -192,6 +214,8 @@ SSL_JKS_PASSWORD: "{{SSL_P12_PASSWORD}}"
 SSL_JKS_BASE64: "{{ lookup('file', '{{ SSL_JKS_PATH }}') | b64encode }}"
 # The jceks file base64 encoded (base64 -w 0 /opt/keystore/computate.org.jceks).
 SSL_JCEKS_BASE64: "{{ lookup('file', '{{ SSL_JCEKS_PATH }}') | b64encode }}"
+# Enable SSL passthrough
+SSL_PASSTHROUGH: true
 
 #######################################
 # OpenID Connect auth server defaults #
@@ -244,7 +268,7 @@ AUTH_SECRET: "..."
 # The Auth token ID. 
 AUTH_TOKEN_URI: "/auth/realms/{{ AUTH_REALM }}/protocol/openid-connect/token"
 # The Auth host name
-AUTH_HOST_NAME: "sso.example.com"
+AUTH_HOST_NAME: "{{ SSO_SITE_HOST_NAME }}"
 # The Auth port. 
 AUTH_PORT: 443
 # Whether the Auth server uses SSL. 

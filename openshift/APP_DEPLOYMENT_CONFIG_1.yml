@@ -12,6 +12,12 @@ spec:
   selector:
     app: "{{ APP_NAME }}"
     deploymentconfig: "{{ APP_NAME }}"
+  strategy:
+    activeDeadlineSeconds: 21600
+    recreateParams:
+      timeoutSeconds: 600
+    resources: {}
+    type: Recreate
   template:
     metadata:
       labels:
@@ -36,7 +42,8 @@ spec:
               protocol: TCP
           resources:
             limits:
-              memory: 1.6Gi
+              memory: '{{ APP_LIMITS_MEMORY }}'
+              cpu: '{{ APP_LIMITS_CPU }}'
           env:
             - name: AUTH_REALM
               valueFrom:
@@ -286,11 +293,35 @@ spec:
               value: "{{ FTP_SYNC_PATH_TrafficSearchBasis }}"
             - name: FTP_MAX_RECORD_SIZE
               value: "{{ FTP_MAX_RECORD_SIZE }}"
+            - name: AUTH_ROLES_REQUIRED_ChoiceDonor
+              value: "{{ AUTH_ROLES_ADMIN }}"
+            - name: AUTH_ROLES_REQUIRED_ChoiceDonor
+              value: "{{ AUTH_ROLES_REQUIRED_ChoiceDonor }}"
+            - name: AUTH_ROLES_REQUIRED_ChoiceReport
+              value: "{{ AUTH_ROLES_REQUIRED_ChoiceReport }}"
+            - name: AUTH_ROLES_REQUIRED_SiteUser
+              value: "{{ AUTH_ROLES_REQUIRED_SiteUser }}"
+            - name: DOMO_HOST_NAME
+              value: "{{ DOMO_HOST_NAME }}"
+            - name: DOMO_PORT
+              value: "{{ DOMO_PORT }}"
+            - name: DOMO_SSL 
+              value: "{{ DOMO_SSL }}"
+            - name: DOMO_AUTH_TOKEN_URI
+              value: "{{ DOMO_AUTH_TOKEN_URI }}"
+            - name: DOMO_AUTH_SCOPE
+              value: "{{ DOMO_AUTH_SCOPE }}"
+            - name: DOMO_AUTH_CLIENT_ID
+              value: "{{ DOMO_AUTH_CLIENT_ID }}"
+            - name: DOMO_AUTH_CLIENT_SECRET
+              value: "{{ DOMO_AUTH_CLIENT_SECRET }}"
+            - name: DOMO_DATASET_CPP_URI
+              value: "{{ DOMO_DATASET_CPP_URI }}"
           volumeMounts:
             - mountPath: /opt/keystore
               name: volume-keystore
               readOnly: true
-            - mountPath: /opt/static/template
+            - mountPath: /opt/static/template/enUS
               name: volume-template
               readOnly: true
       volumes:
