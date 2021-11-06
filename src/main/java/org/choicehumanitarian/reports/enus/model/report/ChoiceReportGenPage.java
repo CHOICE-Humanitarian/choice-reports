@@ -230,11 +230,11 @@ public class ChoiceReportGenPage extends ChoiceReportGenPageGen<BaseModelPage> {
 
 	@Override
 	protected void _contextIconGroup(Wrap<String> c) {
-			c.o("regular");
+			c.o("duotone");
 	}
 
 	@Override
 	protected void _contextIconName(Wrap<String> c) {
-			c.o("globe-americas");
+			c.o("file-chart-line");
 	}
 }

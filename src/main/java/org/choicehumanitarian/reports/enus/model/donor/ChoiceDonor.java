@@ -31,9 +31,9 @@ import org.choicehumanitarian.reports.enus.wrap.Wrap;
  * ApiUriSearchPage.enUS: /donor
  * 
  * AName.enUS: a donor
- * Color: pale-blue
- * IconGroup: regular
- * IconName: globe-americas
+ * Color: light-green
+ * IconGroup: duotone
+ * IconName: hands-heart
  * NameVar.enUS: donor
  * 
  * Role.enUS: SiteAdmin

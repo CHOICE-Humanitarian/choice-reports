@@ -32,7 +32,7 @@ import org.choicehumanitarian.reports.enus.wrap.Wrap;
  * Saves: true
  * 
  * AName.enUS: a site user
- * Color: gray
+ * Color: teal
  * IconGroup: regular
  * IconName: user-cog
  * NameVar.enUS: user

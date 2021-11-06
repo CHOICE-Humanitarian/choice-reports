@@ -229,11 +229,11 @@ public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<BaseModelPage> {
 
 	@Override
 	protected void _contextIconGroup(Wrap<String> c) {
-			c.o("regular");
+			c.o("duotone");
 	}
 
 	@Override
 	protected void _contextIconName(Wrap<String> c) {
-			c.o("globe-americas");
+			c.o("hands-heart");
 	}
 }

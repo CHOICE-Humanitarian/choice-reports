@@ -76,9 +76,9 @@ public abstract class ChoiceReportGen<DEV> extends BaseModel {
 	public static final String ChoiceReport_ANameAdjective = "a report";
 	public static final String ChoiceReport_NameAdjectiveSingular = "report";
 	public static final String ChoiceReport_NameAdjectivePlural = "reports";
-	public static final String ChoiceReport_Color = "pale-blue";
-	public static final String ChoiceReport_IconGroup = "regular";
-	public static final String ChoiceReport_IconName = "globe-americas";
+	public static final String ChoiceReport_Color = "cyan";
+	public static final String ChoiceReport_IconGroup = "duotone";
+	public static final String ChoiceReport_IconName = "file-chart-line";
 	public static final Integer ChoiceReport_Rows = 100;
 
 	//////////////

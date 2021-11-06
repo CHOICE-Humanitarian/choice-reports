@@ -75,9 +75,9 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	public static final String ChoiceDonor_ANameAdjective = "a donor";
 	public static final String ChoiceDonor_NameAdjectiveSingular = "donor";
 	public static final String ChoiceDonor_NameAdjectivePlural = "donors";
-	public static final String ChoiceDonor_Color = "pale-blue";
-	public static final String ChoiceDonor_IconGroup = "regular";
-	public static final String ChoiceDonor_IconName = "globe-americas";
+	public static final String ChoiceDonor_Color = "light-green";
+	public static final String ChoiceDonor_IconGroup = "duotone";
+	public static final String ChoiceDonor_IconName = "hands-heart";
 	public static final Integer ChoiceDonor_Rows = 100;
 
 	///////////////////

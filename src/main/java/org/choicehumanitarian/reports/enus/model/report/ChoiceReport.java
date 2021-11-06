@@ -45,9 +45,9 @@ import io.vertx.core.Promise;
  * ApiUriChoiceReportPdfSearchPage.enUS: /pdf-report
  * 
  * AName.enUS: a report
- * Color: pale-blue
- * IconGroup: regular
- * IconName: globe-americas
+ * Color: cyan
+ * IconGroup: duotone
+ * IconName: file-chart-line
  * NameVar.enUS: report
  * 
  * Role.enUS: SiteAdmin

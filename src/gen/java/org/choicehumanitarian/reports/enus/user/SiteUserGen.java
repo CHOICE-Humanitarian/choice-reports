@@ -74,7 +74,7 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	public static final String SiteUser_ANameAdjective = "a site user";
 	public static final String SiteUser_NameAdjectiveSingular = "site user";
 	public static final String SiteUser_NameAdjectivePlural = "site users";
-	public static final String SiteUser_Color = "gray";
+	public static final String SiteUser_Color = "teal";
 	public static final String SiteUser_IconGroup = "regular";
 	public static final String SiteUser_IconName = "user-cog";
 
