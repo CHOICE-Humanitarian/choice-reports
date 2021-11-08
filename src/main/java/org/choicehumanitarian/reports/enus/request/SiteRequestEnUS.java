@@ -81,7 +81,7 @@ public class SiteRequestEnUS extends SiteRequestEnUSGen<Object> implements Seria
 
 	protected void _sessionIdBefore(Wrap<String> c) {
 		if(serviceRequest != null) {
-			c.o(serviceRequest.getParams().getJsonObject("cookie").getString("sessionIdBefore"));
+			c.o(Optional.ofNullable(serviceRequest).map(r -> r.getParams()).map(p -> p.getJsonObject("cookie")).map(cookie -> cookie.getString("sessionIdBefore")).orElse(null));
 		}
 	}
 
