@@ -44,6 +44,14 @@ public class PageLayout extends PageLayoutGen<Object> {
 		w.o(siteRequest_.getConfig().getString(ConfigKeys.STATIC_BASE_URL));
 	}
 
+	protected void _authUrl(Wrap<String> w) {
+		w.o(siteRequest_.getConfig().getString(ConfigKeys.AUTH_URL));
+	}
+
+	protected void _authRealm(Wrap<String> w) {
+		w.o(siteRequest_.getConfig().getString(ConfigKeys.AUTH_REALM));
+	}
+
 	protected void _pageUri(Wrap<String> w) {
 		w.o(serviceRequest.getExtra().getString("uri"));
 	}

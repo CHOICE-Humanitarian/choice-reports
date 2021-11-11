@@ -50,7 +50,7 @@ public class AppSwagger2 extends AppSwagger2Gen<Object> {
 	}
 
 	protected void _appPath(Wrap<String> c) {
-		c.o(config.getString(ConfigKeys.APP_PATH + "_" + languageName));
+		c.o(config.getString(ConfigKeys.SITE_PATH + "_" + languageName));
 	}
 
 	protected void _openApiVersion(Wrap<String> c) {

@@ -10,17 +10,17 @@ kind: DeploymentConfig
 spec:
   replicas: 1
   selector:
-    app: choice-reports
-    deploymentconfig: choice-reports
+    app: "{{ SITE_NAME }}"
+    deploymentconfig: "{{ SITE_NAME }}"
   template:
     metadata:
       labels:
-        app: choice-reports
-        deploymentconfig: choice-reports
+        app: "{{ SITE_NAME }}"
+        deploymentconfig: "{{ SITE_NAME }}"
     spec:
       containers:
         - imagePullPolicy: Always
-          name: choice-reports
+          name: "{{ SITE_NAME }}"
           ports:
             - containerPort: 8080
               name: http
@@ -49,166 +49,166 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: AUTH_REALM
-                  name: choice-reports-secret
+                  name: "{{ SITE_NAME }}-secret"
             - name: AUTH_RESOURCE
               valueFrom:
                 secretKeyRef:
                   key: AUTH_RESOURCE
-                  name: choice-reports-secret
+                  name: "{{ SITE_NAME }}-secret"
             - name: AUTH_SECRET
               valueFrom:
                 secretKeyRef:
                   key: AUTH_SECRET
-                  name: choice-reports-secret
+                  name: "{{ SITE_NAME }}-secret"
             - name: AUTH_HOST_NAME
               valueFrom:
                 secretKeyRef:
                   key: AUTH_HOST_NAME
-                  name: choice-reports-secret
+                  name: "{{ SITE_NAME }}-secret"
             - name: AUTH_PORT
               valueFrom:
                 secretKeyRef:
                   key: AUTH_PORT
-                  name: choice-reports-secret
+                  name: "{{ SITE_NAME }}-secret"
             - name: AUTH_SSL
               valueFrom:
                 secretKeyRef:
                   key: AUTH_SSL
-                  name: choice-reports-secret
+                  name: "{{ SITE_NAME }}-secret"
             - name: AUTH_TOKEN_URI
-              value: "{{AUTH_TOKEN_URI}}"
+              value: "{{ AUTH_TOKEN_URI }}"
             - name: EMAIL_AUTH
               valueFrom:
                 secretKeyRef:
                   key: EMAIL_AUTH
-                  name: choice-reports-secret
+                  name: "{{ SITE_NAME }}-secret"
             - name: EMAIL_FROM
               valueFrom:
                 secretKeyRef:
                   key: EMAIL_FROM
-                  name: choice-reports-secret
+                  name: "{{ SITE_NAME }}-secret"
             - name: EMAIL_HOST
               valueFrom:
                 secretKeyRef:
                   key: EMAIL_HOST
-                  name: choice-reports-secret
+                  name: "{{ SITE_NAME }}-secret"
             - name: EMAIL_PASSWORD
               valueFrom:
                 secretKeyRef:
                   key: EMAIL_PASSWORD
-                  name: choice-reports-secret
+                  name: "{{ SITE_NAME }}-secret"
             - name: EMAIL_PORT
               valueFrom:
                 secretKeyRef:
                   key: EMAIL_PORT
-                  name: choice-reports-secret
+                  name: "{{ SITE_NAME }}-secret"
             - name: EMAIL_SSL
               valueFrom:
                 secretKeyRef:
                   key: EMAIL_SSL
-                  name: choice-reports-secret
+                  name: "{{ SITE_NAME }}-secret"
             - name: EMAIL_USERNAME
               valueFrom:
                 secretKeyRef:
                   key: EMAIL_USERNAME
-                  name: choice-reports-secret
+                  name: "{{ SITE_NAME }}-secret"
             - name: JDBC_HOST
               valueFrom:
                 secretKeyRef:
                   key: JDBC_HOST
-                  name: choice-reports-secret
+                  name: "{{ SITE_NAME }}-secret"
             - name: JDBC_PORT
               valueFrom:
                 secretKeyRef:
                   key: JDBC_PORT
-                  name: choice-reports-secret
+                  name: "{{ SITE_NAME }}-secret"
             - name: JDBC_DATABASE
               valueFrom:
                 secretKeyRef:
                   key: JDBC_DATABASE
-                  name: choice-reports-secret
+                  name: "{{ SITE_NAME }}-secret"
             - name: JDBC_USERNAME
               valueFrom:
                 secretKeyRef:
                   key: JDBC_USERNAME
-                  name: choice-reports-secret
+                  name: "{{ SITE_NAME }}-secret"
             - name: JDBC_PASSWORD
               valueFrom:
                 secretKeyRef:
                   key: JDBC_PASSWORD
-                  name: choice-reports-secret
+                  name: "{{ SITE_NAME }}-secret"
             - name: SSL_PASSTHROUGH
               valueFrom:
                 secretKeyRef:
                   key: SSL_PASSTHROUGH
-                  name: choice-reports-secret
+                  name: "{{ SITE_NAME }}-secret"
             - name: SSL_ALIAS
               valueFrom:
                 secretKeyRef:
                   key: SSL_ALIAS
-                  name: choice-reports-secret
+                  name: "{{ SITE_NAME }}-secret"
             - name: SSL_JKS_PASSWORD
               valueFrom:
                 secretKeyRef:
                   key: SSL_JKS_PASSWORD
-                  name: choice-reports-secret
+                  name: "{{ SITE_NAME }}-secret"
             - name: SSL_JKS_PATH
               valueFrom:
                 secretKeyRef:
                   key: SSL_JKS_PATH
-                  name: choice-reports-secret
+                  name: "{{ SITE_NAME }}-secret"
             - name: SSL_KEYSTORE_PATH
               valueFrom:
                 secretKeyRef:
                   key: SSL_KEYSTORE_PATH
-                  name: choice-reports-secret
+                  name: "{{ SITE_NAME }}-secret"
             - name: OPENSHIFT_SERVICE
-              value: "choice-reports"
+              value: "{{ SITE_NAME }}"
             - name: CLUSTER_PORT
               value: "8081"
             - name: ZOOKEEPER_HOST_NAME
-              value: "{{ZOOKEEPER_HOST_NAME}}"
+              value: "{{ ZOOKEEPER_HOST_NAME }}"
             - name: ZOOKEEPER_PORT
-              value: "{{ZOOKEEPER_PORT}}"
+              value: "{{ ZOOKEEPER_PORT }}"
             - name: SOLR_HOST_NAME
-              value: "{{SOLR_HOST_NAME}}"
+              value: "{{ SOLR_HOST_NAME }}"
             - name: SOLR_PORT
-              value: "{{SOLR_PORT}}"
+              value: "{{ SOLR_PORT }}"
             - name: SOLR_URL
-              value: "http://{{SOLR_HOST_NAME}}:{{SOLR_PORT}}/solr/{{PROJECT_SOLR_COLLECTION}}"
+              value: "http://{{ SOLR_HOST_NAME }}:{{ SOLR_PORT }}/solr/{{ SITE_SOLR_COLLECTION }}"
             - name: SITE_HOST_NAME
-              value: "{{PROJECT_SITE_HOST_NAME_ENUS}}"
+              value: "{{ SITE_HOST_NAME_ENUS }}"
             - name: SITE_PORT
-              value: "{{PROJECT_SITE_PORT}}"
+              value: "{{ SITE_PORT }}"
             - name: SITE_BASE_URL
-              value: "{{PROJECT_SITE_BASE_URL_ENUS}}"
+              value: "{{ SITE_BASE_URL_ENUS }}"
             - name: NUMBER_EXECUTORS
-              value: "{{PROJECT_NUMBER_EXECUTORS}}"
+              value: "{{ SITE_NUMBER_EXECUTORS }}"
             - name: STATIC_BASE_URL
-              value: "{{PROJECT_STATIC_BASE_URL}}"
+              value: "{{ SITE_STATIC_BASE_URL }}"
             - name: STATIC_PATH
-              value: "{{PROJECT_STATIC_PATH}}"
+              value: "{{ SITE_STATIC_PATH }}"
             - name: SITE_ZONE
-              value: "{{PROJECT_SITE_ZONE_ENUS}}"
+              value: "{{ SITE_ZONE_ENUS }}"
             - name: JAVA_MAIN_CLASS
-              value: "{{PROJECT_JAVA_MAIN_CLASS_ENUS}}"
+              value: "{{ SITE_JAVA_MAIN_CLASS_ENUS }}"
       volumes:
         - name: volume-keystore
           secret:
             defaultMode: 420
-            secretName: choice-reports-keystore
+            secretName: "{{ SITE_NAME }}-keystore"
         - name: volume-template
           configMap:
             defaultMode: 420
-            name: choice-reports-template
+            name: "{{ SITE_NAME }}-template"
   triggers:
     - imageChangeParams:
         automatic: true
         containerNames:
-          - choice-reports
+          - {{ SITE_NAME }}
         from:
           kind: ImageStreamTag
-          name: 'choice-reports:latest'
-          namespace: {{PROJECT_NAMESPACE}}
+          name: '{{ SITE_NAME }}:latest'
+          namespace: "{{ SITE_NAMESPACE }}"
       type: ImageChange
     - type: ConfigChange

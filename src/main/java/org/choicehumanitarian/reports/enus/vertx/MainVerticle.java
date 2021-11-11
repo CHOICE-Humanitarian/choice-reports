@@ -712,7 +712,7 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 			handlebars.registerHelpers(ConditionalHelpers.class);
 			handlebars.registerHelpers(StringHelpers.class);
 			handlebars.registerHelpers(AuthHelpers.class);
-			handlebars.registerHelpers(DateHelpers.class);
+			handlebars.registerHelpers(SiteHelpers.class);
 
 			router.get("/").handler(a -> {
 				a.reroute("/template/home-page");
@@ -725,6 +725,8 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 			router.get("/template/*").handler(ctx -> {
 				ctx.put(ConfigKeys.STATIC_BASE_URL, staticBaseUrl);
 				ctx.put(ConfigKeys.SITE_BASE_URL, siteBaseUrl);
+				ctx.put(ConfigKeys.AUTH_URL, config().getString(ConfigKeys.AUTH_URL));
+				ctx.put(ConfigKeys.AUTH_REALM, config().getString(ConfigKeys.AUTH_REALM));
 				ctx.put("staticBaseUrl", staticBaseUrl);
 				ctx.put("siteBaseUrl", siteBaseUrl);
 				ctx.next();

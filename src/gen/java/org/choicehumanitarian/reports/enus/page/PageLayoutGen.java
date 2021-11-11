@@ -274,6 +274,104 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	}
 
 	/////////////
+	// authUrl //
+	/////////////
+
+	/**	 The entity authUrl
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String authUrl;
+
+	/**	<br/> The entity authUrl
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:authUrl">Find the entity authUrl in Solr</a>
+	 * <br/>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _authUrl(Wrap<String> w);
+
+	public String getAuthUrl() {
+		return authUrl;
+	}
+	public void setAuthUrl(String o) {
+		this.authUrl = PageLayout.staticSetAuthUrl(siteRequest_, o);
+	}
+	public static String staticSetAuthUrl(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected PageLayout authUrlInit() {
+		Wrap<String> authUrlWrap = new Wrap<String>().var("authUrl");
+		if(authUrl == null) {
+			_authUrl(authUrlWrap);
+			setAuthUrl(authUrlWrap.o);
+		}
+		return (PageLayout)this;
+	}
+
+	public static String staticSolrAuthUrl(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrAuthUrl(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqAuthUrl(SiteRequestEnUS siteRequest_, String o) {
+		return PageLayout.staticSolrStrAuthUrl(siteRequest_, PageLayout.staticSolrAuthUrl(siteRequest_, PageLayout.staticSetAuthUrl(siteRequest_, o)));
+	}
+
+	///////////////
+	// authRealm //
+	///////////////
+
+	/**	 The entity authRealm
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String authRealm;
+
+	/**	<br/> The entity authRealm
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:authRealm">Find the entity authRealm in Solr</a>
+	 * <br/>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _authRealm(Wrap<String> w);
+
+	public String getAuthRealm() {
+		return authRealm;
+	}
+	public void setAuthRealm(String o) {
+		this.authRealm = PageLayout.staticSetAuthRealm(siteRequest_, o);
+	}
+	public static String staticSetAuthRealm(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected PageLayout authRealmInit() {
+		Wrap<String> authRealmWrap = new Wrap<String>().var("authRealm");
+		if(authRealm == null) {
+			_authRealm(authRealmWrap);
+			setAuthRealm(authRealmWrap.o);
+		}
+		return (PageLayout)this;
+	}
+
+	public static String staticSolrAuthRealm(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrAuthRealm(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqAuthRealm(SiteRequestEnUS siteRequest_, String o) {
+		return PageLayout.staticSolrStrAuthRealm(siteRequest_, PageLayout.staticSolrAuthRealm(siteRequest_, PageLayout.staticSetAuthRealm(siteRequest_, o)));
+	}
+
+	/////////////
 	// pageUri //
 	/////////////
 
@@ -1512,6 +1610,8 @@ public abstract class PageLayoutGen<DEV> extends Object {
 				requestZoneIdInit();
 				requestLocaleIdInit();
 				staticBaseUrlInit();
+				authUrlInit();
+				authRealmInit();
 				pageUriInit();
 				pageMethodInit();
 				paramsInit();
@@ -1628,6 +1728,10 @@ public abstract class PageLayoutGen<DEV> extends Object {
 				return oPageLayout.requestLocaleId;
 			case "staticBaseUrl":
 				return oPageLayout.staticBaseUrl;
+			case "authUrl":
+				return oPageLayout.authUrl;
+			case "authRealm":
+				return oPageLayout.authRealm;
 			case "pageUri":
 				return oPageLayout.pageUri;
 			case "pageMethod":
@@ -1721,6 +1825,10 @@ public abstract class PageLayoutGen<DEV> extends Object {
 			return PageLayout.staticSetRequestLocaleId(siteRequest_, o);
 		case "staticBaseUrl":
 			return PageLayout.staticSetStaticBaseUrl(siteRequest_, o);
+		case "authUrl":
+			return PageLayout.staticSetAuthUrl(siteRequest_, o);
+		case "authRealm":
+			return PageLayout.staticSetAuthRealm(siteRequest_, o);
 		case "pageUri":
 			return PageLayout.staticSetPageUri(siteRequest_, o);
 		case "pageMethod":
@@ -1779,6 +1887,10 @@ public abstract class PageLayoutGen<DEV> extends Object {
 			return PageLayout.staticSolrRequestLocaleId(siteRequest_, (String)o);
 		case "staticBaseUrl":
 			return PageLayout.staticSolrStaticBaseUrl(siteRequest_, (String)o);
+		case "authUrl":
+			return PageLayout.staticSolrAuthUrl(siteRequest_, (String)o);
+		case "authRealm":
+			return PageLayout.staticSolrAuthRealm(siteRequest_, (String)o);
 		case "pageUri":
 			return PageLayout.staticSolrPageUri(siteRequest_, (String)o);
 		case "pageMethod":
@@ -1837,6 +1949,10 @@ public abstract class PageLayoutGen<DEV> extends Object {
 			return PageLayout.staticSolrStrRequestLocaleId(siteRequest_, (String)o);
 		case "staticBaseUrl":
 			return PageLayout.staticSolrStrStaticBaseUrl(siteRequest_, (String)o);
+		case "authUrl":
+			return PageLayout.staticSolrStrAuthUrl(siteRequest_, (String)o);
+		case "authRealm":
+			return PageLayout.staticSolrStrAuthRealm(siteRequest_, (String)o);
 		case "pageUri":
 			return PageLayout.staticSolrStrPageUri(siteRequest_, (String)o);
 		case "pageMethod":
@@ -1895,6 +2011,10 @@ public abstract class PageLayoutGen<DEV> extends Object {
 			return PageLayout.staticSolrFqRequestLocaleId(siteRequest_, o);
 		case "staticBaseUrl":
 			return PageLayout.staticSolrFqStaticBaseUrl(siteRequest_, o);
+		case "authUrl":
+			return PageLayout.staticSolrFqAuthUrl(siteRequest_, o);
+		case "authRealm":
+			return PageLayout.staticSolrFqAuthRealm(siteRequest_, o);
 		case "pageUri":
 			return PageLayout.staticSolrFqPageUri(siteRequest_, o);
 		case "pageMethod":
@@ -1990,6 +2110,8 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	public static final String VAR_requestZoneId = "requestZoneId";
 	public static final String VAR_requestLocaleId = "requestLocaleId";
 	public static final String VAR_staticBaseUrl = "staticBaseUrl";
+	public static final String VAR_authUrl = "authUrl";
+	public static final String VAR_authRealm = "authRealm";
 	public static final String VAR_pageUri = "pageUri";
 	public static final String VAR_pageMethod = "pageMethod";
 	public static final String VAR_params = "params";

@@ -1,4 +1,4 @@
-package org.choicehumanitarian.reports.enus.base;     
+package org.choicehumanitarian.reports.enus.base;    
 
 import java.text.Normalizer;
 import java.time.ZoneId;
@@ -68,6 +68,7 @@ public class BaseModel extends BaseModelGen<Object> {
 	 * HtmlCell: 2
 	 * HtmlColumn: 2
 	 * DisplayName.enUS: created
+	 * FormatHtm: MMM d, yyyy h:mm:ss a
 	 */
 	protected void _created(Wrap<ZonedDateTime> w) {}
 
