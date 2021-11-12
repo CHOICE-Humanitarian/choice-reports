@@ -21,6 +21,9 @@
 {{#partial "htmBodyEnd"}}{{> htmBodyEndChoiceReportPage}}{{/partial}}
 {{#partial "htmBody"}}
     <div class="w3-content ">
+			<div>
+				<a href="{{siteBaseUrl}}/pdf-report/{{choiceReport_.pk}}">View the PDF</a>
+			</div>
       <div class="w3-margin-bottom w3-white page-break-after ">
         <table class="" style="border-spacing: 0px; ">
           <tr>
@@ -28,7 +31,7 @@
               <table class="" style="border-spacing: 0px; ">
                 <tr>
                   <td class="w3-padding ">
-                    <img class="w3-image " style="width: 200px; " src="{{staticBaseUrl}}/logos/partner-logos/{{choiceReport_.donorLogoFilename}}"/>
+                    <img class="w3-image " style="width: 200px; " src="{{staticBaseUrl}}/logos/partner-logos/{{choiceReport_.donorLogoFilename}}" alt="{{choiceReport_.donorFullName}}"/>
                   </td>
                 </tr>
                 <tr>

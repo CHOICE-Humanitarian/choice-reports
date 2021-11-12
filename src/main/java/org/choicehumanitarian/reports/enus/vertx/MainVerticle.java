@@ -712,7 +712,7 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 			if(StringUtils.isBlank(templatePath))
 				templateHandler = TemplateHandler.create(templateEngine);
 			else
-				templateHandler = TemplateHandler.create(templateEngine, staticPath + "/template/enUS", "text/html");
+				templateHandler = TemplateHandler.create(templateEngine, templatePath, "text/html");
 
 			handlebars.registerHelpers(ConditionalHelpers.class);
 			handlebars.registerHelpers(StringHelpers.class);
