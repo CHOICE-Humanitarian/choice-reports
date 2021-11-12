@@ -1930,7 +1930,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 				}
 			});
 			if("*:*".equals(searchList.getQuery()) && searchList.getSorts().size() == 0) {
-				searchList.addSort("created_indexedstored_date", ORDER.desc);
+				searchList.addSort("objectId_indexedstored_string", ORDER.asc);
 			}
 			searchChoiceDonor2(siteRequest, populate, store, modify, searchList);
 			searchList.promiseDeepForClass(siteRequest).onSuccess(a -> {

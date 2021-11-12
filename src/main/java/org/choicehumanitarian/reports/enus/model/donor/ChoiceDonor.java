@@ -14,6 +14,7 @@ import org.choicehumanitarian.reports.enus.wrap.Wrap;
  * Indexed: true
  * Saved: true
  * Map.Integer.sqlSort: 5
+ * Sort.asc: objectId
  * 
  * ApiTag.enUS: Donor
  * ApiUri.enUS: /api/donor
@@ -39,7 +40,7 @@ import org.choicehumanitarian.reports.enus.wrap.Wrap;
  * Role.enUS: SiteAdmin
  * 
  * Rows: 100
-**/         
+**/          
 public class ChoiceDonor extends ChoiceDonorGen<BaseModel> {
 
 	/**  
@@ -144,7 +145,7 @@ public class ChoiceDonor extends ChoiceDonorGen<BaseModel> {
 	protected void _donorQ1(Wrap<BigDecimal> w) {
 	}
 
-	/**   
+	/**    
 	 * {@inheritDoc}
 	 * Indexed: true
 	 * Stored: true
