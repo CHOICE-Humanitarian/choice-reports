@@ -407,12 +407,6 @@
 			<tr>
 				<th>created</th>
 				<th></th>
-				<th>total</th>
-				<th>YTD</th>
-				<th>Q1</th>
-				<th>Q2</th>
-				<th>Q3</th>
-				<th>Q4</th>
 			</tr>
 {{/inline}}
 {{#*inline "tbody1ChoiceDonorPage"}}
@@ -434,36 +428,6 @@
 							<span class="white-space-pre-wrap ">{{objectTitle}}</span>
 						</a>
 					</td>
-					<td>
-						<a href="{{pageUrlPk}}">
-							<span class="white-space-pre-wrap ">{{siteNumberFormat donorTotal "currency" siteLocale}}</span>
-						</a>
-					</td>
-					<td>
-						<a href="{{pageUrlPk}}">
-							<span class="white-space-pre-wrap ">{{siteNumberFormat donorYtd "currency" siteLocale}}</span>
-						</a>
-					</td>
-					<td>
-						<a href="{{pageUrlPk}}">
-							<span class="white-space-pre-wrap ">{{siteNumberFormat donorQ1 "currency" siteLocale}}</span>
-						</a>
-					</td>
-					<td>
-						<a href="{{pageUrlPk}}">
-							<span class="white-space-pre-wrap ">{{siteNumberFormat donorQ2 "currency" siteLocale}}</span>
-						</a>
-					</td>
-					<td>
-						<a href="{{pageUrlPk}}">
-							<span class="white-space-pre-wrap ">{{siteNumberFormat donorQ3 "currency" siteLocale}}</span>
-						</a>
-					</td>
-					<td>
-						<a href="{{pageUrlPk}}">
-							<span class="white-space-pre-wrap ">{{siteNumberFormat donorQ4 "currency" siteLocale}}</span>
-						</a>
-					</td>
 			</tr>
 		{{/each}}
 {{/inline}}
@@ -479,30 +443,6 @@
 				</td>
 			{{/if}}
 			{{#if getColumnObjectTitle}}
-				<td>
-				</td>
-			{{/if}}
-			{{#if getColumnDonorTotal}}
-				<td>
-				</td>
-			{{/if}}
-			{{#if getColumnDonorYtd}}
-				<td>
-				</td>
-			{{/if}}
-			{{#if getColumnDonorQ1}}
-				<td>
-				</td>
-			{{/if}}
-			{{#if getColumnDonorQ2}}
-				<td>
-				</td>
-			{{/if}}
-			{{#if getColumnDonorQ3}}
-				<td>
-				</td>
-			{{/if}}
-			{{#if getColumnDonorQ4}}
 				<td>
 				</td>
 			{{/if}}

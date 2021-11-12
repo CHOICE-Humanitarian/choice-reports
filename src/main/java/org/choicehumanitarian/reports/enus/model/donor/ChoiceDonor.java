@@ -110,7 +110,7 @@ public class ChoiceDonor extends ChoiceDonorGen<BaseModel> {
 	 * HtmlRow: 5
 	 * HtmlCell: 1
 	 * DisplayName.enUS: total
-	 * HtmlColumn: 3
+	 * HtmlXColumn: 3
 	 * FormatHtm: currency
 	 */  
 	protected void _donorTotal(Wrap<BigDecimal> w) {
@@ -124,7 +124,7 @@ public class ChoiceDonor extends ChoiceDonorGen<BaseModel> {
 	 * HtmlRow: 5
 	 * HtmlCell: 2
 	 * DisplayName.enUS: YTD
-	 * HtmlColumn: 4
+	 * HtmlXColumn: 4
 	 * FormatHtm: currency
 	 */  
 	protected void _donorYtd(Wrap<BigDecimal> w) {
@@ -138,7 +138,7 @@ public class ChoiceDonor extends ChoiceDonorGen<BaseModel> {
 	 * HtmlRow: 6
 	 * HtmlCell: 1
 	 * DisplayName.enUS: Q1
-	 * HtmlColumn: 5
+	 * HtmlXColumn: 5
 	 * FormatHtm: currency
 	 */  
 	protected void _donorQ1(Wrap<BigDecimal> w) {
@@ -152,9 +152,9 @@ public class ChoiceDonor extends ChoiceDonorGen<BaseModel> {
 	 * HtmlRow: 6
 	 * HtmlCell: 2
 	 * DisplayName.enUS: Q2
-	 * HtmlColumn: 6
+	 * HtmlXColumn: 6
 	 * FormatHtm: currency
-	 */   
+	 */       
 	protected void _donorQ2(Wrap<BigDecimal> w) {
 	}
 
@@ -166,7 +166,7 @@ public class ChoiceDonor extends ChoiceDonorGen<BaseModel> {
 	 * HtmlRow: 6
 	 * HtmlCell: 3
 	 * DisplayName.enUS: Q3
-	 * HtmlColumn: 7
+	 * HtmlXColumn: 7
 	 * FormatHtm: currency
 	 */  
 	protected void _donorQ3(Wrap<BigDecimal> w) {
@@ -180,7 +180,7 @@ public class ChoiceDonor extends ChoiceDonorGen<BaseModel> {
 	 * HtmlRow: 6
 	 * HtmlCell: 4
 	 * DisplayName.enUS: Q4
-	 * HtmlColumn: 8
+	 * HtmlXColumn: 8
 	 * FormatHtm: currency
 	 */  
 	protected void _donorQ4(Wrap<BigDecimal> w) {
