@@ -239,12 +239,12 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 						LOG.info("Started main verticle. ");
 						vertx.deployVerticle(WorkerVerticle.class, workerVerticleDeploymentOptions).onSuccess(b -> {
 							LOG.info("Started worker verticle. ");
-							vertx.deployVerticle(AppCeylonVerticle.class, ceylonVerticleDeploymentOptions).onSuccess(c -> {
-								scheduling(vertx);
+//							vertx.deployVerticle(AppCeylonVerticle.class, ceylonVerticleDeploymentOptions).onSuccess(c -> {
+//								scheduling(vertx);
 								LOG.info("Started scheduler verticle. ");
-							}).onFailure(ex -> {
-								LOG.error("Failed to start scheduler verticle. ", ex);
-							});
+//							}).onFailure(ex -> {
+//								LOG.error("Failed to start scheduler verticle. ", ex);
+//							});
 						}).onFailure(ex -> {
 							LOG.error("Failed to start worker verticle. ", ex);
 						});
