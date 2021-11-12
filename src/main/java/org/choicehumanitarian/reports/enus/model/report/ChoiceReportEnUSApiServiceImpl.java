@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.Optional;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -45,12 +46,12 @@ public class ChoiceReportEnUSApiServiceImpl extends ChoiceReportEnUSGenApiServic
 
 	@Override
 	public String templateChoiceReportDisplaySearchPageChoiceReport() {
-		return config.getString(ConfigKeys.TEMPLATE_PATH) + "/enUS/ChoiceReportDisplayPage";
+		return Optional.ofNullable(config.getString(ConfigKeys.TEMPLATE_PATH)).orElse("templates") + "/enUS/ChoiceReportDisplayPage";
 	}
 
 	@Override
 	public String templateChoiceReportPdfSearchPageChoiceReport() {
-		return config.getString(ConfigKeys.TEMPLATE_PATH) + "/enUS/ChoiceReportDisplayPage";
+		return Optional.ofNullable(config.getString(ConfigKeys.TEMPLATE_PATH)).orElse("templates") + "/enUS/ChoiceReportDisplayPage";
 	}
 
 	@Override
