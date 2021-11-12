@@ -1,4 +1,4 @@
-package org.choicehumanitarian.reports.enus.user;         
+package org.choicehumanitarian.reports.enus.user;        
 
 import java.util.List;
 

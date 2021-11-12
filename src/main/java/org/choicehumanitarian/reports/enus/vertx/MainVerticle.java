@@ -706,8 +706,13 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 			String staticPath = config().getString(ConfigKeys.STATIC_PATH);
 			String staticBaseUrl = config().getString(ConfigKeys.STATIC_BASE_URL);
 			String siteBaseUrl = config().getString(ConfigKeys.SITE_BASE_URL);
+			String templatePath = config().getString(ConfigKeys.TEMPLATE_PATH);
 			Handlebars handlebars = (Handlebars)templateEngine.unwrap();
-			TemplateHandler templateHandler = TemplateHandler.create(templateEngine, staticPath + "/template/enUS", "text/html");
+			TemplateHandler templateHandler;
+			if(StringUtils.isBlank(templatePath))
+				templateHandler = TemplateHandler.create(templateEngine);
+			else
+				templateHandler = TemplateHandler.create(templateEngine, staticPath + "/template/enUS", "text/html");
 
 			handlebars.registerHelpers(ConditionalHelpers.class);
 			handlebars.registerHelpers(StringHelpers.class);
@@ -715,11 +720,11 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 			handlebars.registerHelpers(SiteHelpers.class);
 
 			router.get("/").handler(a -> {
-				a.reroute("/template/home-page");
+				a.reroute("/template/enUS/home-page");
 			});
 
 			router.get("/api").handler(ctx -> {
-				ctx.reroute("/template/openapi");
+				ctx.reroute("/template/enUS/openapi");
 			});
 
 			router.get("/template/*").handler(ctx -> {

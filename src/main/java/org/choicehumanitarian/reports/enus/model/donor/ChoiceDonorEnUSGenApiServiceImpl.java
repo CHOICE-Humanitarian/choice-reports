@@ -1646,7 +1646,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 	public void searchpageChoiceDonorPageInit(ChoiceDonorPage page, SearchList<ChoiceDonor> listChoiceDonor) {
 	}
 	public String templateSearchPageChoiceDonor() {
-		return config.getString(ConfigKeys.TEMPLATE_PATH) + "/enUS/ChoiceDonorPage";
+		return Optional.ofNullable(config.getString(ConfigKeys.TEMPLATE_PATH)).orElse("templates") + "/enUS/ChoiceDonorPage";
 	}
 	public Future<ServiceResponse> response200SearchPageChoiceDonor(SearchList<ChoiceDonor> listChoiceDonor) {
 		Promise<ServiceResponse> promise = Promise.promise();

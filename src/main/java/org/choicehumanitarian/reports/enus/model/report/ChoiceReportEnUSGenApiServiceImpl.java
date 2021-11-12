@@ -1578,7 +1578,7 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 	public void searchpageChoiceReportPageInit(ChoiceReportPage page, SearchList<ChoiceReport> listChoiceReport) {
 	}
 	public String templateSearchPageChoiceReport() {
-		return config.getString(ConfigKeys.TEMPLATE_PATH) + "/enUS/ChoiceReportPage";
+		return Optional.ofNullable(config.getString(ConfigKeys.TEMPLATE_PATH)).orElse("templates") + "/enUS/ChoiceReportPage";
 	}
 	public Future<ServiceResponse> response200SearchPageChoiceReport(SearchList<ChoiceReport> listChoiceReport) {
 		Promise<ServiceResponse> promise = Promise.promise();
@@ -1676,7 +1676,7 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 	public void choicereportdisplaysearchpageChoiceReportPageInit(ChoiceReportPage page, SearchList<ChoiceReport> listChoiceReport) {
 	}
 	public String templateChoiceReportDisplaySearchPageChoiceReport() {
-		return config.getString(ConfigKeys.TEMPLATE_PATH) + "/enUS/ChoiceReportPage";
+		return Optional.ofNullable(config.getString(ConfigKeys.TEMPLATE_PATH)).orElse("templates") + "/enUS/ChoiceReportPage";
 	}
 	public Future<ServiceResponse> response200ChoiceReportDisplaySearchPageChoiceReport(SearchList<ChoiceReport> listChoiceReport) {
 		Promise<ServiceResponse> promise = Promise.promise();
@@ -1774,7 +1774,7 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 	public void choicereportpdfsearchpageChoiceReportPageInit(ChoiceReportPage page, SearchList<ChoiceReport> listChoiceReport) {
 	}
 	public String templateChoiceReportPdfSearchPageChoiceReport() {
-		return config.getString(ConfigKeys.TEMPLATE_PATH) + "/enUS/ChoiceReportPage";
+		return Optional.ofNullable(config.getString(ConfigKeys.TEMPLATE_PATH)).orElse("templates") + "/enUS/ChoiceReportPage";
 	}
 	public Future<ServiceResponse> response200ChoiceReportPdfSearchPageChoiceReport(SearchList<ChoiceReport> listChoiceReport) {
 		Promise<ServiceResponse> promise = Promise.promise();
