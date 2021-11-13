@@ -811,12 +811,12 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 				if(sslPrivateKeyPath != null && sslCertPath != null) {
 					options.setPemKeyCertOptions(new PemKeyCertOptions().setKeyPath(sslPrivateKeyPath).setCertPath(sslCertPath));
 					LOG.info(String.format(startServerSsl, sslPrivateKeyPath));
+					LOG.info(String.format(startServerSsl, sslCertPath));
 				} else if(sslJksPath != null) {
 					options.setKeyStoreOptions(new JksOptions().setPath(sslJksPath).setPassword(config().getString(ConfigKeys.SSL_JKS_PASSWORD)));
 					LOG.info(String.format(startServerSsl, sslJksPath));
 				}
 				options.setSsl(true);
-				LOG.info(String.format(startServerSsl, sslJksPath));
 			}
 			options.setPort(sitePort);
 	
