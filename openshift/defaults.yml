@@ -196,10 +196,6 @@ SSL_KEY_PATH: "{{ SSL_KEYSTORE_PATH }}/tls.key"
 SSL_CRT_FILENAME: "{{ SSL_ALIAS }}.crt"
 # The certificate path.
 SSL_CRT_PATH: "{{ SSL_KEYSTORE_PATH }}/{{ SSL_CRT_FILENAME }}"
-# The private key filename.
-SSL_KEY_FILENAME: "{{ SSL_ALIAS }}.key"
-# The private key path.
-SSL_KEY_PATH: "{{ SSL_KEYSTORE_PATH }}/{{ SSL_KEY_FILENAME }}"
 # The p12 file password.
 SSL_P12_PASSWORD: "..."
 # The keystore file password.
