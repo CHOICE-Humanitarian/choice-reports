@@ -152,15 +152,15 @@ spec:
                 secretKeyRef:
                   key: SSL_ALIAS
                   name: "{{ SITE_NAME }}-secret"
-            - name: SSL_JKS_PASSWORD
+            - name: SSL_CERT_PATH
               valueFrom:
                 secretKeyRef:
-                  key: SSL_JKS_PASSWORD
+                  key: SSL_CERT_PATH
                   name: "{{ SITE_NAME }}-secret"
-            - name: SSL_JKS_PATH
+            - name: SSL_KEY_PATH
               valueFrom:
                 secretKeyRef:
-                  key: SSL_JKS_PATH
+                  key: SSL_KEY_PATH
                   name: "{{ SITE_NAME }}-secret"
             - name: SSL_KEYSTORE_PATH
               valueFrom:
@@ -326,16 +326,16 @@ spec:
               value: "{{ DOMO_DATASET_CPP_URI }}"
           volumeMounts:
             - mountPath: /opt/keystore
-              name: volume-keystore
+              name: volume-certificate
               readOnly: true
             - mountPath: /opt/static/template/enUS
               name: volume-template
               readOnly: true
       volumes:
-        - name: volume-keystore
+        - name: volume-certificate
           secret:
             defaultMode: 420
-            secretName: "{{ SITE_NAME }}-keystore"
+            secretName: "{{ SITE_NAME }}-certificate"
         - name: volume-template
           configMap:
             defaultMode: 420

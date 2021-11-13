@@ -46,6 +46,7 @@ import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.net.JksOptions;
+import io.vertx.core.net.PemKeyCertOptions;
 import io.vertx.core.spi.cluster.ClusterManager;
 import io.vertx.ext.auth.authorization.AuthorizationProvider;
 import io.vertx.ext.auth.oauth2.OAuth2Auth;
@@ -803,9 +804,17 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 			String siteBaseUrl = config().getString(ConfigKeys.SITE_BASE_URL);
 			Integer sitePort = config().getInteger(ConfigKeys.SITE_PORT);
 			String sslJksPath = config().getString(ConfigKeys.SSL_JKS_PATH);
+			String sslPrivateKeyPath = config().getString(ConfigKeys.SSL_KEY_PATH);
+			String sslCertPath = config().getString(ConfigKeys.SSL_CERT_PATH);
 			HttpServerOptions options = new HttpServerOptions();
 			if(sslPassthrough) {
-				options.setKeyStoreOptions(new JksOptions().setPath(sslJksPath).setPassword(config().getString(ConfigKeys.SSL_JKS_PASSWORD)));
+				if(sslPrivateKeyPath != null && sslCertPath != null) {
+					options.setPemKeyCertOptions(new PemKeyCertOptions().setKeyPath(sslPrivateKeyPath).setCertPath(sslCertPath));
+					LOG.info(String.format(startServerSsl, sslPrivateKeyPath));
+				} if(sslJksPath != null) {
+					options.setKeyStoreOptions(new JksOptions().setPath(sslJksPath).setPassword(config().getString(ConfigKeys.SSL_JKS_PASSWORD)));
+					LOG.info(String.format(startServerSsl, sslJksPath));
+				}
 				options.setSsl(true);
 				LOG.info(String.format(startServerSsl, sslJksPath));
 			}
