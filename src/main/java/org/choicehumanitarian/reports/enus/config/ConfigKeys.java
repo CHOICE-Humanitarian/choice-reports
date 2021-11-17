@@ -433,6 +433,16 @@ public class ConfigKeys {
 	/**
 	 * 
 	 **/
+	public static final String IMPORT_DATA_START_TIME = "IMPORT_DATA_START_TIME";
+
+	/**
+	 * 
+	 **/
+	public static final String IMPORT_DATA_PERIOD = "IMPORT_DATA_PERIOD";
+
+	/**
+	 * 
+	 **/
 	public static final String WORKER_POOL_SIZE = "WORKER_POOL_SIZE";
 
 	/**
@@ -466,6 +476,7 @@ public class ConfigKeys {
 	public static final String DOMO_PORT = "DOMO_PORT";
 
 	/**
+	 * 
 	 * 
 	 **/
 	public static final String DOMO_SSL = "DOMO_SSL";

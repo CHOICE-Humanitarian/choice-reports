@@ -48,7 +48,7 @@ public class TimeTool {
 	 * 1 MILLISECOND, 1 milli, 2 Milliseconds, 3 millis
 	 * 1 NANOSECOND, 1 nano, 2 Nanoseconds, 3 nanos
 	 */
-	public static ZonedDateTime parseNextDuration(ZonedDateTime startDateTime, String periodStr) {
+	public static Duration parseNextDuration(String periodStr) {
 		String[] periodParts = periodStr.split("\\s+");
 		BigDecimal periodNumber = new BigDecimal(periodParts[0]);
 		String periodUnitStr = Optional.of(periodParts[1])
@@ -59,7 +59,6 @@ public class TimeTool {
 				.get();
 		ChronoUnit periodUnit = ChronoUnit.valueOf(periodUnitStr);
 		Duration duration = Duration.of(periodNumber.longValue(), periodUnit);
-		ZonedDateTime nextStartTime = startDateTime.plus(duration);
-		return nextStartTime;
+		return duration;
 	}
 }

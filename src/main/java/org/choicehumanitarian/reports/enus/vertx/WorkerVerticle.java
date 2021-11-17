@@ -1,8 +1,11 @@
 package org.choicehumanitarian.reports.enus.vertx;
 
 import java.math.BigDecimal;
+import java.time.Duration;
+import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -10,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
+import org.choicehumanitarian.reports.enus.java.TimeTool;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import org.choicehumanitarian.reports.enus.request.api.ApiRequest;
 import org.slf4j.Logger;
@@ -40,6 +44,8 @@ import io.vertx.sqlclient.RowStream;
  */
 public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 	private static final Logger LOG = LoggerFactory.getLogger(WorkerVerticle.class);
+
+	public final DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm:ss VV");
 
 	public static final Integer FACET_LIMIT = 100;
 
@@ -191,6 +197,56 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 		return promise.future();
 	}
 
+	/**
+	 * Val.Scheduling.enUS:Scheduling the import at %s
+	 */
+	private Future<Void> importTimer() {
+		Promise<Void> promise = Promise.promise();
+
+		if(!config().getBoolean(ConfigKeys.ENABLE_IMPORT_DATA)) {
+			LOG.info(importDataSkip);
+			promise.complete();
+		} else {
+			// Load the import start time and period configuration. 
+			String importStartTime = config().getString(ConfigKeys.IMPORT_DATA_START_TIME);
+			String importPeriod = config().getString(ConfigKeys.IMPORT_DATA_PERIOD);
+			// Get the duration of the import period. 
+			Duration duration = TimeTool.parseNextDuration(importPeriod);
+			// Calculate the next start time, or the next start time after that, if the start time is in less than a minute, 
+			// to give the following code enough time to complete it's calculations to ensure the import starts correctly. 
+			ZonedDateTime nextStartTime = Optional.of(TimeTool.parseNextZonedTime(importStartTime))
+					.map(t -> Duration.between(Instant.now(), t).toMinutes() < 1L ? t.plus(duration) : t).get();
+			// Get the time now for the import start time zone. 
+			ZonedDateTime now = ZonedDateTime.now(nextStartTime.getZone());
+			BigDecimal[] divideAndRemainder = BigDecimal.valueOf(Duration.between(now, nextStartTime).toMillis())
+					.divideAndRemainder(BigDecimal.valueOf(duration.toMillis()));
+			Duration nextStartDuration = Duration.between(now, nextStartTime);
+			if(divideAndRemainder[0].compareTo(BigDecimal.ONE) >= 0) {
+				nextStartDuration = Duration.ofMillis(divideAndRemainder[1].longValueExact());
+				nextStartTime = now.plus(nextStartDuration);
+			}
+			LOG.info(String.format(importTimerScheduling, nextStartTime.format(timeFormat)));
+			ZonedDateTime nextStartTime2 = nextStartTime;
+			vertx.setTimer(nextStartDuration.toMillis(), a -> {
+				importData(nextStartTime2);
+			});
+		}
+		return promise.future();
+	}
+
+	private void importData(ZonedDateTime startDateTime) {
+		importData().onComplete(a -> {
+			String importPeriod = config().getString(ConfigKeys.IMPORT_DATA_PERIOD);
+			Duration duration = TimeTool.parseNextDuration(importPeriod);
+			ZonedDateTime nextStartTime = startDateTime.plus(duration);
+			LOG.info(String.format(importTimerScheduling, nextStartTime.format(timeFormat)));
+			Duration nextStartDuration = Duration.between(Instant.now(), nextStartTime);
+			vertx.setTimer(nextStartDuration.toMillis(), b -> {
+				importData(nextStartTime);
+			});
+		});
+	}
+
 	/**	
 	 * Import initial data
 	 * Val.Complete.enUS:Importing initial data completed. 
@@ -199,8 +255,23 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 	 **/
 	private Future<Void> importData() {
 		Promise<Void> promise = Promise.promise();
+		if(config().getBoolean(ConfigKeys.ENABLE_IMPORT_DATA, false)) {
+			importDataChoiceDonor().onSuccess(a -> {
+				promise.complete();
+			}).onFailure(ex -> {
+				promise.fail(ex);
+			});
+		} else {
+			LOG.info(importDataSkip);
+			promise.complete();
+		}
+		return promise.future();
+	}
+
+	private Future<Void> importDataChoiceDonor() {
+		Promise<Void> promise = Promise.promise();
 		try {
-			if(config().getBoolean(ConfigKeys.ENABLE_IMPORT_DATA, false)) {
+			if(config().getBoolean(String.format("%s_%s", ConfigKeys.ENABLE_IMPORT_DATA, "ChoiceDonor"), true)) {
 
 				webClient.post(config().getInteger(ConfigKeys.DOMO_PORT), config().getString(ConfigKeys.DOMO_HOST_NAME), config().getString(ConfigKeys.DOMO_AUTH_TOKEN_URI))
 						.expect(ResponsePredicate.SC_OK)
@@ -265,10 +336,6 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 							LOG.error(importDataFail, ex);
 							promise.fail(ex);
 						});
-
-
-
-
 					}).onFailure(ex -> {
 						LOG.error(importDataFail, ex);
 						promise.fail(ex);
