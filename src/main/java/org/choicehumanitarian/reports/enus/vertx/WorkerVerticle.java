@@ -198,18 +198,14 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 	}
 
 	/**
-	 * Val.Scheduling.enUS:Scheduling the import at %s
+	 * Val.Scheduling.enUS:Scheduling the %s import at %s
+	 * Val.Skip.enUS:Skip importing %s data. 
 	 */
-	private Future<Void> importTimer() {
-		Promise<Void> promise = Promise.promise();
-
-		if(!config().getBoolean(ConfigKeys.ENABLE_IMPORT_DATA)) {
-			LOG.info(importDataSkip);
-			promise.complete();
-		} else {
+	private void importTimer(String classSimpleName) {
+		if(config().getBoolean(String.format("%s_%s", ConfigKeys.ENABLE_IMPORT_DATA, classSimpleName), true)) {
 			// Load the import start time and period configuration. 
-			String importStartTime = config().getString(ConfigKeys.IMPORT_DATA_START_TIME);
-			String importPeriod = config().getString(ConfigKeys.IMPORT_DATA_PERIOD);
+			String importStartTime = config().getString(String.format("%s_%s", ConfigKeys.IMPORT_DATA_START_TIME, classSimpleName));
+			String importPeriod = config().getString(String.format("%s_%s", ConfigKeys.IMPORT_DATA_PERIOD, classSimpleName));
 			// Get the duration of the import period. 
 			Duration duration = TimeTool.parseNextDuration(importPeriod);
 			// Calculate the next start time, or the next start time after that, if the start time is in less than a minute, 
@@ -225,26 +221,40 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 				nextStartDuration = Duration.ofMillis(divideAndRemainder[1].longValueExact());
 				nextStartTime = now.plus(nextStartDuration);
 			}
-			LOG.info(String.format(importTimerScheduling, nextStartTime.format(timeFormat)));
+			LOG.info(String.format(importTimerScheduling, classSimpleName, nextStartTime.format(timeFormat)));
 			ZonedDateTime nextStartTime2 = nextStartTime;
 			vertx.setTimer(nextStartDuration.toMillis(), a -> {
-				importData(nextStartTime2);
+				importData(classSimpleName, nextStartTime2);
 			});
+		} else {
+			LOG.info(String.format(importTimerSkip, classSimpleName));
 		}
-		return promise.future();
 	}
 
-	private void importData(ZonedDateTime startDateTime) {
-		importData().onComplete(a -> {
-			String importPeriod = config().getString(ConfigKeys.IMPORT_DATA_PERIOD);
-			Duration duration = TimeTool.parseNextDuration(importPeriod);
-			ZonedDateTime nextStartTime = startDateTime.plus(duration);
-			LOG.info(String.format(importTimerScheduling, nextStartTime.format(timeFormat)));
-			Duration nextStartDuration = Duration.between(Instant.now(), nextStartTime);
-			vertx.setTimer(nextStartDuration.toMillis(), b -> {
-				importData(nextStartTime);
+	private void importData(String classSimpleName, ZonedDateTime startDateTime) {
+		if("ChoiceDonor".equals(classSimpleName)) {
+			importDataChoiceDonor().onComplete(a -> {
+				String importPeriod = config().getString(String.format("%s_%s", ConfigKeys.IMPORT_DATA_PERIOD, classSimpleName));
+				Duration duration = TimeTool.parseNextDuration(importPeriod);
+				ZonedDateTime nextStartTime = startDateTime.plus(duration);
+				LOG.info(String.format(importTimerScheduling, nextStartTime.format(timeFormat)));
+				Duration nextStartDuration = Duration.between(Instant.now(), nextStartTime);
+				vertx.setTimer(nextStartDuration.toMillis(), b -> {
+					importData(classSimpleName, nextStartTime);
+				});
 			});
-		});
+		} else if("ChoiceImage".equals(classSimpleName)) {
+			importDataChoiceImage().onComplete(a -> {
+				String importPeriod = config().getString(String.format("%s_%s", ConfigKeys.IMPORT_DATA_PERIOD, classSimpleName));
+				Duration duration = TimeTool.parseNextDuration(importPeriod);
+				ZonedDateTime nextStartTime = startDateTime.plus(duration);
+				LOG.info(String.format(importTimerScheduling, nextStartTime.format(timeFormat)));
+				Duration nextStartDuration = Duration.between(Instant.now(), nextStartTime);
+				vertx.setTimer(nextStartDuration.toMillis(), b -> {
+					importData(classSimpleName, nextStartTime);
+				});
+			});
+		}
 	}
 
 	/**	
@@ -255,16 +265,17 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 	 **/
 	private Future<Void> importData() {
 		Promise<Void> promise = Promise.promise();
-		if(config().getBoolean(ConfigKeys.ENABLE_IMPORT_DATA, false)) {
-			importDataChoiceDonor().onSuccess(a -> {
-				promise.complete();
-			}).onFailure(ex -> {
-				promise.fail(ex);
-			});
-		} else {
-			LOG.info(importDataSkip);
-			promise.complete();
-		}
+		importTimer()
+//		if(config().getBoolean(ConfigKeys.ENABLE_IMPORT_DATA, false)) {
+//			importDataChoiceDonor().onSuccess(a -> {
+//				promise.complete();
+//			}).onFailure(ex -> {
+//				promise.fail(ex);
+//			});
+//		} else {
+//			LOG.info(importDataSkip);
+//			promise.complete();
+//		}
 		return promise.future();
 	}
 

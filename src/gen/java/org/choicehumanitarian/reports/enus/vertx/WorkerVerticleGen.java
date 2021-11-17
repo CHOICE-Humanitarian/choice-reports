@@ -61,8 +61,10 @@ public abstract class WorkerVerticleGen<DEV> extends AbstractVerticle {
 	public static final String configureEmailFail1 = "Configure sending email failed. ";
 	public static final String configureEmailFail = configureEmailFail1;
 
-	public static final String importTimerScheduling1 = "Scheduling the import at %s";
+	public static final String importTimerScheduling1 = "Scheduling the %s import at %s";
 	public static final String importTimerScheduling = importTimerScheduling1;
+	public static final String importTimerSkip1 = "Skip importing %s data. ";
+	public static final String importTimerSkip = importTimerSkip1;
 
 	public static final String importDataComplete1 = "Importing initial data completed. ";
 	public static final String importDataComplete = importDataComplete1;
@@ -269,6 +271,6 @@ public abstract class WorkerVerticleGen<DEV> extends AbstractVerticle {
 		return sb.toString();
 	}
 
-	public static final String[] WorkerVerticleVals = new String[] { configureDataConnectionError1, configureDataConnectionSuccess1, configureDataInitError1, configureDataInitSuccess1, configureSharedWorkerExecutorFail1, configureSharedWorkerExecutorComplete1, configureEmailComplete1, configureEmailFail1, importTimerScheduling1, importDataComplete1, importDataFail1, importDataSkip1, syncDbToSolrComplete1, syncDbToSolrFail1, syncDbToSolrSkip1, syncDataComplete1, syncDataFail1, syncDataCounterResetFail1, syncDataSkip1, syncDataStarted1, refreshAllDataComplete1, refreshAllDataFail1, refreshAllDataSkip1, refreshDataComplete1, refreshDataFail1, refreshDataSkip1 };
+	public static final String[] WorkerVerticleVals = new String[] { configureDataConnectionError1, configureDataConnectionSuccess1, configureDataInitError1, configureDataInitSuccess1, configureSharedWorkerExecutorFail1, configureSharedWorkerExecutorComplete1, configureEmailComplete1, configureEmailFail1, importTimerScheduling1, importTimerSkip1, importDataComplete1, importDataFail1, importDataSkip1, syncDbToSolrComplete1, syncDbToSolrFail1, syncDbToSolrSkip1, syncDataComplete1, syncDataFail1, syncDataCounterResetFail1, syncDataSkip1, syncDataStarted1, refreshAllDataComplete1, refreshAllDataFail1, refreshAllDataSkip1, refreshDataComplete1, refreshDataFail1, refreshDataSkip1 };
 
 }
