@@ -529,15 +529,20 @@ public class ConfigKeys {
 	/**
 	 * 
 	 **/
-	public static final String NEOCITIES_HOST_NAME = "NEOCITIES_HOST_NAME";
+	public static final String NEOCITIES_API_DELETE = "NEOCITIES_API_DELETE";
 
 	/**
 	 * 
 	 **/
-	public static final String NEOCITIES_HOST_NAME = "NEOCITIES_HOST_NAME";
+	public static final String NEOCITIES_API_LIST = "NEOCITIES_API_LIST";
 
 	/**
 	 * 
 	 **/
-	public static final String NEOCITIES_HOST_NAME = "NEOCITIES_HOST_NAME";
+	public static final String NEOCITIES_API_INFO = "NEOCITIES_API_INFO";
+
+	/**
+	 * 
+	 **/
+	public static final String NEOCITIES_API_RENAME = "NEOCITIES_API_RENAME";
 }
