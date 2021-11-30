@@ -1,4 +1,4 @@
-package org.choicehumanitarian.reports.enus.model.donor;                 
+package org.choicehumanitarian.reports.enus.model.donor;                         
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -127,7 +127,7 @@ public class ChoiceDonor extends ChoiceDonorGen<BaseModel> {
 	 * DisplayName.enUS: YTD
 	 * HtmlXColumn: 4
 	 * FormatHtm: currency
-	 */  
+	 */            
 	protected void _donorYtd(Wrap<BigDecimal> w) {
 	}
 

@@ -505,4 +505,39 @@ public class ConfigKeys {
 	 * 
 	 **/
 	public static final String DOMO_DATASET_CPP_URI = "DOMO_DATASET_CPP_URI";
+
+	/**
+	 * 
+	 **/
+	public static final String NEOCITIES_HOST_NAME = "NEOCITIES_HOST_NAME";
+
+	/**
+	 * 
+	 **/
+	public static final String NEOCITIES_PORT = "NEOCITIES_PORT";
+
+	/**
+	 * 
+	 **/
+	public static final String NEOCITIES_SSL = "NEOCITIES_SSL";
+
+	/**
+	 * 
+	 **/
+	public static final String NEOCITIES_API_UPLOAD = "NEOCITIES_API_UPLOAD";
+
+	/**
+	 * 
+	 **/
+	public static final String NEOCITIES_HOST_NAME = "NEOCITIES_HOST_NAME";
+
+	/**
+	 * 
+	 **/
+	public static final String NEOCITIES_HOST_NAME = "NEOCITIES_HOST_NAME";
+
+	/**
+	 * 
+	 **/
+	public static final String NEOCITIES_HOST_NAME = "NEOCITIES_HOST_NAME";
 }

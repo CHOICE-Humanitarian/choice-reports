@@ -98,17 +98,19 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 	 * A io.vertx.ext.jdbc.JDBCClient for connecting to the relational database PostgreSQL. 
 	 **/
 	private PgPool pgPool;
-
+	
+	public PgPool getPgPool() {
+		return pgPool;
+	}
+	public void setPgPool(PgPool pgPool) {
+		this.pgPool = pgPool;
+	}
+	
 	private WebClient webClient;
-
 	private Router router;
-
 	WorkerExecutor workerExecutor;
-
 	OAuth2Auth oauth2AuthenticationProvider;
-
 	AuthorizationProvider authorizationProvider;
-
 	HandlebarsTemplateEngine templateEngine;
 
 	/**	
