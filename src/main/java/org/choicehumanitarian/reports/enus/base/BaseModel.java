@@ -247,6 +247,7 @@ public class BaseModel extends BaseModelGen<Object> {
 	/**
 	 * {@inheritDoc}
 	 * Text: true
+	 * DocValues: true
 	 */ 
 	protected void _objectText(Wrap<String> c) { 
 		StringBuilder b = new StringBuilder();

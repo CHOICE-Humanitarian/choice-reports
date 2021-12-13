@@ -1,5 +1,6 @@
 package org.choicehumanitarian.reports.enus.base;
 
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -123,6 +124,8 @@ public class BaseApiServiceImpl {
 
 	public Future<SiteRequestEnUS> user(ServiceRequest serviceRequest) {
 		Promise<SiteRequestEnUS> promise = Promise.promise();
+		LOG.info(String.format("X-Forwarded-For: %s", serviceRequest.getHeaders().get("X-Forwarded-For")));
+		LOG.info(String.format("Forwarded: %s", serviceRequest.getHeaders().get("Forwarded")));
 		try {
 			JsonObject userJson = serviceRequest.getUser();
 			if(userJson == null) {
