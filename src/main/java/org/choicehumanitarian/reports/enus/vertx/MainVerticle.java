@@ -59,7 +59,6 @@ import io.vertx.ext.healthchecks.HealthCheckHandler;
 import io.vertx.ext.healthchecks.Status;
 import io.vertx.ext.mail.MailClient;
 import io.vertx.ext.mail.MailConfig;
-import io.vertx.ext.web.AllowForwardHeaders;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.Session;
@@ -99,19 +98,17 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 	 * A io.vertx.ext.jdbc.JDBCClient for connecting to the relational database PostgreSQL. 
 	 **/
 	private PgPool pgPool;
-	
-	public PgPool getPgPool() {
-		return pgPool;
-	}
-	public void setPgPool(PgPool pgPool) {
-		this.pgPool = pgPool;
-	}
-	
+
 	private WebClient webClient;
+
 	private Router router;
+
 	WorkerExecutor workerExecutor;
+
 	OAuth2Auth oauth2AuthenticationProvider;
+
 	AuthorizationProvider authorizationProvider;
+
 	HandlebarsTemplateEngine templateEngine;
 
 	/**	
@@ -178,9 +175,9 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 		zkConfig.put("rootPath", "choice-reports");
 		zkConfig.put("retry", new JsonObject() {
 			{
-				put("initialSleepTime", 3000);
+				put("initialSleepTime", 100);
 				put("intervalTimes", 10000);
-				put("maxTimes", 3);
+				put("maxTimes", 5);
 			}
 		});
 		ClusterManager clusterManager = new ZookeeperClusterManager(zkConfig);
@@ -519,7 +516,6 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 							routerBuilder.operation("logout").handler(c -> {});
 			
 							router = routerBuilder.createRouter();
-							router.allowForward(AllowForwardHeaders.FORWARD);
 			
 							LOG.info(configureOpenApiSuccess);
 							promise.complete();
