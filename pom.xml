@@ -21,6 +21,7 @@
 		<exec-maven-plugin.version>1.5.0</exec-maven-plugin.version>
 		<vertx.version>4.0.3</vertx.version>
 		<handlebars-maven-plugin.version>4.2.0</handlebars-maven-plugin.version>
+		<apache-curator.version>4.3.0</apache-curator.version>
 		<postgresql.version>42.2.2.jre7</postgresql.version>
 		<solr.version>8.4.1</solr.version>
 		<junit.version>4.13.1</junit.version>
@@ -83,6 +84,23 @@
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<version>${postgresql.version}</version>
+		</dependency>
+
+		<!-- Apache Curator -->
+		<dependency>
+			<groupId>org.apache.curator</groupId>
+			<artifactId>curator-client</artifactId>
+			<version>${apache-curator.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.curator</groupId>
+			<artifactId>curator-framework</artifactId>
+			<version>${apache-curator.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.curator</groupId>
+			<artifactId>curator-recipes</artifactId>
+			<version>${apache-curator.version}</version>
 		</dependency>
 
 		<!-- #### -->
