@@ -1436,7 +1436,7 @@ public abstract class ChoiceReportGen<DEV> extends BaseModel {
 	}
 	public void populateChoiceReport(SolrDocument solrDocument) {
 		ChoiceReport oChoiceReport = (ChoiceReport)this;
-		saves = (List<String>)solrDocument.get("saves_indexedstored_strings");
+		saves = (List<String>)solrDocument.get("saves_docvalues_strings");
 		if(saves != null) {
 
 			Long donorKey = (Long)solrDocument.get("donorKey_indexedstored_long");

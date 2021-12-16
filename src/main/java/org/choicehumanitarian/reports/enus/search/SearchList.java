@@ -167,12 +167,12 @@ public class SearchList<DEV> extends SearchListGen<DEV> implements Iterable<DEV>
 	protected void _queryResponse(Promise<QueryResponse> promise) {        
 		try {
 			if(this.c != null)
-				solrQuery.addFilterQuery("classCanonicalName_indexedstored_string:" + ClientUtils.escapeQueryChars(this.c.getCanonicalName()));
+				solrQuery.addFilterQuery("classCanonicalName_docvalues_string:" + ClientUtils.escapeQueryChars(this.c.getCanonicalName()));
 			SiteUser siteUser = siteRequest_.getSiteUser_();
 			if(siteUser == null || BooleanUtils.isNotTrue(siteUser.getSeeDeleted()))
-				solrQuery.addFilterQuery("deleted_indexedstored_boolean:false");
+				solrQuery.addFilterQuery("deleted_docvalues_boolean:false");
 			if(siteUser == null || BooleanUtils.isNotTrue(siteUser.getSeeArchived()))
-				solrQuery.addFilterQuery("archived_indexedstored_boolean:false");
+				solrQuery.addFilterQuery("archived_docvalues_boolean:false");
 			if(solrQuery.getQuery() != null) {
 				String solrHostName = siteRequest_.getConfig().getString(ConfigKeys.SOLR_HOST_NAME);
 				Integer solrPort = siteRequest_.getConfig().getInteger(ConfigKeys.SOLR_PORT);
@@ -412,7 +412,7 @@ public class SearchList<DEV> extends SearchListGen<DEV> implements Iterable<DEV>
 			for(SolrDocument solrDocument : solrDocumentList) {
 				try {
 					if(solrDocument != null) {
-						String classCanonicalName = (String)solrDocument.get("classCanonicalName_indexedstored_string");
+						String classCanonicalName = (String)solrDocument.get("classCanonicalName_docvalues_string");
 						DEV o = (DEV)Class.forName(classCanonicalName).newInstance();
 						MethodUtils.invokeMethod(o, "setSiteRequest_", siteRequest_);
 						if(populate)

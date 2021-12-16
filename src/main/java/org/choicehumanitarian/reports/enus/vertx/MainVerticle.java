@@ -34,9 +34,7 @@ import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
 import io.vertx.core.WorkerExecutor;
-import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.EventBusOptions;
-import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.http.Cookie;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.http.HttpServerOptions;
@@ -55,6 +53,7 @@ import io.vertx.ext.healthchecks.HealthCheckHandler;
 import io.vertx.ext.healthchecks.Status;
 import io.vertx.ext.mail.MailClient;
 import io.vertx.ext.mail.MailConfig;
+import io.vertx.ext.web.AllowForwardHeaders;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.Session;
@@ -489,6 +488,7 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 							routerBuilder.operation("logout").handler(c -> {});
 			
 							router = routerBuilder.createRouter();
+							router.allowForward(AllowForwardHeaders.FORWARD);
 			
 							LOG.info(configureOpenApiSuccess);
 							promise.complete();

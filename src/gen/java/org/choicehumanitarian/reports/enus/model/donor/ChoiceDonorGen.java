@@ -1343,7 +1343,7 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	}
 	public void populateChoiceDonor(SolrDocument solrDocument) {
 		ChoiceDonor oChoiceDonor = (ChoiceDonor)this;
-		saves = (List<String>)solrDocument.get("saves_indexedstored_strings");
+		saves = (List<String>)solrDocument.get("saves_docvalues_strings");
 		if(saves != null) {
 
 			if(saves.contains("donorFullName")) {

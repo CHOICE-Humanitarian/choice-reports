@@ -936,7 +936,7 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	}
 	public void populateSiteUser(SolrDocument solrDocument) {
 		SiteUser oSiteUser = (SiteUser)this;
-		saves = (List<String>)solrDocument.get("saves_indexedstored_strings");
+		saves = (List<String>)solrDocument.get("saves_docvalues_strings");
 		if(saves != null) {
 
 			if(saves.contains("userKeys")) {

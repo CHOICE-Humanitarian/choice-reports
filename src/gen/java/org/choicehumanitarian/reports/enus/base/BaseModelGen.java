@@ -1780,7 +1780,7 @@ public abstract class BaseModelGen<DEV> extends Object {
 	}
 	public void populateBaseModel(SolrDocument solrDocument) {
 		BaseModel oBaseModel = (BaseModel)this;
-		saves = (List<String>)solrDocument.get("saves_indexedstored_strings");
+		saves = (List<String>)solrDocument.get("saves_docvalues_strings");
 		if(saves != null) {
 		}
 	}
@@ -1840,7 +1840,7 @@ public abstract class BaseModelGen<DEV> extends Object {
 		}
 		if(objectText != null) {
 			document.addField("objectText_text_enUS", objectText.toString());
-			document.addField("objectText_indexed_string", objectText);
+			document.addField("objectText_docvalues_string", objectText);
 		}
 		if(pageUrlId != null) {
 			document.addField("pageUrlId_indexedstored_string", pageUrlId);
@@ -1947,7 +1947,7 @@ public abstract class BaseModelGen<DEV> extends Object {
 		oBaseModel.setObjectId(Optional.ofNullable(solrDocument.get("objectId_indexedstored_string")).map(v -> v.toString()).orElse(null));
 		String objectSuggest = (String)solrDocument.get("objectSuggest_suggested");
 		oBaseModel.setObjectSuggest(objectSuggest);
-		oBaseModel.setObjectText(Optional.ofNullable(solrDocument.get("objectText_indexedstored_string")).map(v -> v.toString()).orElse(null));
+		oBaseModel.setObjectText(Optional.ofNullable(solrDocument.get("objectText_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oBaseModel.setPageUrlId(Optional.ofNullable(solrDocument.get("pageUrlId_indexedstored_string")).map(v -> v.toString()).orElse(null));
 		oBaseModel.setPageUrlPk(Optional.ofNullable(solrDocument.get("pageUrlPk_indexedstored_string")).map(v -> v.toString()).orElse(null));
 	}

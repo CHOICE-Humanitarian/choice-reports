@@ -75,7 +75,7 @@ public class ChoiceReport extends ChoiceReportGen<BaseModel> {
 	protected void _donorSearch(Promise<SearchList<ChoiceDonor>> promise) {
 		SearchList<ChoiceDonor> l = new SearchList<>();
 		l.setQuery("*:*");
-		l.addFilterQuery("pk_indexedstored_long:" + donorKey);
+		l.addFilterQuery("pk_docvalues_long:" + donorKey);
 		l.setC(ChoiceDonor.class);
 		l.setStore(true);
 		promise.complete(l);

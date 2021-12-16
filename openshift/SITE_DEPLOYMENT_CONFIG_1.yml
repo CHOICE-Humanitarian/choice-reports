@@ -345,21 +345,7 @@ spec:
             - name: DOMO_DATASET_CPP_URI
               value: "{{ DOMO_DATASET_CPP_URI }}"
           volumeMounts:
-            - mountPath: /opt/keystore
-              name: volume-certificate
-              readOnly: true
-            - mountPath: /opt/static/template/enUS
-              name: volume-template
-              readOnly: true
       volumes:
-        - name: volume-certificate
-          secret:
-            defaultMode: 420
-            secretName: "{{ SITE_NAME }}-certificate"
-        - name: volume-template
-          configMap:
-            defaultMode: 420
-            name: "{{ SITE_NAME }}-template"
   triggers:
     - imageChangeParams:
         automatic: true
