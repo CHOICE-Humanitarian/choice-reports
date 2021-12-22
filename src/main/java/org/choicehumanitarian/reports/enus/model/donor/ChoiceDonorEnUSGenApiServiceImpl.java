@@ -588,6 +588,15 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 						num++;
 						bParams.add(o2.sqlInheritPk());
 						break;
+					case ChoiceDonor.VAR_created:
+						o2.setCreated(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(ChoiceDonor.VAR_created + "=$" + num);
+						num++;
+						bParams.add(o2.sqlCreated());
+						break;
 					case ChoiceDonor.VAR_archived:
 						o2.setArchived(jsonObject.getBoolean(entityVar));
 						if(bParams.size() > 0) {
@@ -605,6 +614,24 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 						bSql.append(ChoiceDonor.VAR_deleted + "=$" + num);
 						num++;
 						bParams.add(o2.sqlDeleted());
+						break;
+					case ChoiceDonor.VAR_sessionId:
+						o2.setSessionId(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(ChoiceDonor.VAR_sessionId + "=$" + num);
+						num++;
+						bParams.add(o2.sqlSessionId());
+						break;
+					case ChoiceDonor.VAR_userKey:
+						o2.setUserKey(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(ChoiceDonor.VAR_userKey + "=$" + num);
+						num++;
+						bParams.add(o2.sqlUserKey());
 						break;
 					case ChoiceDonor.VAR_donorFullName:
 						o2.setDonorFullName(jsonObject.getString(entityVar));

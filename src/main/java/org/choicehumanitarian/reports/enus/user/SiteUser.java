@@ -44,8 +44,7 @@ public class SiteUser extends SiteUserGen<BaseModel> {
 
 	/**
 	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
+	 * DocValues: true
 	 */
 	protected void _userKeys(List<Long> l) {
 		l.add(pk);
@@ -53,8 +52,7 @@ public class SiteUser extends SiteUserGen<BaseModel> {
 
 	/**   
 	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
+	 * DocValues: true
 	 * Define: true
 	 * Modify: false
 	 */                 
@@ -63,8 +61,7 @@ public class SiteUser extends SiteUserGen<BaseModel> {
 
 	/**
 	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
+	 * DocValues: true
 	 * Define: true
 	 */
 	protected void _userName(Wrap<String> c) {
@@ -72,8 +69,7 @@ public class SiteUser extends SiteUserGen<BaseModel> {
 
 	/**
 	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
+	 * DocValues: true
 	 * Define: true
 	 */
 	protected void _userEmail(Wrap<String> c) {
@@ -81,8 +77,7 @@ public class SiteUser extends SiteUserGen<BaseModel> {
 
 	/**
 	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
+	 * DocValues: true
 	 * Define: true
 	 */
 	protected void _userFirstName(Wrap<String> c) {
@@ -90,8 +85,7 @@ public class SiteUser extends SiteUserGen<BaseModel> {
 
 	/**
 	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
+	 * DocValues: true
 	 * Define: true
 	 */
 	protected void _userLastName(Wrap<String> c) {
@@ -99,8 +93,7 @@ public class SiteUser extends SiteUserGen<BaseModel> {
 
 	/**
 	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
+	 * DocValues: true
 	 * Define: true
 	 */
 	protected void _userFullName(Wrap<String> c) {
@@ -109,8 +102,7 @@ public class SiteUser extends SiteUserGen<BaseModel> {
 
 	/**
 	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
+	 * DocValues: true
 	 * Define: true
 	 * HtmlRow: 3
 	 * HtmlCell: 2
@@ -122,8 +114,7 @@ public class SiteUser extends SiteUserGen<BaseModel> {
 
 	/**
 	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
+	 * DocValues: true
 	 * Define: true
 	 * HtmlRow: 3
 	 * HtmlCell: 3

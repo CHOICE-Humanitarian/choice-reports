@@ -326,13 +326,12 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 	 * Val.ConnectionError.enUS:Could not open the database client connection. 
 	 * Val.ConnectionSuccess.enUS:The database client connection was successful. 
 	 * 
-	 * Val.InitError.enUS:Could not initialize the database tables. 
-	 * Val.InitSuccess.enUS:The database tables were created successfully. 
+	 * Val.InitError.enUS:Could not initialize the database. 
+	 * Val.InitSuccess.enUS:The database was initialized successfully. 
 	 * 
 	 *	Configure shared database connections across the cluster for massive scaling of the application. 
 	 *	Return a promise that configures a shared database client connection. 
 	 *	Load the database configuration into a shared io.vertx.ext.jdbc.JDBCClient for a scalable, clustered datasource connection pool. 
-	 *	Initialize the database tables if not already created for the first time. 
 	 **/
 	private Future<Void> configureData() {
 		Promise<Void> promise = Promise.promise();
@@ -387,11 +386,11 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 			String authUrl = String.format("%s://%s%s/auth", (authSsl ? "https" : "http"), authHostName, (authPort == 443 || authPort == 80 ? "" : ":" + authPort));
 			oauth2ClientOptions.setSite(authUrl + "/realms/" + config().getString(ConfigKeys.AUTH_REALM));
 			oauth2ClientOptions.setTenant(config().getString(ConfigKeys.AUTH_REALM));
-			oauth2ClientOptions.setClientID(config().getString(ConfigKeys.AUTH_RESOURCE));
+			oauth2ClientOptions.setClientId(config().getString(ConfigKeys.AUTH_RESOURCE));
 			oauth2ClientOptions.setClientSecret(config().getString(ConfigKeys.AUTH_SECRET));
 			oauth2ClientOptions.setFlow(OAuth2FlowType.AUTH_CODE);
 			JsonObject extraParams = new JsonObject();
-			extraParams.put("scope", "DefaultAuthScope");
+			extraParams.put("scope", "profile");
 			oauth2ClientOptions.setExtraParameters(extraParams);
 
 			OpenIDConnectAuth.discover(vertx, oauth2ClientOptions, a -> {
@@ -438,7 +437,7 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 			
 								final JsonObject config = new JsonObject().put("code", code);
 			
-								config.put("redirect_uri", siteBaseUrl + "/callback");
+								config.put("redirectUri", siteBaseUrl + "/callback");
 			
 								oauth2AuthenticationProvider.authenticate(config, res -> {
 									if (res.failed()) {

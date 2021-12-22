@@ -45,8 +45,7 @@ public class ChoiceDonor extends ChoiceDonorGen<BaseModel> {
 
 	/**  
 	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
+	 * DocValues: true
 	 * Define: true
 	 * HtmlRow: 3
 	 * HtmlCell: 1
@@ -57,8 +56,7 @@ public class ChoiceDonor extends ChoiceDonorGen<BaseModel> {
 
 	/**   
 	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
+	 * DocValues: true
 	 * Define: true
 	 * HtmlRow: 3
 	 * HtmlCell: 2
@@ -69,8 +67,7 @@ public class ChoiceDonor extends ChoiceDonorGen<BaseModel> {
 
 	/**   
 	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
+	 * DocValues: true
 	 * Define: true
 	 * HtmlRow: 4
 	 * HtmlCell: 1
@@ -81,8 +78,7 @@ public class ChoiceDonor extends ChoiceDonorGen<BaseModel> {
 
 	/**   
 	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
+	 * DocValues: true
 	 * Define: true
 	 * HtmlRow: 4
 	 * HtmlCell: 2
@@ -93,8 +89,7 @@ public class ChoiceDonor extends ChoiceDonorGen<BaseModel> {
 
 	/**   
 	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
+	 * DocValues: true
 	 * Define: true
 	 * HtmlRow: 4
 	 * HtmlCell: 3
@@ -105,8 +100,7 @@ public class ChoiceDonor extends ChoiceDonorGen<BaseModel> {
 
 	/**   
 	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
+	 * DocValues: true
 	 * Define: true
 	 * HtmlRow: 5
 	 * HtmlCell: 1
@@ -119,8 +113,7 @@ public class ChoiceDonor extends ChoiceDonorGen<BaseModel> {
 
 	/**   
 	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
+	 * DocValues: true
 	 * Define: true
 	 * HtmlRow: 5
 	 * HtmlCell: 2
@@ -133,8 +126,7 @@ public class ChoiceDonor extends ChoiceDonorGen<BaseModel> {
 
 	/**   
 	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
+	 * DocValues: true
 	 * Define: true
 	 * HtmlRow: 6
 	 * HtmlCell: 1
@@ -147,8 +139,7 @@ public class ChoiceDonor extends ChoiceDonorGen<BaseModel> {
 
 	/**    
 	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
+	 * DocValues: true
 	 * Define: true
 	 * HtmlRow: 6
 	 * HtmlCell: 2
@@ -161,8 +152,7 @@ public class ChoiceDonor extends ChoiceDonorGen<BaseModel> {
 
 	/**   
 	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
+	 * DocValues: true
 	 * Define: true
 	 * HtmlRow: 6
 	 * HtmlCell: 3
@@ -175,8 +165,7 @@ public class ChoiceDonor extends ChoiceDonorGen<BaseModel> {
 
 	/**   
 	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
+	 * DocValues: true
 	 * Define: true
 	 * HtmlRow: 6
 	 * HtmlCell: 4
@@ -189,8 +178,7 @@ public class ChoiceDonor extends ChoiceDonorGen<BaseModel> {
 
 	/**   
 	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
+	 * DocValues: true
 	 * Define: true
 	 * HtmlRow: 7
 	 * HtmlCell: 1
@@ -201,8 +189,7 @@ public class ChoiceDonor extends ChoiceDonorGen<BaseModel> {
 
 	/**  
 	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
+	 * DocValues: true
 	 * Relate: ChoiceReport.donorKey
 	 * HtmlRow: 10
 	 * HtmlCell: 1

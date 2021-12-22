@@ -588,6 +588,15 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 						num++;
 						bParams.add(o2.sqlInheritPk());
 						break;
+					case ChoiceReport.VAR_created:
+						o2.setCreated(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(ChoiceReport.VAR_created + "=$" + num);
+						num++;
+						bParams.add(o2.sqlCreated());
+						break;
 					case ChoiceReport.VAR_archived:
 						o2.setArchived(jsonObject.getBoolean(entityVar));
 						if(bParams.size() > 0) {
@@ -605,6 +614,24 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 						bSql.append(ChoiceReport.VAR_deleted + "=$" + num);
 						num++;
 						bParams.add(o2.sqlDeleted());
+						break;
+					case ChoiceReport.VAR_sessionId:
+						o2.setSessionId(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(ChoiceReport.VAR_sessionId + "=$" + num);
+						num++;
+						bParams.add(o2.sqlSessionId());
+						break;
+					case ChoiceReport.VAR_userKey:
+						o2.setUserKey(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(ChoiceReport.VAR_userKey + "=$" + num);
+						num++;
+						bParams.add(o2.sqlUserKey());
 						break;
 					case ChoiceReport.VAR_donorKey:
 						Optional.ofNullable(jsonObject.getString(entityVar)).ifPresent(val -> {

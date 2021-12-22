@@ -1438,82 +1438,6 @@ public abstract class ChoiceReportGen<DEV> extends BaseModel {
 		ChoiceReport oChoiceReport = (ChoiceReport)this;
 		saves = (List<String>)solrDocument.get("saves_docvalues_strings");
 		if(saves != null) {
-
-			Long donorKey = (Long)solrDocument.get("donorKey_indexedstored_long");
-			if(donorKey != null)
-				oChoiceReport.setDonorKey(donorKey);
-
-			if(saves.contains("donorFullName")) {
-				String donorFullName = (String)solrDocument.get("donorFullName_indexedstored_string");
-				if(donorFullName != null)
-					oChoiceReport.setDonorFullName(donorFullName);
-			}
-
-			if(saves.contains("donorParentName")) {
-				String donorParentName = (String)solrDocument.get("donorParentName_indexedstored_string");
-				if(donorParentName != null)
-					oChoiceReport.setDonorParentName(donorParentName);
-			}
-
-			if(saves.contains("donorId")) {
-				Long donorId = (Long)solrDocument.get("donorId_indexedstored_long");
-				if(donorId != null)
-					oChoiceReport.setDonorId(donorId);
-			}
-
-			if(saves.contains("donorAttributeId")) {
-				String donorAttributeId = (String)solrDocument.get("donorAttributeId_indexedstored_string");
-				if(donorAttributeId != null)
-					oChoiceReport.setDonorAttributeId(donorAttributeId);
-			}
-
-			if(saves.contains("donorInKind")) {
-				Long donorInKind = (Long)solrDocument.get("donorInKind_indexedstored_long");
-				if(donorInKind != null)
-					oChoiceReport.setDonorInKind(donorInKind);
-			}
-
-			if(saves.contains("donorTotal")) {
-				Double donorTotal = (Double)solrDocument.get("donorTotal_indexedstored_double");
-				if(donorTotal != null)
-					oChoiceReport.setDonorTotal(donorTotal);
-			}
-
-			if(saves.contains("donorYtd")) {
-				Double donorYtd = (Double)solrDocument.get("donorYtd_indexedstored_double");
-				if(donorYtd != null)
-					oChoiceReport.setDonorYtd(donorYtd);
-			}
-
-			if(saves.contains("donorQ1")) {
-				Double donorQ1 = (Double)solrDocument.get("donorQ1_indexedstored_double");
-				if(donorQ1 != null)
-					oChoiceReport.setDonorQ1(donorQ1);
-			}
-
-			if(saves.contains("donorQ2")) {
-				Double donorQ2 = (Double)solrDocument.get("donorQ2_indexedstored_double");
-				if(donorQ2 != null)
-					oChoiceReport.setDonorQ2(donorQ2);
-			}
-
-			if(saves.contains("donorQ3")) {
-				Double donorQ3 = (Double)solrDocument.get("donorQ3_indexedstored_double");
-				if(donorQ3 != null)
-					oChoiceReport.setDonorQ3(donorQ3);
-			}
-
-			if(saves.contains("donorQ4")) {
-				Double donorQ4 = (Double)solrDocument.get("donorQ4_indexedstored_double");
-				if(donorQ4 != null)
-					oChoiceReport.setDonorQ4(donorQ4);
-			}
-
-			if(saves.contains("donorLogoFilename")) {
-				String donorLogoFilename = (String)solrDocument.get("donorLogoFilename_indexedstored_string");
-				if(donorLogoFilename != null)
-					oChoiceReport.setDonorLogoFilename(donorLogoFilename);
-			}
 		}
 
 		super.populateBaseModel(solrDocument);
@@ -1521,43 +1445,43 @@ public abstract class ChoiceReportGen<DEV> extends BaseModel {
 
 	public void indexChoiceReport(SolrInputDocument document) {
 		if(donorKey != null) {
-			document.addField("donorKey_indexedstored_long", donorKey);
+			document.addField("donorKey_docvalues_long", donorKey);
 		}
 		if(donorFullName != null) {
-			document.addField("donorFullName_indexedstored_string", donorFullName);
+			document.addField("donorFullName_docvalues_string", donorFullName);
 		}
 		if(donorParentName != null) {
-			document.addField("donorParentName_indexedstored_string", donorParentName);
+			document.addField("donorParentName_docvalues_string", donorParentName);
 		}
 		if(donorId != null) {
-			document.addField("donorId_indexedstored_long", donorId);
+			document.addField("donorId_docvalues_long", donorId);
 		}
 		if(donorAttributeId != null) {
-			document.addField("donorAttributeId_indexedstored_string", donorAttributeId);
+			document.addField("donorAttributeId_docvalues_string", donorAttributeId);
 		}
 		if(donorInKind != null) {
-			document.addField("donorInKind_indexedstored_long", donorInKind);
+			document.addField("donorInKind_docvalues_long", donorInKind);
 		}
 		if(donorTotal != null) {
-			document.addField("donorTotal_indexedstored_double", donorTotal.doubleValue());
+			document.addField("donorTotal_docvalues_double", donorTotal.doubleValue());
 		}
 		if(donorYtd != null) {
-			document.addField("donorYtd_indexedstored_double", donorYtd.doubleValue());
+			document.addField("donorYtd_docvalues_double", donorYtd.doubleValue());
 		}
 		if(donorQ1 != null) {
-			document.addField("donorQ1_indexedstored_double", donorQ1.doubleValue());
+			document.addField("donorQ1_docvalues_double", donorQ1.doubleValue());
 		}
 		if(donorQ2 != null) {
-			document.addField("donorQ2_indexedstored_double", donorQ2.doubleValue());
+			document.addField("donorQ2_docvalues_double", donorQ2.doubleValue());
 		}
 		if(donorQ3 != null) {
-			document.addField("donorQ3_indexedstored_double", donorQ3.doubleValue());
+			document.addField("donorQ3_docvalues_double", donorQ3.doubleValue());
 		}
 		if(donorQ4 != null) {
-			document.addField("donorQ4_indexedstored_double", donorQ4.doubleValue());
+			document.addField("donorQ4_docvalues_double", donorQ4.doubleValue());
 		}
 		if(donorLogoFilename != null) {
-			document.addField("donorLogoFilename_indexedstored_string", donorLogoFilename);
+			document.addField("donorLogoFilename_docvalues_string", donorLogoFilename);
 		}
 		super.indexBaseModel(document);
 
@@ -1566,31 +1490,31 @@ public abstract class ChoiceReportGen<DEV> extends BaseModel {
 	public static String varIndexedChoiceReport(String entityVar) {
 		switch(entityVar) {
 			case "donorKey":
-				return "donorKey_indexedstored_long";
+				return "donorKey_docvalues_long";
 			case "donorFullName":
-				return "donorFullName_indexedstored_string";
+				return "donorFullName_docvalues_string";
 			case "donorParentName":
-				return "donorParentName_indexedstored_string";
+				return "donorParentName_docvalues_string";
 			case "donorId":
-				return "donorId_indexedstored_long";
+				return "donorId_docvalues_long";
 			case "donorAttributeId":
-				return "donorAttributeId_indexedstored_string";
+				return "donorAttributeId_docvalues_string";
 			case "donorInKind":
-				return "donorInKind_indexedstored_long";
+				return "donorInKind_docvalues_long";
 			case "donorTotal":
-				return "donorTotal_indexedstored_double";
+				return "donorTotal_docvalues_double";
 			case "donorYtd":
-				return "donorYtd_indexedstored_double";
+				return "donorYtd_docvalues_double";
 			case "donorQ1":
-				return "donorQ1_indexedstored_double";
+				return "donorQ1_docvalues_double";
 			case "donorQ2":
-				return "donorQ2_indexedstored_double";
+				return "donorQ2_docvalues_double";
 			case "donorQ3":
-				return "donorQ3_indexedstored_double";
+				return "donorQ3_docvalues_double";
 			case "donorQ4":
-				return "donorQ4_indexedstored_double";
+				return "donorQ4_docvalues_double";
 			case "donorLogoFilename":
-				return "donorLogoFilename_indexedstored_string";
+				return "donorLogoFilename_docvalues_string";
 			default:
 				return BaseModel.varIndexedBaseModel(entityVar);
 		}
@@ -1620,19 +1544,19 @@ public abstract class ChoiceReportGen<DEV> extends BaseModel {
 	public void storeChoiceReport(SolrDocument solrDocument) {
 		ChoiceReport oChoiceReport = (ChoiceReport)this;
 
-		oChoiceReport.setDonorKey(Optional.ofNullable(solrDocument.get("donorKey_indexedstored_long")).map(v -> v.toString()).orElse(null));
-		oChoiceReport.setDonorFullName(Optional.ofNullable(solrDocument.get("donorFullName_indexedstored_string")).map(v -> v.toString()).orElse(null));
-		oChoiceReport.setDonorParentName(Optional.ofNullable(solrDocument.get("donorParentName_indexedstored_string")).map(v -> v.toString()).orElse(null));
-		oChoiceReport.setDonorId(Optional.ofNullable(solrDocument.get("donorId_indexedstored_long")).map(v -> v.toString()).orElse(null));
-		oChoiceReport.setDonorAttributeId(Optional.ofNullable(solrDocument.get("donorAttributeId_indexedstored_string")).map(v -> v.toString()).orElse(null));
-		oChoiceReport.setDonorInKind(Optional.ofNullable(solrDocument.get("donorInKind_indexedstored_long")).map(v -> v.toString()).orElse(null));
-		oChoiceReport.setDonorTotal(Optional.ofNullable(solrDocument.get("donorTotal_indexedstored_double")).map(v -> v.toString()).orElse(null));
-		oChoiceReport.setDonorYtd(Optional.ofNullable(solrDocument.get("donorYtd_indexedstored_double")).map(v -> v.toString()).orElse(null));
-		oChoiceReport.setDonorQ1(Optional.ofNullable(solrDocument.get("donorQ1_indexedstored_double")).map(v -> v.toString()).orElse(null));
-		oChoiceReport.setDonorQ2(Optional.ofNullable(solrDocument.get("donorQ2_indexedstored_double")).map(v -> v.toString()).orElse(null));
-		oChoiceReport.setDonorQ3(Optional.ofNullable(solrDocument.get("donorQ3_indexedstored_double")).map(v -> v.toString()).orElse(null));
-		oChoiceReport.setDonorQ4(Optional.ofNullable(solrDocument.get("donorQ4_indexedstored_double")).map(v -> v.toString()).orElse(null));
-		oChoiceReport.setDonorLogoFilename(Optional.ofNullable(solrDocument.get("donorLogoFilename_indexedstored_string")).map(v -> v.toString()).orElse(null));
+		oChoiceReport.setDonorKey(Optional.ofNullable(solrDocument.get("donorKey_docvalues_long")).map(v -> v.toString()).orElse(null));
+		oChoiceReport.setDonorFullName(Optional.ofNullable(solrDocument.get("donorFullName_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oChoiceReport.setDonorParentName(Optional.ofNullable(solrDocument.get("donorParentName_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oChoiceReport.setDonorId(Optional.ofNullable(solrDocument.get("donorId_docvalues_long")).map(v -> v.toString()).orElse(null));
+		oChoiceReport.setDonorAttributeId(Optional.ofNullable(solrDocument.get("donorAttributeId_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oChoiceReport.setDonorInKind(Optional.ofNullable(solrDocument.get("donorInKind_docvalues_long")).map(v -> v.toString()).orElse(null));
+		oChoiceReport.setDonorTotal(Optional.ofNullable(solrDocument.get("donorTotal_docvalues_double")).map(v -> v.toString()).orElse(null));
+		oChoiceReport.setDonorYtd(Optional.ofNullable(solrDocument.get("donorYtd_docvalues_double")).map(v -> v.toString()).orElse(null));
+		oChoiceReport.setDonorQ1(Optional.ofNullable(solrDocument.get("donorQ1_docvalues_double")).map(v -> v.toString()).orElse(null));
+		oChoiceReport.setDonorQ2(Optional.ofNullable(solrDocument.get("donorQ2_docvalues_double")).map(v -> v.toString()).orElse(null));
+		oChoiceReport.setDonorQ3(Optional.ofNullable(solrDocument.get("donorQ3_docvalues_double")).map(v -> v.toString()).orElse(null));
+		oChoiceReport.setDonorQ4(Optional.ofNullable(solrDocument.get("donorQ4_docvalues_double")).map(v -> v.toString()).orElse(null));
+		oChoiceReport.setDonorLogoFilename(Optional.ofNullable(solrDocument.get("donorLogoFilename_docvalues_string")).map(v -> v.toString()).orElse(null));
 
 		super.storeBaseModel(solrDocument);
 	}

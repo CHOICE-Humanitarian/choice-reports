@@ -36,7 +36,7 @@ paths:
       x-vertx-event-bus: choice-reports-enUS-ChoiceDonor
       security:
         - openIdConnect:
-          - DefaultAuthScope
+          - profile
       description: >+
       summary: >+
       tags:
@@ -60,7 +60,7 @@ paths:
       x-vertx-event-bus: choice-reports-enUS-ChoiceDonor
       security:
         - openIdConnect:
-          - DefaultAuthScope
+          - profile
       description: >+
       summary: >+
       tags:
@@ -202,7 +202,7 @@ paths:
       x-vertx-event-bus: choice-reports-enUS-ChoiceDonor
       security:
         - openIdConnect:
-          - DefaultAuthScope
+          - profile
       description: >+
       summary: >+
       tags:
@@ -338,7 +338,7 @@ paths:
       x-vertx-event-bus: choice-reports-enUS-ChoiceDonor
       security:
         - openIdConnect:
-          - DefaultAuthScope
+          - profile
       description: >+
       summary: >+
       tags:
@@ -481,7 +481,7 @@ paths:
       x-vertx-event-bus: choice-reports-enUS-ChoiceDonor
       security:
         - openIdConnect:
-          - DefaultAuthScope
+          - profile
       description: >+
       summary: >+
       tags:
@@ -514,7 +514,7 @@ paths:
       x-vertx-event-bus: choice-reports-enUS-ChoiceDonor
       security:
         - openIdConnect:
-          - DefaultAuthScope
+          - profile
       description: >+
       summary: >+
       tags:
@@ -650,7 +650,7 @@ paths:
       x-vertx-event-bus: choice-reports-enUS-ChoiceDonor
       security:
         - openIdConnect:
-          - DefaultAuthScope
+          - profile
       description: >+
       summary: >+
       tags:
@@ -792,7 +792,7 @@ paths:
       x-vertx-event-bus: choice-reports-enUS-ChoiceReport
       security:
         - openIdConnect:
-          - DefaultAuthScope
+          - profile
       description: >+
       summary: >+
       tags:
@@ -816,7 +816,7 @@ paths:
       x-vertx-event-bus: choice-reports-enUS-ChoiceReport
       security:
         - openIdConnect:
-          - DefaultAuthScope
+          - profile
       description: >+
       summary: >+
       tags:
@@ -958,7 +958,7 @@ paths:
       x-vertx-event-bus: choice-reports-enUS-ChoiceReport
       security:
         - openIdConnect:
-          - DefaultAuthScope
+          - profile
       description: >+
       summary: >+
       tags:
@@ -1094,7 +1094,7 @@ paths:
       x-vertx-event-bus: choice-reports-enUS-ChoiceReport
       security:
         - openIdConnect:
-          - DefaultAuthScope
+          - profile
       description: >+
       summary: >+
       tags:
@@ -1237,7 +1237,7 @@ paths:
       x-vertx-event-bus: choice-reports-enUS-ChoiceReport
       security:
         - openIdConnect:
-          - DefaultAuthScope
+          - profile
       description: >+
       summary: >+
       tags:
@@ -1270,7 +1270,7 @@ paths:
       x-vertx-event-bus: choice-reports-enUS-ChoiceReport
       security:
         - openIdConnect:
-          - DefaultAuthScope
+          - profile
       description: >+
       summary: >+
       tags:
@@ -1406,7 +1406,7 @@ paths:
       x-vertx-event-bus: choice-reports-enUS-ChoiceReport
       security:
         - openIdConnect:
-          - DefaultAuthScope
+          - profile
       description: >+
       summary: >+
       tags:
@@ -1548,7 +1548,7 @@ paths:
       x-vertx-event-bus: choice-reports-enUS-ChoiceReport
       security:
         - openIdConnect:
-          - DefaultAuthScope
+          - profile
       description: >+
       summary: >+
       tags:
@@ -1684,7 +1684,7 @@ paths:
       x-vertx-event-bus: choice-reports-enUS-ChoiceReport
       security:
         - openIdConnect:
-          - DefaultAuthScope
+          - profile
       description: >+
       summary: >+
       tags:
@@ -1826,7 +1826,7 @@ paths:
       x-vertx-event-bus: choice-reports-enUS-ChoiceReport
       security:
         - openIdConnect:
-          - DefaultAuthScope
+          - profile
       description: >+
       summary: >+
       tags:
@@ -1962,7 +1962,7 @@ paths:
       x-vertx-event-bus: choice-reports-enUS-ChoiceReport
       security:
         - openIdConnect:
-          - DefaultAuthScope
+          - profile
       description: >+
       summary: >+
       tags:
@@ -2104,7 +2104,7 @@ paths:
       x-vertx-event-bus: choice-reports-enUS-SiteUser
       security:
         - openIdConnect:
-          - DefaultAuthScope
+          - profile
       description: >+
       summary: >+
       tags:
@@ -2239,7 +2239,7 @@ paths:
       x-vertx-event-bus: choice-reports-enUS-SiteUser
       security:
         - openIdConnect:
-          - DefaultAuthScope
+          - profile
       description: >+
       summary: >+
       tags:
@@ -2381,7 +2381,7 @@ paths:
       x-vertx-event-bus: choice-reports-enUS-SiteUser
       security:
         - openIdConnect:
-          - DefaultAuthScope
+          - profile
       description: >+
       summary: >+
       tags:
@@ -2406,7 +2406,7 @@ paths:
       x-vertx-event-bus: choice-reports-enUS-SiteUser
       security:
         - openIdConnect:
-          - DefaultAuthScope
+          - profile
       description: >+
       summary: >+
       tags:
@@ -2542,7 +2542,7 @@ paths:
       x-vertx-event-bus: choice-reports-enUS-SiteUser
       security:
         - openIdConnect:
-          - DefaultAuthScope
+          - profile
       description: >+
       summary: >+
       tags:
@@ -2685,7 +2685,7 @@ components:
       scheme: basic
     openIdConnect:
       type: openIdConnect
-      openIdConnectUrl: https://sso.computate.org/auth/realms/COMPUTATE.ORG/.well-known/openid-configuration
+      openIdConnectUrl: https://sso.computate.org/auth/realms/TEAM19/.well-known/openid-configuration
   requestBodies:
     POSTChoiceDonorRequest:
       content:
@@ -2844,6 +2844,8 @@ components:
               type: string
             donorQ4:
               type: string
+            donorLogoFilename:
+              type: string
             reportKeys:
               type: array
               items:
@@ -2873,6 +2875,8 @@ components:
             donorQ3:
               type: string
             donorQ4:
+              type: string
+            donorLogoFilename:
               type: string
             reportKeys:
               type: array
@@ -2958,6 +2962,13 @@ components:
             removeDonorQ4:
               type: string
             removeAllDonorQ4:
+              type: string
+            setDonorLogoFilename:
+              type: string
+              nullable: true
+            removeDonorLogoFilename:
+              type: string
+            removeAllDonorLogoFilename:
               type: string
             setReportKeys:
               type: array
@@ -3057,6 +3068,13 @@ components:
               type: string
             removeAllDonorQ4:
               type: string
+            setDonorLogoFilename:
+              type: string
+              nullable: true
+            removeDonorLogoFilename:
+              type: string
+            removeAllDonorLogoFilename:
+              type: string
             setReportKeys:
               type: array
               nullable: true
@@ -3102,6 +3120,8 @@ components:
                 type: string
               donorQ4:
                 type: string
+              donorLogoFilename:
+                type: string
               reportKeys:
                 type: array
                 items:
@@ -3131,6 +3151,8 @@ components:
             donorQ3:
               type: string
             donorQ4:
+              type: string
+            donorLogoFilename:
               type: string
             reportKeys:
               type: array
@@ -3162,6 +3184,8 @@ components:
               type: string
             donorQ4:
               type: string
+            donorLogoFilename:
+              type: string
             reportKeys:
               type: array
               items:
@@ -3192,6 +3216,8 @@ components:
               type: string
             donorQ4:
               type: string
+            donorLogoFilename:
+              type: string
             reportKeys:
               type: array
               items:
@@ -3207,10 +3233,28 @@ components:
               type: string
             donorFullName:
               type: string
-            donorKeys:
-              type: array
-              items:
-                type: string
+            donorParentName:
+              type: string
+            donorId:
+              type: string
+            donorAttributeId:
+              type: string
+            donorInKind:
+              type: string
+            donorTotal:
+              type: string
+            donorYtd:
+              type: string
+            donorQ1:
+              type: string
+            donorQ2:
+              type: string
+            donorQ3:
+              type: string
+            donorQ4:
+              type: string
+            donorLogoFilename:
+              type: string
     POSTChoiceReportResponse:
       allOf:
         - type: object
@@ -3219,10 +3263,28 @@ components:
               type: string
             donorFullName:
               type: string
-            donorKeys:
-              type: array
-              items:
-                type: string
+            donorParentName:
+              type: string
+            donorId:
+              type: string
+            donorAttributeId:
+              type: string
+            donorInKind:
+              type: string
+            donorTotal:
+              type: string
+            donorYtd:
+              type: string
+            donorQ1:
+              type: string
+            donorQ2:
+              type: string
+            donorQ3:
+              type: string
+            donorQ4:
+              type: string
+            donorLogoFilename:
+              type: string
     PATCHChoiceReportRequest:
       allOf:
         - type: object
@@ -3241,23 +3303,83 @@ components:
               type: string
             removeAllDonorFullName:
               type: string
-            setDonorKeys:
-              type: array
+            setDonorParentName:
+              type: string
               nullable: true
-              items:
-                type: string
-            removeDonorKeys:
+            removeDonorParentName:
               type: string
-            removeAllDonorKeys:
-              type: array
-              items:
-                type: string
-            addDonorKeys:
+            removeAllDonorParentName:
               type: string
-            addAllDonorKeys:
-              type: array
-              items:
-                type: string
+            setDonorId:
+              type: string
+              nullable: true
+            removeDonorId:
+              type: string
+            removeAllDonorId:
+              type: string
+            setDonorAttributeId:
+              type: string
+              nullable: true
+            removeDonorAttributeId:
+              type: string
+            removeAllDonorAttributeId:
+              type: string
+            setDonorInKind:
+              type: string
+              nullable: true
+            removeDonorInKind:
+              type: string
+            removeAllDonorInKind:
+              type: string
+            setDonorTotal:
+              type: string
+              nullable: true
+            removeDonorTotal:
+              type: string
+            removeAllDonorTotal:
+              type: string
+            setDonorYtd:
+              type: string
+              nullable: true
+            removeDonorYtd:
+              type: string
+            removeAllDonorYtd:
+              type: string
+            setDonorQ1:
+              type: string
+              nullable: true
+            removeDonorQ1:
+              type: string
+            removeAllDonorQ1:
+              type: string
+            setDonorQ2:
+              type: string
+              nullable: true
+            removeDonorQ2:
+              type: string
+            removeAllDonorQ2:
+              type: string
+            setDonorQ3:
+              type: string
+              nullable: true
+            removeDonorQ3:
+              type: string
+            removeAllDonorQ3:
+              type: string
+            setDonorQ4:
+              type: string
+              nullable: true
+            removeDonorQ4:
+              type: string
+            removeAllDonorQ4:
+              type: string
+            setDonorLogoFilename:
+              type: string
+              nullable: true
+            removeDonorLogoFilename:
+              type: string
+            removeAllDonorLogoFilename:
+              type: string
     PATCHChoiceReportResponse:
       allOf:
         - type: object
@@ -3276,23 +3398,83 @@ components:
               type: string
             removeAllDonorFullName:
               type: string
-            setDonorKeys:
-              type: array
+            setDonorParentName:
+              type: string
               nullable: true
-              items:
-                type: string
-            removeDonorKeys:
+            removeDonorParentName:
               type: string
-            removeAllDonorKeys:
-              type: array
-              items:
-                type: string
-            addDonorKeys:
+            removeAllDonorParentName:
               type: string
-            addAllDonorKeys:
-              type: array
-              items:
-                type: string
+            setDonorId:
+              type: string
+              nullable: true
+            removeDonorId:
+              type: string
+            removeAllDonorId:
+              type: string
+            setDonorAttributeId:
+              type: string
+              nullable: true
+            removeDonorAttributeId:
+              type: string
+            removeAllDonorAttributeId:
+              type: string
+            setDonorInKind:
+              type: string
+              nullable: true
+            removeDonorInKind:
+              type: string
+            removeAllDonorInKind:
+              type: string
+            setDonorTotal:
+              type: string
+              nullable: true
+            removeDonorTotal:
+              type: string
+            removeAllDonorTotal:
+              type: string
+            setDonorYtd:
+              type: string
+              nullable: true
+            removeDonorYtd:
+              type: string
+            removeAllDonorYtd:
+              type: string
+            setDonorQ1:
+              type: string
+              nullable: true
+            removeDonorQ1:
+              type: string
+            removeAllDonorQ1:
+              type: string
+            setDonorQ2:
+              type: string
+              nullable: true
+            removeDonorQ2:
+              type: string
+            removeAllDonorQ2:
+              type: string
+            setDonorQ3:
+              type: string
+              nullable: true
+            removeDonorQ3:
+              type: string
+            removeAllDonorQ3:
+              type: string
+            setDonorQ4:
+              type: string
+              nullable: true
+            removeDonorQ4:
+              type: string
+            removeAllDonorQ4:
+              type: string
+            setDonorLogoFilename:
+              type: string
+              nullable: true
+            removeDonorLogoFilename:
+              type: string
+            removeAllDonorLogoFilename:
+              type: string
     SearchChoiceReportResponse:
       allOf:
         - type: array
@@ -3303,10 +3485,28 @@ components:
                 type: string
               donorFullName:
                 type: string
-              donorKeys:
-                type: array
-                items:
-                  type: string
+              donorParentName:
+                type: string
+              donorId:
+                type: string
+              donorAttributeId:
+                type: string
+              donorInKind:
+                type: string
+              donorTotal:
+                type: string
+              donorYtd:
+                type: string
+              donorQ1:
+                type: string
+              donorQ2:
+                type: string
+              donorQ3:
+                type: string
+              donorQ4:
+                type: string
+              donorLogoFilename:
+                type: string
     PUTImportChoiceReportRequest:
       allOf:
         - type: object
@@ -3315,10 +3515,28 @@ components:
               type: string
             donorFullName:
               type: string
-            donorKeys:
-              type: array
-              items:
-                type: string
+            donorParentName:
+              type: string
+            donorId:
+              type: string
+            donorAttributeId:
+              type: string
+            donorInKind:
+              type: string
+            donorTotal:
+              type: string
+            donorYtd:
+              type: string
+            donorQ1:
+              type: string
+            donorQ2:
+              type: string
+            donorQ3:
+              type: string
+            donorQ4:
+              type: string
+            donorLogoFilename:
+              type: string
     PUTImportChoiceReportResponse:
       allOf:
         - type: object
@@ -3327,10 +3545,28 @@ components:
               type: string
             donorFullName:
               type: string
-            donorKeys:
-              type: array
-              items:
-                type: string
+            donorParentName:
+              type: string
+            donorId:
+              type: string
+            donorAttributeId:
+              type: string
+            donorInKind:
+              type: string
+            donorTotal:
+              type: string
+            donorYtd:
+              type: string
+            donorQ1:
+              type: string
+            donorQ2:
+              type: string
+            donorQ3:
+              type: string
+            donorQ4:
+              type: string
+            donorLogoFilename:
+              type: string
     GETChoiceReportResponse:
       allOf:
         - type: object
@@ -3339,10 +3575,28 @@ components:
               type: string
             donorFullName:
               type: string
-            donorKeys:
-              type: array
-              items:
-                type: string
+            donorParentName:
+              type: string
+            donorId:
+              type: string
+            donorAttributeId:
+              type: string
+            donorInKind:
+              type: string
+            donorTotal:
+              type: string
+            donorYtd:
+              type: string
+            donorQ1:
+              type: string
+            donorQ2:
+              type: string
+            donorQ3:
+              type: string
+            donorQ4:
+              type: string
+            donorLogoFilename:
+              type: string
     ChoiceReportDisplaySearchPageChoiceReportResponse:
       allOf:
         - type: string

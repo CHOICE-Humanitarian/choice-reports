@@ -45,7 +45,7 @@ import io.vertx.sqlclient.RowStream;
 public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 	private static final Logger LOG = LoggerFactory.getLogger(WorkerVerticle.class);
 
-	public final DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm:ss VV");
+	public final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm:ss VV");
 
 	public static final Integer FACET_LIMIT = 100;
 
@@ -221,7 +221,7 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 				nextStartDuration = Duration.ofMillis(divideAndRemainder[1].longValueExact());
 				nextStartTime = now.plus(nextStartDuration);
 			}
-			LOG.info(String.format(importTimerScheduling, classSimpleName, nextStartTime.format(timeFormat)));
+			LOG.info(String.format(importTimerScheduling, classSimpleName, nextStartTime.format(TIME_FORMAT)));
 			ZonedDateTime nextStartTime2 = nextStartTime;
 			vertx.setTimer(nextStartDuration.toMillis(), a -> {
 				importData(classSimpleName, nextStartTime2);
@@ -237,7 +237,7 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 				String importPeriod = config().getString(String.format("%s_%s", ConfigKeys.IMPORT_DATA_PERIOD, classSimpleName));
 				Duration duration = TimeTool.parseNextDuration(importPeriod);
 				ZonedDateTime nextStartTime = startDateTime.plus(duration);
-				LOG.info(String.format(importTimerScheduling, nextStartTime.format(timeFormat)));
+				LOG.info(String.format(importTimerScheduling, nextStartTime.format(TIME_FORMAT)));
 				Duration nextStartDuration = Duration.between(Instant.now(), nextStartTime);
 				vertx.setTimer(nextStartDuration.toMillis(), b -> {
 					importData(classSimpleName, nextStartTime);
@@ -248,7 +248,7 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 				String importPeriod = config().getString(String.format("%s_%s", ConfigKeys.IMPORT_DATA_PERIOD, classSimpleName));
 				Duration duration = TimeTool.parseNextDuration(importPeriod);
 				ZonedDateTime nextStartTime = startDateTime.plus(duration);
-				LOG.info(String.format(importTimerScheduling, nextStartTime.format(timeFormat)));
+				LOG.info(String.format(importTimerScheduling, nextStartTime.format(TIME_FORMAT)));
 				Duration nextStartDuration = Duration.between(Instant.now(), nextStartTime);
 				vertx.setTimer(nextStartDuration.toMillis(), b -> {
 					importData(classSimpleName, nextStartTime);
