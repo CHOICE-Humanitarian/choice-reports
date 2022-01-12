@@ -388,4 +388,24 @@ public abstract class SearchResultGen<DEV> extends Object {
 	public static final String VAR_siteRequest_ = "siteRequest_";
 	public static final String VAR_solrDocument = "solrDocument";
 	public static final String VAR_resultIndex = "resultIndex";
+
+	public static final String DISPLAY_NAME_siteRequest_ = "";
+	public static final String DISPLAY_NAME_solrDocument = "";
+	public static final String DISPLAY_NAME_resultIndex = "";
+
+	public static String displayNameForClass(String var) {
+		return SearchResult.displayNameSearchResult(var);
+	}
+	public static String displayNameSearchResult(String var) {
+		switch(var) {
+		case VAR_siteRequest_:
+			return DISPLAY_NAME_siteRequest_;
+		case VAR_solrDocument:
+			return DISPLAY_NAME_solrDocument;
+		case VAR_resultIndex:
+			return DISPLAY_NAME_resultIndex;
+		default:
+			return null;
+		}
+	}
 }

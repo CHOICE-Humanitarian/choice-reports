@@ -103,44 +103,6 @@
 			<version>${apache-curator.version}</version>
 		</dependency>
 
-		<!-- #### -->
-		<!-- Solr -->
-		<!-- #### -->
-
-		<dependency>
-			<groupId>org.apache.solr</groupId>
-			<artifactId>solr-core</artifactId>
-			<version>${solr.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.apache.logging.log4j</groupId>
-					<artifactId>log4j-core</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.logging.log4j</groupId>
-					<artifactId>log4j-api</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.logging.log4j</groupId>
-					<artifactId>log4j-1.2-api</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.logging.log4j</groupId>
-					<artifactId>log4j-slf4j-impl</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.logging.log4j</groupId>
-					<artifactId>log4j-web</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.solr</groupId>
-			<artifactId>solr-solrj</artifactId>
-			<version>${solr.version}</version>
-		</dependency>
-
 		<!-- ################# -->
 		<!-- Flying Saucer PDF -->
 		<!-- ################# -->
@@ -268,18 +230,6 @@
 		<dependency>
 			<groupId>io.vertx</groupId>
 			<artifactId>vertx-health-check</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>io.opentracing.contrib</groupId>
-			<artifactId>opentracing-vertx-web</artifactId>
-			<version>0.1.0</version>
-		</dependency>
-
-		<dependency>
-			<groupId>io.opentracing.contrib</groupId>
-			<artifactId>opentracing-solr-client</artifactId>
-			<version>0.1.0</version>
 		</dependency>
 
 		<!-- ###### -->

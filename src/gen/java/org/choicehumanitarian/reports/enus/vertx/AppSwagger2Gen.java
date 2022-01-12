@@ -1093,4 +1093,63 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	public static final String VAR_wPaths = "wPaths";
 	public static final String VAR_wRequestBodies = "wRequestBodies";
 	public static final String VAR_wSchemas = "wSchemas";
+
+	public static final String DISPLAY_NAME_solrClientComputate = "";
+	public static final String DISPLAY_NAME_siteRequest_ = "";
+	public static final String DISPLAY_NAME_config = "";
+	public static final String DISPLAY_NAME_appName = "";
+	public static final String DISPLAY_NAME_languageName = "";
+	public static final String DISPLAY_NAME_appPath = "";
+	public static final String DISPLAY_NAME_openApiVersion = "";
+	public static final String DISPLAY_NAME_openApiVersionNumber = "";
+	public static final String DISPLAY_NAME_tabsSchema = "";
+	public static final String DISPLAY_NAME_apiVersion = "";
+	public static final String DISPLAY_NAME_openApiYamlPath = "";
+	public static final String DISPLAY_NAME_openApiYamlFile = "";
+	public static final String DISPLAY_NAME_w = "";
+	public static final String DISPLAY_NAME_wPaths = "";
+	public static final String DISPLAY_NAME_wRequestBodies = "";
+	public static final String DISPLAY_NAME_wSchemas = "";
+
+	public static String displayNameForClass(String var) {
+		return AppSwagger2.displayNameAppSwagger2(var);
+	}
+	public static String displayNameAppSwagger2(String var) {
+		switch(var) {
+		case VAR_solrClientComputate:
+			return DISPLAY_NAME_solrClientComputate;
+		case VAR_siteRequest_:
+			return DISPLAY_NAME_siteRequest_;
+		case VAR_config:
+			return DISPLAY_NAME_config;
+		case VAR_appName:
+			return DISPLAY_NAME_appName;
+		case VAR_languageName:
+			return DISPLAY_NAME_languageName;
+		case VAR_appPath:
+			return DISPLAY_NAME_appPath;
+		case VAR_openApiVersion:
+			return DISPLAY_NAME_openApiVersion;
+		case VAR_openApiVersionNumber:
+			return DISPLAY_NAME_openApiVersionNumber;
+		case VAR_tabsSchema:
+			return DISPLAY_NAME_tabsSchema;
+		case VAR_apiVersion:
+			return DISPLAY_NAME_apiVersion;
+		case VAR_openApiYamlPath:
+			return DISPLAY_NAME_openApiYamlPath;
+		case VAR_openApiYamlFile:
+			return DISPLAY_NAME_openApiYamlFile;
+		case VAR_w:
+			return DISPLAY_NAME_w;
+		case VAR_wPaths:
+			return DISPLAY_NAME_wPaths;
+		case VAR_wRequestBodies:
+			return DISPLAY_NAME_wRequestBodies;
+		case VAR_wSchemas:
+			return DISPLAY_NAME_wSchemas;
+		default:
+			return null;
+		}
+	}
 }

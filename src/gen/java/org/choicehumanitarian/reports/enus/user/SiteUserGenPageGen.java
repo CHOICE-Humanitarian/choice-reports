@@ -524,4 +524,30 @@ public abstract class SiteUserGenPageGen<DEV> extends BaseModelPage {
 	public static final String VAR_siteUserCount = "siteUserCount";
 	public static final String VAR_siteUser_ = "siteUser_";
 	public static final String VAR_pk = "pk";
+
+	public static final String DISPLAY_NAME_searchListSiteUser_ = "";
+	public static final String DISPLAY_NAME_listSiteUser = "";
+	public static final String DISPLAY_NAME_siteUserCount = "";
+	public static final String DISPLAY_NAME_siteUser_ = "";
+	public static final String DISPLAY_NAME_pk = "";
+
+	public static String displayNameForClass(String var) {
+		return SiteUserGenPage.displayNameSiteUserGenPage(var);
+	}
+	public static String displayNameSiteUserGenPage(String var) {
+		switch(var) {
+		case VAR_searchListSiteUser_:
+			return DISPLAY_NAME_searchListSiteUser_;
+		case VAR_listSiteUser:
+			return DISPLAY_NAME_listSiteUser;
+		case VAR_siteUserCount:
+			return DISPLAY_NAME_siteUserCount;
+		case VAR_siteUser_:
+			return DISPLAY_NAME_siteUser_;
+		case VAR_pk:
+			return DISPLAY_NAME_pk;
+		default:
+			return BaseModelPage.displayNameBaseModelPage(var);
+		}
+	}
 }

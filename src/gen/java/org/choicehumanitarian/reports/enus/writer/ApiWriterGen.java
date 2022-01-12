@@ -3177,4 +3177,165 @@ public abstract class ApiWriterGen<DEV> extends Object {
 	public static final String VAR_classRolesLanguage = "classRolesLanguage";
 	public static final String VAR_languageName = "languageName";
 	public static final String VAR_entitySolrDocument = "entitySolrDocument";
+
+	public static final String DISPLAY_NAME_siteRequest_ = "";
+	public static final String DISPLAY_NAME_classSolrDocument = "";
+	public static final String DISPLAY_NAME_contextRows = "";
+	public static final String DISPLAY_NAME_classApiMethod = "";
+	public static final String DISPLAY_NAME_openApiVersion = "";
+	public static final String DISPLAY_NAME_appSwagger2 = "";
+	public static final String DISPLAY_NAME_classUris = "";
+	public static final String DISPLAY_NAME_openApiVersionNumber = "";
+	public static final String DISPLAY_NAME_tabsSchema = "";
+	public static final String DISPLAY_NAME_tabsResponses = "";
+	public static final String DISPLAY_NAME_wPaths = "";
+	public static final String DISPLAY_NAME_wRequestBodies = "";
+	public static final String DISPLAY_NAME_wSchemas = "";
+	public static final String DISPLAY_NAME_config = "";
+	public static final String DISPLAY_NAME_solrClientComputate = "";
+	public static final String DISPLAY_NAME_wRequestHeaders = "";
+	public static final String DISPLAY_NAME_wRequestDescription = "";
+	public static final String DISPLAY_NAME_wResponseDescription = "";
+	public static final String DISPLAY_NAME_wRequestBody = "";
+	public static final String DISPLAY_NAME_wResponseBody = "";
+	public static final String DISPLAY_NAME_wRequestSchema = "";
+	public static final String DISPLAY_NAME_wResponseSchema = "";
+	public static final String DISPLAY_NAME_writers = "";
+	public static final String DISPLAY_NAME_classApiTag = "";
+	public static final String DISPLAY_NAME_classExtendsBase = "";
+	public static final String DISPLAY_NAME_classIsBase = "";
+	public static final String DISPLAY_NAME_classSimpleName = "";
+	public static final String DISPLAY_NAME_appName = "";
+	public static final String DISPLAY_NAME_classAbsolutePath = "";
+	public static final String DISPLAY_NAME_classApiUriMethod = "";
+	public static final String DISPLAY_NAME_classRoleUserMethod = "";
+	public static final String DISPLAY_NAME_classApiMethodMethod = "";
+	public static final String DISPLAY_NAME_classApiMediaType200Method = "";
+	public static final String DISPLAY_NAME_classApiOperationIdMethod = "";
+	public static final String DISPLAY_NAME_classApiOperationIdMethodRequest = "";
+	public static final String DISPLAY_NAME_classApiOperationIdMethodResponse = "";
+	public static final String DISPLAY_NAME_classSuperApiOperationIdMethodRequest = "";
+	public static final String DISPLAY_NAME_classSuperApiOperationIdMethodResponse = "";
+	public static final String DISPLAY_NAME_classPageCanonicalNameMethod = "";
+	public static final String DISPLAY_NAME_classKeywordsFound = "";
+	public static final String DISPLAY_NAME_classKeywords = "";
+	public static final String DISPLAY_NAME_classPublicRead = "";
+	public static final String DISPLAY_NAME_classRoleSession = "";
+	public static final String DISPLAY_NAME_classRoleUtilisateur = "";
+	public static final String DISPLAY_NAME_classRoleAll = "";
+	public static final String DISPLAY_NAME_classRolesFound = "";
+	public static final String DISPLAY_NAME_classRoles = "";
+	public static final String DISPLAY_NAME_classRolesLanguage = "";
+	public static final String DISPLAY_NAME_languageName = "";
+	public static final String DISPLAY_NAME_entitySolrDocument = "";
+
+	public static String displayNameForClass(String var) {
+		return ApiWriter.displayNameApiWriter(var);
+	}
+	public static String displayNameApiWriter(String var) {
+		switch(var) {
+		case VAR_siteRequest_:
+			return DISPLAY_NAME_siteRequest_;
+		case VAR_classSolrDocument:
+			return DISPLAY_NAME_classSolrDocument;
+		case VAR_contextRows:
+			return DISPLAY_NAME_contextRows;
+		case VAR_classApiMethod:
+			return DISPLAY_NAME_classApiMethod;
+		case VAR_openApiVersion:
+			return DISPLAY_NAME_openApiVersion;
+		case VAR_appSwagger2:
+			return DISPLAY_NAME_appSwagger2;
+		case VAR_classUris:
+			return DISPLAY_NAME_classUris;
+		case VAR_openApiVersionNumber:
+			return DISPLAY_NAME_openApiVersionNumber;
+		case VAR_tabsSchema:
+			return DISPLAY_NAME_tabsSchema;
+		case VAR_tabsResponses:
+			return DISPLAY_NAME_tabsResponses;
+		case VAR_wPaths:
+			return DISPLAY_NAME_wPaths;
+		case VAR_wRequestBodies:
+			return DISPLAY_NAME_wRequestBodies;
+		case VAR_wSchemas:
+			return DISPLAY_NAME_wSchemas;
+		case VAR_config:
+			return DISPLAY_NAME_config;
+		case VAR_solrClientComputate:
+			return DISPLAY_NAME_solrClientComputate;
+		case VAR_wRequestHeaders:
+			return DISPLAY_NAME_wRequestHeaders;
+		case VAR_wRequestDescription:
+			return DISPLAY_NAME_wRequestDescription;
+		case VAR_wResponseDescription:
+			return DISPLAY_NAME_wResponseDescription;
+		case VAR_wRequestBody:
+			return DISPLAY_NAME_wRequestBody;
+		case VAR_wResponseBody:
+			return DISPLAY_NAME_wResponseBody;
+		case VAR_wRequestSchema:
+			return DISPLAY_NAME_wRequestSchema;
+		case VAR_wResponseSchema:
+			return DISPLAY_NAME_wResponseSchema;
+		case VAR_writers:
+			return DISPLAY_NAME_writers;
+		case VAR_classApiTag:
+			return DISPLAY_NAME_classApiTag;
+		case VAR_classExtendsBase:
+			return DISPLAY_NAME_classExtendsBase;
+		case VAR_classIsBase:
+			return DISPLAY_NAME_classIsBase;
+		case VAR_classSimpleName:
+			return DISPLAY_NAME_classSimpleName;
+		case VAR_appName:
+			return DISPLAY_NAME_appName;
+		case VAR_classAbsolutePath:
+			return DISPLAY_NAME_classAbsolutePath;
+		case VAR_classApiUriMethod:
+			return DISPLAY_NAME_classApiUriMethod;
+		case VAR_classRoleUserMethod:
+			return DISPLAY_NAME_classRoleUserMethod;
+		case VAR_classApiMethodMethod:
+			return DISPLAY_NAME_classApiMethodMethod;
+		case VAR_classApiMediaType200Method:
+			return DISPLAY_NAME_classApiMediaType200Method;
+		case VAR_classApiOperationIdMethod:
+			return DISPLAY_NAME_classApiOperationIdMethod;
+		case VAR_classApiOperationIdMethodRequest:
+			return DISPLAY_NAME_classApiOperationIdMethodRequest;
+		case VAR_classApiOperationIdMethodResponse:
+			return DISPLAY_NAME_classApiOperationIdMethodResponse;
+		case VAR_classSuperApiOperationIdMethodRequest:
+			return DISPLAY_NAME_classSuperApiOperationIdMethodRequest;
+		case VAR_classSuperApiOperationIdMethodResponse:
+			return DISPLAY_NAME_classSuperApiOperationIdMethodResponse;
+		case VAR_classPageCanonicalNameMethod:
+			return DISPLAY_NAME_classPageCanonicalNameMethod;
+		case VAR_classKeywordsFound:
+			return DISPLAY_NAME_classKeywordsFound;
+		case VAR_classKeywords:
+			return DISPLAY_NAME_classKeywords;
+		case VAR_classPublicRead:
+			return DISPLAY_NAME_classPublicRead;
+		case VAR_classRoleSession:
+			return DISPLAY_NAME_classRoleSession;
+		case VAR_classRoleUtilisateur:
+			return DISPLAY_NAME_classRoleUtilisateur;
+		case VAR_classRoleAll:
+			return DISPLAY_NAME_classRoleAll;
+		case VAR_classRolesFound:
+			return DISPLAY_NAME_classRolesFound;
+		case VAR_classRoles:
+			return DISPLAY_NAME_classRoles;
+		case VAR_classRolesLanguage:
+			return DISPLAY_NAME_classRolesLanguage;
+		case VAR_languageName:
+			return DISPLAY_NAME_languageName;
+		case VAR_entitySolrDocument:
+			return DISPLAY_NAME_entitySolrDocument;
+		default:
+			return null;
+		}
+	}
 }

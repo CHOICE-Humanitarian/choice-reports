@@ -273,4 +273,15 @@ public abstract class WorkerVerticleGen<DEV> extends AbstractVerticle {
 
 	public static final String[] WorkerVerticleVals = new String[] { configureDataConnectionError1, configureDataConnectionSuccess1, configureDataInitError1, configureDataInitSuccess1, configureSharedWorkerExecutorFail1, configureSharedWorkerExecutorComplete1, configureEmailComplete1, configureEmailFail1, importTimerScheduling1, importTimerSkip1, importDataComplete1, importDataFail1, importDataSkip1, syncDbToSolrComplete1, syncDbToSolrFail1, syncDbToSolrSkip1, syncDataComplete1, syncDataFail1, syncDataCounterResetFail1, syncDataSkip1, syncDataStarted1, refreshAllDataComplete1, refreshAllDataFail1, refreshAllDataSkip1, refreshDataComplete1, refreshDataFail1, refreshDataSkip1 };
 
+
+
+	public static String displayNameForClass(String var) {
+		return WorkerVerticle.displayNameWorkerVerticle(var);
+	}
+	public static String displayNameWorkerVerticle(String var) {
+		switch(var) {
+		default:
+			return null;
+		}
+	}
 }

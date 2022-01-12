@@ -3,7 +3,6 @@ package org.choicehumanitarian.reports.enus.search;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Arrays;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import org.apache.solr.common.SolrDocumentList;
 import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import org.apache.commons.lang3.StringUtils;
@@ -11,30 +10,27 @@ import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import org.choicehumanitarian.reports.enus.wrap.Wrap;
-import org.apache.commons.collections.CollectionUtils;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.choicehumanitarian.reports.enus.java.ZonedDateTimeSerializer;
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.lang.Boolean;
-import java.lang.String;
+import io.vertx.core.json.JsonObject;
 import java.math.RoundingMode;
 import org.choicehumanitarian.reports.enus.request.api.ApiRequest;
 import org.slf4j.Logger;
 import java.math.MathContext;
 import org.choicehumanitarian.reports.enus.java.ZonedDateTimeDeserializer;
-import org.apache.solr.client.solrj.response.QueryResponse;
 import io.vertx.core.Promise;
 import org.choicehumanitarian.reports.enus.java.LocalDateSerializer;
-import org.apache.commons.text.StringEscapeUtils;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import org.computate.search.request.SearchRequest;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.vertx.core.Future;
 import org.choicehumanitarian.reports.enus.base.BaseModel;
 import java.util.Objects;
 import io.vertx.core.json.JsonArray;
 import java.util.List;
-import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.commons.lang3.math.NumberUtils;
 import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -85,6 +81,40 @@ public abstract class SearchListGen<DEV> {
 			_c(cWrap);
 			setC(cWrap.o);
 		}
+		return (SearchList)this;
+	}
+
+	/////////////
+	// request //
+	/////////////
+
+	/**	 The entity request
+	 *	Il est construit avant d'être initialisé avec le constructeur par défaut SearchRequest(). 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected SearchRequest request = new SearchRequest();
+
+	/**	<br/> The entity request
+	 *  It is constructed before being initialized with the constructor by default SearchRequest(). 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.search.SearchList&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:request">Find the entity request in Solr</a>
+	 * <br/>
+	 * @param request is the entity already constructed. 
+	 **/
+	protected abstract void _request(SearchRequest o);
+
+	public SearchRequest getRequest() {
+		return request;
+	}
+
+	public void setRequest(SearchRequest request) {
+		this.request = request;
+	}
+	public static SearchRequest staticSetRequest(SiteRequestEnUS siteRequest_, String o) {
+		return null;
+	}
+	protected SearchList requestInit() {
+		_request(request);
 		return (SearchList)this;
 	}
 
@@ -234,98 +264,33 @@ public abstract class SearchListGen<DEV> {
 		return SearchList.staticSolrStrPopulate(siteRequest_, SearchList.staticSolrPopulate(siteRequest_, SearchList.staticSetPopulate(siteRequest_, o)));
 	}
 
-	////////////
-	// fields //
-	////////////
-
-	/**	 The entity fields
-	 *	Il est construit avant d'être initialisé avec le constructeur par défaut List<String>(). 
-	 */
-	@JsonIgnore
-	@JsonInclude(Include.NON_NULL)
-	protected List<String> fields = new ArrayList<String>();
-
-	/**	<br/> The entity fields
-	 *  It is constructed before being initialized with the constructor by default List<String>(). 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.search.SearchList&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:fields">Find the entity fields in Solr</a>
-	 * <br/>
-	 * @param fields is the entity already constructed. 
-	 **/
-	protected abstract void _fields(List<String> c);
-
-	public List<String> getFields() {
-		return fields;
-	}
-
-	public void setFields(List<String> fields) {
-		this.fields = fields;
-	}
-	public static String staticSetFields(SiteRequestEnUS siteRequest_, String o) {
-		return o;
-	}
-	public SearchList addFields(String...objets) {
-		for(String o : objets) {
-			addFields(o);
-		}
-		return (SearchList)this;
-	}
-	public SearchList addFields(String o) {
-		if(o != null)
-			this.fields.add(o);
-		return (SearchList)this;
-	}
-	@JsonIgnore
-	public void setFields(JsonArray objets) {
-		fields.clear();
-		for(int i = 0; i < objets.size(); i++) {
-			String o = objets.getString(i);
-			addFields(o);
-		}
-	}
-	protected SearchList fieldsInit() {
-		_fields(fields);
-		return (SearchList)this;
-	}
-
-	public static String staticSolrFields(SiteRequestEnUS siteRequest_, String o) {
-		return o;
-	}
-
-	public static String staticSolrStrFields(SiteRequestEnUS siteRequest_, String o) {
-		return o == null ? null : o.toString();
-	}
-
-	public static String staticSolrFqFields(SiteRequestEnUS siteRequest_, String o) {
-		return SearchList.staticSolrStrFields(siteRequest_, SearchList.staticSolrFields(siteRequest_, SearchList.staticSetFields(siteRequest_, o)));
-	}
-
 	///////////////
 	// solrQuery //
 	///////////////
 
 	/**	 The entity solrQuery
-	 *	Il est construit avant d'être initialisé avec le constructeur par défaut SolrQuery(). 
+	 *	Il est construit avant d'être initialisé avec le constructeur par défaut JsonObject(). 
 	 */
 	@JsonIgnore
 	@JsonInclude(Include.NON_NULL)
-	protected SolrQuery solrQuery = new SolrQuery();
+	protected JsonObject solrQuery = new JsonObject();
 
 	/**	<br/> The entity solrQuery
-	 *  It is constructed before being initialized with the constructor by default SolrQuery(). 
+	 *  It is constructed before being initialized with the constructor by default JsonObject(). 
 	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.search.SearchList&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:solrQuery">Find the entity solrQuery in Solr</a>
 	 * <br/>
 	 * @param solrQuery is the entity already constructed. 
 	 **/
-	protected abstract void _solrQuery(SolrQuery o);
+	protected abstract void _solrQuery(JsonObject o);
 
-	public SolrQuery getSolrQuery() {
+	public JsonObject getSolrQuery() {
 		return solrQuery;
 	}
 
-	public void setSolrQuery(SolrQuery solrQuery) {
+	public void setSolrQuery(JsonObject solrQuery) {
 		this.solrQuery = solrQuery;
 	}
-	public static SolrQuery staticSetSolrQuery(SiteRequestEnUS siteRequest_, String o) {
+	public static JsonObject staticSetSolrQuery(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
 	protected SearchList solrQueryInit() {
@@ -520,10 +485,10 @@ public abstract class SearchListGen<DEV> {
 			Promise<Void> promise2 = Promise.promise();
 			try {
 				cInit();
+				requestInit();
 				siteRequest_Init();
 				storeInit();
 				populateInit();
-				fieldsInit();
 				solrQueryInit();
 				promise2.complete();
 			} catch(Exception ex) {
@@ -598,14 +563,14 @@ public abstract class SearchListGen<DEV> {
 		switch(var) {
 			case "c":
 				return oSearchList.c;
+			case "request":
+				return oSearchList.request;
 			case "siteRequest_":
 				return oSearchList.siteRequest_;
 			case "store":
 				return oSearchList.store;
 			case "populate":
 				return oSearchList.populate;
-			case "fields":
-				return oSearchList.fields;
 			case "solrQuery":
 				return oSearchList.solrQuery;
 			case "queryResponse":
@@ -659,8 +624,6 @@ public abstract class SearchListGen<DEV> {
 			return SearchList.staticSetStore(siteRequest_, o);
 		case "populate":
 			return SearchList.staticSetPopulate(siteRequest_, o);
-		case "fields":
-			return SearchList.staticSetFields(siteRequest_, o);
 			default:
 				return null;
 		}
@@ -679,8 +642,6 @@ public abstract class SearchListGen<DEV> {
 			return SearchList.staticSolrStore(siteRequest_, (Boolean)o);
 		case "populate":
 			return SearchList.staticSolrPopulate(siteRequest_, (Boolean)o);
-		case "fields":
-			return SearchList.staticSolrFields(siteRequest_, (String)o);
 			default:
 				return null;
 		}
@@ -699,8 +660,6 @@ public abstract class SearchListGen<DEV> {
 			return SearchList.staticSolrStrStore(siteRequest_, (Boolean)o);
 		case "populate":
 			return SearchList.staticSolrStrPopulate(siteRequest_, (Boolean)o);
-		case "fields":
-			return SearchList.staticSolrStrFields(siteRequest_, (String)o);
 			default:
 				return null;
 		}
@@ -719,8 +678,6 @@ public abstract class SearchListGen<DEV> {
 			return SearchList.staticSolrFqStore(siteRequest_, o);
 		case "populate":
 			return SearchList.staticSolrFqPopulate(siteRequest_, o);
-		case "fields":
-			return SearchList.staticSolrFqFields(siteRequest_, o);
 			default:
 				return null;
 		}
@@ -752,18 +709,6 @@ public abstract class SearchListGen<DEV> {
 		}
 	}
 
-	//////////////////
-	// apiRequest //
-	//////////////////
-
-	public void apiRequestSearchList() {
-		ApiRequest apiRequest = Optional.ofNullable(siteRequest_).map(SiteRequestEnUS::getApiRequest_).orElse(null);
-		Object o = Optional.ofNullable(apiRequest).map(ApiRequest::getOriginal).orElse(null);
-		if(o != null && o instanceof SearchList) {
-			SearchList original = (SearchList)o;
-		}
-	}
-
 	//////////////
 	// toString //
 	//////////////
@@ -774,13 +719,54 @@ public abstract class SearchListGen<DEV> {
 	}
 
 	public static final String VAR_c = "c";
+	public static final String VAR_request = "request";
 	public static final String VAR_siteRequest_ = "siteRequest_";
 	public static final String VAR_store = "store";
 	public static final String VAR_populate = "populate";
-	public static final String VAR_fields = "fields";
 	public static final String VAR_solrQuery = "solrQuery";
 	public static final String VAR_queryResponse = "queryResponse";
 	public static final String VAR_solrDocumentList = "solrDocumentList";
 	public static final String VAR_list = "list";
 	public static final String VAR_first = "first";
+
+	public static final String DISPLAY_NAME_c = "";
+	public static final String DISPLAY_NAME_request = "";
+	public static final String DISPLAY_NAME_siteRequest_ = "";
+	public static final String DISPLAY_NAME_store = "";
+	public static final String DISPLAY_NAME_populate = "";
+	public static final String DISPLAY_NAME_solrQuery = "";
+	public static final String DISPLAY_NAME_queryResponse = "";
+	public static final String DISPLAY_NAME_solrDocumentList = "";
+	public static final String DISPLAY_NAME_list = "";
+	public static final String DISPLAY_NAME_first = "";
+
+	public static String displayNameForClass(String var) {
+		return SearchList.displayNameSearchList(var);
+	}
+	public static String displayNameSearchList(String var) {
+		switch(var) {
+		case VAR_c:
+			return DISPLAY_NAME_c;
+		case VAR_request:
+			return DISPLAY_NAME_request;
+		case VAR_siteRequest_:
+			return DISPLAY_NAME_siteRequest_;
+		case VAR_store:
+			return DISPLAY_NAME_store;
+		case VAR_populate:
+			return DISPLAY_NAME_populate;
+		case VAR_solrQuery:
+			return DISPLAY_NAME_solrQuery;
+		case VAR_queryResponse:
+			return DISPLAY_NAME_queryResponse;
+		case VAR_solrDocumentList:
+			return DISPLAY_NAME_solrDocumentList;
+		case VAR_list:
+			return DISPLAY_NAME_list;
+		case VAR_first:
+			return DISPLAY_NAME_first;
+		default:
+			return null;
+		}
+	}
 }

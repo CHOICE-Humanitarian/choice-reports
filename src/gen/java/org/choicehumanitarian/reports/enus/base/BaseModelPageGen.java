@@ -260,4 +260,15 @@ public abstract class BaseModelPageGen<DEV> extends BaseModelGenPage {
 		return sb.toString();
 	}
 
+
+
+	public static String displayNameForClass(String var) {
+		return BaseModelPage.displayNameBaseModelPage(var);
+	}
+	public static String displayNameBaseModelPage(String var) {
+		switch(var) {
+		default:
+			return BaseModelGenPage.displayNameBaseModelGenPage(var);
+		}
+	}
 }

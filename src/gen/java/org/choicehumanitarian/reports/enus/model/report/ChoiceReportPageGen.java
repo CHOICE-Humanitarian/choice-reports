@@ -10,7 +10,6 @@ import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import org.choicehumanitarian.reports.enus.wrap.Wrap;
-import org.apache.commons.collections.CollectionUtils;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.choicehumanitarian.reports.enus.java.ZonedDateTimeSerializer;
 import java.util.Map;
@@ -22,7 +21,6 @@ import java.math.MathContext;
 import org.choicehumanitarian.reports.enus.java.ZonedDateTimeDeserializer;
 import io.vertx.core.Promise;
 import org.choicehumanitarian.reports.enus.java.LocalDateSerializer;
-import org.apache.commons.text.StringEscapeUtils;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.choicehumanitarian.reports.enus.model.report.ChoiceReportGenPage;
@@ -237,19 +235,6 @@ public abstract class ChoiceReportPageGen<DEV> extends ChoiceReportGenPage {
 		}
 	}
 
-	//////////////////
-	// apiRequest //
-	//////////////////
-
-	public void apiRequestChoiceReportPage() {
-		ApiRequest apiRequest = Optional.ofNullable(siteRequest_).map(SiteRequestEnUS::getApiRequest_).orElse(null);
-		Object o = Optional.ofNullable(apiRequest).map(ApiRequest::getOriginal).orElse(null);
-		if(o != null && o instanceof ChoiceReportPage) {
-			ChoiceReportPage original = (ChoiceReportPage)o;
-			super.apiRequestChoiceReportGenPage();
-		}
-	}
-
 	//////////////
 	// toString //
 	//////////////
@@ -260,4 +245,15 @@ public abstract class ChoiceReportPageGen<DEV> extends ChoiceReportGenPage {
 		return sb.toString();
 	}
 
+
+
+	public static String displayNameForClass(String var) {
+		return ChoiceReportPage.displayNameChoiceReportPage(var);
+	}
+	public static String displayNameChoiceReportPage(String var) {
+		switch(var) {
+		default:
+			return ChoiceReportGenPage.displayNameChoiceReportGenPage(var);
+		}
+	}
 }

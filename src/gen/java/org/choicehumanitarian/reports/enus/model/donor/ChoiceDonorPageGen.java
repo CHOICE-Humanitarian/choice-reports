@@ -10,7 +10,6 @@ import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import org.choicehumanitarian.reports.enus.wrap.Wrap;
-import org.apache.commons.collections.CollectionUtils;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.choicehumanitarian.reports.enus.java.ZonedDateTimeSerializer;
 import java.util.Map;
@@ -22,7 +21,6 @@ import java.math.MathContext;
 import org.choicehumanitarian.reports.enus.java.ZonedDateTimeDeserializer;
 import io.vertx.core.Promise;
 import org.choicehumanitarian.reports.enus.java.LocalDateSerializer;
-import org.apache.commons.text.StringEscapeUtils;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.vertx.core.Future;
@@ -260,4 +258,15 @@ public abstract class ChoiceDonorPageGen<DEV> extends ChoiceDonorGenPage {
 		return sb.toString();
 	}
 
+
+
+	public static String displayNameForClass(String var) {
+		return ChoiceDonorPage.displayNameChoiceDonorPage(var);
+	}
+	public static String displayNameChoiceDonorPage(String var) {
+		switch(var) {
+		default:
+			return ChoiceDonorGenPage.displayNameChoiceDonorGenPage(var);
+		}
+	}
 }

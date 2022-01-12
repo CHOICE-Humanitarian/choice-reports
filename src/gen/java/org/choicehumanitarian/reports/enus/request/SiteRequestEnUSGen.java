@@ -1796,4 +1796,102 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	public static final String VAR_sqlConnection = "sqlConnection";
 	public static final String VAR_requestHeaders = "requestHeaders";
 	public static final String VAR_requestVars = "requestVars";
+
+	public static final String DISPLAY_NAME_config = "";
+	public static final String DISPLAY_NAME_siteRequest_ = "";
+	public static final String DISPLAY_NAME_webClient = "";
+	public static final String DISPLAY_NAME_apiRequest_ = "";
+	public static final String DISPLAY_NAME_jsonObject = "";
+	public static final String DISPLAY_NAME_solrQuery = "";
+	public static final String DISPLAY_NAME_serviceRequest = "";
+	public static final String DISPLAY_NAME_user = "";
+	public static final String DISPLAY_NAME_userId = "";
+	public static final String DISPLAY_NAME_userKey = "";
+	public static final String DISPLAY_NAME_sessionId = "";
+	public static final String DISPLAY_NAME_sessionIdBefore = "";
+	public static final String DISPLAY_NAME_userName = "";
+	public static final String DISPLAY_NAME_userLastName = "";
+	public static final String DISPLAY_NAME_userFirstName = "";
+	public static final String DISPLAY_NAME_userFullName = "";
+	public static final String DISPLAY_NAME_userEmail = "";
+	public static final String DISPLAY_NAME_userRealmRoles = "";
+	public static final String DISPLAY_NAME_userResource = "";
+	public static final String DISPLAY_NAME_userResourceRoles = "";
+	public static final String DISPLAY_NAME_siteUser_ = "";
+	public static final String DISPLAY_NAME_solrDocument = "";
+	public static final String DISPLAY_NAME_pageAdmin = "";
+	public static final String DISPLAY_NAME_requestPk = "";
+	public static final String DISPLAY_NAME_requestUri = "";
+	public static final String DISPLAY_NAME_requestMethod = "";
+	public static final String DISPLAY_NAME_sqlConnection = "";
+	public static final String DISPLAY_NAME_requestHeaders = "";
+	public static final String DISPLAY_NAME_requestVars = "";
+
+	public static String displayNameForClass(String var) {
+		return SiteRequestEnUS.displayNameSiteRequestEnUS(var);
+	}
+	public static String displayNameSiteRequestEnUS(String var) {
+		switch(var) {
+		case VAR_config:
+			return DISPLAY_NAME_config;
+		case VAR_siteRequest_:
+			return DISPLAY_NAME_siteRequest_;
+		case VAR_webClient:
+			return DISPLAY_NAME_webClient;
+		case VAR_apiRequest_:
+			return DISPLAY_NAME_apiRequest_;
+		case VAR_jsonObject:
+			return DISPLAY_NAME_jsonObject;
+		case VAR_solrQuery:
+			return DISPLAY_NAME_solrQuery;
+		case VAR_serviceRequest:
+			return DISPLAY_NAME_serviceRequest;
+		case VAR_user:
+			return DISPLAY_NAME_user;
+		case VAR_userId:
+			return DISPLAY_NAME_userId;
+		case VAR_userKey:
+			return DISPLAY_NAME_userKey;
+		case VAR_sessionId:
+			return DISPLAY_NAME_sessionId;
+		case VAR_sessionIdBefore:
+			return DISPLAY_NAME_sessionIdBefore;
+		case VAR_userName:
+			return DISPLAY_NAME_userName;
+		case VAR_userLastName:
+			return DISPLAY_NAME_userLastName;
+		case VAR_userFirstName:
+			return DISPLAY_NAME_userFirstName;
+		case VAR_userFullName:
+			return DISPLAY_NAME_userFullName;
+		case VAR_userEmail:
+			return DISPLAY_NAME_userEmail;
+		case VAR_userRealmRoles:
+			return DISPLAY_NAME_userRealmRoles;
+		case VAR_userResource:
+			return DISPLAY_NAME_userResource;
+		case VAR_userResourceRoles:
+			return DISPLAY_NAME_userResourceRoles;
+		case VAR_siteUser_:
+			return DISPLAY_NAME_siteUser_;
+		case VAR_solrDocument:
+			return DISPLAY_NAME_solrDocument;
+		case VAR_pageAdmin:
+			return DISPLAY_NAME_pageAdmin;
+		case VAR_requestPk:
+			return DISPLAY_NAME_requestPk;
+		case VAR_requestUri:
+			return DISPLAY_NAME_requestUri;
+		case VAR_requestMethod:
+			return DISPLAY_NAME_requestMethod;
+		case VAR_sqlConnection:
+			return DISPLAY_NAME_sqlConnection;
+		case VAR_requestHeaders:
+			return DISPLAY_NAME_requestHeaders;
+		case VAR_requestVars:
+			return DISPLAY_NAME_requestVars;
+		default:
+			return null;
+		}
+	}
 }

@@ -575,4 +575,36 @@ public abstract class AllWriterGen<DEV> extends Object {
 	public static final String VAR_buffer = "buffer";
 	public static final String VAR_printWriter = "printWriter";
 	public static final String VAR_empty = "empty";
+
+	public static final String DISPLAY_NAME_siteRequest_ = "";
+	public static final String DISPLAY_NAME_tabStr = "";
+	public static final String DISPLAY_NAME_file = "";
+	public static final String DISPLAY_NAME_stringWriter = "";
+	public static final String DISPLAY_NAME_buffer = "";
+	public static final String DISPLAY_NAME_printWriter = "";
+	public static final String DISPLAY_NAME_empty = "";
+
+	public static String displayNameForClass(String var) {
+		return AllWriter.displayNameAllWriter(var);
+	}
+	public static String displayNameAllWriter(String var) {
+		switch(var) {
+		case VAR_siteRequest_:
+			return DISPLAY_NAME_siteRequest_;
+		case VAR_tabStr:
+			return DISPLAY_NAME_tabStr;
+		case VAR_file:
+			return DISPLAY_NAME_file;
+		case VAR_stringWriter:
+			return DISPLAY_NAME_stringWriter;
+		case VAR_buffer:
+			return DISPLAY_NAME_buffer;
+		case VAR_printWriter:
+			return DISPLAY_NAME_printWriter;
+		case VAR_empty:
+			return DISPLAY_NAME_empty;
+		default:
+			return null;
+		}
+	}
 }

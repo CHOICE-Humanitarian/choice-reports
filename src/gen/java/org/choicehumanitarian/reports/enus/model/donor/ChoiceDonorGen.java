@@ -2,53 +2,45 @@ package org.choicehumanitarian.reports.enus.model.donor;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Arrays;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import java.util.Date;
 import org.slf4j.LoggerFactory;
+import java.util.HashMap;
 import org.apache.commons.lang3.StringUtils;
+import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
+import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.math.BigDecimal;
 import org.choicehumanitarian.reports.enus.wrap.Wrap;
 import java.lang.Long;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.choicehumanitarian.reports.enus.java.ZonedDateTimeSerializer;
 import java.util.Map;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.vertx.core.json.JsonObject;
+import java.lang.String;
 import java.math.RoundingMode;
+import org.choicehumanitarian.reports.enus.request.api.ApiRequest;
+import org.slf4j.Logger;
 import java.math.MathContext;
+import org.choicehumanitarian.reports.enus.java.ZonedDateTimeDeserializer;
+import io.vertx.core.Promise;
 import java.util.Set;
 import org.choicehumanitarian.reports.enus.java.LocalDateSerializer;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import org.choicehumanitarian.reports.enus.model.report.ChoiceReport;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.vertx.core.Future;
 import org.choicehumanitarian.reports.enus.base.BaseModel;
 import java.util.Objects;
-import java.util.List;
-import org.apache.solr.client.solrj.SolrQuery;
-import java.util.Optional;
-import org.apache.solr.client.solrj.util.ClientUtils;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import org.apache.solr.common.SolrInputDocument;
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import java.util.HashMap;
-import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import org.apache.commons.collections.CollectionUtils;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.choicehumanitarian.reports.enus.java.ZonedDateTimeSerializer;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.lang.String;
-import org.choicehumanitarian.reports.enus.request.api.ApiRequest;
-import org.slf4j.Logger;
-import org.choicehumanitarian.reports.enus.java.ZonedDateTimeDeserializer;
-import io.vertx.core.Promise;
-import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.commons.text.StringEscapeUtils;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import org.choicehumanitarian.reports.enus.model.report.ChoiceReport;
-import org.apache.solr.client.solrj.SolrClient;
 import io.vertx.core.json.JsonArray;
-import org.apache.solr.common.SolrDocument;
+import java.util.List;
 import org.apache.commons.lang3.math.NumberUtils;
+import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 /**	
  * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
@@ -1547,4 +1539,54 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	public static final String VAR_donorQ4 = "donorQ4";
 	public static final String VAR_donorLogoFilename = "donorLogoFilename";
 	public static final String VAR_reportKeys = "reportKeys";
+
+	public static final String DISPLAY_NAME_donorFullName = "donor full name";
+	public static final String DISPLAY_NAME_donorParentName = "donor parent name";
+	public static final String DISPLAY_NAME_donorId = "donor ID";
+	public static final String DISPLAY_NAME_donorAttributeId = "donor attribute ID";
+	public static final String DISPLAY_NAME_donorInKind = "in kind?";
+	public static final String DISPLAY_NAME_donorTotal = "total";
+	public static final String DISPLAY_NAME_donorYtd = "YTD";
+	public static final String DISPLAY_NAME_donorQ1 = "Q1";
+	public static final String DISPLAY_NAME_donorQ2 = "Q2";
+	public static final String DISPLAY_NAME_donorQ3 = "Q3";
+	public static final String DISPLAY_NAME_donorQ4 = "Q4";
+	public static final String DISPLAY_NAME_donorLogoFilename = "Logo Filename";
+	public static final String DISPLAY_NAME_reportKeys = "reports";
+
+	public static String displayNameForClass(String var) {
+		return ChoiceDonor.displayNameChoiceDonor(var);
+	}
+	public static String displayNameChoiceDonor(String var) {
+		switch(var) {
+		case VAR_donorFullName:
+			return DISPLAY_NAME_donorFullName;
+		case VAR_donorParentName:
+			return DISPLAY_NAME_donorParentName;
+		case VAR_donorId:
+			return DISPLAY_NAME_donorId;
+		case VAR_donorAttributeId:
+			return DISPLAY_NAME_donorAttributeId;
+		case VAR_donorInKind:
+			return DISPLAY_NAME_donorInKind;
+		case VAR_donorTotal:
+			return DISPLAY_NAME_donorTotal;
+		case VAR_donorYtd:
+			return DISPLAY_NAME_donorYtd;
+		case VAR_donorQ1:
+			return DISPLAY_NAME_donorQ1;
+		case VAR_donorQ2:
+			return DISPLAY_NAME_donorQ2;
+		case VAR_donorQ3:
+			return DISPLAY_NAME_donorQ3;
+		case VAR_donorQ4:
+			return DISPLAY_NAME_donorQ4;
+		case VAR_donorLogoFilename:
+			return DISPLAY_NAME_donorLogoFilename;
+		case VAR_reportKeys:
+			return DISPLAY_NAME_reportKeys;
+		default:
+			return BaseModel.displayNameBaseModel(var);
+		}
+	}
 }

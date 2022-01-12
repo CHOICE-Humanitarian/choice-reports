@@ -29,7 +29,6 @@ import java.util.Map;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
-import org.apache.solr.common.util.SimpleOrderedMap;
 import java.util.stream.Collectors;
 import java.util.Arrays;
 import org.apache.solr.client.solrj.response.QueryResponse;

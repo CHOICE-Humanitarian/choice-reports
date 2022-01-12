@@ -326,4 +326,21 @@ public abstract class AllWritersGen<DEV> extends Object {
 
 	public static final String VAR_siteRequest_ = "siteRequest_";
 	public static final String VAR_writers = "writers";
+
+	public static final String DISPLAY_NAME_siteRequest_ = "";
+	public static final String DISPLAY_NAME_writers = "";
+
+	public static String displayNameForClass(String var) {
+		return AllWriters.displayNameAllWriters(var);
+	}
+	public static String displayNameAllWriters(String var) {
+		switch(var) {
+		case VAR_siteRequest_:
+			return DISPLAY_NAME_siteRequest_;
+		case VAR_writers:
+			return DISPLAY_NAME_writers;
+		default:
+			return null;
+		}
+	}
 }

@@ -10,6 +10,7 @@ touch ~/.local/src/choice-reports/src/main/java/org/choicehumanitarian/reports/e
 touch ~/.local/src/choice-reports/src/main/java/org/choicehumanitarian/reports/enus/request/api/ApiRequest.java
 touch ~/.local/src/choice-reports/src/main/java/org/choicehumanitarian/reports/enus/search/SearchList.java
 touch ~/.local/src/choice-reports/src/main/java/org/choicehumanitarian/reports/enus/search/SearchResult.java
+touch ~/.local/src/choice-reports/src/main/java/org/choicehumanitarian/reports/enus/search/SearchTool.java
 touch ~/.local/src/choice-reports/src/main/java/org/choicehumanitarian/reports/enus/writer/AllWriter.java
 touch ~/.local/src/choice-reports/src/main/java/org/choicehumanitarian/reports/enus/writer/AllWriters.java
 touch ~/.local/src/choice-reports/src/main/java/org/choicehumanitarian/reports/enus/writer/ApiWriter.java

@@ -523,4 +523,30 @@ public abstract class BaseModelGenPageGen<DEV> extends PageLayout {
 	public static final String VAR_baseModelCount = "baseModelCount";
 	public static final String VAR_baseModel_ = "baseModel_";
 	public static final String VAR_pk = "pk";
+
+	public static final String DISPLAY_NAME_searchListBaseModel_ = "";
+	public static final String DISPLAY_NAME_listBaseModel = "";
+	public static final String DISPLAY_NAME_baseModelCount = "";
+	public static final String DISPLAY_NAME_baseModel_ = "";
+	public static final String DISPLAY_NAME_pk = "";
+
+	public static String displayNameForClass(String var) {
+		return BaseModelGenPage.displayNameBaseModelGenPage(var);
+	}
+	public static String displayNameBaseModelGenPage(String var) {
+		switch(var) {
+		case VAR_searchListBaseModel_:
+			return DISPLAY_NAME_searchListBaseModel_;
+		case VAR_listBaseModel:
+			return DISPLAY_NAME_listBaseModel;
+		case VAR_baseModelCount:
+			return DISPLAY_NAME_baseModelCount;
+		case VAR_baseModel_:
+			return DISPLAY_NAME_baseModel_;
+		case VAR_pk:
+			return DISPLAY_NAME_pk;
+		default:
+			return PageLayout.displayNamePageLayout(var);
+		}
+	}
 }

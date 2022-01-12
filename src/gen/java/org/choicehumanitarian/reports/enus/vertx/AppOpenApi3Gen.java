@@ -236,4 +236,15 @@ public abstract class AppOpenApi3Gen<DEV> extends AppSwagger2 {
 		return sb.toString();
 	}
 
+
+
+	public static String displayNameForClass(String var) {
+		return AppOpenApi3.displayNameAppOpenApi3(var);
+	}
+	public static String displayNameAppOpenApi3(String var) {
+		switch(var) {
+		default:
+			return AppSwagger2.displayNameAppSwagger2(var);
+		}
+	}
 }

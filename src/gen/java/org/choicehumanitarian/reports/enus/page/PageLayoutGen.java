@@ -2136,4 +2136,108 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	public static final String VAR_pageImageUri = "pageImageUri";
 	public static final String VAR_contextIconGroup = "contextIconGroup";
 	public static final String VAR_contextIconName = "contextIconName";
+
+	public static final String DISPLAY_NAME_siteRequest_ = "";
+	public static final String DISPLAY_NAME_serviceRequest = "";
+	public static final String DISPLAY_NAME_requestZoneId = "";
+	public static final String DISPLAY_NAME_requestLocaleId = "";
+	public static final String DISPLAY_NAME_staticBaseUrl = "";
+	public static final String DISPLAY_NAME_authUrl = "";
+	public static final String DISPLAY_NAME_authRealm = "";
+	public static final String DISPLAY_NAME_pageUri = "";
+	public static final String DISPLAY_NAME_pageMethod = "";
+	public static final String DISPLAY_NAME_params = "";
+	public static final String DISPLAY_NAME_userKey = "";
+	public static final String DISPLAY_NAME_userFullName = "";
+	public static final String DISPLAY_NAME_userName = "";
+	public static final String DISPLAY_NAME_userEmail = "";
+	public static final String DISPLAY_NAME_logoutUrl = "";
+	public static final String DISPLAY_NAME_long0 = "";
+	public static final String DISPLAY_NAME_long1 = "";
+	public static final String DISPLAY_NAME_int0 = "";
+	public static final String DISPLAY_NAME_int1 = "";
+	public static final String DISPLAY_NAME_promiseBefore = "";
+	public static final String DISPLAY_NAME_classSimpleName = "";
+	public static final String DISPLAY_NAME_pageTitle = "";
+	public static final String DISPLAY_NAME_roles = "";
+	public static final String DISPLAY_NAME_rolesRequired = "";
+	public static final String DISPLAY_NAME_authRolesAdmin = "";
+	public static final String DISPLAY_NAME_pagination = "";
+	public static final String DISPLAY_NAME_query = "";
+	public static final String DISPLAY_NAME_promiseAfter = "";
+	public static final String DISPLAY_NAME_pageImageUri = "";
+	public static final String DISPLAY_NAME_contextIconGroup = "";
+	public static final String DISPLAY_NAME_contextIconName = "";
+
+	public static String displayNameForClass(String var) {
+		return PageLayout.displayNamePageLayout(var);
+	}
+	public static String displayNamePageLayout(String var) {
+		switch(var) {
+		case VAR_siteRequest_:
+			return DISPLAY_NAME_siteRequest_;
+		case VAR_serviceRequest:
+			return DISPLAY_NAME_serviceRequest;
+		case VAR_requestZoneId:
+			return DISPLAY_NAME_requestZoneId;
+		case VAR_requestLocaleId:
+			return DISPLAY_NAME_requestLocaleId;
+		case VAR_staticBaseUrl:
+			return DISPLAY_NAME_staticBaseUrl;
+		case VAR_authUrl:
+			return DISPLAY_NAME_authUrl;
+		case VAR_authRealm:
+			return DISPLAY_NAME_authRealm;
+		case VAR_pageUri:
+			return DISPLAY_NAME_pageUri;
+		case VAR_pageMethod:
+			return DISPLAY_NAME_pageMethod;
+		case VAR_params:
+			return DISPLAY_NAME_params;
+		case VAR_userKey:
+			return DISPLAY_NAME_userKey;
+		case VAR_userFullName:
+			return DISPLAY_NAME_userFullName;
+		case VAR_userName:
+			return DISPLAY_NAME_userName;
+		case VAR_userEmail:
+			return DISPLAY_NAME_userEmail;
+		case VAR_logoutUrl:
+			return DISPLAY_NAME_logoutUrl;
+		case VAR_long0:
+			return DISPLAY_NAME_long0;
+		case VAR_long1:
+			return DISPLAY_NAME_long1;
+		case VAR_int0:
+			return DISPLAY_NAME_int0;
+		case VAR_int1:
+			return DISPLAY_NAME_int1;
+		case VAR_promiseBefore:
+			return DISPLAY_NAME_promiseBefore;
+		case VAR_classSimpleName:
+			return DISPLAY_NAME_classSimpleName;
+		case VAR_pageTitle:
+			return DISPLAY_NAME_pageTitle;
+		case VAR_roles:
+			return DISPLAY_NAME_roles;
+		case VAR_rolesRequired:
+			return DISPLAY_NAME_rolesRequired;
+		case VAR_authRolesAdmin:
+			return DISPLAY_NAME_authRolesAdmin;
+		case VAR_pagination:
+			return DISPLAY_NAME_pagination;
+		case VAR_query:
+			return DISPLAY_NAME_query;
+		case VAR_promiseAfter:
+			return DISPLAY_NAME_promiseAfter;
+		case VAR_pageImageUri:
+			return DISPLAY_NAME_pageImageUri;
+		case VAR_contextIconGroup:
+			return DISPLAY_NAME_contextIconGroup;
+		case VAR_contextIconName:
+			return DISPLAY_NAME_contextIconName;
+		default:
+			return null;
+		}
+	}
 }

@@ -260,4 +260,15 @@ public abstract class SiteUserPageGen<DEV> extends SiteUserGenPage {
 		return sb.toString();
 	}
 
+
+
+	public static String displayNameForClass(String var) {
+		return SiteUserPage.displayNameSiteUserPage(var);
+	}
+	public static String displayNameSiteUserPage(String var) {
+		switch(var) {
+		default:
+			return SiteUserGenPage.displayNameSiteUserGenPage(var);
+		}
+	}
 }

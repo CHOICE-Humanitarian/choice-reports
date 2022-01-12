@@ -13,7 +13,6 @@ import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import org.choicehumanitarian.reports.enus.wrap.Wrap;
-import org.apache.commons.collections.CollectionUtils;
 import java.lang.Long;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.choicehumanitarian.reports.enus.java.ZonedDateTimeSerializer;
@@ -27,7 +26,6 @@ import java.math.MathContext;
 import org.choicehumanitarian.reports.enus.java.ZonedDateTimeDeserializer;
 import io.vertx.core.Promise;
 import org.choicehumanitarian.reports.enus.java.LocalDateSerializer;
-import org.apache.commons.text.StringEscapeUtils;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import org.choicehumanitarian.reports.enus.model.report.ChoiceReport;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -496,19 +494,6 @@ public abstract class ChoiceReportGenPageGen<DEV> extends BaseModelPage {
 		}
 	}
 
-	//////////////////
-	// apiRequest //
-	//////////////////
-
-	public void apiRequestChoiceReportGenPage() {
-		ApiRequest apiRequest = Optional.ofNullable(siteRequest_).map(SiteRequestEnUS::getApiRequest_).orElse(null);
-		Object o = Optional.ofNullable(apiRequest).map(ApiRequest::getOriginal).orElse(null);
-		if(o != null && o instanceof ChoiceReportGenPage) {
-			ChoiceReportGenPage original = (ChoiceReportGenPage)o;
-			super.apiRequestBaseModelPage();
-		}
-	}
-
 	//////////////
 	// toString //
 	//////////////
@@ -524,4 +509,30 @@ public abstract class ChoiceReportGenPageGen<DEV> extends BaseModelPage {
 	public static final String VAR_choiceReportCount = "choiceReportCount";
 	public static final String VAR_choiceReport_ = "choiceReport_";
 	public static final String VAR_pk = "pk";
+
+	public static final String DISPLAY_NAME_searchListChoiceReport_ = "";
+	public static final String DISPLAY_NAME_listChoiceReport = "";
+	public static final String DISPLAY_NAME_choiceReportCount = "";
+	public static final String DISPLAY_NAME_choiceReport_ = "";
+	public static final String DISPLAY_NAME_pk = "";
+
+	public static String displayNameForClass(String var) {
+		return ChoiceReportGenPage.displayNameChoiceReportGenPage(var);
+	}
+	public static String displayNameChoiceReportGenPage(String var) {
+		switch(var) {
+		case VAR_searchListChoiceReport_:
+			return DISPLAY_NAME_searchListChoiceReport_;
+		case VAR_listChoiceReport:
+			return DISPLAY_NAME_listChoiceReport;
+		case VAR_choiceReportCount:
+			return DISPLAY_NAME_choiceReportCount;
+		case VAR_choiceReport_:
+			return DISPLAY_NAME_choiceReport_;
+		case VAR_pk:
+			return DISPLAY_NAME_pk;
+		default:
+			return BaseModelPage.displayNameBaseModelPage(var);
+		}
+	}
 }

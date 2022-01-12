@@ -22,11 +22,8 @@ import org.choicehumanitarian.reports.enus.base.BaseModel;
 import java.util.Objects;
 import java.util.List;
 import java.time.OffsetDateTime;
-import org.apache.solr.client.solrj.SolrQuery;
 import java.util.Optional;
-import org.apache.solr.client.solrj.util.ClientUtils;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import org.apache.solr.common.SolrInputDocument;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import java.time.LocalDateTime;
@@ -44,12 +41,9 @@ import org.choicehumanitarian.reports.enus.request.api.ApiRequest;
 import org.slf4j.Logger;
 import org.choicehumanitarian.reports.enus.java.ZonedDateTimeDeserializer;
 import io.vertx.core.Promise;
-import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.commons.text.StringEscapeUtils;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import org.apache.solr.client.solrj.SolrClient;
 import io.vertx.core.json.JsonArray;
-import org.apache.solr.common.SolrDocument;
 import java.time.temporal.ChronoUnit;
 import java.time.format.DateTimeFormatter;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -2053,4 +2047,84 @@ public abstract class BaseModelGen<DEV> extends Object {
 	public static final String VAR_pageUrlPk = "pageUrlPk";
 	public static final String VAR_pageUrlApi = "pageUrlApi";
 	public static final String VAR_pageH1 = "pageH1";
+
+	public static final String DISPLAY_NAME_siteRequest_ = "";
+	public static final String DISPLAY_NAME_pk = "primary key";
+	public static final String DISPLAY_NAME_inheritPk = "";
+	public static final String DISPLAY_NAME_id = "";
+	public static final String DISPLAY_NAME_created = "created";
+	public static final String DISPLAY_NAME_modified = "modified";
+	public static final String DISPLAY_NAME_archived = "archived";
+	public static final String DISPLAY_NAME_deleted = "deleted";
+	public static final String DISPLAY_NAME_classCanonicalName = "";
+	public static final String DISPLAY_NAME_classSimpleName = "";
+	public static final String DISPLAY_NAME_classCanonicalNames = "";
+	public static final String DISPLAY_NAME_sessionId = "";
+	public static final String DISPLAY_NAME_userKey = "";
+	public static final String DISPLAY_NAME_saves = "";
+	public static final String DISPLAY_NAME_objectTitle = "";
+	public static final String DISPLAY_NAME_objectId = "ID";
+	public static final String DISPLAY_NAME_objectNameVar = "";
+	public static final String DISPLAY_NAME_objectSuggest = "";
+	public static final String DISPLAY_NAME_objectText = "";
+	public static final String DISPLAY_NAME_pageUrlId = "";
+	public static final String DISPLAY_NAME_pageUrlPk = "";
+	public static final String DISPLAY_NAME_pageUrlApi = "";
+	public static final String DISPLAY_NAME_pageH1 = "";
+
+	public static String displayNameForClass(String var) {
+		return BaseModel.displayNameBaseModel(var);
+	}
+	public static String displayNameBaseModel(String var) {
+		switch(var) {
+		case VAR_siteRequest_:
+			return DISPLAY_NAME_siteRequest_;
+		case VAR_pk:
+			return DISPLAY_NAME_pk;
+		case VAR_inheritPk:
+			return DISPLAY_NAME_inheritPk;
+		case VAR_id:
+			return DISPLAY_NAME_id;
+		case VAR_created:
+			return DISPLAY_NAME_created;
+		case VAR_modified:
+			return DISPLAY_NAME_modified;
+		case VAR_archived:
+			return DISPLAY_NAME_archived;
+		case VAR_deleted:
+			return DISPLAY_NAME_deleted;
+		case VAR_classCanonicalName:
+			return DISPLAY_NAME_classCanonicalName;
+		case VAR_classSimpleName:
+			return DISPLAY_NAME_classSimpleName;
+		case VAR_classCanonicalNames:
+			return DISPLAY_NAME_classCanonicalNames;
+		case VAR_sessionId:
+			return DISPLAY_NAME_sessionId;
+		case VAR_userKey:
+			return DISPLAY_NAME_userKey;
+		case VAR_saves:
+			return DISPLAY_NAME_saves;
+		case VAR_objectTitle:
+			return DISPLAY_NAME_objectTitle;
+		case VAR_objectId:
+			return DISPLAY_NAME_objectId;
+		case VAR_objectNameVar:
+			return DISPLAY_NAME_objectNameVar;
+		case VAR_objectSuggest:
+			return DISPLAY_NAME_objectSuggest;
+		case VAR_objectText:
+			return DISPLAY_NAME_objectText;
+		case VAR_pageUrlId:
+			return DISPLAY_NAME_pageUrlId;
+		case VAR_pageUrlPk:
+			return DISPLAY_NAME_pageUrlPk;
+		case VAR_pageUrlApi:
+			return DISPLAY_NAME_pageUrlApi;
+		case VAR_pageH1:
+			return DISPLAY_NAME_pageH1;
+		default:
+			return null;
+		}
+	}
 }

@@ -1120,4 +1120,54 @@ public abstract class ApiRequestGen<DEV> extends Object {
 	public static final String VAR_classes = "classes";
 	public static final String VAR_vars = "vars";
 	public static final String VAR_timeRemaining = "timeRemaining";
+
+	public static final String DISPLAY_NAME_siteRequest_ = "";
+	public static final String DISPLAY_NAME_created = "";
+	public static final String DISPLAY_NAME_rows = "";
+	public static final String DISPLAY_NAME_numFound = "";
+	public static final String DISPLAY_NAME_numPATCH = "";
+	public static final String DISPLAY_NAME_uuid = "";
+	public static final String DISPLAY_NAME_id = "";
+	public static final String DISPLAY_NAME_pk = "";
+	public static final String DISPLAY_NAME_original = "";
+	public static final String DISPLAY_NAME_pks = "";
+	public static final String DISPLAY_NAME_classes = "";
+	public static final String DISPLAY_NAME_vars = "";
+	public static final String DISPLAY_NAME_timeRemaining = "";
+
+	public static String displayNameForClass(String var) {
+		return ApiRequest.displayNameApiRequest(var);
+	}
+	public static String displayNameApiRequest(String var) {
+		switch(var) {
+		case VAR_siteRequest_:
+			return DISPLAY_NAME_siteRequest_;
+		case VAR_created:
+			return DISPLAY_NAME_created;
+		case VAR_rows:
+			return DISPLAY_NAME_rows;
+		case VAR_numFound:
+			return DISPLAY_NAME_numFound;
+		case VAR_numPATCH:
+			return DISPLAY_NAME_numPATCH;
+		case VAR_uuid:
+			return DISPLAY_NAME_uuid;
+		case VAR_id:
+			return DISPLAY_NAME_id;
+		case VAR_pk:
+			return DISPLAY_NAME_pk;
+		case VAR_original:
+			return DISPLAY_NAME_original;
+		case VAR_pks:
+			return DISPLAY_NAME_pks;
+		case VAR_classes:
+			return DISPLAY_NAME_classes;
+		case VAR_vars:
+			return DISPLAY_NAME_vars;
+		case VAR_timeRemaining:
+			return DISPLAY_NAME_timeRemaining;
+		default:
+			return null;
+		}
+	}
 }

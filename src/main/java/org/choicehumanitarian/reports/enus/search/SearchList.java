@@ -5,7 +5,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -17,22 +16,11 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrQuery.ORDER;
-import org.apache.solr.client.solrj.SolrQuery.SortClause;
-import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.client.solrj.util.ClientUtils;
-import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrDocumentList;
-import org.apache.solr.common.params.CursorMarkParams;
-import org.apache.solr.common.util.NamedList;
-import org.apache.solr.common.util.SimpleOrderedMap;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import org.choicehumanitarian.reports.enus.user.SiteUser;
 import org.choicehumanitarian.reports.enus.wrap.Wrap;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.computate.search.request.SearchRequest;
 
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
@@ -43,12 +31,32 @@ import io.vertx.core.json.JsonObject;
  */ 
 public class SearchList<DEV> extends SearchListGen<DEV> implements Iterable<DEV> {
 
+	public SearchList q(String s) {
+		request.q(s);
+		return this;
+	}
+
+	public SearchList fq(String s) {
+		request.fq(s);
+		return this;
+	}
+
+	public SearchList fl(String s) {
+		request.fl(s);
+		return this;
+	}
+
 	/**
 	 * {@inheritDoc}
 	 * Ignore: true
 	 */
 	protected void _c(Wrap<Class<?>> c) {
-		
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	protected void _request(SearchRequest o) {
 	}
 
 	/**
@@ -78,14 +86,7 @@ public class SearchList<DEV> extends SearchListGen<DEV> implements Iterable<DEV>
 	 * {@inheritDoc}
 	 * Ignore: true
 	 */
-	protected void _fields(List<String> c) {
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * Ignore: true
-	 */
-	protected void _solrQuery(SolrQuery o) {
+	protected void _solrQuery(JsonObject o) {
 	}
 
 	public DEV get(Integer index) {
@@ -136,11 +137,10 @@ public class SearchList<DEV> extends SearchListGen<DEV> implements Iterable<DEV>
 			String solrHostName = siteRequest_.getConfig().getString(ConfigKeys.SOLR_HOST_NAME);
 			Integer solrPort = siteRequest_.getConfig().getInteger(ConfigKeys.SOLR_PORT);
 			String solrCollection = siteRequest_.getConfig().getString(ConfigKeys.SOLR_COLLECTION);
-			String solrRequestUri = String.format("/solr/%s/select%s", solrCollection, solrQuery.toQueryString());
+			String solrRequestUri = String.format("/solr/%s/select%s", solrCollection, request.getQueryString());
 			siteRequest_.getWebClient().get(solrPort, solrHostName, solrRequestUri).send().onSuccess(a -> {
 				JsonObject json = a.bodyAsJsonObject();
-				Map<String, Object> map = json.getMap();
-				QueryResponse r = generateSolrQueryResponse(map);
+				QueryResponse r = generateSolrQueryResponse(json);
 				setQueryResponse(r);
 				Wrap<SolrDocumentList> solrDocumentListWrap = new Wrap<SolrDocumentList>().var("solrDocumentList").o(solrDocumentList);
 				_solrDocumentList(solrDocumentListWrap);
@@ -202,7 +202,7 @@ public class SearchList<DEV> extends SearchListGen<DEV> implements Iterable<DEV>
 		}
 	}
 
-	public QueryResponse generateSolrQueryResponse(Map<String, Object> map) {
+	public QueryResponse generateSolrQueryResponse(JsonObject json) {
 		NamedList<Object> l = new NamedList<>();
 		SolrDocumentList response = new SolrDocumentList();
 		ArrayList<NamedList<Object>> clusters = new ArrayList<>();
@@ -447,568 +447,6 @@ public class SearchList<DEV> extends SearchListGen<DEV> implements Iterable<DEV>
 
 	public int size() {
 		return list.size();
-	}
-
-	public SolrQuery setTerms(boolean b) {
-		return solrQuery.setTerms(b);
-	}
-
-	@JsonIgnore
-	public boolean getTerms() {
-		return solrQuery.getTerms();
-	}
-
-	public SolrQuery addField(String field) {
-		return solrQuery.addField(field);
-	}
-
-	public SolrQuery addTermsField(String field) {
-		return solrQuery.addTermsField(field);
-	}
-
-	@JsonIgnore
-	public String[] getTermsFields() {
-		return solrQuery.getTermsFields();
-	}
-
-	public SolrQuery setTermsLower(String lower) {
-		return solrQuery.setTermsLower(lower);
-	}
-
-	@JsonIgnore
-	public String getTermsLower() {
-		return solrQuery.getTermsLower();
-	}
-
-	public SolrQuery setTermsUpper(String upper) {
-		return solrQuery.setTermsUpper(upper);
-	}
-
-	@JsonIgnore
-	public String getTermsUpper() {
-		return solrQuery.getTermsUpper();
-	}
-
-	public SolrQuery setTermsUpperInclusive(boolean b) {
-		return solrQuery.setTermsUpperInclusive(b);
-	}
-
-	@JsonIgnore
-	public boolean getTermsUpperInclusive() {
-		return solrQuery.getTermsUpperInclusive();
-	}
-
-	public SolrQuery setTermsLowerInclusive(boolean b) {
-		return solrQuery.setTermsLowerInclusive(b);
-	}
-
-	@JsonIgnore
-	public boolean getTermsLowerInclusive() {
-		return solrQuery.getTermsLowerInclusive();
-	}
-
-	public SolrQuery setTermsLimit(int limit) {
-		return solrQuery.setTermsLimit(limit);
-	}
-
-	@JsonIgnore
-	public int getTermsLimit() {
-		return solrQuery.getTermsLimit();
-	}
-
-	public SolrQuery setTermsMinCount(int cnt) {
-		return solrQuery.setTermsMinCount(cnt);
-	}
-
-	@JsonIgnore
-	public int getTermsMinCount() {
-		return solrQuery.getTermsMinCount();
-	}
-
-	public SolrQuery setTermsMaxCount(int cnt) {
-		return solrQuery.setTermsMaxCount(cnt);
-	}
-
-	@JsonIgnore
-	public int getTermsMaxCount() {
-		return solrQuery.getTermsMaxCount();
-	}
-
-	public SolrQuery setTermsPrefix(String prefix) {
-		return solrQuery.setTermsPrefix(prefix);
-	}
-
-	@JsonIgnore
-	public String getTermsPrefix() {
-		return solrQuery.getTermsPrefix();
-	}
-
-	public SolrQuery setTermsRaw(boolean b) {
-		return solrQuery.setTermsRaw(b);
-	}
-
-	@JsonIgnore
-	public boolean getTermsRaw() {
-		return solrQuery.getTermsRaw();
-	}
-
-	public SolrQuery setTermsSortString(String type) {
-		return solrQuery.setTermsSortString(type);
-	}
-
-	@JsonIgnore
-	public String getTermsSortString() {
-		return solrQuery.getTermsSortString();
-	}
-
-	public SolrQuery setTermsRegex(String regex) {
-		return solrQuery.setTermsRegex(regex);
-	}
-
-	@JsonIgnore
-	public String getTermsRegex() {
-		return solrQuery.getTermsRegex();
-	}
-
-	public SolrQuery setTermsRegexFlag(String flag) {
-		return solrQuery.setTermsRegexFlag(flag);
-	}
-
-	@JsonIgnore
-	public String[] getTermsRegexFlags() {
-		return solrQuery.getTermsRegexFlags();
-	}
-
-	public SolrQuery addFacetField(String...fields) {
-		return solrQuery.addFacetField(fields);
-	}
-
-	public SolrQuery addFacetPivotField(String...fields) {
-		return solrQuery.addFacetPivotField(fields);
-	}
-
-	public SolrQuery addNumericRangeFacet(String field, Number start, Number end, Number gap) {
-		return solrQuery.addNumericRangeFacet(field, start, end, gap);
-	}
-
-	public SolrQuery addDateRangeFacet(String field, Date start, Date end, String gap) {
-		return solrQuery.addDateRangeFacet(field, start, end, gap);
-	}
-
-	public SolrQuery addIntervalFacets(String field, String[] intervals) {
-		return solrQuery.addIntervalFacets(field, intervals);
-	}
-
-	public String[] removeIntervalFacets(String field) {
-		return solrQuery.removeIntervalFacets(field);
-	}
-
-	@JsonIgnore
-	public String[] getFacetFields() {
-		return solrQuery.getFacetFields();
-	}
-
-	public boolean removeFacetField(String name) {
-		return solrQuery.removeFacetField(name);
-	}
-
-	public SolrQuery setFacet(boolean b) {
-		return solrQuery.setFacet(b);
-	}
-
-	public SolrQuery setFacetPrefix(String prefix) {
-		return solrQuery.setFacetPrefix(prefix);
-	}
-
-	public SolrQuery setFacetPrefix(String field, String prefix) {
-		return solrQuery.setFacetPrefix(field, prefix);
-	}
-
-	public SolrQuery addFacetQuery(String f) {
-		return solrQuery.addFacetQuery(f);
-	}
-
-	@JsonIgnore
-	public String[] getFacetQuery() {
-		return solrQuery.getFacetQuery();
-	}
-
-	public boolean removeFacetQuery(String q) {
-		return solrQuery.removeFacetQuery(q);
-	}
-
-	public SolrQuery setFacetLimit(int lim) {
-		return solrQuery.setFacetLimit(lim);
-	}
-
-	@JsonIgnore
-	public int getFacetLimit() {
-		return solrQuery.getFacetLimit();
-	}
-
-	public SolrQuery setFacetMinCount(int cnt) {
-		return solrQuery.setFacetMinCount(cnt);
-	}
-
-	@JsonIgnore
-	public int getFacetMinCount() {
-		return solrQuery.getFacetMinCount();
-	}
-
-	public SolrQuery setFacetMissing(Boolean v) {
-		return solrQuery.setFacetMissing(v);
-	}
-
-	@JsonIgnore
-	public String getFacetSortString() {
-		return solrQuery.getFacetSortString();
-	}
-
-	public SolrQuery setFacetSort(String sort) {
-		return solrQuery.setFacetSort(sort);
-	}
-
-	public SolrQuery addHighlightField(String f) {
-		return solrQuery.addHighlightField(f);
-	}
-
-	public boolean removeHighlightField(String f) {
-		return solrQuery.removeHighlightField(f);
-	}
-
-	@JsonIgnore
-	public String[] getHighlightFields() {
-		return solrQuery.getHighlightFields();
-	}
-
-	public SolrQuery setHighlightSnippets(int num) {
-		return solrQuery.setHighlightSnippets(num);
-	}
-
-	@JsonIgnore
-	public int getHighlightSnippets() {
-		return solrQuery.getHighlightSnippets();
-	}
-
-	public SolrQuery setHighlightFragsize(int num) {
-		return solrQuery.setHighlightFragsize(num);
-	}
-
-	@JsonIgnore
-	public int getHighlightFragsize() {
-		return solrQuery.getHighlightFragsize();
-	}
-
-	public SolrQuery setHighlightRequireFieldMatch(boolean flag) {
-		return solrQuery.setHighlightRequireFieldMatch(flag);
-	}
-
-	@JsonIgnore
-	public boolean getHighlightRequireFieldMatch() {
-		return solrQuery.getHighlightRequireFieldMatch();
-	}
-
-	public SolrQuery setHighlightSimplePre(String f) {
-		return solrQuery.setHighlightSimplePre(f);
-	}
-
-	@JsonIgnore
-	public String getHighlightSimplePre() {
-		return solrQuery.getHighlightSimplePre();
-	}
-
-	public SolrQuery setHighlightSimplePost(String f) {
-		return solrQuery.setHighlightSimplePost(f);
-	}
-
-	@JsonIgnore
-	public String getHighlightSimplePost() {
-		return solrQuery.getHighlightSimplePost();
-	}
-
-	@JsonIgnore
-	public String getSortField() {
-		return solrQuery.getSortField();
-	}
-
-	public SolrQuery clearSorts() {
-		return solrQuery.clearSorts();
-	}
-
-	public SolrQuery setSorts(List<SortClause> value) {
-		return solrQuery.setSorts(value);
-	}
-
-	@JsonIgnore
-	public List<SortClause> getSorts() {
-		return solrQuery.getSorts();
-	}
-
-	public SolrQuery setSort(String field, ORDER order) {
-		return solrQuery.setSort(field, order);
-	}
-
-	public SolrQuery setSort(SortClause sortClause) {
-		return solrQuery.setSort(sortClause);
-	}
-
-	public SolrQuery addSort(String field, ORDER order) {
-		return solrQuery.addSort(field, order);
-	}
-
-	public SolrQuery addSort(SortClause sortClause) {
-		return solrQuery.addSort(sortClause);
-	}
-
-	public SolrQuery addOrUpdateSort(String field, ORDER order) {
-		return solrQuery.addOrUpdateSort(field, order);
-	}
-
-	public SolrQuery addOrUpdateSort(SortClause sortClause) {
-		return solrQuery.addOrUpdateSort(sortClause);
-	}
-
-	public SolrQuery removeSort(SortClause sortClause) {
-		return solrQuery.removeSort(sortClause);
-	}
-
-	public SolrQuery removeSort(String itemName) {
-		return solrQuery.removeSort(itemName);
-	}
-
-	public void  setGetFieldStatistics(boolean v) {
-		solrQuery.setGetFieldStatistics(v);
-	}
-
-	public void  setGetFieldStatistics(String field) {
-		solrQuery.setGetFieldStatistics(field);
-	}
-
-	public void  addGetFieldStatistics(String...field) {
-		solrQuery.addGetFieldStatistics(field);
-	}
-
-	public void  addStatsFieldFacets(String field, String...facets) {
-		solrQuery.addStatsFieldFacets(field, facets);
-	}
-
-	public void  addStatsFieldCalcDistinct(String field, boolean calcDistinct) {
-		solrQuery.addStatsFieldCalcDistinct(field, calcDistinct);
-	}
-
-	public SolrQuery setFilterQueries(String...fq) {
-		return solrQuery.setFilterQueries(fq);
-	}
-
-	public SolrQuery addFilterQuery(String...fq) {
-		return solrQuery.addFilterQuery(fq);
-	}
-
-	public boolean removeFilterQuery(String fq) {
-		return solrQuery.removeFilterQuery(fq);
-	}
-
-	@JsonIgnore
-	public String[] getFilterQueries() {
-		return solrQuery.getFilterQueries();
-	}
-
-	@JsonIgnore
-	public boolean getHighlight() {
-		return solrQuery.getHighlight();
-	}
-
-	public SolrQuery setHighlight(boolean b) {
-		return solrQuery.setHighlight(b);
-	}
-
-	public SolrQuery addMoreLikeThisField(String field) {
-		return solrQuery.addMoreLikeThisField(field);
-	}
-
-	public SolrQuery setMoreLikeThisFields(String...fields) {
-		return solrQuery.setMoreLikeThisFields(fields);
-	}
-
-	@JsonIgnore
-	public String[] getMoreLikeThisFields() {
-		return solrQuery.getMoreLikeThisFields();
-	}
-
-	public SolrQuery setMoreLikeThisMinTermFreq(int mintf) {
-		return solrQuery.setMoreLikeThisMinTermFreq(mintf);
-	}
-
-	@JsonIgnore
-	public int getMoreLikeThisMinTermFreq() {
-		return solrQuery.getMoreLikeThisMinTermFreq();
-	}
-
-	public SolrQuery setMoreLikeThisMinDocFreq(int mindf) {
-		return solrQuery.setMoreLikeThisMinDocFreq(mindf);
-	}
-
-	@JsonIgnore
-	public int getMoreLikeThisMinDocFreq() {
-		return solrQuery.getMoreLikeThisMinDocFreq();
-	}
-
-	public SolrQuery setMoreLikeThisMinWordLen(int minwl) {
-		return solrQuery.setMoreLikeThisMinWordLen(minwl);
-	}
-
-	@JsonIgnore
-	public int getMoreLikeThisMinWordLen() {
-		return solrQuery.getMoreLikeThisMinWordLen();
-	}
-
-	public SolrQuery setMoreLikeThisMaxWordLen(int maxwl) {
-		return solrQuery.setMoreLikeThisMaxWordLen(maxwl);
-	}
-
-	@JsonIgnore
-	public int getMoreLikeThisMaxWordLen() {
-		return solrQuery.getMoreLikeThisMaxWordLen();
-	}
-
-	public SolrQuery setMoreLikeThisMaxQueryTerms(int maxqt) {
-		return solrQuery.setMoreLikeThisMaxQueryTerms(maxqt);
-	}
-
-	@JsonIgnore
-	public int getMoreLikeThisMaxQueryTerms() {
-		return solrQuery.getMoreLikeThisMaxQueryTerms();
-	}
-
-	public SolrQuery setMoreLikeThisMaxTokensParsed(int maxntp) {
-		return solrQuery.setMoreLikeThisMaxTokensParsed(maxntp);
-	}
-
-	@JsonIgnore
-	public int getMoreLikeThisMaxTokensParsed() {
-		return solrQuery.getMoreLikeThisMaxTokensParsed();	
-	}
-
-	public SolrQuery setMoreLikeThisBoost(boolean b) {
-		return solrQuery.setMoreLikeThisBoost(b);
-	}
-
-	@JsonIgnore
-	public boolean getMoreLikeThisBoost() {
-		return solrQuery.getMoreLikeThisBoost();
-	}
-
-	public SolrQuery setMoreLikeThisQF(String qf) {
-		return solrQuery.setMoreLikeThisQF(qf);
-	}
-
-	@JsonIgnore
-	public String getMoreLikeThisQF() {
-		return solrQuery.getMoreLikeThisQF();
-	}
-
-	public SolrQuery setMoreLikeThisCount(int count) {
-		return solrQuery.setMoreLikeThisCount(count);
-	}
-
-	@JsonIgnore
-	public int getMoreLikeThisCount() {
-		return solrQuery.getMoreLikeThisCount();
-	}
-
-	public SolrQuery setMoreLikeThis(boolean b) {
-		return solrQuery.setMoreLikeThis(b);
-	}
-
-	@JsonIgnore
-	public boolean getMoreLikeThis() {
-		return solrQuery.getMoreLikeThis();
-	}
-
-	public SolrQuery setIncludeScore(boolean includeScore) {
-		return solrQuery.setIncludeScore(includeScore);
-	}
-
-	public SolrQuery setQuery(String query) {
-		return solrQuery.setQuery(query);
-	}
-
-	@JsonIgnore
-	public String getQuery() {
-		return solrQuery.getQuery();
-	}
-
-	public SolrQuery setRows(Integer rows) {
-		return solrQuery.setRows(rows);
-	}
-
-	@JsonIgnore
-	public Integer getRows() {
-		return solrQuery.getRows();
-	}
-
-	public SolrQuery setShowDebugInfo(boolean showDebugInfo) {
-		return solrQuery.setShowDebugInfo(showDebugInfo);
-	}
-
-	public void  set(String name, boolean val) {
-		solrQuery.set(name, val);
-	}
-
-	public void  set(String name, int val) {
-		solrQuery.set(name, val);
-	}
-
-	public void  set(String name, String vals) {
-		solrQuery.set(name, vals);
-	}
-
-	public void  add(String name, String...vals) {
-		solrQuery.add(name, vals);
-	}
-
-	public void  setDistrib(boolean val) {
-		solrQuery.setDistrib(val);
-	}
-
-	public SolrQuery setStart(Integer start) {
-		return solrQuery.setStart(start);
-	}
-
-	@JsonIgnore
-	public Integer getStart() {
-		return solrQuery.getStart();
-	}
-
-	public SolrQuery setRequestHandler(String qt) {
-		return solrQuery.setRequestHandler(qt);
-	}
-
-	@JsonIgnore
-	public String getRequestHandler() {
-		return solrQuery.getRequestHandler();
-	}
-
-	public SolrQuery setParam(String name, String...values) {
-		return solrQuery.setParam(name, values);
-	}
-
-	public SolrQuery setParam(String name, boolean value) {
-		return solrQuery.setParam(name, value);
-	}
-
-	@JsonIgnore
-	public SolrQuery getCopy() {
-		return solrQuery.getCopy();
-	}
-
-	public SolrQuery setTimeAllowed(Integer milliseconds) {
-		return solrQuery.setTimeAllowed(milliseconds);
-	}
-
-	@JsonIgnore
-	public Integer getTimeAllowed() {
-		return solrQuery.getTimeAllowed();
 	}
 
 	@Override()

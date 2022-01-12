@@ -26,7 +26,6 @@ import org.slf4j.Logger;
 import java.math.MathContext;
 import org.choicehumanitarian.reports.enus.java.ZonedDateTimeDeserializer;
 import io.vertx.core.Promise;
-import org.apache.solr.client.solrj.response.QueryResponse;
 import java.util.Set;
 import org.choicehumanitarian.reports.enus.java.LocalDateSerializer;
 import org.apache.commons.text.StringEscapeUtils;
@@ -34,19 +33,14 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.vertx.core.Future;
 import org.choicehumanitarian.reports.enus.base.BaseModel;
-import org.apache.solr.client.solrj.SolrClient;
 import java.util.Objects;
 import io.vertx.core.json.JsonArray;
-import org.apache.solr.common.SolrDocument;
 import java.util.List;
-import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.commons.lang3.math.NumberUtils;
 import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import org.apache.solr.client.solrj.util.ClientUtils;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
-import org.apache.solr.common.SolrInputDocument;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 /**	
@@ -1100,4 +1094,42 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	public static final String VAR_userFullName = "userFullName";
 	public static final String VAR_seeArchived = "seeArchived";
 	public static final String VAR_seeDeleted = "seeDeleted";
+
+	public static final String DISPLAY_NAME_userKeys = "";
+	public static final String DISPLAY_NAME_userId = "";
+	public static final String DISPLAY_NAME_userName = "";
+	public static final String DISPLAY_NAME_userEmail = "";
+	public static final String DISPLAY_NAME_userFirstName = "";
+	public static final String DISPLAY_NAME_userLastName = "";
+	public static final String DISPLAY_NAME_userFullName = "";
+	public static final String DISPLAY_NAME_seeArchived = "see archived";
+	public static final String DISPLAY_NAME_seeDeleted = "see deleted";
+
+	public static String displayNameForClass(String var) {
+		return SiteUser.displayNameSiteUser(var);
+	}
+	public static String displayNameSiteUser(String var) {
+		switch(var) {
+		case VAR_userKeys:
+			return DISPLAY_NAME_userKeys;
+		case VAR_userId:
+			return DISPLAY_NAME_userId;
+		case VAR_userName:
+			return DISPLAY_NAME_userName;
+		case VAR_userEmail:
+			return DISPLAY_NAME_userEmail;
+		case VAR_userFirstName:
+			return DISPLAY_NAME_userFirstName;
+		case VAR_userLastName:
+			return DISPLAY_NAME_userLastName;
+		case VAR_userFullName:
+			return DISPLAY_NAME_userFullName;
+		case VAR_seeArchived:
+			return DISPLAY_NAME_seeArchived;
+		case VAR_seeDeleted:
+			return DISPLAY_NAME_seeDeleted;
+		default:
+			return BaseModel.displayNameBaseModel(var);
+		}
+	}
 }
