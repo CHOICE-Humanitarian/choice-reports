@@ -212,7 +212,7 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 					if(commitWithin != null)
 						query.put("commitWithin", commitWithin);
 					params.put("query", query);
-					JsonObject context = new JsonObject().put("params", params).put("user", Optional.ofNullable(siteRequest.getUser()).map(user -> user.principal()).orElse(null));
+					JsonObject context = new JsonObject().put("params", params).put("user", Optional.ofNullable(siteRequest.getUser()).map(user -> user.attributes().getJsonObject("tokenPrincipal")).orElse(null));
 					JsonObject json = new JsonObject().put("context", context);
 					eventBus.request("choice-reports-enUS-ChoiceReport", json, new DeliveryOptions().addHeader("action", "putimportChoiceReportFuture")).onSuccess(a -> {
 						promise1.complete();
@@ -410,7 +410,7 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 					if(commitWithin != null)
 						query.put("commitWithin", commitWithin);
 					params.put("query", query);
-					JsonObject context = new JsonObject().put("params", params).put("user", Optional.ofNullable(siteRequest.getUser()).map(user -> user.principal()).orElse(null));
+					JsonObject context = new JsonObject().put("params", params).put("user", Optional.ofNullable(siteRequest.getUser()).map(user -> user.attributes().getJsonObject("tokenPrincipal")).orElse(null));
 					JsonObject json = new JsonObject().put("context", context);
 					eventBus.request("choice-reports-enUS-ChoiceReport", json, new DeliveryOptions().addHeader("action", "postChoiceReportFuture")).onSuccess(a -> {
 						JsonObject responseMessage = (JsonObject)a.body();
@@ -2282,7 +2282,7 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 						query.put("commitWithin", commitWithin);
 					query.put("q", "*:*").put("fq", new JsonArray().add("pk:" + o.getPk()));
 					params.put("query", query);
-					JsonObject context = new JsonObject().put("params", params).put("user", Optional.ofNullable(siteRequest.getUser()).map(user -> user.principal()).orElse(null));
+					JsonObject context = new JsonObject().put("params", params).put("user", Optional.ofNullable(siteRequest.getUser()).map(user -> user.attributes().getJsonObject("tokenPrincipal")).orElse(null));
 					JsonObject json = new JsonObject().put("context", context);
 					eventBus.request("choice-reports-enUS-ChoiceReport", json, new DeliveryOptions().addHeader("action", "patchChoiceReportFuture")).onSuccess(c -> {
 						JsonObject responseMessage = (JsonObject)c.body();

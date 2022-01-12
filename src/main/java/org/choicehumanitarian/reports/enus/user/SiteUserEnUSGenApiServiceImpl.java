@@ -701,7 +701,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 					if(commitWithin != null)
 						query.put("commitWithin", commitWithin);
 					params.put("query", query);
-					JsonObject context = new JsonObject().put("params", params).put("user", Optional.ofNullable(siteRequest.getUser()).map(user -> user.principal()).orElse(null));
+					JsonObject context = new JsonObject().put("params", params).put("user", Optional.ofNullable(siteRequest.getUser()).map(user -> user.attributes().getJsonObject("tokenPrincipal")).orElse(null));
 					JsonObject json = new JsonObject().put("context", context);
 					eventBus.request("choice-reports-enUS-SiteUser", json, new DeliveryOptions().addHeader("action", "postSiteUserFuture")).onSuccess(a -> {
 						JsonObject responseMessage = (JsonObject)a.body();

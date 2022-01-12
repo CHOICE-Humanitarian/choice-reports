@@ -237,7 +237,7 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 				String importPeriod = config().getString(String.format("%s_%s", ConfigKeys.IMPORT_DATA_PERIOD, classSimpleName));
 				Duration duration = TimeTool.parseNextDuration(importPeriod);
 				ZonedDateTime nextStartTime = startDateTime.plus(duration);
-				LOG.info(String.format(importTimerScheduling, nextStartTime.format(TIME_FORMAT)));
+				LOG.info(String.format(importTimerScheduling, "ChoiceDonor", nextStartTime.format(TIME_FORMAT)));
 				Duration nextStartDuration = Duration.between(Instant.now(), nextStartTime);
 				vertx.setTimer(nextStartDuration.toMillis(), b -> {
 					importData(classSimpleName, nextStartTime);
@@ -248,7 +248,7 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 				String importPeriod = config().getString(String.format("%s_%s", ConfigKeys.IMPORT_DATA_PERIOD, classSimpleName));
 				Duration duration = TimeTool.parseNextDuration(importPeriod);
 				ZonedDateTime nextStartTime = startDateTime.plus(duration);
-				LOG.info(String.format(importTimerScheduling, nextStartTime.format(TIME_FORMAT)));
+				LOG.info(String.format(importTimerScheduling, "ChoiceImage", nextStartTime.format(TIME_FORMAT)));
 				Duration nextStartDuration = Duration.between(Instant.now(), nextStartTime);
 				vertx.setTimer(nextStartDuration.toMillis(), b -> {
 					importData(classSimpleName, nextStartTime);
