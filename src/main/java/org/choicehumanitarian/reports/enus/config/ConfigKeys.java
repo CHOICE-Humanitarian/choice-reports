@@ -276,9 +276,9 @@ public class ConfigKeys {
 	public static final String SOLR_COLLECTION = "SOLR_COLLECTION";
 
 	/**
-	 * The URL to the SOLR search engine for the computate project. 
+	 * The Solr computate collection. 
 	 **/
-	public static final String SOLR_URL_COMPUTATE = "SOLR_URL_COMPUTATE";
+	public static final String SOLR_COLLECTION_COMPUTATE = "SOLR_COLLECTION_COMPUTATE";
 
 	/**
 	 * The Email account for the site. 

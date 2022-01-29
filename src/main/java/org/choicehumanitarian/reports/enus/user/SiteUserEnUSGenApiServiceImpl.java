@@ -75,14 +75,14 @@ import io.vertx.ext.auth.User;
 import java.util.Optional;
 import java.util.stream.Stream;
 import java.net.URLDecoder;
-import org.choicehumanitarian.reports.enus.search.DateMathParser;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.Map.Entry;
 import java.util.Iterator;
+import org.computate.search.tool.SearchTool;
+import org.computate.search.response.solr.SolrResponse;
 import java.util.Base64;
 import java.time.ZonedDateTime;
-import org.apache.solr.common.util.SimpleOrderedMap;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.choicehumanitarian.reports.enus.user.SiteUserEnUSApiServiceImpl;
@@ -145,18 +145,16 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 		Promise<ServiceResponse> promise = Promise.promise();
 		try {
 			SiteRequestEnUS siteRequest = listSiteUser.getSiteRequest_();
-			QueryResponse responseSearch = listSiteUser.getQueryResponse();
-			SolrDocumentList solrDocuments = listSiteUser.getSolrDocumentList();
-			Long searchInMillis = Long.valueOf(responseSearch.getQTime());
-			Long transmissionInMillis = responseSearch.getElapsedTime();
-			Long startNum = responseSearch.getResults().getStart();
-			Long foundNum = responseSearch.getResults().getNumFound();
-			Integer returnedNum = responseSearch.getResults().size();
+			SolrResponse responseSearch = listSiteUser.getQueryResponse();
+			List<SolrResponse.Doc> solrDocuments = listSiteUser.getQueryResponse().getResponse().getDocs();
+			Long searchInMillis = Long.valueOf(responseSearch.getResponseHeader().getqTime());
+			Long startNum = listSiteUser.getRequest().getStart();
+			Long foundNum = responseSearch.getResponse().getNumFound();
+			Integer returnedNum = responseSearch.getResponse().getDocs().size();
 			String searchTime = String.format("%d.%03d sec", TimeUnit.MILLISECONDS.toSeconds(searchInMillis), TimeUnit.MILLISECONDS.toMillis(searchInMillis) - TimeUnit.SECONDS.toMillis(TimeUnit.MILLISECONDS.toSeconds(searchInMillis)));
-			String transmissionTime = String.format("%d.%03d sec", TimeUnit.MILLISECONDS.toSeconds(transmissionInMillis), TimeUnit.MILLISECONDS.toMillis(transmissionInMillis) - TimeUnit.SECONDS.toSeconds(TimeUnit.MILLISECONDS.toSeconds(transmissionInMillis)));
 			String nextCursorMark = responseSearch.getNextCursorMark();
-			Exception exceptionSearch = responseSearch.getException();
-			List<String> fls = listSiteUser.getFields();
+			String exceptionSearch = Optional.ofNullable(responseSearch.getError()).map(error -> error.getMsg()).orElse(null);
+			List<String> fls = listSiteUser.getRequest().getFields();
 
 			JsonObject json = new JsonObject();
 			json.put("startNum", startNum);
@@ -164,7 +162,6 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 			json.put("returnedNum", returnedNum);
 			if(fls.size() == 1 && fls.stream().findFirst().orElse(null).equals("saves")) {
 				json.put("searchTime", searchTime);
-				json.put("transmissionTime", transmissionTime);
 			}
 			if(nextCursorMark != null) {
 				json.put("nextCursorMark", nextCursorMark);
@@ -192,49 +189,42 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 			});
 			json.put("list", l);
 
-			List<FacetField> facetFields = responseSearch.getFacetFields();
+			SolrResponse.FacetFields facetFields = Optional.ofNullable(responseSearch.getFacetCounts()).map(f -> f.getFacetFields()).orElse(null);
 			if(facetFields != null) {
 				JsonObject facetFieldsJson = new JsonObject();
 				json.put("facet_fields", facetFieldsJson);
-				for(FacetField facetField : facetFields) {
+				for(SolrResponse.FacetField facetField : facetFields.getFacets().values()) {
 					String facetFieldVar = StringUtils.substringBefore(facetField.getName(), "_docvalues_");
 					JsonObject facetFieldCounts = new JsonObject();
 					facetFieldsJson.put(facetFieldVar, facetFieldCounts);
-					List<FacetField.Count> facetFieldValues = facetField.getValues();
-					for(Integer i = 0; i < facetFieldValues.size(); i+= 1) {
-						FacetField.Count count = (FacetField.Count)facetFieldValues.get(i);
-						facetFieldCounts.put(count.getName(), count.getCount());
-					}
+					facetField.getCounts().forEach((name, count) -> {
+						facetFieldCounts.put(name, count);
+					});
 				}
 			}
 
-			List<RangeFacet> facetRanges = responseSearch.getFacetRanges();
+			SolrResponse.FacetRanges facetRanges = Optional.ofNullable(responseSearch.getFacetCounts()).map(f -> f.getFacetRanges()).orElse(null);
 			if(facetRanges != null) {
 				JsonObject rangeJson = new JsonObject();
 				json.put("facet_ranges", rangeJson);
-				for(RangeFacet rangeFacet : facetRanges) {
+				for(SolrResponse.FacetRange rangeFacet : facetRanges.getRanges().values()) {
 					JsonObject rangeFacetJson = new JsonObject();
 					String rangeFacetVar = StringUtils.substringBefore(rangeFacet.getName(), "_docvalues_");
 					rangeJson.put(rangeFacetVar, rangeFacetJson);
 					JsonObject rangeFacetCountsMap = new JsonObject();
 					rangeFacetJson.put("counts", rangeFacetCountsMap);
-					List<?> rangeFacetCounts = rangeFacet.getCounts();
-					for(Integer i = 0; i < rangeFacetCounts.size(); i+= 1) {
-						RangeFacet.Count count = (RangeFacet.Count)rangeFacetCounts.get(i);
-						rangeFacetCountsMap.put(count.getValue(), count.getCount());
-					}
+					rangeFacet.getCounts().forEach((name, count) -> {
+						rangeFacetCountsMap.put(name, count);
+					});
 				}
 			}
 
-			NamedList<List<PivotField>> facetPivot = responseSearch.getFacetPivot();
-			if(facetPivot != null) {
+			SolrResponse.FacetPivots facetPivots = Optional.ofNullable(responseSearch.getFacetCounts()).map(f -> f.getFacetPivots()).orElse(null);
+			if(facetPivots != null) {
 				JsonObject facetPivotJson = new JsonObject();
 				json.put("facet_pivot", facetPivotJson);
-				Iterator<Entry<String, List<PivotField>>> facetPivotIterator = responseSearch.getFacetPivot().iterator();
-				while(facetPivotIterator.hasNext()) {
-					Entry<String, List<PivotField>> pivotEntry = facetPivotIterator.next();
-					List<PivotField> pivotFields = pivotEntry.getValue();
-					String[] varsIndexed = pivotEntry.getKey().trim().split(",");
+				for(SolrResponse.FacetPivot facetPivot : facetPivots.getPivots().values()) {
+					String[] varsIndexed = facetPivot.getName().trim().split(",");
 					String[] entityVars = new String[varsIndexed.length];
 					for(Integer i = 0; i < entityVars.length; i++) {
 						String entityIndexed = varsIndexed[i];
@@ -242,11 +232,11 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 					}
 					JsonArray pivotArray = new JsonArray();
 					facetPivotJson.put(StringUtils.join(entityVars, ","), pivotArray);
-					responsePivotSearchSiteUser(pivotFields, pivotArray);
+					responsePivotSearchSiteUser(facetPivot.getPivot(), pivotArray);
 				}
 			}
 			if(exceptionSearch != null) {
-				json.put("exceptionSearch", exceptionSearch.getMessage());
+				json.put("exceptionSearch", exceptionSearch);
 			}
 			promise.complete(ServiceResponse.completedWithJson(Buffer.buffer(Optional.ofNullable(json).orElse(new JsonObject()).encodePrettily())));
 		} catch(Exception ex) {
@@ -255,8 +245,8 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 		}
 		return promise.future();
 	}
-	public void responsePivotSearchSiteUser(List<PivotField> pivotFields, JsonArray pivotArray) {
-		for(PivotField pivotField : pivotFields) {
+	public void responsePivotSearchSiteUser(List<SolrResponse.Pivot> pivots, JsonArray pivotArray) {
+		for(SolrResponse.Pivot pivotField : pivots) {
 			String entityIndexed = pivotField.getField();
 			String entityVar = StringUtils.substringBefore(entityIndexed, "_docvalues_");
 			JsonObject pivotJson = new JsonObject();
@@ -264,22 +254,20 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 			pivotJson.put("field", entityVar);
 			pivotJson.put("value", pivotField.getValue());
 			pivotJson.put("count", pivotField.getCount());
-			List<RangeFacet> pivotRanges = pivotField.getFacetRanges();
-			List<PivotField> pivotFields2 = pivotField.getPivot();
+			Collection<SolrResponse.PivotRange> pivotRanges = pivotField.getRanges().values();
+			List<SolrResponse.Pivot> pivotFields2 = pivotField.getPivot();
 			if(pivotRanges != null) {
 				JsonObject rangeJson = new JsonObject();
 				pivotJson.put("ranges", rangeJson);
-				for(RangeFacet rangeFacet : pivotRanges) {
+				for(SolrResponse.PivotRange rangeFacet : pivotRanges) {
 					JsonObject rangeFacetJson = new JsonObject();
 					String rangeFacetVar = StringUtils.substringBefore(rangeFacet.getName(), "_docvalues_");
 					rangeJson.put(rangeFacetVar, rangeFacetJson);
 					JsonObject rangeFacetCountsObject = new JsonObject();
 					rangeFacetJson.put("counts", rangeFacetCountsObject);
-					List<?> rangeFacetCounts = rangeFacet.getCounts();
-					for(Integer i = 0; i < rangeFacetCounts.size(); i+= 1) {
-						RangeFacet.Count count = (RangeFacet.Count)rangeFacetCounts.get(i);
-						rangeFacetCountsObject.put(count.getValue(), count.getCount());
-					}
+					rangeFacet.getCounts().forEach((value, count) -> {
+						rangeFacetCountsObject.put(value, count);
+					});
 				}
 			}
 			if(pivotFields2 != null) {
@@ -302,7 +290,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 					searchSiteUserList(siteRequest, false, true, true).onSuccess(listSiteUser -> {
 						try {
 							List<String> roles2 = Optional.ofNullable(config.getValue(ConfigKeys.AUTH_ROLES_ADMIN)).map(v -> v instanceof JsonArray ? (JsonArray)v : new JsonArray(v.toString())).orElse(new JsonArray()).getList();
-							if(listSiteUser.getQueryResponse().getResults().getNumFound() > 1
+							if(listSiteUser.getQueryResponse().getResponse().getNumFound() > 1
 									&& !CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roles2)
 									&& !CollectionUtils.containsAny(siteRequest.getUserRealmRoles(), roles2)
 									) {
@@ -312,8 +300,8 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 							} else {
 
 								ApiRequest apiRequest = new ApiRequest();
-								apiRequest.setRows(listSiteUser.getRows());
-								apiRequest.setNumFound(listSiteUser.getQueryResponse().getResults().getNumFound());
+								apiRequest.setRows(listSiteUser.getRequest().getRows());
+								apiRequest.setNumFound(listSiteUser.getQueryResponse().getResponse().getNumFound());
 								apiRequest.setNumPATCH(0L);
 								apiRequest.initDeepApiRequest(siteRequest);
 								siteRequest.setApiRequest_(apiRequest);
@@ -382,7 +370,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 		});
 		CompositeFuture.all(futures).onSuccess( a -> {
 			if(apiRequest != null) {
-				apiRequest.setNumPATCH(apiRequest.getNumPATCH() + listSiteUser.getQueryResponse().getResults().size());
+				apiRequest.setNumPATCH(apiRequest.getNumPATCH() + listSiteUser.getQueryResponse().getResponse().getDocs().size());
 				if(apiRequest.getNumFound() == 1L)
 					listSiteUser.first().apiRequestSiteUser();
 				eventBus.publish("websocketSiteUser", JsonObject.mapFrom(apiRequest).toString());
@@ -413,9 +401,9 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 				searchSiteUserList(siteRequest, false, true, true).onSuccess(listSiteUser -> {
 					try {
 						SiteUser o = listSiteUser.first();
-						if(o != null && listSiteUser.getQueryResponse().getResults().getNumFound() == 1) {
+						if(o != null && listSiteUser.getQueryResponse().getResponse().getNumFound() == 1) {
 							ApiRequest apiRequest = new ApiRequest();
-							apiRequest.setRows(1);
+							apiRequest.setRows(1L);
 							apiRequest.setNumFound(1L);
 							apiRequest.setNumPATCH(0L);
 							apiRequest.initDeepApiRequest(siteRequest);
@@ -668,7 +656,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 				siteRequest.setJsonObject(body);
 				{
 					ApiRequest apiRequest = new ApiRequest();
-					apiRequest.setRows(1);
+					apiRequest.setRows(1L);
 					apiRequest.setNumFound(1L);
 					apiRequest.setNumPATCH(0L);
 					apiRequest.initDeepApiRequest(siteRequest);
@@ -727,7 +715,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 	public void postSiteUserFuture(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
 		user(serviceRequest).onSuccess(siteRequest -> {
 			ApiRequest apiRequest = new ApiRequest();
-			apiRequest.setRows(1);
+			apiRequest.setRows(1L);
 			apiRequest.setNumFound(1L);
 			apiRequest.setNumPATCH(0L);
 			apiRequest.initDeepApiRequest(siteRequest);
@@ -1155,7 +1143,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 	}
 
 	public void searchSiteUserQ(SearchList<SiteUser> searchList, String entityVar, String valueIndexed, String varIndexed) {
-		searchList.setQuery(varIndexed + ":" + ("*".equals(valueIndexed) ? valueIndexed : ClientUtils.escapeQueryChars(valueIndexed)));
+		searchList.q(varIndexed + ":" + ("*".equals(valueIndexed) ? valueIndexed : SearchTool.escapeQueryChars(valueIndexed)));
 		if(!"*".equals(entityVar)) {
 		}
 	}
@@ -1171,22 +1159,22 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 			String fq2 = fqs[1].equals("*") ? fqs[1] : SiteUser.staticSolrFqForClass(entityVar, searchList.getSiteRequest_(), fqs[1]);
 			 return varIndexed + ":[" + fq1 + " TO " + fq2 + "]";
 		} else {
-			return varIndexed + ":" + ClientUtils.escapeQueryChars(SiteUser.staticSolrFqForClass(entityVar, searchList.getSiteRequest_(), valueIndexed)).replace("\\", "\\\\");
+			return varIndexed + ":" + SearchTool.escapeQueryChars(SiteUser.staticSolrFqForClass(entityVar, searchList.getSiteRequest_(), valueIndexed)).replace("\\", "\\\\");
 		}
 	}
 
 	public void searchSiteUserSort(SearchList<SiteUser> searchList, String entityVar, String valueIndexed, String varIndexed) {
 		if(varIndexed == null)
 			throw new RuntimeException(String.format("\"%s\" is not an indexed entity. ", entityVar));
-		searchList.addSort(varIndexed, ORDER.valueOf(valueIndexed));
+		searchList.sort(varIndexed, valueIndexed);
 	}
 
-	public void searchSiteUserRows(SearchList<SiteUser> searchList, Integer valueRows) {
-			searchList.setRows(valueRows != null ? valueRows : 10);
+	public void searchSiteUserRows(SearchList<SiteUser> searchList, Long valueRows) {
+			searchList.rows(valueRows != null ? valueRows : 10L);
 	}
 
-	public void searchSiteUserStart(SearchList<SiteUser> searchList, Integer valueStart) {
-		searchList.setStart(valueStart);
+	public void searchSiteUserStart(SearchList<SiteUser> searchList, Long valueStart) {
+		searchList.start(valueStart);
 	}
 
 	public void searchSiteUserVar(SearchList<SiteUser> searchList, String var, String value) {
@@ -1235,17 +1223,17 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 			SearchList<SiteUser> searchList = new SearchList<SiteUser>();
 			searchList.setPopulate(populate);
 			searchList.setStore(store);
-			searchList.setQuery("*:*");
+			searchList.q("*:*");
 			searchList.setC(SiteUser.class);
 			searchList.setSiteRequest_(siteRequest);
 			if(entityList != null)
-				searchList.addFields(entityList);
+				searchList.fl(entityList);
 
 			String id = serviceRequest.getParams().getJsonObject("path").getString("id");
 			if(id != null && NumberUtils.isCreatable(id)) {
-				searchList.addFilterQuery("(pk_docvalues_long:" + ClientUtils.escapeQueryChars(id) + " OR objectId_docvalues_string:" + ClientUtils.escapeQueryChars(id) + ")");
+				searchList.fq("(pk_docvalues_long:" + SearchTool.escapeQueryChars(id) + " OR objectId_docvalues_string:" + SearchTool.escapeQueryChars(id) + ")");
 			} else if(id != null) {
-				searchList.addFilterQuery("objectId_docvalues_string:" + ClientUtils.escapeQueryChars(id));
+				searchList.fq("objectId_docvalues_string:" + SearchTool.escapeQueryChars(id));
 			}
 
 			List<String> roles = Optional.ofNullable(config.getValue(ConfigKeys.AUTH_ROLES_REQUIRED + "_SiteUser")).map(v -> v instanceof JsonArray ? (JsonArray)v : new JsonArray(v.toString())).orElse(new JsonArray()).getList();
@@ -1256,7 +1244,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 					&& (modify || !CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roleReads))
 					&& (modify || !CollectionUtils.containsAny(siteRequest.getUserRealmRoles(), roleReads))
 					) {
-				searchList.addFilterQuery("sessionId_docvalues_string:" + ClientUtils.escapeQueryChars(Optional.ofNullable(siteRequest.getSessionId()).orElse("-----")) + " OR " + "sessionId_docvalues_string:" + ClientUtils.escapeQueryChars(Optional.ofNullable(siteRequest.getSessionIdBefore()).orElse("-----"))
+				searchList.fq("sessionId_docvalues_string:" + SearchTool.escapeQueryChars(Optional.ofNullable(siteRequest.getSessionId()).orElse("-----")) + " OR " + "sessionId_docvalues_string:" + SearchTool.escapeQueryChars(Optional.ofNullable(siteRequest.getSessionIdBefore()).orElse("-----"))
 						+ " OR userKeys_docvalues_longs:" + Optional.ofNullable(siteRequest.getUserKey()).orElse(0L));
 			}
 
@@ -1265,8 +1253,8 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 				String valueIndexed = null;
 				String varIndexed = null;
 				String valueSort = null;
-				Integer valueStart = null;
-				Integer valueRows = null;
+				Long valueStart = null;
+				Long valueRows = null;
 				String valueCursorMark = null;
 				String paramName = paramRequest.getKey();
 				Object paramValuesObject = paramRequest.getValue();
@@ -1284,7 +1272,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 								entityVar = entityVars[i];
 								varsIndexed[i] = SiteUser.varIndexedSiteUser(entityVar);
 							}
-							searchList.add("facet.pivot", (solrLocalParams == null ? "" : solrLocalParams) + StringUtils.join(varsIndexed, ","));
+							searchList.facetPivot((solrLocalParams == null ? "" : solrLocalParams) + StringUtils.join(varsIndexed, ","));
 						}
 					} else if(paramValuesObject != null) {
 						for(Object paramObject : paramObjects) {
@@ -1303,7 +1291,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 											foundQ = mQ.find();
 										}
 										mQ.appendTail(sb);
-										searchList.setQuery(sb.toString());
+										searchList.q(sb.toString());
 									}
 									break;
 								case "fq":
@@ -1320,7 +1308,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 											foundFq = mFq.find();
 										}
 										mFq.appendTail(sb);
-										searchList.addFilterQuery(sb.toString());
+										searchList.fq(sb.toString());
 									}
 									break;
 								case "sort":
@@ -1330,29 +1318,29 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 									searchSiteUserSort(searchList, entityVar, valueIndexed, varIndexed);
 									break;
 								case "start":
-									valueStart = paramObject instanceof Integer ? (Integer)paramObject : Integer.parseInt(paramObject.toString());
+									valueStart = paramObject instanceof Long ? (Long)paramObject : Long.parseLong(paramObject.toString());
 									searchSiteUserStart(searchList, valueStart);
 									break;
 								case "rows":
-									valueRows = paramObject instanceof Integer ? (Integer)paramObject : Integer.parseInt(paramObject.toString());
+									valueRows = paramObject instanceof Long ? (Long)paramObject : Long.parseLong(paramObject.toString());
 									searchSiteUserRows(searchList, valueRows);
 									break;
 								case "facet":
-									searchList.add("facet", ((Boolean)paramObject).toString());
+									searchList.facet((Boolean)paramObject);
 									break;
 								case "facet.range.start":
 									String startMathStr = (String)paramObject;
-									Date start = DateMathParser.parseMath(null, startMathStr);
-									searchList.add("facet.range.start", start.toInstant().toString());
+									Date start = SearchTool.parseMath(startMathStr);
+									searchList.facetRangeStart(start.toInstant().toString());
 									break;
 								case "facet.range.end":
 									String endMathStr = (String)paramObject;
-									Date end = DateMathParser.parseMath(null, endMathStr);
-									searchList.add("facet.range.end", end.toInstant().toString());
+									Date end = SearchTool.parseMath(endMathStr);
+									searchList.facetRangeEnd(end.toInstant().toString());
 									break;
 								case "facet.range.gap":
 									String gap = (String)paramObject;
-									searchList.add("facet.range.gap", gap);
+									searchList.facetRangeGap(gap);
 									break;
 								case "facet.range":
 									Matcher mFacetRange = Pattern.compile("(?:(\\{![^\\}]+\\}))?(.*)").matcher((String)paramObject);
@@ -1361,14 +1349,14 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 										String solrLocalParams = mFacetRange.group(1);
 										entityVar = mFacetRange.group(2).trim();
 										varIndexed = SiteUser.varIndexedSiteUser(entityVar);
-										searchList.add("facet.range", (solrLocalParams == null ? "" : solrLocalParams) + varIndexed);
+										searchList.facetRange((solrLocalParams == null ? "" : solrLocalParams) + varIndexed);
 									}
 									break;
 								case "facet.field":
 									entityVar = (String)paramObject;
 									varIndexed = SiteUser.varIndexedSiteUser(entityVar);
 									if(varIndexed != null)
-										searchList.addFacetField(varIndexed);
+										searchList.facetField(varIndexed);
 									break;
 								case "var":
 									entityVar = StringUtils.trim(StringUtils.substringBefore((String)paramObject, ":"));
@@ -1377,7 +1365,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 									break;
 								case "cursorMark":
 									valueCursorMark = (String)paramObject;
-									searchList.add("cursorMark", (String)paramObject);
+									searchList.cursorMark((String)paramObject);
 									break;
 							}
 						}
@@ -1388,7 +1376,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 				}
 			});
 			if("*:*".equals(searchList.getQuery()) && searchList.getSorts().size() == 0) {
-				searchList.addSort("created_docvalues_date", ORDER.desc);
+				searchList.sort("created_docvalues_date", "desc");
 			}
 			searchSiteUser2(siteRequest, populate, store, modify, searchList);
 			searchList.promiseDeepForClass(siteRequest).onSuccess(a -> {
@@ -1459,8 +1447,12 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 			SiteRequestEnUS siteRequest = o.getSiteRequest_();
 			ApiRequest apiRequest = siteRequest.getApiRequest_();
 			o.promiseDeepForClass(siteRequest).onSuccess(a -> {
-				SolrInputDocument document = new SolrInputDocument();
-				o.indexSiteUser(document);
+				JsonObject json = new JsonObject();
+				JsonObject add = new JsonObject();
+				json.put("add", add);
+				JsonObject doc = new JsonObject();
+				add.put("doc", doc);
+				o.indexSiteUser(doc);
 				String solrHostName = siteRequest.getConfig().getString(ConfigKeys.SOLR_HOST_NAME);
 				Integer solrPort = siteRequest.getConfig().getInteger(ConfigKeys.SOLR_PORT);
 				String solrCollection = siteRequest.getConfig().getString(ConfigKeys.SOLR_COLLECTION);
@@ -1471,7 +1463,6 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 					else if(softCommit == null)
 						softCommit = false;
 				String solrRequestUri = String.format("/solr/%s/update%s%s%s", solrCollection, "?overwrite=true&wt=json", softCommit ? "&softCommit=true" : "", commitWithin != null ? ("&commitWithin=" + commitWithin) : "");
-				JsonArray json = new JsonArray().add(new JsonObject(document.toMap(new HashMap<String, Object>())));
 				webClient.post(solrPort, solrHostName, solrRequestUri).putHeader("Content-Type", "application/json").expect(ResponsePredicate.SC_OK).sendBuffer(json.toBuffer()).onSuccess(b -> {
 					promise.complete();
 				}).onFailure(ex -> {

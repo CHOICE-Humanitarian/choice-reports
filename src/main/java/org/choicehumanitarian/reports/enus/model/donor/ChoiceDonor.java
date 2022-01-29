@@ -1,10 +1,10 @@
-package org.choicehumanitarian.reports.enus.model.donor;                         
+package org.choicehumanitarian.reports.enus.model.donor;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 import org.choicehumanitarian.reports.enus.base.BaseModel;
-import org.choicehumanitarian.reports.enus.wrap.Wrap;
+import org.computate.search.wrap.Wrap;
 
 /**
  * Model: true
@@ -194,7 +194,7 @@ public class ChoiceDonor extends ChoiceDonorGen<BaseModel> {
 	 * HtmlRow: 10
 	 * HtmlCell: 1
 	 * DisplayName.enUS: reports
-	 */         
+	 */        
 	protected void _reportKeys(List<Long> w) {}
 
 	@Override

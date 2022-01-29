@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import org.choicehumanitarian.reports.enus.wrap.Wrap;
+import org.computate.search.response.solr.SolrResponse;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.choicehumanitarian.reports.enus.java.ZonedDateTimeSerializer;
 import java.util.Map;
@@ -23,6 +23,7 @@ import java.math.MathContext;
 import org.choicehumanitarian.reports.enus.java.ZonedDateTimeDeserializer;
 import io.vertx.core.Promise;
 import org.choicehumanitarian.reports.enus.java.LocalDateSerializer;
+import org.computate.search.response.solr.SolrResponse.Doc;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import org.computate.search.request.SearchRequest;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -31,6 +32,7 @@ import org.choicehumanitarian.reports.enus.base.BaseModel;
 import java.util.Objects;
 import io.vertx.core.json.JsonArray;
 import java.util.List;
+import org.computate.search.wrap.Wrap;
 import org.apache.commons.lang3.math.NumberUtils;
 import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -40,8 +42,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 
 /**	
- * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.search.SearchList&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
- * <br/>
+ * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.search.SearchList&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
+ * <br>
  **/
 public abstract class SearchListGen<DEV> {
 	protected static final Logger LOG = LoggerFactory.getLogger(SearchList.class);
@@ -57,10 +59,10 @@ public abstract class SearchListGen<DEV> {
 	@JsonInclude(Include.NON_NULL)
 	protected Class<?> c;
 
-	/**	<br/> The entity c
+	/**	<br> The entity c
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.search.SearchList&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:c">Find the entity c in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.search.SearchList&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:c">Find the entity c in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _c(Wrap<Class<?>> c);
@@ -89,17 +91,17 @@ public abstract class SearchListGen<DEV> {
 	/////////////
 
 	/**	 The entity request
-	 *	Il est construit avant d'être initialisé avec le constructeur par défaut SearchRequest(). 
+	 *	 It is constructed before being initialized with the constructor by default. 
 	 */
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected SearchRequest request = new SearchRequest();
 
-	/**	<br/> The entity request
-	 *  It is constructed before being initialized with the constructor by default SearchRequest(). 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.search.SearchList&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:request">Find the entity request in Solr</a>
-	 * <br/>
-	 * @param request is the entity already constructed. 
+	/**	<br> The entity request
+	 *  It is constructed before being initialized with the constructor by default. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.search.SearchList&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:request">Find the entity request in Solr</a>
+	 * <br>
+	 * @param o is the entity already constructed. 
 	 **/
 	protected abstract void _request(SearchRequest o);
 
@@ -129,10 +131,10 @@ public abstract class SearchListGen<DEV> {
 	@JsonInclude(Include.NON_NULL)
 	protected SiteRequestEnUS siteRequest_;
 
-	/**	<br/> The entity siteRequest_
+	/**	<br> The entity siteRequest_
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.search.SearchList&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:siteRequest_">Find the entity siteRequest_ in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.search.SearchList&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:siteRequest_">Find the entity siteRequest_ in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _siteRequest_(Wrap<SiteRequestEnUS> c);
@@ -167,10 +169,10 @@ public abstract class SearchListGen<DEV> {
 	@JsonInclude(Include.NON_NULL)
 	protected Boolean store;
 
-	/**	<br/> The entity store
+	/**	<br> The entity store
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.search.SearchList&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:store">Find the entity store in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.search.SearchList&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:store">Find the entity store in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _store(Wrap<Boolean> c);
@@ -221,10 +223,10 @@ public abstract class SearchListGen<DEV> {
 	@JsonInclude(Include.NON_NULL)
 	protected Boolean populate;
 
-	/**	<br/> The entity populate
+	/**	<br> The entity populate
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.search.SearchList&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:populate">Find the entity populate in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.search.SearchList&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:populate">Find the entity populate in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _populate(Wrap<Boolean> c);
@@ -269,17 +271,17 @@ public abstract class SearchListGen<DEV> {
 	///////////////
 
 	/**	 The entity solrQuery
-	 *	Il est construit avant d'être initialisé avec le constructeur par défaut JsonObject(). 
+	 *	 It is constructed before being initialized with the constructor by default. 
 	 */
 	@JsonIgnore
 	@JsonInclude(Include.NON_NULL)
 	protected JsonObject solrQuery = new JsonObject();
 
-	/**	<br/> The entity solrQuery
-	 *  It is constructed before being initialized with the constructor by default JsonObject(). 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.search.SearchList&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:solrQuery">Find the entity solrQuery in Solr</a>
-	 * <br/>
-	 * @param solrQuery is the entity already constructed. 
+	/**	<br> The entity solrQuery
+	 *  It is constructed before being initialized with the constructor by default. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.search.SearchList&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:solrQuery">Find the entity solrQuery in Solr</a>
+	 * <br>
+	 * @param o is the entity already constructed. 
 	 **/
 	protected abstract void _solrQuery(JsonObject o);
 
@@ -307,29 +309,29 @@ public abstract class SearchListGen<DEV> {
 	 */
 	@JsonIgnore
 	@JsonInclude(Include.NON_NULL)
-	protected QueryResponse queryResponse;
+	protected SolrResponse queryResponse;
 
-	/**	<br/> The entity queryResponse
+	/**	<br> The entity queryResponse
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.search.SearchList&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:queryResponse">Find the entity queryResponse in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.search.SearchList&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:queryResponse">Find the entity queryResponse in Solr</a>
+	 * <br>
 	 * @param promise is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _queryResponse(Promise<QueryResponse> promise);
+	protected abstract void _queryResponse(Promise<SolrResponse> promise);
 
-	public QueryResponse getQueryResponse() {
+	public SolrResponse getQueryResponse() {
 		return queryResponse;
 	}
 
-	public void setQueryResponse(QueryResponse queryResponse) {
+	public void setQueryResponse(SolrResponse queryResponse) {
 		this.queryResponse = queryResponse;
 	}
-	public static QueryResponse staticSetQueryResponse(SiteRequestEnUS siteRequest_, String o) {
+	public static SolrResponse staticSetQueryResponse(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
-	protected Future<QueryResponse> queryResponsePromise() {
-		Promise<QueryResponse> promise = Promise.promise();
-		Promise<QueryResponse> promise2 = Promise.promise();
+	protected Future<SolrResponse> queryResponsePromise() {
+		Promise<SolrResponse> promise = Promise.promise();
+		Promise<SolrResponse> promise2 = Promise.promise();
 		_queryResponse(promise2);
 		promise2.future().onSuccess(o -> {
 			setQueryResponse(o);
@@ -340,40 +342,51 @@ public abstract class SearchListGen<DEV> {
 		return promise.future();
 	}
 
-	//////////////////////
-	// solrDocumentList //
-	//////////////////////
+	//////////
+	// docs //
+	//////////
 
-	/**	 The entity solrDocumentList
+	/**	 The entity docs
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonIgnore
 	@JsonInclude(Include.NON_NULL)
-	protected SolrDocumentList solrDocumentList;
+	protected List<Doc> docs;
 
-	/**	<br/> The entity solrDocumentList
+	/**	<br> The entity docs
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.search.SearchList&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:solrDocumentList">Find the entity solrDocumentList in Solr</a>
-	 * <br/>
-	 * @param c is for wrapping a value to assign to this entity during initialization. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.search.SearchList&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:docs">Find the entity docs in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _solrDocumentList(Wrap<SolrDocumentList> c);
+	protected abstract void _docs(Wrap<List<Doc>> w);
 
-	public SolrDocumentList getSolrDocumentList() {
-		return solrDocumentList;
+	public List<Doc> getDocs() {
+		return docs;
 	}
 
-	public void setSolrDocumentList(SolrDocumentList solrDocumentList) {
-		this.solrDocumentList = solrDocumentList;
+	public void setDocs(List<Doc> docs) {
+		this.docs = docs;
 	}
-	public static SolrDocumentList staticSetSolrDocumentList(SiteRequestEnUS siteRequest_, String o) {
+	public static Doc staticSetDocs(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
-	protected SearchList solrDocumentListInit() {
-		Wrap<SolrDocumentList> solrDocumentListWrap = new Wrap<SolrDocumentList>().var("solrDocumentList");
-		if(solrDocumentList == null) {
-			_solrDocumentList(solrDocumentListWrap);
-			setSolrDocumentList(solrDocumentListWrap.o);
+	public SearchList addDocs(Doc...objets) {
+		for(Doc o : objets) {
+			addDocs(o);
+		}
+		return (SearchList)this;
+	}
+	public SearchList addDocs(Doc o) {
+		if(o != null)
+			this.docs.add(o);
+		return (SearchList)this;
+	}
+	protected SearchList docsInit() {
+		Wrap<List<Doc>> docsWrap = new Wrap<List<Doc>>().var("docs");
+		if(docs == null) {
+			_docs(docsWrap);
+			setDocs(docsWrap.o);
 		}
 		return (SearchList)this;
 	}
@@ -383,18 +396,18 @@ public abstract class SearchListGen<DEV> {
 	//////////
 
 	/**	 The entity list
-	 *	Il est construit avant d'être initialisé avec le constructeur par défaut List<DEV>(). 
+	 *	 It is constructed before being initialized with the constructor by default. 
 	 */
 	@JsonProperty
 	@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 	@JsonInclude(Include.NON_NULL)
 	protected List<DEV> list = new ArrayList<DEV>();
 
-	/**	<br/> The entity list
-	 *  It is constructed before being initialized with the constructor by default List<DEV>(). 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.search.SearchList&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:list">Find the entity list in Solr</a>
-	 * <br/>
-	 * @param list is the entity already constructed. 
+	/**	<br> The entity list
+	 *  It is constructed before being initialized with the constructor by default. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.search.SearchList&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:list">Find the entity list in Solr</a>
+	 * <br>
+	 * @param l is the entity already constructed. 
 	 **/
 	protected abstract void _list(List<DEV> l);
 
@@ -432,10 +445,10 @@ public abstract class SearchListGen<DEV> {
 	@JsonInclude(Include.NON_NULL)
 	protected Object first;
 
-	/**	<br/> The entity first
+	/**	<br> The entity first
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.search.SearchList&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:first">Find the entity first in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.search.SearchList&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:first">Find the entity first in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _first(Wrap<Object> w);
@@ -506,7 +519,7 @@ public abstract class SearchListGen<DEV> {
 		}).compose(a -> {
 			Promise<Void> promise2 = Promise.promise();
 			try {
-				solrDocumentListInit();
+				docsInit();
 				listInit();
 				firstInit();
 				promise2.complete();
@@ -575,8 +588,8 @@ public abstract class SearchListGen<DEV> {
 				return oSearchList.solrQuery;
 			case "queryResponse":
 				return oSearchList.queryResponse;
-			case "solrDocumentList":
-				return oSearchList.solrDocumentList;
+			case "docs":
+				return oSearchList.docs;
 			case "list":
 				return oSearchList.list;
 			case "first":
@@ -725,7 +738,7 @@ public abstract class SearchListGen<DEV> {
 	public static final String VAR_populate = "populate";
 	public static final String VAR_solrQuery = "solrQuery";
 	public static final String VAR_queryResponse = "queryResponse";
-	public static final String VAR_solrDocumentList = "solrDocumentList";
+	public static final String VAR_docs = "docs";
 	public static final String VAR_list = "list";
 	public static final String VAR_first = "first";
 
@@ -736,7 +749,7 @@ public abstract class SearchListGen<DEV> {
 	public static final String DISPLAY_NAME_populate = "";
 	public static final String DISPLAY_NAME_solrQuery = "";
 	public static final String DISPLAY_NAME_queryResponse = "";
-	public static final String DISPLAY_NAME_solrDocumentList = "";
+	public static final String DISPLAY_NAME_docs = "";
 	public static final String DISPLAY_NAME_list = "";
 	public static final String DISPLAY_NAME_first = "";
 
@@ -759,8 +772,8 @@ public abstract class SearchListGen<DEV> {
 			return DISPLAY_NAME_solrQuery;
 		case VAR_queryResponse:
 			return DISPLAY_NAME_queryResponse;
-		case VAR_solrDocumentList:
-			return DISPLAY_NAME_solrDocumentList;
+		case VAR_docs:
+			return DISPLAY_NAME_docs;
 		case VAR_list:
 			return DISPLAY_NAME_list;
 		case VAR_first:

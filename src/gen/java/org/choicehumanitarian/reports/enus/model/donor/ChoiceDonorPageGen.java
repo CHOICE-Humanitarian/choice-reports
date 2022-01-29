@@ -9,7 +9,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import org.choicehumanitarian.reports.enus.wrap.Wrap;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.choicehumanitarian.reports.enus.java.ZonedDateTimeSerializer;
 import java.util.Map;
@@ -27,6 +26,7 @@ import io.vertx.core.Future;
 import org.choicehumanitarian.reports.enus.base.BaseModel;
 import java.util.Objects;
 import io.vertx.core.json.JsonArray;
+import org.computate.search.wrap.Wrap;
 import org.apache.commons.lang3.math.NumberUtils;
 import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -35,8 +35,8 @@ import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 import org.choicehumanitarian.reports.enus.model.donor.ChoiceDonorGenPage;
 
 /**	
- * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonorPage&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
- * <br/>
+ * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonorPage&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
+ * <br>
  **/
 public abstract class ChoiceDonorPageGen<DEV> extends ChoiceDonorGenPage {
 	protected static final Logger LOG = LoggerFactory.getLogger(ChoiceDonorPage.class);
@@ -232,19 +232,6 @@ public abstract class ChoiceDonorPageGen<DEV> extends ChoiceDonorGenPage {
 		switch(var.toLowerCase()) {
 			default:
 				return super.defineChoiceDonorGenPage(var, val);
-		}
-	}
-
-	//////////////////
-	// apiRequest //
-	//////////////////
-
-	public void apiRequestChoiceDonorPage() {
-		ApiRequest apiRequest = Optional.ofNullable(siteRequest_).map(SiteRequestEnUS::getApiRequest_).orElse(null);
-		Object o = Optional.ofNullable(apiRequest).map(ApiRequest::getOriginal).orElse(null);
-		if(o != null && o instanceof ChoiceDonorPage) {
-			ChoiceDonorPage original = (ChoiceDonorPage)o;
-			super.apiRequestChoiceDonorGenPage();
 		}
 	}
 

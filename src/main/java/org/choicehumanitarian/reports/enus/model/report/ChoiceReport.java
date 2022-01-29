@@ -1,12 +1,11 @@
 package org.choicehumanitarian.reports.enus.model.report;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import org.choicehumanitarian.reports.enus.base.BaseModel;
 import org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor;
 import org.choicehumanitarian.reports.enus.search.SearchList;
-import org.choicehumanitarian.reports.enus.wrap.Wrap;
+import org.computate.search.wrap.Wrap;
 
 import io.vertx.core.Promise;
 

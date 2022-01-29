@@ -3,6 +3,7 @@ package org.choicehumanitarian.reports.enus.vertx;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Arrays;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import io.vertx.ext.web.client.WebClient;
 import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import org.apache.commons.lang3.StringUtils;
@@ -11,8 +12,6 @@ import org.choicehumanitarian.reports.enus.writer.AllWriter;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import org.choicehumanitarian.reports.enus.wrap.Wrap;
-import org.apache.commons.collections.CollectionUtils;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.choicehumanitarian.reports.enus.java.ZonedDateTimeSerializer;
 import java.util.Map;
@@ -26,15 +25,14 @@ import java.math.MathContext;
 import org.choicehumanitarian.reports.enus.java.ZonedDateTimeDeserializer;
 import io.vertx.core.Promise;
 import org.choicehumanitarian.reports.enus.java.LocalDateSerializer;
-import org.apache.commons.text.StringEscapeUtils;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.vertx.core.Future;
 import java.io.File;
 import org.choicehumanitarian.reports.enus.base.BaseModel;
-import org.apache.solr.client.solrj.SolrClient;
 import java.util.Objects;
 import io.vertx.core.json.JsonArray;
+import org.computate.search.wrap.Wrap;
 import org.apache.commons.lang3.math.NumberUtils;
 import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -43,46 +41,51 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 
 /**	
- * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.AppSwagger2&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
- * <br/>
+ * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.AppSwagger2&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
+ * <br>
  **/
 public abstract class AppSwagger2Gen<DEV> extends Object {
 	protected static final Logger LOG = LoggerFactory.getLogger(AppSwagger2.class);
+	public static final String configureConfigComplete1 = "The config was configured successfully. ";
+	public static final String configureConfigComplete = configureConfigComplete1;
+	public static final String configureConfigFail1 = "Could not configure the config(). ";
+	public static final String configureConfigFail = configureConfigFail1;
 
-	/////////////////////////
-	// solrClientComputate //
-	/////////////////////////
 
-	/**	 The entity solrClientComputate
+	///////////////
+	// webClient //
+	///////////////
+
+	/**	 The entity webClient
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
-	protected SolrClient solrClientComputate;
+	protected WebClient webClient;
 
-	/**	<br/> The entity solrClientComputate
+	/**	<br> The entity webClient
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.AppSwagger2&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:solrClientComputate">Find the entity solrClientComputate in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.AppSwagger2&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:webClient">Find the entity webClient in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _solrClientComputate(Wrap<SolrClient> w);
+	protected abstract void _webClient(Wrap<WebClient> w);
 
-	public SolrClient getSolrClientComputate() {
-		return solrClientComputate;
+	public WebClient getWebClient() {
+		return webClient;
 	}
 
-	public void setSolrClientComputate(SolrClient solrClientComputate) {
-		this.solrClientComputate = solrClientComputate;
+	public void setWebClient(WebClient webClient) {
+		this.webClient = webClient;
 	}
-	public static SolrClient staticSetSolrClientComputate(SiteRequestEnUS siteRequest_, String o) {
+	public static WebClient staticSetWebClient(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
-	protected AppSwagger2 solrClientComputateInit() {
-		Wrap<SolrClient> solrClientComputateWrap = new Wrap<SolrClient>().var("solrClientComputate");
-		if(solrClientComputate == null) {
-			_solrClientComputate(solrClientComputateWrap);
-			setSolrClientComputate(solrClientComputateWrap.o);
+	protected AppSwagger2 webClientInit() {
+		Wrap<WebClient> webClientWrap = new Wrap<WebClient>().var("webClient");
+		if(webClient == null) {
+			_webClient(webClientWrap);
+			setWebClient(webClientWrap.o);
 		}
 		return (AppSwagger2)this;
 	}
@@ -98,10 +101,10 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected SiteRequestEnUS siteRequest_;
 
-	/**	<br/> The entity siteRequest_
+	/**	<br> The entity siteRequest_
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.AppSwagger2&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:siteRequest_">Find the entity siteRequest_ in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.AppSwagger2&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:siteRequest_">Find the entity siteRequest_ in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _siteRequest_(Wrap<SiteRequestEnUS> c);
@@ -135,10 +138,10 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected JsonObject config;
 
-	/**	<br/> The entity config
+	/**	<br> The entity config
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.AppSwagger2&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:config">Find the entity config in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.AppSwagger2&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:config">Find the entity config in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _config(Wrap<JsonObject> c);
@@ -173,10 +176,10 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String appName;
 
-	/**	<br/> The entity appName
+	/**	<br> The entity appName
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.AppSwagger2&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:appName">Find the entity appName in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.AppSwagger2&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:appName">Find the entity appName in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _appName(Wrap<String> c);
@@ -222,10 +225,10 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String languageName;
 
-	/**	<br/> The entity languageName
+	/**	<br> The entity languageName
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.AppSwagger2&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:languageName">Find the entity languageName in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.AppSwagger2&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:languageName">Find the entity languageName in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _languageName(Wrap<String> c);
@@ -271,10 +274,10 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String appPath;
 
-	/**	<br/> The entity appPath
+	/**	<br> The entity appPath
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.AppSwagger2&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:appPath">Find the entity appPath in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.AppSwagger2&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:appPath">Find the entity appPath in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _appPath(Wrap<String> c);
@@ -320,10 +323,10 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String openApiVersion;
 
-	/**	<br/> The entity openApiVersion
+	/**	<br> The entity openApiVersion
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.AppSwagger2&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:openApiVersion">Find the entity openApiVersion in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.AppSwagger2&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:openApiVersion">Find the entity openApiVersion in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _openApiVersion(Wrap<String> c);
@@ -370,10 +373,10 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected Integer openApiVersionNumber;
 
-	/**	<br/> The entity openApiVersionNumber
+	/**	<br> The entity openApiVersionNumber
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.AppSwagger2&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:openApiVersionNumber">Find the entity openApiVersionNumber in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.AppSwagger2&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:openApiVersionNumber">Find the entity openApiVersionNumber in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _openApiVersionNumber(Wrap<Integer> c);
@@ -427,10 +430,10 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected Integer tabsSchema;
 
-	/**	<br/> The entity tabsSchema
+	/**	<br> The entity tabsSchema
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.AppSwagger2&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:tabsSchema">Find the entity tabsSchema in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.AppSwagger2&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:tabsSchema">Find the entity tabsSchema in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _tabsSchema(Wrap<Integer> c);
@@ -483,10 +486,10 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String apiVersion;
 
-	/**	<br/> The entity apiVersion
+	/**	<br> The entity apiVersion
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.AppSwagger2&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:apiVersion">Find the entity apiVersion in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.AppSwagger2&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:apiVersion">Find the entity apiVersion in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _apiVersion(Wrap<String> c);
@@ -532,10 +535,10 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String openApiYamlPath;
 
-	/**	<br/> The entity openApiYamlPath
+	/**	<br> The entity openApiYamlPath
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.AppSwagger2&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:openApiYamlPath">Find the entity openApiYamlPath in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.AppSwagger2&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:openApiYamlPath">Find the entity openApiYamlPath in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _openApiYamlPath(Wrap<String> c);
@@ -581,10 +584,10 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected File openApiYamlFile;
 
-	/**	<br/> The entity openApiYamlFile
+	/**	<br> The entity openApiYamlFile
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.AppSwagger2&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:openApiYamlFile">Find the entity openApiYamlFile in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.AppSwagger2&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:openApiYamlFile">Find the entity openApiYamlFile in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _openApiYamlFile(Wrap<File> c);
@@ -619,10 +622,10 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected AllWriter w;
 
-	/**	<br/> The entity w
+	/**	<br> The entity w
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.AppSwagger2&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:w">Find the entity w in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.AppSwagger2&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:w">Find the entity w in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _w(Wrap<AllWriter> c);
@@ -659,10 +662,10 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected AllWriter wPaths;
 
-	/**	<br/> The entity wPaths
+	/**	<br> The entity wPaths
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.AppSwagger2&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:wPaths">Find the entity wPaths in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.AppSwagger2&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:wPaths">Find the entity wPaths in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _wPaths(Wrap<AllWriter> c);
@@ -699,10 +702,10 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected AllWriter wRequestBodies;
 
-	/**	<br/> The entity wRequestBodies
+	/**	<br> The entity wRequestBodies
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.AppSwagger2&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:wRequestBodies">Find the entity wRequestBodies in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.AppSwagger2&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:wRequestBodies">Find the entity wRequestBodies in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _wRequestBodies(Wrap<AllWriter> c);
@@ -739,10 +742,10 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected AllWriter wSchemas;
 
-	/**	<br/> The entity wSchemas
+	/**	<br> The entity wSchemas
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.AppSwagger2&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:wSchemas">Find the entity wSchemas in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.AppSwagger2&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:wSchemas">Find the entity wSchemas in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _wSchemas(Wrap<AllWriter> c);
@@ -767,6 +770,11 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 			wSchemas.initDeepForClass(siteRequest_);
 		return (AppSwagger2)this;
 	}
+	public static final String writeApiError1 = "An error occured while writing the API. ";
+	public static final String writeApiError = writeApiError1;
+	public static final String writeApiError21 = "An error occured while writing the API. ";
+	public static final String writeApiError2 = writeApiError21;
+
 
 	//////////////
 	// initDeep //
@@ -783,7 +791,7 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	}
 
 	public void initAppSwagger2() {
-				solrClientComputateInit();
+				webClientInit();
 				siteRequest_Init();
 				configInit();
 				appNameInit();
@@ -848,8 +856,8 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	public Object obtainAppSwagger2(String var) {
 		AppSwagger2 oAppSwagger2 = (AppSwagger2)this;
 		switch(var) {
-			case "solrClientComputate":
-				return oAppSwagger2.solrClientComputate;
+			case "webClient":
+				return oAppSwagger2.webClient;
 			case "siteRequest_":
 				return oAppSwagger2.siteRequest_;
 			case "config":
@@ -1056,18 +1064,6 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 		}
 	}
 
-	//////////////////
-	// apiRequest //
-	//////////////////
-
-	public void apiRequestAppSwagger2() {
-		ApiRequest apiRequest = Optional.ofNullable(siteRequest_).map(SiteRequestEnUS::getApiRequest_).orElse(null);
-		Object o = Optional.ofNullable(apiRequest).map(ApiRequest::getOriginal).orElse(null);
-		if(o != null && o instanceof AppSwagger2) {
-			AppSwagger2 original = (AppSwagger2)o;
-		}
-	}
-
 	//////////////
 	// toString //
 	//////////////
@@ -1077,7 +1073,9 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 		return sb.toString();
 	}
 
-	public static final String VAR_solrClientComputate = "solrClientComputate";
+	public static final String[] AppSwagger2Vals = new String[] { configureConfigComplete1, configureConfigFail1, writeApiError1, writeApiError21 };
+
+	public static final String VAR_webClient = "webClient";
 	public static final String VAR_siteRequest_ = "siteRequest_";
 	public static final String VAR_config = "config";
 	public static final String VAR_appName = "appName";
@@ -1094,7 +1092,7 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	public static final String VAR_wRequestBodies = "wRequestBodies";
 	public static final String VAR_wSchemas = "wSchemas";
 
-	public static final String DISPLAY_NAME_solrClientComputate = "";
+	public static final String DISPLAY_NAME_webClient = "";
 	public static final String DISPLAY_NAME_siteRequest_ = "";
 	public static final String DISPLAY_NAME_config = "";
 	public static final String DISPLAY_NAME_appName = "";
@@ -1116,8 +1114,8 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	}
 	public static String displayNameAppSwagger2(String var) {
 		switch(var) {
-		case VAR_solrClientComputate:
-			return DISPLAY_NAME_solrClientComputate;
+		case VAR_webClient:
+			return DISPLAY_NAME_webClient;
 		case VAR_siteRequest_:
 			return DISPLAY_NAME_siteRequest_;
 		case VAR_config:

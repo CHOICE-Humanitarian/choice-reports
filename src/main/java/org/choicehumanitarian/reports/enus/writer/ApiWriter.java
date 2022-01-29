@@ -6,27 +6,23 @@ import java.util.List;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrQuery.ORDER;
-import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.client.solrj.util.ClientUtils;
-import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrDocumentList;
-
-import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import org.choicehumanitarian.reports.enus.vertx.AppSwagger2;
-import org.choicehumanitarian.reports.enus.wrap.Wrap;
+import org.computate.search.computate.enus.ComputateEnUSClass;
+import org.computate.search.response.solr.SolrResponse;
+import org.computate.search.wrap.Wrap;
 
 import io.vertx.core.json.JsonObject;
 
 public class ApiWriter extends ApiWriterGen<Object> implements Comparable<ApiWriter> {
 
-	protected void _siteRequest_(Wrap<SiteRequestEnUS> c) {
+	protected void _siteRequest_(Wrap<SiteRequestEnUS> w) {
 	}
 
-	protected void _classSolrDocument(Wrap<SolrDocument> c) {
+	protected void _classDoc(Wrap<ComputateEnUSClass> w) {
+	}
+
+	protected void _classSolrDocument(Wrap<SolrResponse.Doc> c) {
 	}
 
 	protected void _contextRows(Wrap<Integer> c) {
@@ -41,7 +37,7 @@ public class ApiWriter extends ApiWriterGen<Object> implements Comparable<ApiWri
 	protected void _appSwagger2(Wrap<AppSwagger2> c) { 
 	}
 
-	protected void _classUris(Wrap<List<String>> c) {
+	protected void _classUris(Wrap<List<String>> w) {
 	}
 
 	protected void _openApiVersionNumber(Wrap<Integer> c) {
@@ -72,9 +68,6 @@ public class ApiWriter extends ApiWriterGen<Object> implements Comparable<ApiWri
 	}
 
 	protected void _config(Wrap<JsonObject> c) {
-	}
-
-	protected void _solrClientComputate(Wrap<SolrClient> c) {
 	}
 
 	protected void _wRequestHeaders(Wrap<AllWriter> c) {
@@ -222,7 +215,7 @@ public class ApiWriter extends ApiWriterGen<Object> implements Comparable<ApiWri
 		c.o("enUS");
 	}
 
-	protected void _entitySolrDocument(Wrap<SolrDocument> c) {
+	protected void _entitySolrDocument(Wrap<SolrResponse.Doc> c) {
 	}
 
 	String entityVar;
@@ -269,7 +262,7 @@ public class ApiWriter extends ApiWriterGen<Object> implements Comparable<ApiWri
 
 	List<String> entityOptionsDescription;
 
-	public void  initEntity(SolrDocument entitySolrDocument) {
+	public void  initEntity(SolrResponse.Doc entitySolrDocument) {
 		setEntitySolrDocument(entitySolrDocument);
 		entityVar = (String)entitySolrDocument.get("entiteVar_enUS_stored_string");
 		entityVarCapitalized = (String)entitySolrDocument.get("entiteVarCapitalise_enUS_stored_string");
@@ -297,122 +290,6 @@ public class ApiWriter extends ApiWriterGen<Object> implements Comparable<ApiWri
 			if(entityKeywords.contains(classApiMethod + ".header.required"))
 				wRequestHeaders.tl(5, "required: true");
 			wRequestHeaders.tl(5, "type: ", entityJsonType);
-		}
-	}
-
-	public void  writeEntityDescription(Integer numberTabs) throws Exception, Exception {
-		writeEntityDescription(numberTabs, wRequestDescription, "request");
-		writeEntityDescription(numberTabs, wResponseDescription, "response");
-	}
-
-	public void  writeEntityDescription(Integer numberTabs, AllWriter w, String apiRequestOrResponse) throws Exception, Exception {
-		numberTabs = numberTabs == null ? 0 : numberTabs;
-		
-		if(
-				entityKeywords.contains("apiModelEntity")
-				|| entityKeywords.contains(classApiMethod + "." + apiRequestOrResponse)
-				) {
-			w.l();
-
-			if("PATCH".equals(classApiMethodMethod))
-				w.t(numberTabs, "- " + entityVarCapitalized);
-			else
-				w.t(numberTabs, "- " + entityVar);
-
-			if(StringUtils.isNotBlank(entityDisplayName))
-				w.s(" (" + entityDisplayName + ")");
-			w.l(": ");
-			AllWriter wDescription = AllWriter.create(siteRequest_, "  ");
-			if(StringUtils.isNotBlank(entityDescription))
-				wDescription.l(entityDescription);
-			if(BooleanUtils.isTrue(entityOptional))
-				wDescription.tl(numberTabs + 1, "- optional: ", entityOptional);
-			if(entityMinLength != null)
-				wDescription.tl(numberTabs + 1, "- min length: ", entityMinLength);
-			if(entityMaxLength != null)
-				wDescription.tl(numberTabs + 1, "- max length: ", entityMaxLength);
-			if(entityMin != null)
-				wDescription.tl(numberTabs + 1, "- min: ", entityMin);
-			if(entityMax != null)
-				wDescription.tl(numberTabs + 1, "- max: ", entityMax);
-			if(entityOptionsVar != null && entityOptionsDescription != null && entityOptionsVar.size() > 0 && entityOptionsDescription.size() == entityOptionsVar.size()) {
-				wDescription.tl(numberTabs + 1, "- enum:");
-				for(int m = 0; m < entityOptionsVar.size(); m++) {
-					wDescription.tl(numberTabs + 2, "- " + entityOptionsVar.get(m) + ": " + entityOptionsDescription.get(m));
-				}
-			}
-			if(entityKeywords.contains("apiModel")) {
-				SolrQuery searchEntities = new SolrQuery();
-				searchEntities.setQuery("*:*");
-				searchEntities.setRows(1000000);
-				searchEntities.addFilterQuery("siteChemin_indexed_string:" + ClientUtils.escapeQueryChars(config.getString(ConfigKeys.SITE_PATH)));
-
-				if(StringUtils.isBlank(entityCanonicalNameGeneric))
-					searchEntities.addFilterQuery("classeNomCanonique_enUS_indexed_string:" + ClientUtils.escapeQueryChars(entityCanonicalName));
-				else
-					searchEntities.addFilterQuery("classeNomCanonique_enUS_indexed_string:" + ClientUtils.escapeQueryChars(entityCanonicalNameGeneric));
-
-				searchEntities.addFilterQuery("entiteMotsCles_indexed_strings:" + ClientUtils.escapeQueryChars("apiModelEntity"));
-				searchEntities.addFilterQuery("partEstEntite_indexed_boolean:true");
-				searchEntities.addSort("partNumero_indexed_int", ORDER.asc);
-				QueryResponse searchEntitiesReponse = solrClientComputate.query(searchEntities);
-				SolrDocumentList searchEntitiesResults = searchEntitiesReponse.getResults();
-				Integer searchEntitiesLines = searchEntities.getRows();
-
-				if(searchEntitiesResults.size() > 0) {
-					for(Long k = searchEntitiesResults.getStart(); k < searchEntitiesResults.getNumFound(); k+=searchEntitiesLines) {
-						for(Integer l = 0; l < searchEntitiesResults.size(); l++) {
-							SolrDocument entitySolrDocument = searchEntitiesResults.get(l);
-							String entityVarOld = entityVar;
-							String entityVarCapitalizedAncien = entityVarCapitalized;
-							String entityVarApiOld = entityVarApi;
-							Boolean entityKeywordsFoundOld = entityKeywordsFound;
-							List<String> entityKeywordsAncien = entityKeywords;
-							String entityCanonicalNameGenericOld = entityCanonicalNameGeneric;
-							String entityCanonicalNameOld = entityCanonicalName;
-							String entityListJsonTypeOld = entityListJsonType;
-							String entityJsonTypeOld = entityJsonType;
-							String entityJsonFormatOld = entityJsonFormat;
-							List<String> entityOptionsVarOld = entityOptionsVar;
-							List<String> entityOptionsDescriptionOld = entityOptionsDescription;
-							String entityDescriptionOld = entityDescription;
-							
-							entityVar = (String)entitySolrDocument.get("entiteVar_enUS_stored_string");
-							entityVarCapitalized = (String)entitySolrDocument.get("entityVarCapitalized_enUS_stored_string");
-							entityVarApi = StringUtils.defaultIfBlank((String)entitySolrDocument.get("entiteVarApi_stored_string"), entityVar);
-							entityKeywordsFound = BooleanUtils.isTrue((Boolean)entitySolrDocument.get("entiteMotsClesTrouves_stored_boolean"));
-							entityKeywords = (List<String>)entitySolrDocument.get("entiteMotsCles_stored_strings");
-							if(entityKeywords == null)
-								entityKeywords = new ArrayList<>();
-							entityCanonicalNameGeneric = (String)entitySolrDocument.get("entiteNomCanoniqueGenerique_enUS_stored_string");
-							entityCanonicalName = (String)entitySolrDocument.get("entiteNomCanonique_enUS_stored_string");
-							entityListJsonType = (String)entitySolrDocument.get("entiteListeTypeJson_stored_string");
-							entityJsonType = (String)entitySolrDocument.get("entiteTypeJson_stored_string");
-							entityJsonFormat = (String)entitySolrDocument.get("entiteFormatJson_stored_string");
-							entityOptionsVar = (List<String>)entitySolrDocument.get("entiteOptionsVar_stored_strings");
-							entityOptionsDescription = (List<String>)entitySolrDocument.get("entiteOptionsDescription_stored_strings");
-							entityDescription = (String)entitySolrDocument.get("entiteDescription_stored_string");
-	
-							writeEntityDescription(numberTabs + 3, w, apiRequestOrResponse);
-							
-							entityVar = entityVarOld;
-							entityVarCapitalized = entityVarCapitalizedAncien;
-							entityVarApi = entityVarApiOld;
-							entityKeywordsFound = entityKeywordsFoundOld;
-							entityKeywords = entityKeywordsAncien;
-							entityCanonicalNameGeneric = entityCanonicalNameGenericOld;
-							entityCanonicalName = entityCanonicalNameOld;
-							entityListJsonType = entityListJsonTypeOld;
-							entityJsonType = entityJsonTypeOld;
-							entityJsonFormat = entityJsonFormatOld;
-							entityOptionsVar = entityOptionsVarOld;
-							entityOptionsDescription = entityOptionsDescriptionOld;
-							entityDescription = entityDescriptionOld;
-						}
-					}
-				}
-			}
-			w.s(StringUtils.trim(wDescription.toString()));
 		}
 	}
 

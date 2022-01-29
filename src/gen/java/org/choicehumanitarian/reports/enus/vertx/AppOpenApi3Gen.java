@@ -10,8 +10,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import org.choicehumanitarian.reports.enus.wrap.Wrap;
-import org.apache.commons.collections.CollectionUtils;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.choicehumanitarian.reports.enus.java.ZonedDateTimeSerializer;
 import java.util.Map;
@@ -23,13 +21,13 @@ import java.math.MathContext;
 import org.choicehumanitarian.reports.enus.java.ZonedDateTimeDeserializer;
 import io.vertx.core.Promise;
 import org.choicehumanitarian.reports.enus.java.LocalDateSerializer;
-import org.apache.commons.text.StringEscapeUtils;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.vertx.core.Future;
 import org.choicehumanitarian.reports.enus.base.BaseModel;
 import java.util.Objects;
 import io.vertx.core.json.JsonArray;
+import org.computate.search.wrap.Wrap;
 import org.apache.commons.lang3.math.NumberUtils;
 import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -37,8 +35,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 
 /**	
- * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.AppOpenApi3&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
- * <br/>
+ * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.AppOpenApi3&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
+ * <br>
  **/
 public abstract class AppOpenApi3Gen<DEV> extends AppSwagger2 {
 	protected static final Logger LOG = LoggerFactory.getLogger(AppOpenApi3.class);
@@ -210,19 +208,6 @@ public abstract class AppOpenApi3Gen<DEV> extends AppSwagger2 {
 		switch(var.toLowerCase()) {
 			default:
 				return super.defineAppSwagger2(var, val);
-		}
-	}
-
-	//////////////////
-	// apiRequest //
-	//////////////////
-
-	public void apiRequestAppOpenApi3() {
-		ApiRequest apiRequest = Optional.ofNullable(siteRequest_).map(SiteRequestEnUS::getApiRequest_).orElse(null);
-		Object o = Optional.ofNullable(apiRequest).map(ApiRequest::getOriginal).orElse(null);
-		if(o != null && o instanceof AppOpenApi3) {
-			AppOpenApi3 original = (AppOpenApi3)o;
-			super.apiRequestAppSwagger2();
 		}
 	}
 

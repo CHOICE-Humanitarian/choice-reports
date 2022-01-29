@@ -2,57 +2,54 @@ package org.choicehumanitarian.reports.enus.request.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Arrays;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import java.util.Date;
 import java.time.ZonedDateTime;
 import org.slf4j.LoggerFactory;
+import java.time.LocalDateTime;
+import java.util.HashMap;
 import org.apache.commons.lang3.StringUtils;
-import java.lang.Integer;
-import org.choicehumanitarian.reports.enus.wrap.Wrap;
+import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
+import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.lang.Long;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.choicehumanitarian.reports.enus.java.ZonedDateTimeSerializer;
 import java.util.Locale;
 import java.util.Map;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.ZoneOffset;
+import java.lang.String;
 import java.math.RoundingMode;
+import org.choicehumanitarian.reports.enus.request.api.ApiRequest;
+import org.slf4j.Logger;
 import java.math.MathContext;
+import org.choicehumanitarian.reports.enus.java.ZonedDateTimeDeserializer;
+import io.vertx.core.Promise;
 import org.choicehumanitarian.reports.enus.java.LocalDateSerializer;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.Instant;
 import io.vertx.core.Future;
 import java.time.ZoneId;
 import org.choicehumanitarian.reports.enus.base.BaseModel;
 import java.util.Objects;
-import java.util.List;
-import java.time.OffsetDateTime;
-import java.util.Optional;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import org.apache.commons.collections.CollectionUtils;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.choicehumanitarian.reports.enus.java.ZonedDateTimeSerializer;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.lang.String;
-import org.choicehumanitarian.reports.enus.request.api.ApiRequest;
-import org.slf4j.Logger;
-import org.choicehumanitarian.reports.enus.java.ZonedDateTimeDeserializer;
-import io.vertx.core.Promise;
-import org.apache.commons.text.StringEscapeUtils;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import io.vertx.core.json.JsonArray;
+import java.util.List;
 import java.time.temporal.ChronoUnit;
+import java.time.OffsetDateTime;
+import org.computate.search.wrap.Wrap;
 import java.time.format.DateTimeFormatter;
 import org.apache.commons.lang3.math.NumberUtils;
+import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.lang.Object;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 
 /**	
- * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.request.api.ApiRequest&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
- * <br/>
+ * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.request.api.ApiRequest&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
+ * <br>
  **/
 public abstract class ApiRequestGen<DEV> extends Object {
 	protected static final Logger LOG = LoggerFactory.getLogger(ApiRequest.class);
@@ -68,10 +65,10 @@ public abstract class ApiRequestGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected SiteRequestEnUS siteRequest_;
 
-	/**	<br/> The entity siteRequest_
+	/**	<br> The entity siteRequest_
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.request.api.ApiRequest&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:siteRequest_">Find the entity siteRequest_ in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.request.api.ApiRequest&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:siteRequest_">Find the entity siteRequest_ in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _siteRequest_(Wrap<SiteRequestEnUS> c);
@@ -109,10 +106,10 @@ public abstract class ApiRequestGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected ZonedDateTime created;
 
-	/**	<br/> The entity created
+	/**	<br> The entity created
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.request.api.ApiRequest&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:created">Find the entity created in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.request.api.ApiRequest&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:created">Find the entity created in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _created(Wrap<ZonedDateTime> c);
@@ -174,34 +171,34 @@ public abstract class ApiRequestGen<DEV> extends Object {
 	@JsonProperty
 	@JsonSerialize(using = ToStringSerializer.class)
 	@JsonInclude(Include.NON_NULL)
-	protected Integer rows;
+	protected Long rows;
 
-	/**	<br/> The entity rows
+	/**	<br> The entity rows
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.request.api.ApiRequest&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:rows">Find the entity rows in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.request.api.ApiRequest&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:rows">Find the entity rows in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _rows(Wrap<Integer> c);
+	protected abstract void _rows(Wrap<Long> c);
 
-	public Integer getRows() {
+	public Long getRows() {
 		return rows;
 	}
 
-	public void setRows(Integer rows) {
+	public void setRows(Long rows) {
 		this.rows = rows;
 	}
 	@JsonIgnore
 	public void setRows(String o) {
 		this.rows = ApiRequest.staticSetRows(siteRequest_, o);
 	}
-	public static Integer staticSetRows(SiteRequestEnUS siteRequest_, String o) {
+	public static Long staticSetRows(SiteRequestEnUS siteRequest_, String o) {
 		if(NumberUtils.isParsable(o))
-			return Integer.parseInt(o);
+			return Long.parseLong(o);
 		return null;
 	}
 	protected ApiRequest rowsInit() {
-		Wrap<Integer> rowsWrap = new Wrap<Integer>().var("rows");
+		Wrap<Long> rowsWrap = new Wrap<Long>().var("rows");
 		if(rows == null) {
 			_rows(rowsWrap);
 			setRows(rowsWrap.o);
@@ -209,11 +206,11 @@ public abstract class ApiRequestGen<DEV> extends Object {
 		return (ApiRequest)this;
 	}
 
-	public static Integer staticSolrRows(SiteRequestEnUS siteRequest_, Integer o) {
+	public static Long staticSolrRows(SiteRequestEnUS siteRequest_, Long o) {
 		return o;
 	}
 
-	public static String staticSolrStrRows(SiteRequestEnUS siteRequest_, Integer o) {
+	public static String staticSolrStrRows(SiteRequestEnUS siteRequest_, Long o) {
 		return o == null ? null : o.toString();
 	}
 
@@ -233,10 +230,10 @@ public abstract class ApiRequestGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected Long numFound;
 
-	/**	<br/> The entity numFound
+	/**	<br> The entity numFound
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.request.api.ApiRequest&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:numFound">Find the entity numFound in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.request.api.ApiRequest&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:numFound">Find the entity numFound in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _numFound(Wrap<Long> c);
@@ -290,10 +287,10 @@ public abstract class ApiRequestGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected Long numPATCH;
 
-	/**	<br/> The entity numPATCH
+	/**	<br> The entity numPATCH
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.request.api.ApiRequest&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:numPATCH">Find the entity numPATCH in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.request.api.ApiRequest&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:numPATCH">Find the entity numPATCH in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _numPATCH(Wrap<Long> c);
@@ -346,10 +343,10 @@ public abstract class ApiRequestGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String uuid;
 
-	/**	<br/> The entity uuid
+	/**	<br> The entity uuid
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.request.api.ApiRequest&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:uuid">Find the entity uuid in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.request.api.ApiRequest&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:uuid">Find the entity uuid in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _uuid(Wrap<String> c);
@@ -395,10 +392,10 @@ public abstract class ApiRequestGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String id;
 
-	/**	<br/> The entity id
+	/**	<br> The entity id
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.request.api.ApiRequest&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:id">Find the entity id in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.request.api.ApiRequest&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:id">Find the entity id in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _id(Wrap<String> c);
@@ -445,10 +442,10 @@ public abstract class ApiRequestGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected Long pk;
 
-	/**	<br/> The entity pk
+	/**	<br> The entity pk
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.request.api.ApiRequest&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pk">Find the entity pk in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.request.api.ApiRequest&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pk">Find the entity pk in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _pk(Wrap<Long> c);
@@ -501,10 +498,10 @@ public abstract class ApiRequestGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected Object original;
 
-	/**	<br/> The entity original
+	/**	<br> The entity original
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.request.api.ApiRequest&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:original">Find the entity original in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.request.api.ApiRequest&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:original">Find the entity original in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _original(Wrap<Object> c);
@@ -533,7 +530,7 @@ public abstract class ApiRequestGen<DEV> extends Object {
 	/////////
 
 	/**	 The entity pks
-	 *	Il est construit avant d'être initialisé avec le constructeur par défaut List<Long>(). 
+	 *	 It is constructed before being initialized with the constructor by default. 
 	 */
 	@JsonProperty
 	@JsonFormat(shape = JsonFormat.Shape.ARRAY)
@@ -541,11 +538,11 @@ public abstract class ApiRequestGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected List<Long> pks = new ArrayList<Long>();
 
-	/**	<br/> The entity pks
-	 *  It is constructed before being initialized with the constructor by default List<Long>(). 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.request.api.ApiRequest&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pks">Find the entity pks in Solr</a>
-	 * <br/>
-	 * @param pks is the entity already constructed. 
+	/**	<br> The entity pks
+	 *  It is constructed before being initialized with the constructor by default. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.request.api.ApiRequest&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pks">Find the entity pks in Solr</a>
+	 * <br>
+	 * @param c is the entity already constructed. 
 	 **/
 	protected abstract void _pks(List<Long> c);
 
@@ -615,18 +612,18 @@ public abstract class ApiRequestGen<DEV> extends Object {
 	/////////////
 
 	/**	 The entity classes
-	 *	Il est construit avant d'être initialisé avec le constructeur par défaut List<String>(). 
+	 *	 It is constructed before being initialized with the constructor by default. 
 	 */
 	@JsonProperty
 	@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 	@JsonInclude(Include.NON_NULL)
 	protected List<String> classes = new ArrayList<String>();
 
-	/**	<br/> The entity classes
-	 *  It is constructed before being initialized with the constructor by default List<String>(). 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.request.api.ApiRequest&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:classes">Find the entity classes in Solr</a>
-	 * <br/>
-	 * @param classes is the entity already constructed. 
+	/**	<br> The entity classes
+	 *  It is constructed before being initialized with the constructor by default. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.request.api.ApiRequest&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:classes">Find the entity classes in Solr</a>
+	 * <br>
+	 * @param c is the entity already constructed. 
 	 **/
 	protected abstract void _classes(List<String> c);
 
@@ -681,18 +678,18 @@ public abstract class ApiRequestGen<DEV> extends Object {
 	//////////
 
 	/**	 The entity vars
-	 *	Il est construit avant d'être initialisé avec le constructeur par défaut List<String>(). 
+	 *	 It is constructed before being initialized with the constructor by default. 
 	 */
 	@JsonProperty
 	@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 	@JsonInclude(Include.NON_NULL)
 	protected List<String> vars = new ArrayList<String>();
 
-	/**	<br/> The entity vars
-	 *  It is constructed before being initialized with the constructor by default List<String>(). 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.request.api.ApiRequest&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:vars">Find the entity vars in Solr</a>
-	 * <br/>
-	 * @param vars is the entity already constructed. 
+	/**	<br> The entity vars
+	 *  It is constructed before being initialized with the constructor by default. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.request.api.ApiRequest&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:vars">Find the entity vars in Solr</a>
+	 * <br>
+	 * @param c is the entity already constructed. 
 	 **/
 	protected abstract void _vars(List<String> c);
 
@@ -753,10 +750,10 @@ public abstract class ApiRequestGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String timeRemaining;
 
-	/**	<br/> The entity timeRemaining
+	/**	<br> The entity timeRemaining
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.request.api.ApiRequest&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:timeRemaining">Find the entity timeRemaining in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.request.api.ApiRequest&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:timeRemaining">Find the entity timeRemaining in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _timeRemaining(Wrap<String> w);
@@ -964,7 +961,7 @@ public abstract class ApiRequestGen<DEV> extends Object {
 		case "created":
 			return ApiRequest.staticSolrCreated(siteRequest_, (ZonedDateTime)o);
 		case "rows":
-			return ApiRequest.staticSolrRows(siteRequest_, (Integer)o);
+			return ApiRequest.staticSolrRows(siteRequest_, (Long)o);
 		case "numFound":
 			return ApiRequest.staticSolrNumFound(siteRequest_, (Long)o);
 		case "numPATCH":
@@ -1000,7 +997,7 @@ public abstract class ApiRequestGen<DEV> extends Object {
 		case "created":
 			return ApiRequest.staticSolrStrCreated(siteRequest_, (Date)o);
 		case "rows":
-			return ApiRequest.staticSolrStrRows(siteRequest_, (Integer)o);
+			return ApiRequest.staticSolrStrRows(siteRequest_, (Long)o);
 		case "numFound":
 			return ApiRequest.staticSolrStrNumFound(siteRequest_, (Long)o);
 		case "numPATCH":
@@ -1083,18 +1080,6 @@ public abstract class ApiRequestGen<DEV> extends Object {
 		switch(var.toLowerCase()) {
 			default:
 				return null;
-		}
-	}
-
-	//////////////////
-	// apiRequest //
-	//////////////////
-
-	public void apiRequestApiRequest() {
-		ApiRequest apiRequest = Optional.ofNullable(siteRequest_).map(SiteRequestEnUS::getApiRequest_).orElse(null);
-		Object o = Optional.ofNullable(apiRequest).map(ApiRequest::getOriginal).orElse(null);
-		if(o != null && o instanceof ApiRequest) {
-			ApiRequest original = (ApiRequest)o;
 		}
 	}
 

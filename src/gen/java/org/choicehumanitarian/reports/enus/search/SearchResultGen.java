@@ -9,13 +9,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import org.choicehumanitarian.reports.enus.wrap.Wrap;
-import org.apache.commons.collections.CollectionUtils;
 import java.lang.Long;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.choicehumanitarian.reports.enus.java.ZonedDateTimeSerializer;
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.vertx.core.json.JsonObject;
 import java.lang.String;
 import java.math.RoundingMode;
 import org.choicehumanitarian.reports.enus.request.api.ApiRequest;
@@ -24,14 +23,13 @@ import java.math.MathContext;
 import org.choicehumanitarian.reports.enus.java.ZonedDateTimeDeserializer;
 import io.vertx.core.Promise;
 import org.choicehumanitarian.reports.enus.java.LocalDateSerializer;
-import org.apache.commons.text.StringEscapeUtils;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.vertx.core.Future;
 import org.choicehumanitarian.reports.enus.base.BaseModel;
 import java.util.Objects;
 import io.vertx.core.json.JsonArray;
-import org.apache.solr.common.SolrDocument;
+import org.computate.search.wrap.Wrap;
 import org.apache.commons.lang3.math.NumberUtils;
 import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -40,8 +38,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 
 /**	
- * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.search.SearchResult&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
- * <br/>
+ * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.search.SearchResult&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
+ * <br>
  **/
 public abstract class SearchResultGen<DEV> extends Object {
 	protected static final Logger LOG = LoggerFactory.getLogger(SearchResult.class);
@@ -57,10 +55,10 @@ public abstract class SearchResultGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected SiteRequestEnUS siteRequest_;
 
-	/**	<br/> The entity siteRequest_
+	/**	<br> The entity siteRequest_
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.search.SearchResult&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:siteRequest_">Find the entity siteRequest_ in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.search.SearchResult&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:siteRequest_">Find the entity siteRequest_ in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _siteRequest_(Wrap<SiteRequestEnUS> c);
@@ -91,30 +89,29 @@ public abstract class SearchResultGen<DEV> extends Object {
 	/**	 The entity solrDocument
 	 *	 is defined as null before being initialized. 
 	 */
-	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
-	protected SolrDocument solrDocument;
+	protected JsonObject solrDocument;
 
-	/**	<br/> The entity solrDocument
+	/**	<br> The entity solrDocument
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.search.SearchResult&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:solrDocument">Find the entity solrDocument in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.search.SearchResult&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:solrDocument">Find the entity solrDocument in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _solrDocument(Wrap<SolrDocument> c);
+	protected abstract void _solrDocument(Wrap<JsonObject> c);
 
-	public SolrDocument getSolrDocument() {
+	public JsonObject getSolrDocument() {
 		return solrDocument;
 	}
 
-	public void setSolrDocument(SolrDocument solrDocument) {
+	public void setSolrDocument(JsonObject solrDocument) {
 		this.solrDocument = solrDocument;
 	}
-	public static SolrDocument staticSetSolrDocument(SiteRequestEnUS siteRequest_, String o) {
+	public static JsonObject staticSetSolrDocument(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
 	protected SearchResult solrDocumentInit() {
-		Wrap<SolrDocument> solrDocumentWrap = new Wrap<SolrDocument>().var("solrDocument");
+		Wrap<JsonObject> solrDocumentWrap = new Wrap<JsonObject>().var("solrDocument");
 		if(solrDocument == null) {
 			_solrDocument(solrDocumentWrap);
 			setSolrDocument(solrDocumentWrap.o);
@@ -134,10 +131,10 @@ public abstract class SearchResultGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected Long resultIndex;
 
-	/**	<br/> The entity resultIndex
+	/**	<br> The entity resultIndex
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.search.SearchResult&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:resultIndex">Find the entity resultIndex in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.search.SearchResult&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:resultIndex">Find the entity resultIndex in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _resultIndex(Wrap<Long> c);
@@ -361,18 +358,6 @@ public abstract class SearchResultGen<DEV> extends Object {
 		switch(var.toLowerCase()) {
 			default:
 				return null;
-		}
-	}
-
-	//////////////////
-	// apiRequest //
-	//////////////////
-
-	public void apiRequestSearchResult() {
-		ApiRequest apiRequest = Optional.ofNullable(siteRequest_).map(SiteRequestEnUS::getApiRequest_).orElse(null);
-		Object o = Optional.ofNullable(apiRequest).map(ApiRequest::getOriginal).orElse(null);
-		if(o != null && o instanceof SearchResult) {
-			SearchResult original = (SearchResult)o;
 		}
 	}
 

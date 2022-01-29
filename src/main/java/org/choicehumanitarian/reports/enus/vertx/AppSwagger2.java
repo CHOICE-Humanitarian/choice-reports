@@ -5,24 +5,26 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrQuery.ORDER;
-import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.client.solrj.util.ClientUtils;
-import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrDocumentList;
-
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
-import org.choicehumanitarian.reports.enus.wrap.Wrap;
 import org.choicehumanitarian.reports.enus.writer.AllWriter;
 import org.choicehumanitarian.reports.enus.writer.ApiWriter;
+import org.computate.search.computate.enus.ComputateEnUSClass;
+import org.computate.search.request.SearchRequest;
+import org.computate.search.response.solr.SolrResponse;
+import org.computate.search.tool.SearchTool;
+import org.computate.search.wrap.Wrap;
 
+import io.vertx.config.ConfigRetriever;
+import io.vertx.config.ConfigRetrieverOptions;
+import io.vertx.config.ConfigStoreOptions;
+import io.vertx.core.Future;
+import io.vertx.core.Promise;
+import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
+import io.vertx.ext.web.client.WebClient;
 
 public class AppSwagger2 extends AppSwagger2Gen<Object> {
 
@@ -32,7 +34,44 @@ public class AppSwagger2 extends AppSwagger2Gen<Object> {
 		api.writeOpenApi();
 	}
 
-	protected void _solrClientComputate(Wrap<SolrClient> w) {
+	/**	
+	 * Val.Complete.enUS:The config was configured successfully. 
+	 * Val.Fail.enUS:Could not configure the config(). 
+	 **/
+	public static Future<JsonObject> configureConfig(Vertx vertx) {
+		Promise<JsonObject> promise = Promise.promise();
+
+		try {
+			ConfigRetrieverOptions retrieverOptions = new ConfigRetrieverOptions();
+
+			retrieverOptions.addStore(new ConfigStoreOptions().setType("file").setFormat("yaml").setConfig(new JsonObject().put("path", Thread.currentThread().getContextClassLoader().getResource("application.yml").getPath())));
+
+			String configPath = System.getenv(ConfigKeys.CONFIG_PATH);
+			if(StringUtils.isNotBlank(configPath)) {
+				ConfigStoreOptions configIni = new ConfigStoreOptions().setType("file").setFormat("yaml").setConfig(new JsonObject().put("path", configPath));
+				retrieverOptions.addStore(configIni);
+			}
+
+			ConfigStoreOptions storeEnv = new ConfigStoreOptions().setType("env");
+			retrieverOptions.addStore(storeEnv);
+
+			ConfigRetriever configRetriever = ConfigRetriever.create(vertx, retrieverOptions);
+			configRetriever.getConfig().onSuccess(config -> {
+				LOG.info("The config was configured successfully. ");
+				promise.complete(config);
+			}).onFailure(ex -> {
+				LOG.error("Unable to configure site context. ", ex);
+				promise.fail(ex);
+			});
+		} catch(Exception ex) {
+			LOG.error("Unable to configure site context. ", ex);
+			promise.fail(ex);
+		}
+
+		return promise.future();
+	}
+
+	protected void _webClient(Wrap<WebClient> w) {
 	}
 
 	protected void _siteRequest_(Wrap<SiteRequestEnUS> c) {
@@ -73,7 +112,7 @@ public class AppSwagger2 extends AppSwagger2Gen<Object> {
 	}
 
 	protected void _openApiYamlPath(Wrap<String> c) {
-		c.o(appPath + "/src/main/resources/webroot/" + ("2.0".equals(apiVersion) ? "swagger2" : "openapi3") + "-enUS.yaml");
+		c.o(appPath + "/src/main/resources/webroot/" + ("2.0".equals(apiVersion) ? "swagger2" : "openapi3") + "-enUS.yml");
 	}
 
 	protected void _openApiYamlFile(Wrap<File> c) {
@@ -96,38 +135,24 @@ public class AppSwagger2 extends AppSwagger2Gen<Object> {
 		c.o(AllWriter.create(siteRequest_, "  "));
 	}
 
-	List<String> classApiMethods;
-
-	List<String> classUris;
-
-	List<ApiWriter> apiWriters;
-
-	String classApiTag;
-
-	String classApiUri;
-
-	String classSimpleName;
-
-	String classAbsolutePath;
-
-	Boolean classIsBase;
-
-	Integer contextRows;
-
-	Boolean classKeywordsFound;
-
-	List<String> classKeywords;
-
-	public void  writeOpenApi() {
+	public Future<Void> writeOpenApi() {
+		Promise<Void> promise = Promise.promise();
 
 		writeInfo();
-		writeApi();
+		writeApi().onSuccess(a -> {
+			w.s(wPaths.toString());
+			w.s(wRequestBodies.toString());
+			w.s(wSchemas.toString());
+			w.flushClose();
+			promise.complete();
+		}).onFailure(ex -> {
+			w.flushClose();
+			promise.fail(ex);
+		});
 
-		w.s(wPaths.toString());
-		w.s(wRequestBodies.toString());
-		w.s(wSchemas.toString());
 
-		w.flushClose();
+
+		return promise.future();
 	}
 
 	public void  writeInfo() {
@@ -149,7 +174,14 @@ public class AppSwagger2 extends AppSwagger2Gen<Object> {
 		}
 	}
 
-	public void  writeApi() {
+	/**
+	 * 
+	 * Val.Error.enUS:An error occured while writing the API. 
+	 * Val.Error2.enUS:An error occured while writing the API. 
+	 */
+	public Future<Void> writeApi() {
+		Promise<Void> promise = Promise.promise();
+
 		try {
 			wPaths.tl(0, "paths:");
 			wPaths.l();
@@ -199,81 +231,86 @@ public class AppSwagger2 extends AppSwagger2Gen<Object> {
 				wSchemas.tl(1, "schemas:");
 			}
 
-			SolrQuery searchClasses = new SolrQuery();
-			searchClasses.setQuery("*:*");
-			searchClasses.setRows(1000000);
-			searchClasses.addFilterQuery("siteChemin_indexed_string:" + ClientUtils.escapeQueryChars(appPath));
-			searchClasses.addFilterQuery("classeApi_indexed_boolean:true");
-			searchClasses.addFilterQuery("partEstClasse_indexed_boolean:true");
-			searchClasses.addSort("classeNomCanonique_enUS_indexed_string", ORDER.asc);
-			searchClasses.addSort("partNumero_indexed_int", ORDER.asc);
-			QueryResponse searchClassesResponse = solrClientComputate.query(searchClasses);
-			SolrDocumentList searchClassesResultats = searchClassesResponse.getResults();
-			Integer searchClassesLines = searchClasses.getRows();
-			for(Long i = searchClassesResultats.getStart(); i < searchClassesResultats.getNumFound(); i+=searchClassesLines) {
-				for(Integer j = 0; j < searchClassesResultats.size(); j++) {
-					SolrDocument classSolrDocument = searchClassesResultats.get(j);
+			loadClasses().onSuccess(classDoc -> {
+				promise.complete();
+			}).onFailure(ex -> {
+				promise.fail(ex);
+			});
 
-					classApiTag = StringUtils.defaultIfBlank((String)classSolrDocument.get("classeApiTag_enUS_stored_string"), classSimpleName + " API");
-					classApiUri = (String)classSolrDocument.get("classeApiUri_enUS_stored_string");
-					classIsBase = (Boolean)classSolrDocument.get("classeEstBase_stored_boolean");
-					contextRows = (Integer)classSolrDocument.get("contexteRows_stored_int");
+		} catch (Exception ex) {
+			LOG.error(writeApiError, ex);
+		}
 
-					classApiMethods = (List<String>)classSolrDocument.get("classeApiMethodes_enUS_stored_strings");
-					classUris = new ArrayList<>();
-					if(classApiMethods == null)
-						classApiMethods = new ArrayList<>();
-					apiWriters = new ArrayList<>();
+		return promise.future();
+	}
 
-					for(String classApiMethode : classApiMethods) {
-						ApiWriter apiWriter = new ApiWriter();
-						apiWriter.setClassSolrDocument(classSolrDocument);
-						apiWriter.setClassApiMethod(classApiMethode);
-						apiWriter.setContextRows(contextRows);
-						apiWriter.setWPaths(wPaths);
-						apiWriter.setWRequestBodies(wRequestBodies);
-						apiWriter.setWSchemas(wSchemas);
-						apiWriter.setOpenApiVersion(openApiVersion);
-						apiWriter.setAppSwagger2(this);
-						apiWriter.setSolrClientComputate(solrClientComputate);
-						apiWriter.setClassUris(classUris);
-						apiWriter.initDeepApiWriter(siteRequest_);
-						apiWriters.add(apiWriter);
-					}
-					Collections.sort(apiWriters);
+	public Future<Void> loadClasses() {
+		Promise<Void> promise = Promise.promise();
 
-					classSimpleName = (String)classSolrDocument.get("classSimpleName_enUS_stored_string");
-					classAbsolutePath = (String)classSolrDocument.get("classeCheminAbsolu_stored_string");
+		try {
+			SearchRequest searchClasses = new SearchRequest();
+			searchClasses.q("*:*");
+			searchClasses.rows(1000000);
+			searchClasses.fq("siteChemin_indexed_string:" + SearchTool.escapeQueryChars(appPath));
+			searchClasses.fq("classeApi_indexed_boolean:true");
+			searchClasses.fq("partEstClasse_indexed_boolean:true");
+			searchClasses.sortAsc("classeNomCanonique_enUS_indexed_string");
+			searchClasses.sortAsc("partNumero_indexed_int");
+			searchClasses.initDeepForClass(siteRequest_);
 
-					classKeywordsFound = BooleanUtils.isTrue((Boolean)classSolrDocument.get("classeMotsClesTrouves_stored_boolean"));
-					classKeywords = (List<String>)classSolrDocument.get("classeMotsCles_stored_strings");
+			String solrHostName = siteRequest_.getConfig().getString(ConfigKeys.SOLR_HOST_NAME);
+			Integer solrPort = siteRequest_.getConfig().getInteger(ConfigKeys.SOLR_PORT);
+			String solrCollection = siteRequest_.getConfig().getString(ConfigKeys.SOLR_COLLECTION_COMPUTATE);
+			String solrRequestUri = String.format("/solr/%s/select%s", solrCollection, searchClasses.getQueryString());
+			siteRequest_.getWebClient().get(solrPort, solrHostName, solrRequestUri).send().onSuccess(a -> {
+				try {
+					SolrResponse queryResponse = a.bodyAsJson(SolrResponse.class);
+					loadClass(queryResponse.getResponse().getDocs(), 0).onSuccess(b -> {
+						promise.complete();
+					}).onFailure(ex -> {
+						promise.fail(ex);
+					});
+				} catch(Exception ex) {
+					LOG.error(String.format("Could not read response from Solr: http://%s:%s%s", solrHostName, solrPort, solrRequestUri), ex);
+					promise.fail(ex);
+				}
+			}).onFailure(ex -> {
+				LOG.error(String.format("Search failed. "), new RuntimeException(ex));
+				promise.fail(ex);
+			});
+		} catch (Exception ex) {
+			promise.fail(ex);
+		}
 
-					SolrQuery searchEntites = new SolrQuery();
-					searchEntites.setQuery("*:*");
-					searchEntites.setRows(1000000);
-					searchEntites.addFilterQuery("siteChemin_indexed_string:" + ClientUtils.escapeQueryChars(appPath));
-					searchEntites.addFilterQuery("classeCheminAbsolu_indexed_string:" + ClientUtils.escapeQueryChars(classAbsolutePath));
-					searchEntites.addFilterQuery("partEstEntite_indexed_boolean:true");
-					searchEntites.addSort("partNumero_indexed_int", ORDER.asc);
-					QueryResponse searchEntitesResponse = solrClientComputate.query(searchEntites);
-					SolrDocumentList searchEntitesResults = searchEntitesResponse.getResults();
-					Integer searchEntitesLines = searchEntites.getRows();
+		return promise.future();
+	}
 
-					for(Long k = searchEntitesResults.getStart(); k < searchEntitesResults.getNumFound(); k+=searchEntitesLines) {
-						for(Integer l = 0; l < searchEntitesResults.size(); l++) {
-							for(ApiWriter apiWriter : apiWriters) {
-								SolrDocument entiteDocumentSolr = searchEntitesResults.get(l);
+	public Future<Void> loadClass(List<SolrResponse.Doc> docs, Integer i) {
+		Promise<Void> promise = Promise.promise();
+		if(docs.size() >= (i + 1)) {
+			SolrResponse.Doc doc = docs.get(i);
+			ComputateEnUSClass classDoc = JsonObject.mapFrom(doc.getFields()).mapTo(ComputateEnUSClass.class);
+			List<ApiWriter> apiWriters = new ArrayList<>();
 
-								apiWriter.initEntity(entiteDocumentSolr);
-								apiWriter.writeEntityHeaders();
-								apiWriter.writeEntitySchema(null);
-							}
-						}
-						searchEntites.setStart(i.intValue() + searchEntitesLines);
-						searchEntitesResponse = solrClientComputate.query(searchEntites);
-						searchEntitesResults = searchEntitesResponse.getResults();
-						searchEntitesLines = searchEntites.getRows();
-					}
+			ArrayList<String> classUris = new ArrayList<>();
+
+			for(String classApiMethode : classDoc.getClassApiMethods()) {
+				ApiWriter apiWriter = new ApiWriter();
+				apiWriter.setClassSolrDocument(doc);
+				apiWriter.setClassApiMethod(classApiMethode);
+				apiWriter.setContextRows(classDoc.getContextRows());
+				apiWriter.setWPaths(wPaths);
+				apiWriter.setWRequestBodies(wRequestBodies);
+				apiWriter.setWSchemas(wSchemas);
+				apiWriter.setOpenApiVersion(openApiVersion);
+				apiWriter.setAppSwagger2(this);
+				apiWriter.setClassUris(classUris);
+				apiWriter.initDeepApiWriter(siteRequest_);
+				apiWriters.add(apiWriter);
+			}
+			Collections.sort(apiWriters);
+			loadEntities(classDoc, apiWriters).onSuccess(a -> {
+				try {
 					for(ApiWriter apiWriter : apiWriters) {
 						apiWriter.getWriters().flushClose();
 						apiWriter.writeApi(false);
@@ -282,14 +319,73 @@ public class AppSwagger2 extends AppSwagger2Gen<Object> {
 					for(ApiWriter apiWriter : apiWriters) {
 						apiWriter.getWResponseDescription().flushClose();
 					}
+					loadClass(docs, i + 1).onSuccess(b -> {
+						promise.complete();
+					}).onFailure(ex -> {
+						promise.fail(ex);
+					});
+				} catch(Exception ex) {
+					LOG.error("loadClass failed", ex);
+					promise.fail(ex);
 				}
-				searchClasses.setStart(i.intValue() + searchClassesLines);
-				searchClassesResponse = solrClientComputate.query(searchClasses);
-				searchClassesResultats = searchClassesResponse.getResults();
-				searchClassesLines = searchClasses.getRows();
-			}
+			}).onFailure(ex -> {
+				promise.fail(ex);
+			});
+		} else {
+			promise.complete();
+		}
+		return promise.future();
+	}
+
+	public Future<List<SolrResponse.Doc>> loadEntities(ComputateEnUSClass classDoc, List<ApiWriter> apiWriters) {
+		Promise<List<SolrResponse.Doc>> promise = Promise.promise();
+
+		try {
+			SearchRequest searchEntities = new SearchRequest();
+			searchEntities.q("*:*");
+			searchEntities.rows(1000000);
+			searchEntities.fq("siteChemin_indexed_string:" + SearchTool.escapeQueryChars(appPath));
+			searchEntities.fq("classeCheminAbsolu_indexed_string:" + SearchTool.escapeQueryChars(classDoc.getClassAbsolutePath()));
+			searchEntities.fq("partEstEntite_indexed_boolean:true");
+			searchEntities.sortAsc("partNumero_indexed_int");
+			searchEntities.initDeepForClass(siteRequest_);
+
+			String solrHostName = siteRequest_.getConfig().getString(ConfigKeys.SOLR_HOST_NAME);
+			Integer solrPort = siteRequest_.getConfig().getInteger(ConfigKeys.SOLR_PORT);
+			String solrCollection = siteRequest_.getConfig().getString(ConfigKeys.SOLR_COLLECTION_COMPUTATE);
+			String solrRequestUri = String.format("/solr/%s/select%s", solrCollection, searchEntities.getQueryString());
+			siteRequest_.getWebClient().get(solrPort, solrHostName, solrRequestUri).send().onSuccess(a -> {
+				try {
+					SolrResponse queryResponse = a.bodyAsJson(SolrResponse.class);
+					List<SolrResponse.Doc> searchEntitiesResults = queryResponse.getResponse().getDocs();
+
+					Long searchEntitesLines = queryResponse.getResponse().getNumFound();
+
+					for(Long k = searchEntities.getStart(); k < queryResponse.getResponse().getNumFound(); k+=searchEntitesLines) {
+						for(Integer l = 0; l < searchEntitiesResults.size(); l++) {
+							for(ApiWriter apiWriter : apiWriters) {
+								SolrResponse.Doc entiteDocumentSolr = searchEntitiesResults.get(l);
+
+								apiWriter.initEntity(entiteDocumentSolr);
+								apiWriter.writeEntityHeaders();
+								apiWriter.writeEntitySchema(null);
+							}
+						}
+					}
+
+					promise.complete(searchEntitiesResults);
+				} catch(Exception ex) {
+					LOG.error(String.format("Could not read response from Solr: http://%s:%s%s", solrHostName, solrPort, solrRequestUri), ex);
+					promise.fail(ex);
+				}
+			}).onFailure(ex -> {
+				LOG.error(String.format("Search failed. "), new RuntimeException(ex));
+				promise.fail(ex);
+			});
 		} catch (Exception e) {
 			ExceptionUtils.rethrow(e);
 		}
+
+		return promise.future();
 	}
 }

@@ -12,7 +12,6 @@ import java.lang.Integer;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import org.choicehumanitarian.reports.enus.wrap.Wrap;
 import java.lang.Long;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.choicehumanitarian.reports.enus.java.ZonedDateTimeSerializer;
@@ -33,6 +32,7 @@ import io.vertx.core.Future;
 import org.choicehumanitarian.reports.enus.base.BaseModel;
 import java.util.Objects;
 import io.vertx.core.json.JsonArray;
+import org.computate.search.wrap.Wrap;
 import org.apache.commons.lang3.math.NumberUtils;
 import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -40,8 +40,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 
 /**	
- * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.ChoiceReportGenPage&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
- * <br/>
+ * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.ChoiceReportGenPage&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
+ * <br>
  **/
 public abstract class ChoiceReportGenPageGen<DEV> extends BaseModelPage {
 	protected static final Logger LOG = LoggerFactory.getLogger(ChoiceReportGenPage.class);
@@ -57,10 +57,10 @@ public abstract class ChoiceReportGenPageGen<DEV> extends BaseModelPage {
 	@JsonInclude(Include.NON_NULL)
 	protected SearchList<ChoiceReport> searchListChoiceReport_;
 
-	/**	<br/> The entity searchListChoiceReport_
+	/**	<br> The entity searchListChoiceReport_
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.ChoiceReportGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:searchListChoiceReport_">Find the entity searchListChoiceReport_ in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.ChoiceReportGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:searchListChoiceReport_">Find the entity searchListChoiceReport_ in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _searchListChoiceReport_(Wrap<SearchList<ChoiceReport>> w);
@@ -89,16 +89,16 @@ public abstract class ChoiceReportGenPageGen<DEV> extends BaseModelPage {
 	//////////////////////
 
 	/**	 The entity listChoiceReport
-	 *	Il est construit avant d'être initialisé avec le constructeur par défaut JsonArray(). 
+	 *	 It is constructed before being initialized with the constructor by default. 
 	 */
 	@JsonInclude(Include.NON_NULL)
 	protected JsonArray listChoiceReport = new JsonArray();
 
-	/**	<br/> The entity listChoiceReport
-	 *  It is constructed before being initialized with the constructor by default JsonArray(). 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.ChoiceReportGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:listChoiceReport">Find the entity listChoiceReport in Solr</a>
-	 * <br/>
-	 * @param listChoiceReport is the entity already constructed. 
+	/**	<br> The entity listChoiceReport
+	 *  It is constructed before being initialized with the constructor by default. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.ChoiceReportGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:listChoiceReport">Find the entity listChoiceReport in Solr</a>
+	 * <br>
+	 * @param l is the entity already constructed. 
 	 **/
 	protected abstract void _listChoiceReport(JsonArray l);
 
@@ -129,10 +129,10 @@ public abstract class ChoiceReportGenPageGen<DEV> extends BaseModelPage {
 	@JsonInclude(Include.NON_NULL)
 	protected Integer choiceReportCount;
 
-	/**	<br/> The entity choiceReportCount
+	/**	<br> The entity choiceReportCount
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.ChoiceReportGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:choiceReportCount">Find the entity choiceReportCount in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.ChoiceReportGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:choiceReportCount">Find the entity choiceReportCount in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _choiceReportCount(Wrap<Integer> w);
@@ -185,10 +185,10 @@ public abstract class ChoiceReportGenPageGen<DEV> extends BaseModelPage {
 	@JsonInclude(Include.NON_NULL)
 	protected ChoiceReport choiceReport_;
 
-	/**	<br/> The entity choiceReport_
+	/**	<br> The entity choiceReport_
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.ChoiceReportGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:choiceReport_">Find the entity choiceReport_ in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.ChoiceReportGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:choiceReport_">Find the entity choiceReport_ in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _choiceReport_(Wrap<ChoiceReport> w);
@@ -224,10 +224,10 @@ public abstract class ChoiceReportGenPageGen<DEV> extends BaseModelPage {
 	@JsonInclude(Include.NON_NULL)
 	protected Long pk;
 
-	/**	<br/> The entity pk
+	/**	<br> The entity pk
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.ChoiceReportGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pk">Find the entity pk in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.ChoiceReportGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pk">Find the entity pk in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _pk(Wrap<Long> w);

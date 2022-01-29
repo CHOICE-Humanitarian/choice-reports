@@ -10,8 +10,6 @@ import java.lang.Integer;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import org.choicehumanitarian.reports.enus.wrap.Wrap;
-import org.apache.commons.collections.CollectionUtils;
 import java.lang.Long;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.choicehumanitarian.reports.enus.java.ZonedDateTimeSerializer;
@@ -27,7 +25,6 @@ import java.math.MathContext;
 import org.choicehumanitarian.reports.enus.java.ZonedDateTimeDeserializer;
 import io.vertx.core.Promise;
 import org.choicehumanitarian.reports.enus.java.LocalDateSerializer;
-import org.apache.commons.text.StringEscapeUtils;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.vertx.core.Future;
@@ -36,6 +33,7 @@ import org.choicehumanitarian.reports.enus.base.BaseModel;
 import java.util.Objects;
 import io.vertx.core.json.JsonArray;
 import java.util.List;
+import org.computate.search.wrap.Wrap;
 import org.apache.commons.lang3.math.NumberUtils;
 import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -44,8 +42,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 
 /**	
- * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
- * <br/>
+ * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
+ * <br>
  **/
 public abstract class PageLayoutGen<DEV> extends Object {
 	protected static final Logger LOG = LoggerFactory.getLogger(PageLayout.class);
@@ -61,10 +59,10 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected SiteRequestEnUS siteRequest_;
 
-	/**	<br/> The entity siteRequest_
+	/**	<br> The entity siteRequest_
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:siteRequest_">Find the entity siteRequest_ in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:siteRequest_">Find the entity siteRequest_ in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _siteRequest_(Wrap<SiteRequestEnUS> w);
@@ -99,10 +97,10 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected ServiceRequest serviceRequest;
 
-	/**	<br/> The entity serviceRequest
+	/**	<br> The entity serviceRequest
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:serviceRequest">Find the entity serviceRequest in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:serviceRequest">Find the entity serviceRequest in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _serviceRequest(Wrap<ServiceRequest> w);
@@ -137,10 +135,10 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String requestZoneId;
 
-	/**	<br/> The entity requestZoneId
+	/**	<br> The entity requestZoneId
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:requestZoneId">Find the entity requestZoneId in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:requestZoneId">Find the entity requestZoneId in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _requestZoneId(Wrap<String> w);
@@ -186,10 +184,10 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String requestLocaleId;
 
-	/**	<br/> The entity requestLocaleId
+	/**	<br> The entity requestLocaleId
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:requestLocaleId">Find the entity requestLocaleId in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:requestLocaleId">Find the entity requestLocaleId in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _requestLocaleId(Wrap<String> w);
@@ -235,10 +233,10 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String staticBaseUrl;
 
-	/**	<br/> The entity staticBaseUrl
+	/**	<br> The entity staticBaseUrl
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:staticBaseUrl">Find the entity staticBaseUrl in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:staticBaseUrl">Find the entity staticBaseUrl in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _staticBaseUrl(Wrap<String> w);
@@ -284,10 +282,10 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String authUrl;
 
-	/**	<br/> The entity authUrl
+	/**	<br> The entity authUrl
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:authUrl">Find the entity authUrl in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:authUrl">Find the entity authUrl in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _authUrl(Wrap<String> w);
@@ -333,10 +331,10 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String authRealm;
 
-	/**	<br/> The entity authRealm
+	/**	<br> The entity authRealm
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:authRealm">Find the entity authRealm in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:authRealm">Find the entity authRealm in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _authRealm(Wrap<String> w);
@@ -382,10 +380,10 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String pageUri;
 
-	/**	<br/> The entity pageUri
+	/**	<br> The entity pageUri
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pageUri">Find the entity pageUri in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pageUri">Find the entity pageUri in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _pageUri(Wrap<String> w);
@@ -431,10 +429,10 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String pageMethod;
 
-	/**	<br/> The entity pageMethod
+	/**	<br> The entity pageMethod
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pageMethod">Find the entity pageMethod in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pageMethod">Find the entity pageMethod in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _pageMethod(Wrap<String> w);
@@ -479,10 +477,10 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected JsonObject params;
 
-	/**	<br/> The entity params
+	/**	<br> The entity params
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:params">Find the entity params in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:params">Find the entity params in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _params(Wrap<JsonObject> w);
@@ -518,10 +516,10 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected Long userKey;
 
-	/**	<br/> The entity userKey
+	/**	<br> The entity userKey
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userKey">Find the entity userKey in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userKey">Find the entity userKey in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _userKey(Wrap<Long> w);
@@ -574,10 +572,10 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String userFullName;
 
-	/**	<br/> The entity userFullName
+	/**	<br> The entity userFullName
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userFullName">Find the entity userFullName in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userFullName">Find the entity userFullName in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _userFullName(Wrap<String> w);
@@ -623,10 +621,10 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String userName;
 
-	/**	<br/> The entity userName
+	/**	<br> The entity userName
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userName">Find the entity userName in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userName">Find the entity userName in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _userName(Wrap<String> w);
@@ -672,10 +670,10 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String userEmail;
 
-	/**	<br/> The entity userEmail
+	/**	<br> The entity userEmail
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userEmail">Find the entity userEmail in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userEmail">Find the entity userEmail in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _userEmail(Wrap<String> w);
@@ -721,10 +719,10 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String logoutUrl;
 
-	/**	<br/> The entity logoutUrl
+	/**	<br> The entity logoutUrl
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:logoutUrl">Find the entity logoutUrl in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:logoutUrl">Find the entity logoutUrl in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _logoutUrl(Wrap<String> w);
@@ -771,10 +769,10 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected Long long0;
 
-	/**	<br/> The entity long0
+	/**	<br> The entity long0
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:long0">Find the entity long0 in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:long0">Find the entity long0 in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _long0(Wrap<Long> w);
@@ -828,10 +826,10 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected Long long1;
 
-	/**	<br/> The entity long1
+	/**	<br> The entity long1
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:long1">Find the entity long1 in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:long1">Find the entity long1 in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _long1(Wrap<Long> w);
@@ -885,10 +883,10 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected Integer int0;
 
-	/**	<br/> The entity int0
+	/**	<br> The entity int0
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:int0">Find the entity int0 in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:int0">Find the entity int0 in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _int0(Wrap<Integer> w);
@@ -942,10 +940,10 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected Integer int1;
 
-	/**	<br/> The entity int1
+	/**	<br> The entity int1
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:int1">Find the entity int1 in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:int1">Find the entity int1 in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _int1(Wrap<Integer> w);
@@ -998,10 +996,10 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected Void promiseBefore;
 
-	/**	<br/> The entity promiseBefore
+	/**	<br> The entity promiseBefore
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:promiseBefore">Find the entity promiseBefore in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:promiseBefore">Find the entity promiseBefore in Solr</a>
+	 * <br>
 	 * @param promise is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _promiseBefore(Promise<Void> promise);
@@ -1040,10 +1038,10 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String classSimpleName;
 
-	/**	<br/> The entity classSimpleName
+	/**	<br> The entity classSimpleName
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:classSimpleName">Find the entity classSimpleName in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:classSimpleName">Find the entity classSimpleName in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _classSimpleName(Wrap<String> c);
@@ -1089,10 +1087,10 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String pageTitle;
 
-	/**	<br/> The entity pageTitle
+	/**	<br> The entity pageTitle
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pageTitle">Find the entity pageTitle in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pageTitle">Find the entity pageTitle in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _pageTitle(Wrap<String> c);
@@ -1132,18 +1130,18 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	///////////
 
 	/**	 The entity roles
-	 *	Il est construit avant d'être initialisé avec le constructeur par défaut List<String>(). 
+	 *	 It is constructed before being initialized with the constructor by default. 
 	 */
 	@JsonProperty
 	@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 	@JsonInclude(Include.NON_NULL)
 	protected List<String> roles = new ArrayList<String>();
 
-	/**	<br/> The entity roles
-	 *  It is constructed before being initialized with the constructor by default List<String>(). 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:roles">Find the entity roles in Solr</a>
-	 * <br/>
-	 * @param roles is the entity already constructed. 
+	/**	<br> The entity roles
+	 *  It is constructed before being initialized with the constructor by default. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:roles">Find the entity roles in Solr</a>
+	 * <br>
+	 * @param l is the entity already constructed. 
 	 **/
 	protected abstract void _roles(List<String> l);
 
@@ -1198,18 +1196,18 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	///////////////////
 
 	/**	 The entity rolesRequired
-	 *	Il est construit avant d'être initialisé avec le constructeur par défaut List<String>(). 
+	 *	 It is constructed before being initialized with the constructor by default. 
 	 */
 	@JsonProperty
 	@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 	@JsonInclude(Include.NON_NULL)
 	protected List<String> rolesRequired = new ArrayList<String>();
 
-	/**	<br/> The entity rolesRequired
-	 *  It is constructed before being initialized with the constructor by default List<String>(). 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:rolesRequired">Find the entity rolesRequired in Solr</a>
-	 * <br/>
-	 * @param rolesRequired is the entity already constructed. 
+	/**	<br> The entity rolesRequired
+	 *  It is constructed before being initialized with the constructor by default. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:rolesRequired">Find the entity rolesRequired in Solr</a>
+	 * <br>
+	 * @param l is the entity already constructed. 
 	 **/
 	protected abstract void _rolesRequired(List<String> l);
 
@@ -1264,18 +1262,18 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	////////////////////
 
 	/**	 The entity authRolesAdmin
-	 *	Il est construit avant d'être initialisé avec le constructeur par défaut List<String>(). 
+	 *	 It is constructed before being initialized with the constructor by default. 
 	 */
 	@JsonProperty
 	@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 	@JsonInclude(Include.NON_NULL)
 	protected List<String> authRolesAdmin = new ArrayList<String>();
 
-	/**	<br/> The entity authRolesAdmin
-	 *  It is constructed before being initialized with the constructor by default List<String>(). 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:authRolesAdmin">Find the entity authRolesAdmin in Solr</a>
-	 * <br/>
-	 * @param authRolesAdmin is the entity already constructed. 
+	/**	<br> The entity authRolesAdmin
+	 *  It is constructed before being initialized with the constructor by default. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:authRolesAdmin">Find the entity authRolesAdmin in Solr</a>
+	 * <br>
+	 * @param l is the entity already constructed. 
 	 **/
 	protected abstract void _authRolesAdmin(List<String> l);
 
@@ -1330,15 +1328,15 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	////////////////
 
 	/**	 The entity pagination
-	 *	Il est construit avant d'être initialisé avec le constructeur par défaut JsonObject(). 
+	 *	 It is constructed before being initialized with the constructor by default. 
 	 */
 	@JsonInclude(Include.NON_NULL)
 	protected JsonObject pagination = new JsonObject();
 
-	/**	<br/> The entity pagination
-	 *  It is constructed before being initialized with the constructor by default JsonObject(). 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pagination">Find the entity pagination in Solr</a>
-	 * <br/>
+	/**	<br> The entity pagination
+	 *  It is constructed before being initialized with the constructor by default. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pagination">Find the entity pagination in Solr</a>
+	 * <br>
 	 * @param pagination is the entity already constructed. 
 	 **/
 	protected abstract void _pagination(JsonObject pagination);
@@ -1363,15 +1361,15 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	///////////
 
 	/**	 The entity query
-	 *	Il est construit avant d'être initialisé avec le constructeur par défaut JsonObject(). 
+	 *	 It is constructed before being initialized with the constructor by default. 
 	 */
 	@JsonInclude(Include.NON_NULL)
 	protected JsonObject query = new JsonObject();
 
-	/**	<br/> The entity query
-	 *  It is constructed before being initialized with the constructor by default JsonObject(). 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:query">Find the entity query in Solr</a>
-	 * <br/>
+	/**	<br> The entity query
+	 *  It is constructed before being initialized with the constructor by default. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:query">Find the entity query in Solr</a>
+	 * <br>
 	 * @param query is the entity already constructed. 
 	 **/
 	protected abstract void _query(JsonObject query);
@@ -1402,10 +1400,10 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected Void promiseAfter;
 
-	/**	<br/> The entity promiseAfter
+	/**	<br> The entity promiseAfter
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:promiseAfter">Find the entity promiseAfter in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:promiseAfter">Find the entity promiseAfter in Solr</a>
+	 * <br>
 	 * @param promise is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _promiseAfter(Promise<Void> promise);
@@ -1444,10 +1442,10 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String pageImageUri;
 
-	/**	<br/> The entity pageImageUri
+	/**	<br> The entity pageImageUri
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pageImageUri">Find the entity pageImageUri in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pageImageUri">Find the entity pageImageUri in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _pageImageUri(Wrap<String> c);
@@ -1493,10 +1491,10 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String contextIconGroup;
 
-	/**	<br/> The entity contextIconGroup
+	/**	<br> The entity contextIconGroup
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:contextIconGroup">Find the entity contextIconGroup in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:contextIconGroup">Find the entity contextIconGroup in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _contextIconGroup(Wrap<String> c);
@@ -1542,10 +1540,10 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String contextIconName;
 
-	/**	<br/> The entity contextIconName
+	/**	<br> The entity contextIconName
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:contextIconName">Find the entity contextIconName in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:contextIconName">Find the entity contextIconName in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _contextIconName(Wrap<String> c);
@@ -2081,18 +2079,6 @@ public abstract class PageLayoutGen<DEV> extends Object {
 		switch(var.toLowerCase()) {
 			default:
 				return null;
-		}
-	}
-
-	//////////////////
-	// apiRequest //
-	//////////////////
-
-	public void apiRequestPageLayout() {
-		ApiRequest apiRequest = Optional.ofNullable(siteRequest_).map(SiteRequestEnUS::getApiRequest_).orElse(null);
-		Object o = Optional.ofNullable(apiRequest).map(ApiRequest::getOriginal).orElse(null);
-		if(o != null && o instanceof PageLayout) {
-			PageLayout original = (PageLayout)o;
 		}
 	}
 

@@ -2842,14 +2842,6 @@ components:
               type: string
             donorQ3:
               type: string
-            donorQ4:
-              type: string
-            donorLogoFilename:
-              type: string
-            reportKeys:
-              type: array
-              items:
-                type: string
     POSTChoiceDonorResponse:
       allOf:
         - type: object
@@ -2874,14 +2866,6 @@ components:
               type: string
             donorQ3:
               type: string
-            donorQ4:
-              type: string
-            donorLogoFilename:
-              type: string
-            reportKeys:
-              type: array
-              items:
-                type: string
     PATCHChoiceDonorRequest:
       allOf:
         - type: object
@@ -2956,37 +2940,6 @@ components:
               type: string
             removeAllDonorQ3:
               type: string
-            setDonorQ4:
-              type: string
-              nullable: true
-            removeDonorQ4:
-              type: string
-            removeAllDonorQ4:
-              type: string
-            setDonorLogoFilename:
-              type: string
-              nullable: true
-            removeDonorLogoFilename:
-              type: string
-            removeAllDonorLogoFilename:
-              type: string
-            setReportKeys:
-              type: array
-              nullable: true
-              items:
-                type: string
-            removeReportKeys:
-              type: string
-            removeAllReportKeys:
-              type: array
-              items:
-                type: string
-            addReportKeys:
-              type: string
-            addAllReportKeys:
-              type: array
-              items:
-                type: string
     PATCHChoiceDonorResponse:
       allOf:
         - type: object
@@ -3061,37 +3014,6 @@ components:
               type: string
             removeAllDonorQ3:
               type: string
-            setDonorQ4:
-              type: string
-              nullable: true
-            removeDonorQ4:
-              type: string
-            removeAllDonorQ4:
-              type: string
-            setDonorLogoFilename:
-              type: string
-              nullable: true
-            removeDonorLogoFilename:
-              type: string
-            removeAllDonorLogoFilename:
-              type: string
-            setReportKeys:
-              type: array
-              nullable: true
-              items:
-                type: string
-            removeReportKeys:
-              type: string
-            removeAllReportKeys:
-              type: array
-              items:
-                type: string
-            addReportKeys:
-              type: string
-            addAllReportKeys:
-              type: array
-              items:
-                type: string
     SearchChoiceDonorResponse:
       allOf:
         - type: array
@@ -3118,14 +3040,6 @@ components:
                 type: string
               donorQ3:
                 type: string
-              donorQ4:
-                type: string
-              donorLogoFilename:
-                type: string
-              reportKeys:
-                type: array
-                items:
-                  type: string
     PUTImportChoiceDonorRequest:
       allOf:
         - type: object
@@ -3150,14 +3064,6 @@ components:
               type: string
             donorQ3:
               type: string
-            donorQ4:
-              type: string
-            donorLogoFilename:
-              type: string
-            reportKeys:
-              type: array
-              items:
-                type: string
     PUTImportChoiceDonorResponse:
       allOf:
         - type: object
@@ -3182,14 +3088,6 @@ components:
               type: string
             donorQ3:
               type: string
-            donorQ4:
-              type: string
-            donorLogoFilename:
-              type: string
-            reportKeys:
-              type: array
-              items:
-                type: string
     GETChoiceDonorResponse:
       allOf:
         - type: object
@@ -3214,14 +3112,6 @@ components:
               type: string
             donorQ3:
               type: string
-            donorQ4:
-              type: string
-            donorLogoFilename:
-              type: string
-            reportKeys:
-              type: array
-              items:
-                type: string
     SearchPageChoiceDonorResponse:
       allOf:
         - type: string
@@ -3245,16 +3135,6 @@ components:
               type: string
             donorYtd:
               type: string
-            donorQ1:
-              type: string
-            donorQ2:
-              type: string
-            donorQ3:
-              type: string
-            donorQ4:
-              type: string
-            donorLogoFilename:
-              type: string
     POSTChoiceReportResponse:
       allOf:
         - type: object
@@ -3274,16 +3154,6 @@ components:
             donorTotal:
               type: string
             donorYtd:
-              type: string
-            donorQ1:
-              type: string
-            donorQ2:
-              type: string
-            donorQ3:
-              type: string
-            donorQ4:
-              type: string
-            donorLogoFilename:
               type: string
     PATCHChoiceReportRequest:
       allOf:
@@ -3345,41 +3215,6 @@ components:
               type: string
             removeAllDonorYtd:
               type: string
-            setDonorQ1:
-              type: string
-              nullable: true
-            removeDonorQ1:
-              type: string
-            removeAllDonorQ1:
-              type: string
-            setDonorQ2:
-              type: string
-              nullable: true
-            removeDonorQ2:
-              type: string
-            removeAllDonorQ2:
-              type: string
-            setDonorQ3:
-              type: string
-              nullable: true
-            removeDonorQ3:
-              type: string
-            removeAllDonorQ3:
-              type: string
-            setDonorQ4:
-              type: string
-              nullable: true
-            removeDonorQ4:
-              type: string
-            removeAllDonorQ4:
-              type: string
-            setDonorLogoFilename:
-              type: string
-              nullable: true
-            removeDonorLogoFilename:
-              type: string
-            removeAllDonorLogoFilename:
-              type: string
     PATCHChoiceReportResponse:
       allOf:
         - type: object
@@ -3440,41 +3275,6 @@ components:
               type: string
             removeAllDonorYtd:
               type: string
-            setDonorQ1:
-              type: string
-              nullable: true
-            removeDonorQ1:
-              type: string
-            removeAllDonorQ1:
-              type: string
-            setDonorQ2:
-              type: string
-              nullable: true
-            removeDonorQ2:
-              type: string
-            removeAllDonorQ2:
-              type: string
-            setDonorQ3:
-              type: string
-              nullable: true
-            removeDonorQ3:
-              type: string
-            removeAllDonorQ3:
-              type: string
-            setDonorQ4:
-              type: string
-              nullable: true
-            removeDonorQ4:
-              type: string
-            removeAllDonorQ4:
-              type: string
-            setDonorLogoFilename:
-              type: string
-              nullable: true
-            removeDonorLogoFilename:
-              type: string
-            removeAllDonorLogoFilename:
-              type: string
     SearchChoiceReportResponse:
       allOf:
         - type: array
@@ -3497,16 +3297,6 @@ components:
                 type: string
               donorYtd:
                 type: string
-              donorQ1:
-                type: string
-              donorQ2:
-                type: string
-              donorQ3:
-                type: string
-              donorQ4:
-                type: string
-              donorLogoFilename:
-                type: string
     PUTImportChoiceReportRequest:
       allOf:
         - type: object
@@ -3526,16 +3316,6 @@ components:
             donorTotal:
               type: string
             donorYtd:
-              type: string
-            donorQ1:
-              type: string
-            donorQ2:
-              type: string
-            donorQ3:
-              type: string
-            donorQ4:
-              type: string
-            donorLogoFilename:
               type: string
     PUTImportChoiceReportResponse:
       allOf:
@@ -3557,16 +3337,6 @@ components:
               type: string
             donorYtd:
               type: string
-            donorQ1:
-              type: string
-            donorQ2:
-              type: string
-            donorQ3:
-              type: string
-            donorQ4:
-              type: string
-            donorLogoFilename:
-              type: string
     GETChoiceReportResponse:
       allOf:
         - type: object
@@ -3586,16 +3356,6 @@ components:
             donorTotal:
               type: string
             donorYtd:
-              type: string
-            donorQ1:
-              type: string
-            donorQ2:
-              type: string
-            donorQ3:
-              type: string
-            donorQ4:
-              type: string
-            donorLogoFilename:
               type: string
     ChoiceReportDisplaySearchPageChoiceReportResponse:
       allOf:

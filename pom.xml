@@ -25,6 +25,7 @@
 		<postgresql.version>42.2.2.jre7</postgresql.version>
 		<solr.version>8.4.1</solr.version>
 		<junit.version>4.13.1</junit.version>
+		<computate-search.version>1.0.4</computate-search.version>
 	</properties>
 
 	<dependencyManagement>
@@ -264,6 +265,16 @@
 			<artifactId>ceylon-complete</artifactId>
 			<version>${ceylon-lang.version}</version>
 		</dependency>
+
+		<!-- ######### -->
+		<!-- Computate -->
+		<!-- ######### -->
+
+		<!--dependency>
+			<groupId>org.computate.search</groupId>
+			<artifactId>computate-search</artifactId>
+			<version>${computate-search.version}</version>
+		</dependency-->
 
 		<!-- ############ -->
 		<!-- Unit Testing -->

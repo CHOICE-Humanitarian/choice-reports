@@ -13,7 +13,6 @@ import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor;
-import org.choicehumanitarian.reports.enus.wrap.Wrap;
 import java.lang.Long;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.choicehumanitarian.reports.enus.java.ZonedDateTimeSerializer;
@@ -33,6 +32,7 @@ import io.vertx.core.Future;
 import org.choicehumanitarian.reports.enus.base.BaseModel;
 import java.util.Objects;
 import io.vertx.core.json.JsonArray;
+import org.computate.search.wrap.Wrap;
 import org.apache.commons.lang3.math.NumberUtils;
 import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -40,8 +40,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 
 /**	
- * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonorGenPage&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
- * <br/>
+ * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonorGenPage&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
+ * <br>
  **/
 public abstract class ChoiceDonorGenPageGen<DEV> extends BaseModelPage {
 	protected static final Logger LOG = LoggerFactory.getLogger(ChoiceDonorGenPage.class);
@@ -57,10 +57,10 @@ public abstract class ChoiceDonorGenPageGen<DEV> extends BaseModelPage {
 	@JsonInclude(Include.NON_NULL)
 	protected SearchList<ChoiceDonor> searchListChoiceDonor_;
 
-	/**	<br/> The entity searchListChoiceDonor_
+	/**	<br> The entity searchListChoiceDonor_
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonorGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:searchListChoiceDonor_">Find the entity searchListChoiceDonor_ in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonorGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:searchListChoiceDonor_">Find the entity searchListChoiceDonor_ in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _searchListChoiceDonor_(Wrap<SearchList<ChoiceDonor>> w);
@@ -89,16 +89,16 @@ public abstract class ChoiceDonorGenPageGen<DEV> extends BaseModelPage {
 	/////////////////////
 
 	/**	 The entity listChoiceDonor
-	 *	Il est construit avant d'être initialisé avec le constructeur par défaut JsonArray(). 
+	 *	 It is constructed before being initialized with the constructor by default. 
 	 */
 	@JsonInclude(Include.NON_NULL)
 	protected JsonArray listChoiceDonor = new JsonArray();
 
-	/**	<br/> The entity listChoiceDonor
-	 *  It is constructed before being initialized with the constructor by default JsonArray(). 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonorGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:listChoiceDonor">Find the entity listChoiceDonor in Solr</a>
-	 * <br/>
-	 * @param listChoiceDonor is the entity already constructed. 
+	/**	<br> The entity listChoiceDonor
+	 *  It is constructed before being initialized with the constructor by default. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonorGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:listChoiceDonor">Find the entity listChoiceDonor in Solr</a>
+	 * <br>
+	 * @param l is the entity already constructed. 
 	 **/
 	protected abstract void _listChoiceDonor(JsonArray l);
 
@@ -129,10 +129,10 @@ public abstract class ChoiceDonorGenPageGen<DEV> extends BaseModelPage {
 	@JsonInclude(Include.NON_NULL)
 	protected Integer choiceDonorCount;
 
-	/**	<br/> The entity choiceDonorCount
+	/**	<br> The entity choiceDonorCount
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonorGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:choiceDonorCount">Find the entity choiceDonorCount in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonorGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:choiceDonorCount">Find the entity choiceDonorCount in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _choiceDonorCount(Wrap<Integer> w);
@@ -185,10 +185,10 @@ public abstract class ChoiceDonorGenPageGen<DEV> extends BaseModelPage {
 	@JsonInclude(Include.NON_NULL)
 	protected ChoiceDonor choiceDonor_;
 
-	/**	<br/> The entity choiceDonor_
+	/**	<br> The entity choiceDonor_
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonorGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:choiceDonor_">Find the entity choiceDonor_ in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonorGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:choiceDonor_">Find the entity choiceDonor_ in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _choiceDonor_(Wrap<ChoiceDonor> w);
@@ -224,10 +224,10 @@ public abstract class ChoiceDonorGenPageGen<DEV> extends BaseModelPage {
 	@JsonInclude(Include.NON_NULL)
 	protected Long pk;
 
-	/**	<br/> The entity pk
+	/**	<br> The entity pk
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonorGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pk">Find the entity pk in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonorGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pk">Find the entity pk in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _pk(Wrap<Long> w);
@@ -491,19 +491,6 @@ public abstract class ChoiceDonorGenPageGen<DEV> extends BaseModelPage {
 		switch(var.toLowerCase()) {
 			default:
 				return super.defineBaseModelPage(var, val);
-		}
-	}
-
-	//////////////////
-	// apiRequest //
-	//////////////////
-
-	public void apiRequestChoiceDonorGenPage() {
-		ApiRequest apiRequest = Optional.ofNullable(siteRequest_).map(SiteRequestEnUS::getApiRequest_).orElse(null);
-		Object o = Optional.ofNullable(apiRequest).map(ApiRequest::getOriginal).orElse(null);
-		if(o != null && o instanceof ChoiceDonorGenPage) {
-			ChoiceDonorGenPage original = (ChoiceDonorGenPage)o;
-			super.apiRequestBaseModelPage();
 		}
 	}
 

@@ -13,9 +13,9 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
-import org.choicehumanitarian.reports.enus.java.TimeTool;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import org.choicehumanitarian.reports.enus.request.api.ApiRequest;
+import org.computate.search.tool.TimeTool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -237,7 +237,7 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 				String importPeriod = config().getString(String.format("%s_%s", ConfigKeys.IMPORT_DATA_PERIOD, classSimpleName));
 				Duration duration = TimeTool.parseNextDuration(importPeriod);
 				ZonedDateTime nextStartTime = startDateTime.plus(duration);
-				LOG.info(String.format(importTimerScheduling, nextStartTime.format(TIME_FORMAT)));
+				LOG.info(String.format(importTimerScheduling, classSimpleName, nextStartTime.format(TIME_FORMAT)));
 				Duration nextStartDuration = Duration.between(Instant.now(), nextStartTime);
 				vertx.setTimer(nextStartDuration.toMillis(), b -> {
 					importData(classSimpleName, nextStartTime);
@@ -248,7 +248,7 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 				String importPeriod = config().getString(String.format("%s_%s", ConfigKeys.IMPORT_DATA_PERIOD, classSimpleName));
 				Duration duration = TimeTool.parseNextDuration(importPeriod);
 				ZonedDateTime nextStartTime = startDateTime.plus(duration);
-				LOG.info(String.format(importTimerScheduling, nextStartTime.format(TIME_FORMAT)));
+				LOG.info(String.format(importTimerScheduling, classSimpleName, nextStartTime.format(TIME_FORMAT)));
 				Duration nextStartDuration = Duration.between(Instant.now(), nextStartTime);
 				vertx.setTimer(nextStartDuration.toMillis(), b -> {
 					importData(classSimpleName, nextStartTime);
@@ -470,7 +470,7 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 						try {
 							Optional<Long> rowCountOptional = Optional.ofNullable(countRowSet.iterator().next()).map(row -> row.getLong(0));
 							if(rowCountOptional.isPresent()) {
-								Long apiCounterResume = config().getLong(ConfigKeys.API_COUNTER_RESUME);
+								Integer apiCounterResume = config().getInteger(ConfigKeys.API_COUNTER_RESUME);
 								Integer apiCounterFetch = config().getInteger(ConfigKeys.API_COUNTER_FETCH);
 								ApiCounter apiCounter = new ApiCounter();
 	
@@ -479,7 +479,7 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 								siteRequest.initDeepSiteRequestEnUS(siteRequest);
 		
 								ApiRequest apiRequest = new ApiRequest();
-								apiRequest.setRows(apiCounterFetch.intValue());
+								apiRequest.setRows(apiCounterFetch.longValue());
 								apiRequest.setNumFound(rowCountOptional.get());
 								apiRequest.setNumPATCH(apiCounter.getQueueNum());
 								apiRequest.setCreated(ZonedDateTime.now(ZoneId.of(config().getString(ConfigKeys.SITE_ZONE))));
@@ -520,7 +520,7 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 														, new DeliveryOptions().addHeader("action", String.format("patch%sFuture", tableName))).onSuccess(a -> {
 													apiCounter.incrementTotalNum();
 													apiCounter.decrementQueueNum();
-													if(apiCounter.getQueueNum().compareTo(apiCounterResume) == 0) {
+													if(apiCounter.getQueueNum().compareTo(apiCounterResume.longValue()) == 0) {
 														stream.fetch(apiCounterFetch);
 														apiRequest.setNumPATCH(apiCounter.getTotalNum());
 														apiRequest.setTimeRemaining(apiRequest.calculateTimeRemaining());

@@ -8,10 +8,9 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
-
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
-import org.choicehumanitarian.reports.enus.wrap.Wrap;
+import org.computate.search.wrap.Wrap;
 
 /**
  * Indexed: true

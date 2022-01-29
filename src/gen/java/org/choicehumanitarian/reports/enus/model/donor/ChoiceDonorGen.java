@@ -10,8 +10,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import org.computate.search.response.solr.SolrResponse;
 import java.math.BigDecimal;
-import org.choicehumanitarian.reports.enus.wrap.Wrap;
 import java.lang.Long;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.choicehumanitarian.reports.enus.java.ZonedDateTimeSerializer;
@@ -35,6 +35,7 @@ import org.choicehumanitarian.reports.enus.base.BaseModel;
 import java.util.Objects;
 import io.vertx.core.json.JsonArray;
 import java.util.List;
+import org.computate.search.wrap.Wrap;
 import org.apache.commons.lang3.math.NumberUtils;
 import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -43,8 +44,8 @@ import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 /**	
- * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
- * <br/>
+ * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
+ * <br>
  **/
 public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	protected static final Logger LOG = LoggerFactory.getLogger(ChoiceDonor.class);
@@ -83,10 +84,10 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String donorFullName;
 
-	/**	<br/> The entity donorFullName
+	/**	<br> The entity donorFullName
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:donorFullName">Find the entity donorFullName in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:donorFullName">Find the entity donorFullName in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _donorFullName(Wrap<String> w);
@@ -136,10 +137,10 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String donorParentName;
 
-	/**	<br/> The entity donorParentName
+	/**	<br> The entity donorParentName
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:donorParentName">Find the entity donorParentName in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:donorParentName">Find the entity donorParentName in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _donorParentName(Wrap<String> w);
@@ -190,10 +191,10 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected Long donorId;
 
-	/**	<br/> The entity donorId
+	/**	<br> The entity donorId
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:donorId">Find the entity donorId in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:donorId">Find the entity donorId in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _donorId(Wrap<Long> w);
@@ -250,10 +251,10 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String donorAttributeId;
 
-	/**	<br/> The entity donorAttributeId
+	/**	<br> The entity donorAttributeId
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:donorAttributeId">Find the entity donorAttributeId in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:donorAttributeId">Find the entity donorAttributeId in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _donorAttributeId(Wrap<String> w);
@@ -304,10 +305,10 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected Long donorInKind;
 
-	/**	<br/> The entity donorInKind
+	/**	<br> The entity donorInKind
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:donorInKind">Find the entity donorInKind in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:donorInKind">Find the entity donorInKind in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _donorInKind(Wrap<Long> w);
@@ -365,10 +366,10 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected BigDecimal donorTotal;
 
-	/**	<br/> The entity donorTotal
+	/**	<br> The entity donorTotal
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:donorTotal">Find the entity donorTotal in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:donorTotal">Find the entity donorTotal in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _donorTotal(Wrap<BigDecimal> w);
@@ -435,10 +436,10 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected BigDecimal donorYtd;
 
-	/**	<br/> The entity donorYtd
+	/**	<br> The entity donorYtd
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:donorYtd">Find the entity donorYtd in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:donorYtd">Find the entity donorYtd in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _donorYtd(Wrap<BigDecimal> w);
@@ -505,10 +506,10 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected BigDecimal donorQ1;
 
-	/**	<br/> The entity donorQ1
+	/**	<br> The entity donorQ1
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:donorQ1">Find the entity donorQ1 in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:donorQ1">Find the entity donorQ1 in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _donorQ1(Wrap<BigDecimal> w);
@@ -575,10 +576,10 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected BigDecimal donorQ2;
 
-	/**	<br/> The entity donorQ2
+	/**	<br> The entity donorQ2
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:donorQ2">Find the entity donorQ2 in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:donorQ2">Find the entity donorQ2 in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _donorQ2(Wrap<BigDecimal> w);
@@ -645,10 +646,10 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected BigDecimal donorQ3;
 
-	/**	<br/> The entity donorQ3
+	/**	<br> The entity donorQ3
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:donorQ3">Find the entity donorQ3 in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:donorQ3">Find the entity donorQ3 in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _donorQ3(Wrap<BigDecimal> w);
@@ -715,10 +716,10 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected BigDecimal donorQ4;
 
-	/**	<br/> The entity donorQ4
+	/**	<br> The entity donorQ4
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:donorQ4">Find the entity donorQ4 in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:donorQ4">Find the entity donorQ4 in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _donorQ4(Wrap<BigDecimal> w);
@@ -784,10 +785,10 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected String donorLogoFilename;
 
-	/**	<br/> The entity donorLogoFilename
+	/**	<br> The entity donorLogoFilename
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:donorLogoFilename">Find the entity donorLogoFilename in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:donorLogoFilename">Find the entity donorLogoFilename in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _donorLogoFilename(Wrap<String> w);
@@ -831,7 +832,7 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	////////////////
 
 	/**	 The entity reportKeys
-	 *	Il est construit avant d'être initialisé avec le constructeur par défaut List<Long>(). 
+	 *	 It is constructed before being initialized with the constructor by default. 
 	 */
 	@JsonProperty
 	@JsonFormat(shape = JsonFormat.Shape.ARRAY)
@@ -839,11 +840,11 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	@JsonInclude(Include.NON_NULL)
 	protected List<Long> reportKeys = new ArrayList<Long>();
 
-	/**	<br/> The entity reportKeys
-	 *  It is constructed before being initialized with the constructor by default List<Long>(). 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:reportKeys">Find the entity reportKeys in Solr</a>
-	 * <br/>
-	 * @param reportKeys is the entity already constructed. 
+	/**	<br> The entity reportKeys
+	 *  It is constructed before being initialized with the constructor by default. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:reportKeys">Find the entity reportKeys in Solr</a>
+	 * <br>
+	 * @param w is the entity already constructed. 
 	 **/
 	protected abstract void _reportKeys(List<Long> w);
 
@@ -1330,61 +1331,61 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	// populate //
 	/////////////
 
-	@Override public void populateForClass(SolrDocument solrDocument) {
-		populateChoiceDonor(solrDocument);
+	@Override public void populateForClass(SolrResponse.Doc doc) {
+		populateChoiceDonor(doc);
 	}
-	public void populateChoiceDonor(SolrDocument solrDocument) {
+	public void populateChoiceDonor(SolrResponse.Doc doc) {
 		ChoiceDonor oChoiceDonor = (ChoiceDonor)this;
-		saves = (List<String>)solrDocument.get("saves_docvalues_strings");
+		saves = doc.get("saves_docvalues_strings");
 		if(saves != null) {
 		}
 
-		super.populateBaseModel(solrDocument);
+		super.populateBaseModel(doc);
 	}
 
-	public void indexChoiceDonor(SolrInputDocument document) {
+	public void indexChoiceDonor(JsonObject doc) {
 		if(donorFullName != null) {
-			document.addField("donorFullName_docvalues_string", donorFullName);
+			doc.put("donorFullName_docvalues_string", donorFullName);
 		}
 		if(donorParentName != null) {
-			document.addField("donorParentName_docvalues_string", donorParentName);
+			doc.put("donorParentName_docvalues_string", donorParentName);
 		}
 		if(donorId != null) {
-			document.addField("donorId_docvalues_long", donorId);
+			doc.put("donorId_docvalues_long", donorId);
 		}
 		if(donorAttributeId != null) {
-			document.addField("donorAttributeId_docvalues_string", donorAttributeId);
+			doc.put("donorAttributeId_docvalues_string", donorAttributeId);
 		}
 		if(donorInKind != null) {
-			document.addField("donorInKind_docvalues_long", donorInKind);
+			doc.put("donorInKind_docvalues_long", donorInKind);
 		}
 		if(donorTotal != null) {
-			document.addField("donorTotal_docvalues_double", donorTotal.doubleValue());
+			doc.put("donorTotal_docvalues_double", donorTotal.doubleValue());
 		}
 		if(donorYtd != null) {
-			document.addField("donorYtd_docvalues_double", donorYtd.doubleValue());
+			doc.put("donorYtd_docvalues_double", donorYtd.doubleValue());
 		}
 		if(donorQ1 != null) {
-			document.addField("donorQ1_docvalues_double", donorQ1.doubleValue());
+			doc.put("donorQ1_docvalues_double", donorQ1.doubleValue());
 		}
 		if(donorQ2 != null) {
-			document.addField("donorQ2_docvalues_double", donorQ2.doubleValue());
+			doc.put("donorQ2_docvalues_double", donorQ2.doubleValue());
 		}
 		if(donorQ3 != null) {
-			document.addField("donorQ3_docvalues_double", donorQ3.doubleValue());
+			doc.put("donorQ3_docvalues_double", donorQ3.doubleValue());
 		}
 		if(donorQ4 != null) {
-			document.addField("donorQ4_docvalues_double", donorQ4.doubleValue());
+			doc.put("donorQ4_docvalues_double", donorQ4.doubleValue());
 		}
 		if(donorLogoFilename != null) {
-			document.addField("donorLogoFilename_docvalues_string", donorLogoFilename);
+			doc.put("donorLogoFilename_docvalues_string", donorLogoFilename);
 		}
 		if(reportKeys != null) {
 			for(java.lang.Long o : reportKeys) {
-				document.addField("reportKeys_docvalues_longs", o);
+				doc.put("reportKeys_docvalues_longs", o);
 			}
 		}
-		super.indexBaseModel(document);
+		super.indexBaseModel(doc);
 
 	}
 
@@ -1439,29 +1440,29 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	// store //
 	/////////////
 
-	@Override public void storeForClass(SolrDocument solrDocument) {
-		storeChoiceDonor(solrDocument);
+	@Override public void storeForClass(SolrResponse.Doc doc) {
+		storeChoiceDonor(doc);
 	}
-	public void storeChoiceDonor(SolrDocument solrDocument) {
+	public void storeChoiceDonor(SolrResponse.Doc doc) {
 		ChoiceDonor oChoiceDonor = (ChoiceDonor)this;
 
-		oChoiceDonor.setDonorFullName(Optional.ofNullable(solrDocument.get("donorFullName_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oChoiceDonor.setDonorParentName(Optional.ofNullable(solrDocument.get("donorParentName_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oChoiceDonor.setDonorId(Optional.ofNullable(solrDocument.get("donorId_docvalues_long")).map(v -> v.toString()).orElse(null));
-		oChoiceDonor.setDonorAttributeId(Optional.ofNullable(solrDocument.get("donorAttributeId_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oChoiceDonor.setDonorInKind(Optional.ofNullable(solrDocument.get("donorInKind_docvalues_long")).map(v -> v.toString()).orElse(null));
-		oChoiceDonor.setDonorTotal(Optional.ofNullable(solrDocument.get("donorTotal_docvalues_double")).map(v -> v.toString()).orElse(null));
-		oChoiceDonor.setDonorYtd(Optional.ofNullable(solrDocument.get("donorYtd_docvalues_double")).map(v -> v.toString()).orElse(null));
-		oChoiceDonor.setDonorQ1(Optional.ofNullable(solrDocument.get("donorQ1_docvalues_double")).map(v -> v.toString()).orElse(null));
-		oChoiceDonor.setDonorQ2(Optional.ofNullable(solrDocument.get("donorQ2_docvalues_double")).map(v -> v.toString()).orElse(null));
-		oChoiceDonor.setDonorQ3(Optional.ofNullable(solrDocument.get("donorQ3_docvalues_double")).map(v -> v.toString()).orElse(null));
-		oChoiceDonor.setDonorQ4(Optional.ofNullable(solrDocument.get("donorQ4_docvalues_double")).map(v -> v.toString()).orElse(null));
-		oChoiceDonor.setDonorLogoFilename(Optional.ofNullable(solrDocument.get("donorLogoFilename_docvalues_string")).map(v -> v.toString()).orElse(null));
-		Optional.ofNullable((List<?>)solrDocument.get("reportKeys_docvalues_longs")).orElse(Arrays.asList()).stream().filter(v -> v != null).forEach(v -> {
+		oChoiceDonor.setDonorFullName(Optional.ofNullable(doc.get("donorFullName_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oChoiceDonor.setDonorParentName(Optional.ofNullable(doc.get("donorParentName_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oChoiceDonor.setDonorId(Optional.ofNullable(doc.get("donorId_docvalues_long")).map(v -> v.toString()).orElse(null));
+		oChoiceDonor.setDonorAttributeId(Optional.ofNullable(doc.get("donorAttributeId_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oChoiceDonor.setDonorInKind(Optional.ofNullable(doc.get("donorInKind_docvalues_long")).map(v -> v.toString()).orElse(null));
+		oChoiceDonor.setDonorTotal(Optional.ofNullable(doc.get("donorTotal_docvalues_double")).map(v -> v.toString()).orElse(null));
+		oChoiceDonor.setDonorYtd(Optional.ofNullable(doc.get("donorYtd_docvalues_double")).map(v -> v.toString()).orElse(null));
+		oChoiceDonor.setDonorQ1(Optional.ofNullable(doc.get("donorQ1_docvalues_double")).map(v -> v.toString()).orElse(null));
+		oChoiceDonor.setDonorQ2(Optional.ofNullable(doc.get("donorQ2_docvalues_double")).map(v -> v.toString()).orElse(null));
+		oChoiceDonor.setDonorQ3(Optional.ofNullable(doc.get("donorQ3_docvalues_double")).map(v -> v.toString()).orElse(null));
+		oChoiceDonor.setDonorQ4(Optional.ofNullable(doc.get("donorQ4_docvalues_double")).map(v -> v.toString()).orElse(null));
+		oChoiceDonor.setDonorLogoFilename(Optional.ofNullable(doc.get("donorLogoFilename_docvalues_string")).map(v -> v.toString()).orElse(null));
+		Optional.ofNullable((List<?>)doc.get("reportKeys_docvalues_longs")).orElse(Arrays.asList()).stream().filter(v -> v != null).forEach(v -> {
 			oChoiceDonor.addReportKeys(v.toString());
 		});
 
-		super.storeBaseModel(solrDocument);
+		super.storeBaseModel(doc);
 	}
 
 	//////////////////

@@ -14,7 +14,7 @@ import java.io.IOException;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
 import org.choicehumanitarian.reports.enus.search.SearchList;
-import org.choicehumanitarian.reports.enus.wrap.Wrap;
+import org.computate.search.wrap.Wrap;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.LocalDate;
@@ -27,16 +27,13 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
-import org.apache.solr.common.util.SimpleOrderedMap;
 import java.util.stream.Collectors;
 import java.util.Arrays;
-import org.apache.solr.client.solrj.response.QueryResponse;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.math.MathContext;
 import org.apache.commons.collections.CollectionUtils;
 import java.util.Objects;
-import org.apache.solr.client.solrj.SolrQuery.SortClause;
 import io.vertx.core.Promise;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 
@@ -111,7 +108,7 @@ public class BaseModelGenPage extends BaseModelGenPageGen<PageLayout> {
 		JsonArray pages = new JsonArray();
 		Long start = searchListBaseModel_.getStart().longValue();
 		Long rows = searchListBaseModel_.getRows().longValue();
-		Long foundNum = searchListBaseModel_.getQueryResponse().getResults().getNumFound();
+		Long foundNum = searchListBaseModel_.getQueryResponse().getResponse().getNumFound().longValue();
 		Long startNum = start + 1L;
 		Long endNum = start + rows;
 		Long floorMod = Math.floorMod(foundNum, rows);
@@ -157,7 +154,7 @@ public class BaseModelGenPage extends BaseModelGenPageGen<PageLayout> {
 		JsonObject params = serviceRequest.getParams();
 
 		JsonObject queryParams = Optional.ofNullable(serviceRequest).map(ServiceRequest::getParams).map(or -> or.getJsonObject("query")).orElse(new JsonObject());
-		Long num = searchListBaseModel_.getQueryResponse().getResults().getNumFound();
+		Long num = searchListBaseModel_.getQueryResponse().getResponse().getNumFound().longValue();
 		String q = "*:*";
 		String q1 = "objectText";
 		String q2 = "";
@@ -185,15 +182,15 @@ public class BaseModelGenPage extends BaseModelGenPageGen<PageLayout> {
 		}
 		query.put("q", q);
 
-		Integer rows1 = Optional.ofNullable(searchListBaseModel_).map(l -> l.getRows()).orElse(10);
-		Integer start1 = Optional.ofNullable(searchListBaseModel_).map(l -> l.getStart()).orElse(1);
-		Integer start2 = start1 - rows1;
-		Integer start3 = start1 + rows1;
-		Integer rows2 = rows1 / 2;
-		Integer rows3 = rows1 * 2;
+		Long rows1 = Optional.ofNullable(searchListBaseModel_).map(l -> l.getRows()).orElse(10L);
+		Long start1 = Optional.ofNullable(searchListBaseModel_).map(l -> l.getStart()).orElse(1L);
+		Long start2 = start1 - rows1;
+		Long start3 = start1 + rows1;
+		Long rows2 = rows1 / 2;
+		Long rows3 = rows1 * 2;
 		start2 = start2 < 0 ? 0 : start2;
 		JsonArray fqs = new JsonArray();
-		for(String fq : Optional.ofNullable(searchListBaseModel_).map(l -> l.getFilterQueries()).orElse(new String[0])) {
+		for(String fq : Optional.ofNullable(searchListBaseModel_).map(l -> l.getFilterQueries()).orElse(Arrays.asList())) {
 			if(!StringUtils.contains(fq, "(")) {
 				String fq1 = StringUtils.substringBefore(fq, "_");
 				String fq2 = StringUtils.substringAfter(fq, ":");
@@ -204,8 +201,8 @@ public class BaseModelGenPage extends BaseModelGenPageGen<PageLayout> {
 		query.put("fq", fqs);
 
 		JsonArray sorts = new JsonArray();
-		for(SortClause sort : Optional.ofNullable(searchListBaseModel_).map(l -> l.getSorts()).orElse(Arrays.asList())) {
-			sorts.add(new JsonObject().put("var", StringUtils.substringBefore(sort.getItem(), "_")).put("order", sort.getOrder().name()));
+		for(String sort : Optional.ofNullable(searchListBaseModel_).map(l -> l.getSorts()).orElse(Arrays.asList())) {
+			sorts.add(new JsonObject().put("var", StringUtils.substringBefore(sort, "_")).put("order", StringUtils.substringAfter(sort, " ")));
 		}
 		query.put("sort", sorts);
 	}

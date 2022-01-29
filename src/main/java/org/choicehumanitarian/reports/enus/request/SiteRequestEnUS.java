@@ -8,11 +8,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.common.SolrDocument;
 import org.choicehumanitarian.reports.enus.request.api.ApiRequest;
 import org.choicehumanitarian.reports.enus.user.SiteUser;
-import org.choicehumanitarian.reports.enus.wrap.Wrap;
+import org.computate.search.request.SiteRequest;
+import org.computate.search.wrap.Wrap;
 
 import io.vertx.core.MultiMap;
 import io.vertx.core.json.JsonArray;
@@ -25,7 +24,7 @@ import io.vertx.sqlclient.SqlConnection;
 /**
  * Keyword: classSimpleNameSiteRequest
  */
-public class SiteRequestEnUS extends SiteRequestEnUSGen<Object> implements Serializable {
+public class SiteRequestEnUS extends SiteRequestEnUSGen<SiteRequest> implements Serializable {
 
 	private static final Pattern PATTERN_SESSION = Pattern.compile(".*vertx-web.session=(\\w+).*");
 
@@ -46,9 +45,6 @@ public class SiteRequestEnUS extends SiteRequestEnUSGen<Object> implements Seria
 	}
 
 	protected void _jsonObject(Wrap<JsonObject> c) {
-	}
-
-	protected void _solrQuery(Wrap<SolrQuery> c) {
 	}
 
 	protected void _serviceRequest(Wrap<ServiceRequest> c) {
@@ -151,7 +147,7 @@ public class SiteRequestEnUS extends SiteRequestEnUSGen<Object> implements Seria
 		}
 	}
 
-	protected void _solrDocument(Wrap<SolrDocument> c) {  
+	protected void _solrDocument(Wrap<JsonObject> c) {  
 	}
 
 	protected void _pageAdmin(Wrap<Boolean> c) { 

@@ -28,7 +28,6 @@ import com.redhat.ceylon.compiler.java.runtime.tools.Options;
 import io.vertx.core.Promise;
 import io.vertx.core.Verticle;
 import io.vertx.core.spi.VerticleFactory;
-import io.vertx.lang.ceylon.CeylonVerticle;
 import io.vertx.lang.ceylon.ExtendedCompilerOptions;
 import io.vertx.lang.ceylon.JavaCompilerImpl;
 

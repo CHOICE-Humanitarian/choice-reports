@@ -6,10 +6,11 @@ import java.util.Date;
 import java.time.ZonedDateTime;
 import org.slf4j.LoggerFactory;
 import org.apache.commons.lang3.StringUtils;
-import org.choicehumanitarian.reports.enus.wrap.Wrap;
+import org.computate.search.response.solr.SolrResponse;
 import java.lang.Long;
 import java.util.Locale;
 import java.util.Map;
+import io.vertx.core.json.JsonObject;
 import java.time.ZoneOffset;
 import java.math.RoundingMode;
 import java.math.MathContext;
@@ -22,6 +23,7 @@ import org.choicehumanitarian.reports.enus.base.BaseModel;
 import java.util.Objects;
 import java.util.List;
 import java.time.OffsetDateTime;
+import org.computate.search.wrap.Wrap;
 import java.util.Optional;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -31,7 +33,6 @@ import java.util.HashMap;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import org.apache.commons.collections.CollectionUtils;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.choicehumanitarian.reports.enus.java.ZonedDateTimeSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -41,7 +42,6 @@ import org.choicehumanitarian.reports.enus.request.api.ApiRequest;
 import org.slf4j.Logger;
 import org.choicehumanitarian.reports.enus.java.ZonedDateTimeDeserializer;
 import io.vertx.core.Promise;
-import org.apache.commons.text.StringEscapeUtils;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import io.vertx.core.json.JsonArray;
 import java.time.temporal.ChronoUnit;
@@ -52,8 +52,8 @@ import java.lang.Object;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 
 /**	
- * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
- * <br/>
+ * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
+ * <br>
  **/
 public abstract class BaseModelGen<DEV> extends Object {
 	protected static final Logger LOG = LoggerFactory.getLogger(BaseModel.class);
@@ -70,10 +70,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected SiteRequestEnUS siteRequest_;
 
-	/**	<br/> The entity siteRequest_
+	/**	<br> The entity siteRequest_
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:siteRequest_">Find the entity siteRequest_ in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:siteRequest_">Find the entity siteRequest_ in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _siteRequest_(Wrap<SiteRequestEnUS> w);
@@ -109,10 +109,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected Long pk;
 
-	/**	<br/> The entity pk
+	/**	<br> The entity pk
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pk">Find the entity pk in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pk">Find the entity pk in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _pk(Wrap<Long> w);
@@ -165,10 +165,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String inheritPk;
 
-	/**	<br/> The entity inheritPk
+	/**	<br> The entity inheritPk
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:inheritPk">Find the entity inheritPk in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:inheritPk">Find the entity inheritPk in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _inheritPk(Wrap<String> w);
@@ -218,10 +218,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String id;
 
-	/**	<br/> The entity id
+	/**	<br> The entity id
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:id">Find the entity id in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:id">Find the entity id in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _id(Wrap<String> w);
@@ -270,10 +270,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected ZonedDateTime created;
 
-	/**	<br/> The entity created
+	/**	<br> The entity created
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:created">Find the entity created in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:created">Find the entity created in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _created(Wrap<ZonedDateTime> w);
@@ -343,10 +343,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected ZonedDateTime modified;
 
-	/**	<br/> The entity modified
+	/**	<br> The entity modified
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:modified">Find the entity modified in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:modified">Find the entity modified in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _modified(Wrap<ZonedDateTime> w);
@@ -409,10 +409,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected Boolean archived;
 
-	/**	<br/> The entity archived
+	/**	<br> The entity archived
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:archived">Find the entity archived in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:archived">Find the entity archived in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _archived(Wrap<Boolean> w);
@@ -467,10 +467,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected Boolean deleted;
 
-	/**	<br/> The entity deleted
+	/**	<br> The entity deleted
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:deleted">Find the entity deleted in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:deleted">Find the entity deleted in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _deleted(Wrap<Boolean> w);
@@ -525,10 +525,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String classCanonicalName;
 
-	/**	<br/> The entity classCanonicalName
+	/**	<br> The entity classCanonicalName
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:classCanonicalName">Find the entity classCanonicalName in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:classCanonicalName">Find the entity classCanonicalName in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _classCanonicalName(Wrap<String> w);
@@ -574,10 +574,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String classSimpleName;
 
-	/**	<br/> The entity classSimpleName
+	/**	<br> The entity classSimpleName
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:classSimpleName">Find the entity classSimpleName in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:classSimpleName">Find the entity classSimpleName in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _classSimpleName(Wrap<String> w);
@@ -617,18 +617,18 @@ public abstract class BaseModelGen<DEV> extends Object {
 	/////////////////////////
 
 	/**	 The entity classCanonicalNames
-	 *	Il est construit avant d'être initialisé avec le constructeur par défaut List<String>(). 
+	 *	 It is constructed before being initialized with the constructor by default. 
 	 */
 	@JsonProperty
 	@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 	@JsonInclude(Include.NON_NULL)
 	protected List<String> classCanonicalNames = new ArrayList<String>();
 
-	/**	<br/> The entity classCanonicalNames
-	 *  It is constructed before being initialized with the constructor by default List<String>(). 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:classCanonicalNames">Find the entity classCanonicalNames in Solr</a>
-	 * <br/>
-	 * @param classCanonicalNames is the entity already constructed. 
+	/**	<br> The entity classCanonicalNames
+	 *  It is constructed before being initialized with the constructor by default. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:classCanonicalNames">Find the entity classCanonicalNames in Solr</a>
+	 * <br>
+	 * @param l is the entity already constructed. 
 	 **/
 	protected abstract void _classCanonicalNames(List<String> l);
 
@@ -689,10 +689,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String sessionId;
 
-	/**	<br/> The entity sessionId
+	/**	<br> The entity sessionId
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:sessionId">Find the entity sessionId in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:sessionId">Find the entity sessionId in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _sessionId(Wrap<String> c);
@@ -743,10 +743,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected Long userKey;
 
-	/**	<br/> The entity userKey
+	/**	<br> The entity userKey
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userKey">Find the entity userKey in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userKey">Find the entity userKey in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _userKey(Wrap<Long> c);
@@ -797,18 +797,18 @@ public abstract class BaseModelGen<DEV> extends Object {
 	///////////
 
 	/**	 The entity saves
-	 *	Il est construit avant d'être initialisé avec le constructeur par défaut List<String>(). 
+	 *	 It is constructed before being initialized with the constructor by default. 
 	 */
 	@JsonProperty
 	@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 	@JsonInclude(Include.NON_NULL)
 	protected List<String> saves = new ArrayList<String>();
 
-	/**	<br/> The entity saves
-	 *  It is constructed before being initialized with the constructor by default List<String>(). 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:saves">Find the entity saves in Solr</a>
-	 * <br/>
-	 * @param saves is the entity already constructed. 
+	/**	<br> The entity saves
+	 *  It is constructed before being initialized with the constructor by default. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:saves">Find the entity saves in Solr</a>
+	 * <br>
+	 * @param l is the entity already constructed. 
 	 **/
 	protected abstract void _saves(List<String> l);
 
@@ -869,10 +869,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String objectTitle;
 
-	/**	<br/> The entity objectTitle
+	/**	<br> The entity objectTitle
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:objectTitle">Find the entity objectTitle in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:objectTitle">Find the entity objectTitle in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _objectTitle(Wrap<String> w);
@@ -918,10 +918,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String objectId;
 
-	/**	<br/> The entity objectId
+	/**	<br> The entity objectId
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:objectId">Find the entity objectId in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:objectId">Find the entity objectId in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _objectId(Wrap<String> c);
@@ -967,10 +967,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String objectNameVar;
 
-	/**	<br/> The entity objectNameVar
+	/**	<br> The entity objectNameVar
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:objectNameVar">Find the entity objectNameVar in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:objectNameVar">Find the entity objectNameVar in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _objectNameVar(Wrap<String> c);
@@ -1016,10 +1016,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String objectSuggest;
 
-	/**	<br/> The entity objectSuggest
+	/**	<br> The entity objectSuggest
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:objectSuggest">Find the entity objectSuggest in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:objectSuggest">Find the entity objectSuggest in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _objectSuggest(Wrap<String> c);
@@ -1065,10 +1065,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String objectText;
 
-	/**	<br/> The entity objectText
+	/**	<br> The entity objectText
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:objectText">Find the entity objectText in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:objectText">Find the entity objectText in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _objectText(Wrap<String> c);
@@ -1114,10 +1114,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String pageUrlId;
 
-	/**	<br/> The entity pageUrlId
+	/**	<br> The entity pageUrlId
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pageUrlId">Find the entity pageUrlId in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pageUrlId">Find the entity pageUrlId in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _pageUrlId(Wrap<String> c);
@@ -1163,10 +1163,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String pageUrlPk;
 
-	/**	<br/> The entity pageUrlPk
+	/**	<br> The entity pageUrlPk
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pageUrlPk">Find the entity pageUrlPk in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pageUrlPk">Find the entity pageUrlPk in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _pageUrlPk(Wrap<String> c);
@@ -1212,10 +1212,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String pageUrlApi;
 
-	/**	<br/> The entity pageUrlApi
+	/**	<br> The entity pageUrlApi
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pageUrlApi">Find the entity pageUrlApi in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pageUrlApi">Find the entity pageUrlApi in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _pageUrlApi(Wrap<String> c);
@@ -1261,10 +1261,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonInclude(Include.NON_NULL)
 	protected String pageH1;
 
-	/**	<br/> The entity pageH1
+	/**	<br> The entity pageH1
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pageH1">Find the entity pageH1 in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pageH1">Find the entity pageH1 in Solr</a>
+	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _pageH1(Wrap<String> c);
@@ -1769,78 +1769,78 @@ public abstract class BaseModelGen<DEV> extends Object {
 	// populate //
 	/////////////
 
-	public void populateForClass(SolrDocument solrDocument) {
-		populateBaseModel(solrDocument);
+	public void populateForClass(SolrResponse.Doc doc) {
+		populateBaseModel(doc);
 	}
-	public void populateBaseModel(SolrDocument solrDocument) {
+	public void populateBaseModel(SolrResponse.Doc doc) {
 		BaseModel oBaseModel = (BaseModel)this;
-		saves = (List<String>)solrDocument.get("saves_docvalues_strings");
+		saves = doc.get("saves_docvalues_strings");
 		if(saves != null) {
 		}
 	}
 
-	public void indexBaseModel(SolrInputDocument document) {
+	public void indexBaseModel(JsonObject doc) {
 		if(pk != null) {
-			document.addField("pk_docvalues_long", pk);
+			doc.put("pk_docvalues_long", pk);
 		}
 		if(inheritPk != null) {
-			document.addField("inheritPk_docvalues_string", inheritPk);
+			doc.put("inheritPk_docvalues_string", inheritPk);
 		}
 		if(id != null) {
-			document.addField("id", id);
+			doc.put("id", id);
 		}
 		if(created != null) {
-			document.addField("created_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(ZonedDateTime.ofInstant(created.toInstant(), ZoneId.of("UTC"))));
+			doc.put("created_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(ZonedDateTime.ofInstant(created.toInstant(), ZoneId.of("UTC"))));
 		}
 		if(modified != null) {
-			document.addField("modified_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(ZonedDateTime.ofInstant(modified.toInstant(), ZoneId.of("UTC"))));
+			doc.put("modified_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(ZonedDateTime.ofInstant(modified.toInstant(), ZoneId.of("UTC"))));
 		}
 		if(archived != null) {
-			document.addField("archived_docvalues_boolean", archived);
+			doc.put("archived_docvalues_boolean", archived);
 		}
 		if(deleted != null) {
-			document.addField("deleted_docvalues_boolean", deleted);
+			doc.put("deleted_docvalues_boolean", deleted);
 		}
 		if(classCanonicalName != null) {
-			document.addField("classCanonicalName_docvalues_string", classCanonicalName);
+			doc.put("classCanonicalName_docvalues_string", classCanonicalName);
 		}
 		if(classSimpleName != null) {
-			document.addField("classSimpleName_docvalues_string", classSimpleName);
+			doc.put("classSimpleName_docvalues_string", classSimpleName);
 		}
 		if(classCanonicalNames != null) {
 			for(java.lang.String o : classCanonicalNames) {
-				document.addField("classCanonicalNames_docvalues_strings", o);
+				doc.put("classCanonicalNames_docvalues_strings", o);
 			}
 		}
 		if(sessionId != null) {
-			document.addField("sessionId_docvalues_string", sessionId);
+			doc.put("sessionId_docvalues_string", sessionId);
 		}
 		if(userKey != null) {
-			document.addField("userKey_docvalues_long", userKey);
+			doc.put("userKey_docvalues_long", userKey);
 		}
 		if(saves != null) {
 			for(java.lang.String o : saves) {
-				document.addField("saves_docvalues_strings", o);
+				doc.put("saves_docvalues_strings", o);
 			}
 		}
 		if(objectTitle != null) {
-			document.addField("objectTitle_docvalues_string", objectTitle);
+			doc.put("objectTitle_docvalues_string", objectTitle);
 		}
 		if(objectId != null) {
-			document.addField("objectId_docvalues_string", objectId);
+			doc.put("objectId_docvalues_string", objectId);
 		}
 		if(objectSuggest != null) {
-			document.addField("objectSuggest_suggested", objectSuggest);
+			doc.put("objectSuggest_suggested", objectSuggest);
 		}
 		if(objectText != null) {
-			document.addField("objectText_text_enUS", objectText.toString());
-			document.addField("objectText_docvalues_string", objectText);
+			doc.put("objectText_text_enUS", objectText.toString());
+			doc.put("objectText_docvalues_string", objectText);
 		}
 		if(pageUrlId != null) {
-			document.addField("pageUrlId_docvalues_string", pageUrlId);
+			doc.put("pageUrlId_docvalues_string", pageUrlId);
 		}
 		if(pageUrlPk != null) {
-			document.addField("pageUrlPk_docvalues_string", pageUrlPk);
+			doc.put("pageUrlPk_docvalues_string", pageUrlPk);
 		}
 	}
 
@@ -1913,37 +1913,37 @@ public abstract class BaseModelGen<DEV> extends Object {
 	// store //
 	/////////////
 
-	public void storeForClass(SolrDocument solrDocument) {
-		storeBaseModel(solrDocument);
+	public void storeForClass(SolrResponse.Doc doc) {
+		storeBaseModel(doc);
 	}
-	public void storeBaseModel(SolrDocument solrDocument) {
+	public void storeBaseModel(SolrResponse.Doc doc) {
 		BaseModel oBaseModel = (BaseModel)this;
 
-		oBaseModel.setPk(Optional.ofNullable(solrDocument.get("pk_docvalues_long")).map(v -> v.toString()).orElse(null));
-		oBaseModel.setInheritPk(Optional.ofNullable(solrDocument.get("inheritPk_docvalues_string")).map(v -> v.toString()).orElse(null));
-		String id = (String)solrDocument.get("id");
+		oBaseModel.setPk(Optional.ofNullable(doc.get("pk_docvalues_long")).map(v -> v.toString()).orElse(null));
+		oBaseModel.setInheritPk(Optional.ofNullable(doc.get("inheritPk_docvalues_string")).map(v -> v.toString()).orElse(null));
+		String id = (String)doc.get("id");
 		oBaseModel.setId(id);
-		oBaseModel.setCreated(Optional.ofNullable(solrDocument.get("created_docvalues_date")).map(v -> v.toString()).orElse(null));
-		oBaseModel.setModified(Optional.ofNullable(solrDocument.get("modified_docvalues_date")).map(v -> v.toString()).orElse(null));
-		oBaseModel.setArchived(Optional.ofNullable(solrDocument.get("archived_docvalues_boolean")).map(v -> v.toString()).orElse(null));
-		oBaseModel.setDeleted(Optional.ofNullable(solrDocument.get("deleted_docvalues_boolean")).map(v -> v.toString()).orElse(null));
-		oBaseModel.setClassCanonicalName(Optional.ofNullable(solrDocument.get("classCanonicalName_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oBaseModel.setClassSimpleName(Optional.ofNullable(solrDocument.get("classSimpleName_docvalues_string")).map(v -> v.toString()).orElse(null));
-		Optional.ofNullable((List<?>)solrDocument.get("classCanonicalNames_docvalues_strings")).orElse(Arrays.asList()).stream().filter(v -> v != null).forEach(v -> {
+		oBaseModel.setCreated(Optional.ofNullable(doc.get("created_docvalues_date")).map(v -> v.toString()).orElse(null));
+		oBaseModel.setModified(Optional.ofNullable(doc.get("modified_docvalues_date")).map(v -> v.toString()).orElse(null));
+		oBaseModel.setArchived(Optional.ofNullable(doc.get("archived_docvalues_boolean")).map(v -> v.toString()).orElse(null));
+		oBaseModel.setDeleted(Optional.ofNullable(doc.get("deleted_docvalues_boolean")).map(v -> v.toString()).orElse(null));
+		oBaseModel.setClassCanonicalName(Optional.ofNullable(doc.get("classCanonicalName_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oBaseModel.setClassSimpleName(Optional.ofNullable(doc.get("classSimpleName_docvalues_string")).map(v -> v.toString()).orElse(null));
+		Optional.ofNullable((List<?>)doc.get("classCanonicalNames_docvalues_strings")).orElse(Arrays.asList()).stream().filter(v -> v != null).forEach(v -> {
 			oBaseModel.addClassCanonicalNames(v.toString());
 		});
-		oBaseModel.setSessionId(Optional.ofNullable(solrDocument.get("sessionId_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oBaseModel.setUserKey(Optional.ofNullable(solrDocument.get("userKey_docvalues_long")).map(v -> v.toString()).orElse(null));
-		Optional.ofNullable((List<?>)solrDocument.get("saves_docvalues_strings")).orElse(Arrays.asList()).stream().filter(v -> v != null).forEach(v -> {
+		oBaseModel.setSessionId(Optional.ofNullable(doc.get("sessionId_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oBaseModel.setUserKey(Optional.ofNullable(doc.get("userKey_docvalues_long")).map(v -> v.toString()).orElse(null));
+		Optional.ofNullable((List<?>)doc.get("saves_docvalues_strings")).orElse(Arrays.asList()).stream().filter(v -> v != null).forEach(v -> {
 			oBaseModel.addSaves(v.toString());
 		});
-		oBaseModel.setObjectTitle(Optional.ofNullable(solrDocument.get("objectTitle_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oBaseModel.setObjectId(Optional.ofNullable(solrDocument.get("objectId_docvalues_string")).map(v -> v.toString()).orElse(null));
-		String objectSuggest = (String)solrDocument.get("objectSuggest_suggested");
+		oBaseModel.setObjectTitle(Optional.ofNullable(doc.get("objectTitle_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oBaseModel.setObjectId(Optional.ofNullable(doc.get("objectId_docvalues_string")).map(v -> v.toString()).orElse(null));
+		String objectSuggest = (String)doc.get("objectSuggest_suggested");
 		oBaseModel.setObjectSuggest(objectSuggest);
-		oBaseModel.setObjectText(Optional.ofNullable(solrDocument.get("objectText_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oBaseModel.setPageUrlId(Optional.ofNullable(solrDocument.get("pageUrlId_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oBaseModel.setPageUrlPk(Optional.ofNullable(solrDocument.get("pageUrlPk_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oBaseModel.setObjectText(Optional.ofNullable(doc.get("objectText_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oBaseModel.setPageUrlId(Optional.ofNullable(doc.get("pageUrlId_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oBaseModel.setPageUrlPk(Optional.ofNullable(doc.get("pageUrlPk_docvalues_string")).map(v -> v.toString()).orElse(null));
 	}
 
 	//////////////////

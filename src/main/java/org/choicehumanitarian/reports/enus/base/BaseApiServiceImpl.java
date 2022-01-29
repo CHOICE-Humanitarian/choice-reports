@@ -7,10 +7,6 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.solr.client.solrj.util.ClientUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import org.choicehumanitarian.reports.enus.request.api.ApiRequest;
@@ -18,6 +14,9 @@ import org.choicehumanitarian.reports.enus.search.SearchList;
 import org.choicehumanitarian.reports.enus.user.SiteUser;
 import org.choicehumanitarian.reports.enus.user.SiteUserEnUSApiServiceImpl;
 import org.choicehumanitarian.reports.enus.vertx.MailVerticle;
+import org.computate.search.tool.SearchTool;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
@@ -124,8 +123,6 @@ public class BaseApiServiceImpl {
 
 	public Future<SiteRequestEnUS> user(ServiceRequest serviceRequest) {
 		Promise<SiteRequestEnUS> promise = Promise.promise();
-		LOG.info(String.format("X-Forwarded-For: %s", serviceRequest.getHeaders().get("X-Forwarded-For")));
-		LOG.info(String.format("Forwarded: %s", serviceRequest.getHeaders().get("Forwarded")));
 		try {
 			JsonObject userJson = serviceRequest.getUser();
 			if(userJson == null) {
@@ -142,10 +139,10 @@ public class BaseApiServiceImpl {
 							String userId = accessToken.getString("sub");
 							SiteRequestEnUS siteRequest = generateSiteRequestEnUS(user, serviceRequest);
 							SearchList<SiteUser> searchList = new SearchList<SiteUser>();
-							searchList.setQuery("*:*");
+							searchList.q("*:*");
 							searchList.setStore(true);
 							searchList.setC(SiteUser.class);
-							searchList.addFilterQuery("userId_docvalues_string:" + ClientUtils.escapeQueryChars(userId));
+							searchList.fq("userId_docvalues_string:" + SearchTool.escapeQueryChars(userId));
 							searchList.promiseDeepSearchList(siteRequest).onSuccess(c -> {
 								SiteUser siteUser1 = searchList.getList().stream().findFirst().orElse(null);
 								SiteUserEnUSApiServiceImpl userService = new SiteUserEnUSApiServiceImpl(eventBus, config, workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine);
@@ -165,7 +162,7 @@ public class BaseApiServiceImpl {
 									siteRequest2.initDeepSiteRequestEnUS(siteRequest);
 
 									ApiRequest apiRequest = new ApiRequest();
-									apiRequest.setRows(1);
+									apiRequest.setRows(1L);
 									apiRequest.setNumFound(1L);
 									apiRequest.setNumPATCH(0L);
 									apiRequest.initDeepApiRequest(siteRequest2);
@@ -199,7 +196,7 @@ public class BaseApiServiceImpl {
 										siteUser1.setSiteRequest_(siteRequest2);
 
 										ApiRequest apiRequest = new ApiRequest();
-										apiRequest.setRows(1);
+										apiRequest.setRows(1L);
 										apiRequest.setNumFound(1L);
 										apiRequest.setNumPATCH(0L);
 										apiRequest.initDeepApiRequest(siteRequest2);
@@ -267,11 +264,11 @@ public class BaseApiServiceImpl {
 		for(String l : Optional.ofNullable(siteRequest.getJsonObject().getJsonArray(entityVar)).orElse(new JsonArray()).stream().map(a -> (String)a).collect(Collectors.toList())) {
 			if(l != null) {
 				SearchList<BaseModel> searchList = new SearchList<BaseModel>();
-				searchList.setQuery("*:*");
+				searchList.q("*:*");
 				searchList.setStore(true);
 				searchList.setC(BaseModel.class);
-				searchList.addFilterQuery("classCanonicalNames_docvalues_strings:" + ClientUtils.escapeQueryChars(c2.getCanonicalName()));
-				searchList.addFilterQuery((inheritPk ? "inheritPk_docvalues_string:" : "pk_docvalues_long:") + ClientUtils.escapeQueryChars(l));
+				searchList.fq("classCanonicalNames_docvalues_strings:" + SearchTool.escapeQueryChars(c2.getCanonicalName()));
+				searchList.fq((inheritPk ? "inheritPk_docvalues_string:" : "pk_docvalues_long:") + SearchTool.escapeQueryChars(l));
 				searchList.promiseDeepSearchList(siteRequest).onSuccess(s -> {
 					Long l2 = Optional.ofNullable(searchList.getList().stream().findFirst().orElse(null)).map(a -> a.getPk()).orElse(null);
 					if(l2 != null) {
@@ -424,10 +421,10 @@ public class BaseApiServiceImpl {
 			Promise<Long> promise = Promise.promise();
 			if(pk != null) {
 				SearchList<BaseModel> searchList = new SearchList<BaseModel>();
-				searchList.setQuery("*:*");
+				searchList.q("*:*");
 				searchList.setStore(true);
 				searchList.setC(c);
-				searchList.addFilterQuery((inheritPk ? "inheritPk_docvalues_string:" : "pk_docvalues_long:") + pk);
+				searchList.fq((inheritPk ? "inheritPk_docvalues_string:" : "pk_docvalues_long:") + pk);
 				searchList.promiseDeepSearchList(siteRequest).onSuccess(s -> {
 					Long l2 = Optional.ofNullable(searchList.getList().stream().findFirst().orElse(null)).map(a -> a.getPk()).orElse(null);
 					promise.complete(l2);

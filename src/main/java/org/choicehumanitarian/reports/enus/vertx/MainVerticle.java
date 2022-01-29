@@ -12,11 +12,12 @@ import java.util.function.Consumer;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.solr.client.solrj.SolrQuery;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 import org.choicehumanitarian.reports.enus.model.donor.ChoiceDonorEnUSGenApiService;
 import org.choicehumanitarian.reports.enus.model.report.ChoiceReportEnUSGenApiService;
 import org.choicehumanitarian.reports.enus.user.SiteUserEnUSGenApiService;
+import org.computate.search.request.SearchRequest;
+import org.computate.search.response.solr.SolrResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -123,7 +124,7 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 		try {
 			ConfigRetrieverOptions retrieverOptions = new ConfigRetrieverOptions();
 
-			retrieverOptions.addStore(new ConfigStoreOptions().setType("file").setFormat("properties").setConfig(new JsonObject().put("path", "application.properties")));
+			retrieverOptions.addStore(new ConfigStoreOptions().setType("file").setFormat("yaml").setConfig(new JsonObject().put("path", "application.yml")));
 
 			String configPath = System.getenv(ConfigKeys.CONFIG_PATH);
 			if(StringUtils.isNotBlank(configPath)) {
@@ -411,7 +412,7 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 					if(StringUtils.startsWith(siteBaseUrl, "https://"))
 						sessionHandler.setCookieSecureFlag(true);
 			
-					RouterBuilder.create(vertx, "webroot/openapi3-enUS.yaml", b -> {
+					RouterBuilder.create(vertx, "webroot/openapi3-enUS.yml", b -> {
 						if (b.succeeded()) {
 							RouterBuilder routerBuilder = b.result();
 							routerBuilder.mountServicesFromExtensions();
@@ -558,28 +559,27 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 					}
 				});
 			});
-			healthCheckHandler.register("solr", 2000, a -> {
-				SolrQuery query = new SolrQuery();
-				query.setQuery("*:*");
+			healthCheckHandler.register("solr", 2000, promise2 -> {
 				try {
-					String solrHostName = config().getString(ConfigKeys.SOLR_HOST_NAME);
-					Integer solrPort = config().getInteger(ConfigKeys.SOLR_PORT);
-					String solrCollection = config().getString(ConfigKeys.SOLR_COLLECTION);
-					String solrRequestUri = String.format("/solr/%s/select%s", solrCollection, query.toQueryString());
-					webClient.get(solrPort, solrHostName, solrRequestUri).send().onSuccess(b -> {
-						try {
-							a.complete(Status.OK());
-						} catch(Exception ex) {
-							LOG.error("Could not read response from Solr. ", ex);
-							a.fail(ex);
-						}
+					SearchRequest request = new SearchRequest();
+					request.q("*:*");
+					webClient.get(
+							config().getInteger(ConfigKeys.SOLR_PORT)
+							, config().getString(ConfigKeys.SOLR_HOST_NAME)
+							, String.format("/solr/%s/select%s", config().getString(ConfigKeys.SOLR_COLLECTION), request.getQueryString())
+							).send().onSuccess(a -> {
+						SolrResponse response = a.bodyAsJson(SolrResponse.class);
+						if(response.getError() == null)
+							promise2.complete();
+						else
+							promise2.fail(new RuntimeException(response.getError().getMsg()));
 					}).onFailure(ex -> {
-						LOG.error(String.format("Solr request failed. "), new RuntimeException(ex));
-						a.fail(ex);
+						promise2.fail(ex);
+						LOG.error(String.format("Solr search failed. "), ex);
 					});
-				} catch (Exception e) {
-					LOG.error(configureHealthChecksErrorSolr, a.future().cause());
-					a.fail(a.future().cause());
+				} catch (Exception ex) {
+					LOG.error("Solr search failed. ", ex);
+					promise2.fail(ex);
 				}
 			});
 			healthCheckHandler.register("vertx", 2000, a -> {
