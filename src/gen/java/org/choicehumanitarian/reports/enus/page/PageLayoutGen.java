@@ -4,33 +4,33 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Arrays;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.slf4j.LoggerFactory;
+import org.computate.search.serialize.ComputateLocalDateDeserializer;
 import java.util.HashMap;
 import org.apache.commons.lang3.StringUtils;
 import java.lang.Integer;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import org.computate.vertx.api.ApiRequest;
 import java.lang.Long;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.choicehumanitarian.reports.enus.java.ZonedDateTimeSerializer;
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.vertx.core.json.JsonObject;
 import java.lang.String;
 import java.math.RoundingMode;
 import java.lang.Void;
-import org.choicehumanitarian.reports.enus.request.api.ApiRequest;
 import org.slf4j.Logger;
 import java.math.MathContext;
-import org.choicehumanitarian.reports.enus.java.ZonedDateTimeDeserializer;
 import io.vertx.core.Promise;
-import org.choicehumanitarian.reports.enus.java.LocalDateSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.vertx.core.Future;
+import org.computate.search.serialize.ComputateZonedDateTimeDeserializer;
 import io.vertx.ext.web.api.service.ServiceRequest;
 import org.choicehumanitarian.reports.enus.base.BaseModel;
 import java.util.Objects;
+import org.computate.search.serialize.ComputateLocalDateSerializer;
 import io.vertx.core.json.JsonArray;
 import java.util.List;
 import org.computate.search.wrap.Wrap;
@@ -38,8 +38,9 @@ import org.apache.commons.lang3.math.NumberUtils;
 import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.lang.Object;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.computate.search.serialize.ComputateZonedDateTimeSerializer;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 /**	
  * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.page.PageLayout&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
@@ -161,16 +162,16 @@ public abstract class PageLayoutGen<DEV> extends Object {
 		return (PageLayout)this;
 	}
 
-	public static String staticSolrRequestZoneId(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchRequestZoneId(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSolrStrRequestZoneId(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchStrRequestZoneId(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqRequestZoneId(SiteRequestEnUS siteRequest_, String o) {
-		return PageLayout.staticSolrStrRequestZoneId(siteRequest_, PageLayout.staticSolrRequestZoneId(siteRequest_, PageLayout.staticSetRequestZoneId(siteRequest_, o)));
+	public static String staticSearchFqRequestZoneId(SiteRequestEnUS siteRequest_, String o) {
+		return PageLayout.staticSearchStrRequestZoneId(siteRequest_, PageLayout.staticSearchRequestZoneId(siteRequest_, PageLayout.staticSetRequestZoneId(siteRequest_, o)));
 	}
 
 	/////////////////////
@@ -210,16 +211,16 @@ public abstract class PageLayoutGen<DEV> extends Object {
 		return (PageLayout)this;
 	}
 
-	public static String staticSolrRequestLocaleId(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchRequestLocaleId(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSolrStrRequestLocaleId(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchStrRequestLocaleId(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqRequestLocaleId(SiteRequestEnUS siteRequest_, String o) {
-		return PageLayout.staticSolrStrRequestLocaleId(siteRequest_, PageLayout.staticSolrRequestLocaleId(siteRequest_, PageLayout.staticSetRequestLocaleId(siteRequest_, o)));
+	public static String staticSearchFqRequestLocaleId(SiteRequestEnUS siteRequest_, String o) {
+		return PageLayout.staticSearchStrRequestLocaleId(siteRequest_, PageLayout.staticSearchRequestLocaleId(siteRequest_, PageLayout.staticSetRequestLocaleId(siteRequest_, o)));
 	}
 
 	///////////////////
@@ -259,16 +260,16 @@ public abstract class PageLayoutGen<DEV> extends Object {
 		return (PageLayout)this;
 	}
 
-	public static String staticSolrStaticBaseUrl(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchStaticBaseUrl(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSolrStrStaticBaseUrl(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchStrStaticBaseUrl(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqStaticBaseUrl(SiteRequestEnUS siteRequest_, String o) {
-		return PageLayout.staticSolrStrStaticBaseUrl(siteRequest_, PageLayout.staticSolrStaticBaseUrl(siteRequest_, PageLayout.staticSetStaticBaseUrl(siteRequest_, o)));
+	public static String staticSearchFqStaticBaseUrl(SiteRequestEnUS siteRequest_, String o) {
+		return PageLayout.staticSearchStrStaticBaseUrl(siteRequest_, PageLayout.staticSearchStaticBaseUrl(siteRequest_, PageLayout.staticSetStaticBaseUrl(siteRequest_, o)));
 	}
 
 	/////////////
@@ -308,16 +309,16 @@ public abstract class PageLayoutGen<DEV> extends Object {
 		return (PageLayout)this;
 	}
 
-	public static String staticSolrAuthUrl(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchAuthUrl(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSolrStrAuthUrl(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchStrAuthUrl(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqAuthUrl(SiteRequestEnUS siteRequest_, String o) {
-		return PageLayout.staticSolrStrAuthUrl(siteRequest_, PageLayout.staticSolrAuthUrl(siteRequest_, PageLayout.staticSetAuthUrl(siteRequest_, o)));
+	public static String staticSearchFqAuthUrl(SiteRequestEnUS siteRequest_, String o) {
+		return PageLayout.staticSearchStrAuthUrl(siteRequest_, PageLayout.staticSearchAuthUrl(siteRequest_, PageLayout.staticSetAuthUrl(siteRequest_, o)));
 	}
 
 	///////////////
@@ -357,16 +358,16 @@ public abstract class PageLayoutGen<DEV> extends Object {
 		return (PageLayout)this;
 	}
 
-	public static String staticSolrAuthRealm(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchAuthRealm(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSolrStrAuthRealm(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchStrAuthRealm(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqAuthRealm(SiteRequestEnUS siteRequest_, String o) {
-		return PageLayout.staticSolrStrAuthRealm(siteRequest_, PageLayout.staticSolrAuthRealm(siteRequest_, PageLayout.staticSetAuthRealm(siteRequest_, o)));
+	public static String staticSearchFqAuthRealm(SiteRequestEnUS siteRequest_, String o) {
+		return PageLayout.staticSearchStrAuthRealm(siteRequest_, PageLayout.staticSearchAuthRealm(siteRequest_, PageLayout.staticSetAuthRealm(siteRequest_, o)));
 	}
 
 	/////////////
@@ -406,16 +407,16 @@ public abstract class PageLayoutGen<DEV> extends Object {
 		return (PageLayout)this;
 	}
 
-	public static String staticSolrPageUri(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchPageUri(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSolrStrPageUri(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchStrPageUri(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqPageUri(SiteRequestEnUS siteRequest_, String o) {
-		return PageLayout.staticSolrStrPageUri(siteRequest_, PageLayout.staticSolrPageUri(siteRequest_, PageLayout.staticSetPageUri(siteRequest_, o)));
+	public static String staticSearchFqPageUri(SiteRequestEnUS siteRequest_, String o) {
+		return PageLayout.staticSearchStrPageUri(siteRequest_, PageLayout.staticSearchPageUri(siteRequest_, PageLayout.staticSetPageUri(siteRequest_, o)));
 	}
 
 	////////////////
@@ -455,16 +456,16 @@ public abstract class PageLayoutGen<DEV> extends Object {
 		return (PageLayout)this;
 	}
 
-	public static String staticSolrPageMethod(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchPageMethod(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSolrStrPageMethod(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchStrPageMethod(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqPageMethod(SiteRequestEnUS siteRequest_, String o) {
-		return PageLayout.staticSolrStrPageMethod(siteRequest_, PageLayout.staticSolrPageMethod(siteRequest_, PageLayout.staticSetPageMethod(siteRequest_, o)));
+	public static String staticSearchFqPageMethod(SiteRequestEnUS siteRequest_, String o) {
+		return PageLayout.staticSearchStrPageMethod(siteRequest_, PageLayout.staticSearchPageMethod(siteRequest_, PageLayout.staticSetPageMethod(siteRequest_, o)));
 	}
 
 	////////////
@@ -549,16 +550,16 @@ public abstract class PageLayoutGen<DEV> extends Object {
 		return (PageLayout)this;
 	}
 
-	public static Long staticSolrUserKey(SiteRequestEnUS siteRequest_, Long o) {
+	public static Long staticSearchUserKey(SiteRequestEnUS siteRequest_, Long o) {
 		return o;
 	}
 
-	public static String staticSolrStrUserKey(SiteRequestEnUS siteRequest_, Long o) {
+	public static String staticSearchStrUserKey(SiteRequestEnUS siteRequest_, Long o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqUserKey(SiteRequestEnUS siteRequest_, String o) {
-		return PageLayout.staticSolrStrUserKey(siteRequest_, PageLayout.staticSolrUserKey(siteRequest_, PageLayout.staticSetUserKey(siteRequest_, o)));
+	public static String staticSearchFqUserKey(SiteRequestEnUS siteRequest_, String o) {
+		return PageLayout.staticSearchStrUserKey(siteRequest_, PageLayout.staticSearchUserKey(siteRequest_, PageLayout.staticSetUserKey(siteRequest_, o)));
 	}
 
 	//////////////////
@@ -598,16 +599,16 @@ public abstract class PageLayoutGen<DEV> extends Object {
 		return (PageLayout)this;
 	}
 
-	public static String staticSolrUserFullName(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchUserFullName(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSolrStrUserFullName(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchStrUserFullName(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqUserFullName(SiteRequestEnUS siteRequest_, String o) {
-		return PageLayout.staticSolrStrUserFullName(siteRequest_, PageLayout.staticSolrUserFullName(siteRequest_, PageLayout.staticSetUserFullName(siteRequest_, o)));
+	public static String staticSearchFqUserFullName(SiteRequestEnUS siteRequest_, String o) {
+		return PageLayout.staticSearchStrUserFullName(siteRequest_, PageLayout.staticSearchUserFullName(siteRequest_, PageLayout.staticSetUserFullName(siteRequest_, o)));
 	}
 
 	//////////////
@@ -647,16 +648,16 @@ public abstract class PageLayoutGen<DEV> extends Object {
 		return (PageLayout)this;
 	}
 
-	public static String staticSolrUserName(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchUserName(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSolrStrUserName(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchStrUserName(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqUserName(SiteRequestEnUS siteRequest_, String o) {
-		return PageLayout.staticSolrStrUserName(siteRequest_, PageLayout.staticSolrUserName(siteRequest_, PageLayout.staticSetUserName(siteRequest_, o)));
+	public static String staticSearchFqUserName(SiteRequestEnUS siteRequest_, String o) {
+		return PageLayout.staticSearchStrUserName(siteRequest_, PageLayout.staticSearchUserName(siteRequest_, PageLayout.staticSetUserName(siteRequest_, o)));
 	}
 
 	///////////////
@@ -696,16 +697,16 @@ public abstract class PageLayoutGen<DEV> extends Object {
 		return (PageLayout)this;
 	}
 
-	public static String staticSolrUserEmail(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchUserEmail(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSolrStrUserEmail(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchStrUserEmail(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqUserEmail(SiteRequestEnUS siteRequest_, String o) {
-		return PageLayout.staticSolrStrUserEmail(siteRequest_, PageLayout.staticSolrUserEmail(siteRequest_, PageLayout.staticSetUserEmail(siteRequest_, o)));
+	public static String staticSearchFqUserEmail(SiteRequestEnUS siteRequest_, String o) {
+		return PageLayout.staticSearchStrUserEmail(siteRequest_, PageLayout.staticSearchUserEmail(siteRequest_, PageLayout.staticSetUserEmail(siteRequest_, o)));
 	}
 
 	///////////////
@@ -745,16 +746,16 @@ public abstract class PageLayoutGen<DEV> extends Object {
 		return (PageLayout)this;
 	}
 
-	public static String staticSolrLogoutUrl(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchLogoutUrl(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSolrStrLogoutUrl(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchStrLogoutUrl(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqLogoutUrl(SiteRequestEnUS siteRequest_, String o) {
-		return PageLayout.staticSolrStrLogoutUrl(siteRequest_, PageLayout.staticSolrLogoutUrl(siteRequest_, PageLayout.staticSetLogoutUrl(siteRequest_, o)));
+	public static String staticSearchFqLogoutUrl(SiteRequestEnUS siteRequest_, String o) {
+		return PageLayout.staticSearchStrLogoutUrl(siteRequest_, PageLayout.staticSearchLogoutUrl(siteRequest_, PageLayout.staticSetLogoutUrl(siteRequest_, o)));
 	}
 
 	///////////
@@ -802,16 +803,16 @@ public abstract class PageLayoutGen<DEV> extends Object {
 		return (PageLayout)this;
 	}
 
-	public static Long staticSolrLong0(SiteRequestEnUS siteRequest_, Long o) {
+	public static Long staticSearchLong0(SiteRequestEnUS siteRequest_, Long o) {
 		return o;
 	}
 
-	public static String staticSolrStrLong0(SiteRequestEnUS siteRequest_, Long o) {
+	public static String staticSearchStrLong0(SiteRequestEnUS siteRequest_, Long o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqLong0(SiteRequestEnUS siteRequest_, String o) {
-		return PageLayout.staticSolrStrLong0(siteRequest_, PageLayout.staticSolrLong0(siteRequest_, PageLayout.staticSetLong0(siteRequest_, o)));
+	public static String staticSearchFqLong0(SiteRequestEnUS siteRequest_, String o) {
+		return PageLayout.staticSearchStrLong0(siteRequest_, PageLayout.staticSearchLong0(siteRequest_, PageLayout.staticSetLong0(siteRequest_, o)));
 	}
 
 	///////////
@@ -859,16 +860,16 @@ public abstract class PageLayoutGen<DEV> extends Object {
 		return (PageLayout)this;
 	}
 
-	public static Long staticSolrLong1(SiteRequestEnUS siteRequest_, Long o) {
+	public static Long staticSearchLong1(SiteRequestEnUS siteRequest_, Long o) {
 		return o;
 	}
 
-	public static String staticSolrStrLong1(SiteRequestEnUS siteRequest_, Long o) {
+	public static String staticSearchStrLong1(SiteRequestEnUS siteRequest_, Long o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqLong1(SiteRequestEnUS siteRequest_, String o) {
-		return PageLayout.staticSolrStrLong1(siteRequest_, PageLayout.staticSolrLong1(siteRequest_, PageLayout.staticSetLong1(siteRequest_, o)));
+	public static String staticSearchFqLong1(SiteRequestEnUS siteRequest_, String o) {
+		return PageLayout.staticSearchStrLong1(siteRequest_, PageLayout.staticSearchLong1(siteRequest_, PageLayout.staticSetLong1(siteRequest_, o)));
 	}
 
 	//////////
@@ -916,16 +917,16 @@ public abstract class PageLayoutGen<DEV> extends Object {
 		return (PageLayout)this;
 	}
 
-	public static Integer staticSolrInt0(SiteRequestEnUS siteRequest_, Integer o) {
+	public static Integer staticSearchInt0(SiteRequestEnUS siteRequest_, Integer o) {
 		return o;
 	}
 
-	public static String staticSolrStrInt0(SiteRequestEnUS siteRequest_, Integer o) {
+	public static String staticSearchStrInt0(SiteRequestEnUS siteRequest_, Integer o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqInt0(SiteRequestEnUS siteRequest_, String o) {
-		return PageLayout.staticSolrStrInt0(siteRequest_, PageLayout.staticSolrInt0(siteRequest_, PageLayout.staticSetInt0(siteRequest_, o)));
+	public static String staticSearchFqInt0(SiteRequestEnUS siteRequest_, String o) {
+		return PageLayout.staticSearchStrInt0(siteRequest_, PageLayout.staticSearchInt0(siteRequest_, PageLayout.staticSetInt0(siteRequest_, o)));
 	}
 
 	//////////
@@ -973,16 +974,16 @@ public abstract class PageLayoutGen<DEV> extends Object {
 		return (PageLayout)this;
 	}
 
-	public static Integer staticSolrInt1(SiteRequestEnUS siteRequest_, Integer o) {
+	public static Integer staticSearchInt1(SiteRequestEnUS siteRequest_, Integer o) {
 		return o;
 	}
 
-	public static String staticSolrStrInt1(SiteRequestEnUS siteRequest_, Integer o) {
+	public static String staticSearchStrInt1(SiteRequestEnUS siteRequest_, Integer o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqInt1(SiteRequestEnUS siteRequest_, String o) {
-		return PageLayout.staticSolrStrInt1(siteRequest_, PageLayout.staticSolrInt1(siteRequest_, PageLayout.staticSetInt1(siteRequest_, o)));
+	public static String staticSearchFqInt1(SiteRequestEnUS siteRequest_, String o) {
+		return PageLayout.staticSearchStrInt1(siteRequest_, PageLayout.staticSearchInt1(siteRequest_, PageLayout.staticSetInt1(siteRequest_, o)));
 	}
 
 	///////////////////
@@ -1064,16 +1065,16 @@ public abstract class PageLayoutGen<DEV> extends Object {
 		return (PageLayout)this;
 	}
 
-	public static String staticSolrClassSimpleName(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchClassSimpleName(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSolrStrClassSimpleName(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchStrClassSimpleName(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqClassSimpleName(SiteRequestEnUS siteRequest_, String o) {
-		return PageLayout.staticSolrStrClassSimpleName(siteRequest_, PageLayout.staticSolrClassSimpleName(siteRequest_, PageLayout.staticSetClassSimpleName(siteRequest_, o)));
+	public static String staticSearchFqClassSimpleName(SiteRequestEnUS siteRequest_, String o) {
+		return PageLayout.staticSearchStrClassSimpleName(siteRequest_, PageLayout.staticSearchClassSimpleName(siteRequest_, PageLayout.staticSetClassSimpleName(siteRequest_, o)));
 	}
 
 	///////////////
@@ -1113,16 +1114,16 @@ public abstract class PageLayoutGen<DEV> extends Object {
 		return (PageLayout)this;
 	}
 
-	public static String staticSolrPageTitle(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchPageTitle(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSolrStrPageTitle(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchStrPageTitle(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqPageTitle(SiteRequestEnUS siteRequest_, String o) {
-		return PageLayout.staticSolrStrPageTitle(siteRequest_, PageLayout.staticSolrPageTitle(siteRequest_, PageLayout.staticSetPageTitle(siteRequest_, o)));
+	public static String staticSearchFqPageTitle(SiteRequestEnUS siteRequest_, String o) {
+		return PageLayout.staticSearchStrPageTitle(siteRequest_, PageLayout.staticSearchPageTitle(siteRequest_, PageLayout.staticSetPageTitle(siteRequest_, o)));
 	}
 
 	///////////
@@ -1179,16 +1180,16 @@ public abstract class PageLayoutGen<DEV> extends Object {
 		return (PageLayout)this;
 	}
 
-	public static String staticSolrRoles(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchRoles(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSolrStrRoles(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchStrRoles(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqRoles(SiteRequestEnUS siteRequest_, String o) {
-		return PageLayout.staticSolrStrRoles(siteRequest_, PageLayout.staticSolrRoles(siteRequest_, PageLayout.staticSetRoles(siteRequest_, o)));
+	public static String staticSearchFqRoles(SiteRequestEnUS siteRequest_, String o) {
+		return PageLayout.staticSearchStrRoles(siteRequest_, PageLayout.staticSearchRoles(siteRequest_, PageLayout.staticSetRoles(siteRequest_, o)));
 	}
 
 	///////////////////
@@ -1245,16 +1246,16 @@ public abstract class PageLayoutGen<DEV> extends Object {
 		return (PageLayout)this;
 	}
 
-	public static String staticSolrRolesRequired(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchRolesRequired(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSolrStrRolesRequired(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchStrRolesRequired(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqRolesRequired(SiteRequestEnUS siteRequest_, String o) {
-		return PageLayout.staticSolrStrRolesRequired(siteRequest_, PageLayout.staticSolrRolesRequired(siteRequest_, PageLayout.staticSetRolesRequired(siteRequest_, o)));
+	public static String staticSearchFqRolesRequired(SiteRequestEnUS siteRequest_, String o) {
+		return PageLayout.staticSearchStrRolesRequired(siteRequest_, PageLayout.staticSearchRolesRequired(siteRequest_, PageLayout.staticSetRolesRequired(siteRequest_, o)));
 	}
 
 	////////////////////
@@ -1311,16 +1312,16 @@ public abstract class PageLayoutGen<DEV> extends Object {
 		return (PageLayout)this;
 	}
 
-	public static String staticSolrAuthRolesAdmin(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchAuthRolesAdmin(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSolrStrAuthRolesAdmin(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchStrAuthRolesAdmin(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqAuthRolesAdmin(SiteRequestEnUS siteRequest_, String o) {
-		return PageLayout.staticSolrStrAuthRolesAdmin(siteRequest_, PageLayout.staticSolrAuthRolesAdmin(siteRequest_, PageLayout.staticSetAuthRolesAdmin(siteRequest_, o)));
+	public static String staticSearchFqAuthRolesAdmin(SiteRequestEnUS siteRequest_, String o) {
+		return PageLayout.staticSearchStrAuthRolesAdmin(siteRequest_, PageLayout.staticSearchAuthRolesAdmin(siteRequest_, PageLayout.staticSetAuthRolesAdmin(siteRequest_, o)));
 	}
 
 	////////////////
@@ -1468,16 +1469,16 @@ public abstract class PageLayoutGen<DEV> extends Object {
 		return (PageLayout)this;
 	}
 
-	public static String staticSolrPageImageUri(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchPageImageUri(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSolrStrPageImageUri(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchStrPageImageUri(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqPageImageUri(SiteRequestEnUS siteRequest_, String o) {
-		return PageLayout.staticSolrStrPageImageUri(siteRequest_, PageLayout.staticSolrPageImageUri(siteRequest_, PageLayout.staticSetPageImageUri(siteRequest_, o)));
+	public static String staticSearchFqPageImageUri(SiteRequestEnUS siteRequest_, String o) {
+		return PageLayout.staticSearchStrPageImageUri(siteRequest_, PageLayout.staticSearchPageImageUri(siteRequest_, PageLayout.staticSetPageImageUri(siteRequest_, o)));
 	}
 
 	//////////////////////
@@ -1517,16 +1518,16 @@ public abstract class PageLayoutGen<DEV> extends Object {
 		return (PageLayout)this;
 	}
 
-	public static String staticSolrContextIconGroup(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchContextIconGroup(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSolrStrContextIconGroup(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchStrContextIconGroup(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqContextIconGroup(SiteRequestEnUS siteRequest_, String o) {
-		return PageLayout.staticSolrStrContextIconGroup(siteRequest_, PageLayout.staticSolrContextIconGroup(siteRequest_, PageLayout.staticSetContextIconGroup(siteRequest_, o)));
+	public static String staticSearchFqContextIconGroup(SiteRequestEnUS siteRequest_, String o) {
+		return PageLayout.staticSearchStrContextIconGroup(siteRequest_, PageLayout.staticSearchContextIconGroup(siteRequest_, PageLayout.staticSetContextIconGroup(siteRequest_, o)));
 	}
 
 	/////////////////////
@@ -1566,16 +1567,16 @@ public abstract class PageLayoutGen<DEV> extends Object {
 		return (PageLayout)this;
 	}
 
-	public static String staticSolrContextIconName(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchContextIconName(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSolrStrContextIconName(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchStrContextIconName(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqContextIconName(SiteRequestEnUS siteRequest_, String o) {
-		return PageLayout.staticSolrStrContextIconName(siteRequest_, PageLayout.staticSolrContextIconName(siteRequest_, PageLayout.staticSetContextIconName(siteRequest_, o)));
+	public static String staticSearchFqContextIconName(SiteRequestEnUS siteRequest_, String o) {
+		return PageLayout.staticSearchStrContextIconName(siteRequest_, PageLayout.staticSearchContextIconName(siteRequest_, PageLayout.staticSetContextIconName(siteRequest_, o)));
 	}
 
 	//////////////
@@ -1871,212 +1872,186 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	}
 
 	////////////////
-	// staticSolr //
+	// staticSearch //
 	////////////////
 
-	public static Object staticSolrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
-		return staticSolrPageLayout(entityVar,  siteRequest_, o);
+	public static Object staticSearchForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+		return staticSearchPageLayout(entityVar,  siteRequest_, o);
 	}
-	public static Object staticSolrPageLayout(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+	public static Object staticSearchPageLayout(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
 		switch(entityVar) {
 		case "requestZoneId":
-			return PageLayout.staticSolrRequestZoneId(siteRequest_, (String)o);
+			return PageLayout.staticSearchRequestZoneId(siteRequest_, (String)o);
 		case "requestLocaleId":
-			return PageLayout.staticSolrRequestLocaleId(siteRequest_, (String)o);
+			return PageLayout.staticSearchRequestLocaleId(siteRequest_, (String)o);
 		case "staticBaseUrl":
-			return PageLayout.staticSolrStaticBaseUrl(siteRequest_, (String)o);
+			return PageLayout.staticSearchStaticBaseUrl(siteRequest_, (String)o);
 		case "authUrl":
-			return PageLayout.staticSolrAuthUrl(siteRequest_, (String)o);
+			return PageLayout.staticSearchAuthUrl(siteRequest_, (String)o);
 		case "authRealm":
-			return PageLayout.staticSolrAuthRealm(siteRequest_, (String)o);
+			return PageLayout.staticSearchAuthRealm(siteRequest_, (String)o);
 		case "pageUri":
-			return PageLayout.staticSolrPageUri(siteRequest_, (String)o);
+			return PageLayout.staticSearchPageUri(siteRequest_, (String)o);
 		case "pageMethod":
-			return PageLayout.staticSolrPageMethod(siteRequest_, (String)o);
+			return PageLayout.staticSearchPageMethod(siteRequest_, (String)o);
 		case "userKey":
-			return PageLayout.staticSolrUserKey(siteRequest_, (Long)o);
+			return PageLayout.staticSearchUserKey(siteRequest_, (Long)o);
 		case "userFullName":
-			return PageLayout.staticSolrUserFullName(siteRequest_, (String)o);
+			return PageLayout.staticSearchUserFullName(siteRequest_, (String)o);
 		case "userName":
-			return PageLayout.staticSolrUserName(siteRequest_, (String)o);
+			return PageLayout.staticSearchUserName(siteRequest_, (String)o);
 		case "userEmail":
-			return PageLayout.staticSolrUserEmail(siteRequest_, (String)o);
+			return PageLayout.staticSearchUserEmail(siteRequest_, (String)o);
 		case "logoutUrl":
-			return PageLayout.staticSolrLogoutUrl(siteRequest_, (String)o);
+			return PageLayout.staticSearchLogoutUrl(siteRequest_, (String)o);
 		case "long0":
-			return PageLayout.staticSolrLong0(siteRequest_, (Long)o);
+			return PageLayout.staticSearchLong0(siteRequest_, (Long)o);
 		case "long1":
-			return PageLayout.staticSolrLong1(siteRequest_, (Long)o);
+			return PageLayout.staticSearchLong1(siteRequest_, (Long)o);
 		case "int0":
-			return PageLayout.staticSolrInt0(siteRequest_, (Integer)o);
+			return PageLayout.staticSearchInt0(siteRequest_, (Integer)o);
 		case "int1":
-			return PageLayout.staticSolrInt1(siteRequest_, (Integer)o);
+			return PageLayout.staticSearchInt1(siteRequest_, (Integer)o);
 		case "classSimpleName":
-			return PageLayout.staticSolrClassSimpleName(siteRequest_, (String)o);
+			return PageLayout.staticSearchClassSimpleName(siteRequest_, (String)o);
 		case "pageTitle":
-			return PageLayout.staticSolrPageTitle(siteRequest_, (String)o);
+			return PageLayout.staticSearchPageTitle(siteRequest_, (String)o);
 		case "roles":
-			return PageLayout.staticSolrRoles(siteRequest_, (String)o);
+			return PageLayout.staticSearchRoles(siteRequest_, (String)o);
 		case "rolesRequired":
-			return PageLayout.staticSolrRolesRequired(siteRequest_, (String)o);
+			return PageLayout.staticSearchRolesRequired(siteRequest_, (String)o);
 		case "authRolesAdmin":
-			return PageLayout.staticSolrAuthRolesAdmin(siteRequest_, (String)o);
+			return PageLayout.staticSearchAuthRolesAdmin(siteRequest_, (String)o);
 		case "pageImageUri":
-			return PageLayout.staticSolrPageImageUri(siteRequest_, (String)o);
+			return PageLayout.staticSearchPageImageUri(siteRequest_, (String)o);
 		case "contextIconGroup":
-			return PageLayout.staticSolrContextIconGroup(siteRequest_, (String)o);
+			return PageLayout.staticSearchContextIconGroup(siteRequest_, (String)o);
 		case "contextIconName":
-			return PageLayout.staticSolrContextIconName(siteRequest_, (String)o);
+			return PageLayout.staticSearchContextIconName(siteRequest_, (String)o);
 			default:
 				return null;
 		}
 	}
 
 	///////////////////
-	// staticSolrStr //
+	// staticSearchStr //
 	///////////////////
 
-	public static String staticSolrStrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
-		return staticSolrStrPageLayout(entityVar,  siteRequest_, o);
+	public static String staticSearchStrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+		return staticSearchStrPageLayout(entityVar,  siteRequest_, o);
 	}
-	public static String staticSolrStrPageLayout(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+	public static String staticSearchStrPageLayout(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
 		switch(entityVar) {
 		case "requestZoneId":
-			return PageLayout.staticSolrStrRequestZoneId(siteRequest_, (String)o);
+			return PageLayout.staticSearchStrRequestZoneId(siteRequest_, (String)o);
 		case "requestLocaleId":
-			return PageLayout.staticSolrStrRequestLocaleId(siteRequest_, (String)o);
+			return PageLayout.staticSearchStrRequestLocaleId(siteRequest_, (String)o);
 		case "staticBaseUrl":
-			return PageLayout.staticSolrStrStaticBaseUrl(siteRequest_, (String)o);
+			return PageLayout.staticSearchStrStaticBaseUrl(siteRequest_, (String)o);
 		case "authUrl":
-			return PageLayout.staticSolrStrAuthUrl(siteRequest_, (String)o);
+			return PageLayout.staticSearchStrAuthUrl(siteRequest_, (String)o);
 		case "authRealm":
-			return PageLayout.staticSolrStrAuthRealm(siteRequest_, (String)o);
+			return PageLayout.staticSearchStrAuthRealm(siteRequest_, (String)o);
 		case "pageUri":
-			return PageLayout.staticSolrStrPageUri(siteRequest_, (String)o);
+			return PageLayout.staticSearchStrPageUri(siteRequest_, (String)o);
 		case "pageMethod":
-			return PageLayout.staticSolrStrPageMethod(siteRequest_, (String)o);
+			return PageLayout.staticSearchStrPageMethod(siteRequest_, (String)o);
 		case "userKey":
-			return PageLayout.staticSolrStrUserKey(siteRequest_, (Long)o);
+			return PageLayout.staticSearchStrUserKey(siteRequest_, (Long)o);
 		case "userFullName":
-			return PageLayout.staticSolrStrUserFullName(siteRequest_, (String)o);
+			return PageLayout.staticSearchStrUserFullName(siteRequest_, (String)o);
 		case "userName":
-			return PageLayout.staticSolrStrUserName(siteRequest_, (String)o);
+			return PageLayout.staticSearchStrUserName(siteRequest_, (String)o);
 		case "userEmail":
-			return PageLayout.staticSolrStrUserEmail(siteRequest_, (String)o);
+			return PageLayout.staticSearchStrUserEmail(siteRequest_, (String)o);
 		case "logoutUrl":
-			return PageLayout.staticSolrStrLogoutUrl(siteRequest_, (String)o);
+			return PageLayout.staticSearchStrLogoutUrl(siteRequest_, (String)o);
 		case "long0":
-			return PageLayout.staticSolrStrLong0(siteRequest_, (Long)o);
+			return PageLayout.staticSearchStrLong0(siteRequest_, (Long)o);
 		case "long1":
-			return PageLayout.staticSolrStrLong1(siteRequest_, (Long)o);
+			return PageLayout.staticSearchStrLong1(siteRequest_, (Long)o);
 		case "int0":
-			return PageLayout.staticSolrStrInt0(siteRequest_, (Integer)o);
+			return PageLayout.staticSearchStrInt0(siteRequest_, (Integer)o);
 		case "int1":
-			return PageLayout.staticSolrStrInt1(siteRequest_, (Integer)o);
+			return PageLayout.staticSearchStrInt1(siteRequest_, (Integer)o);
 		case "classSimpleName":
-			return PageLayout.staticSolrStrClassSimpleName(siteRequest_, (String)o);
+			return PageLayout.staticSearchStrClassSimpleName(siteRequest_, (String)o);
 		case "pageTitle":
-			return PageLayout.staticSolrStrPageTitle(siteRequest_, (String)o);
+			return PageLayout.staticSearchStrPageTitle(siteRequest_, (String)o);
 		case "roles":
-			return PageLayout.staticSolrStrRoles(siteRequest_, (String)o);
+			return PageLayout.staticSearchStrRoles(siteRequest_, (String)o);
 		case "rolesRequired":
-			return PageLayout.staticSolrStrRolesRequired(siteRequest_, (String)o);
+			return PageLayout.staticSearchStrRolesRequired(siteRequest_, (String)o);
 		case "authRolesAdmin":
-			return PageLayout.staticSolrStrAuthRolesAdmin(siteRequest_, (String)o);
+			return PageLayout.staticSearchStrAuthRolesAdmin(siteRequest_, (String)o);
 		case "pageImageUri":
-			return PageLayout.staticSolrStrPageImageUri(siteRequest_, (String)o);
+			return PageLayout.staticSearchStrPageImageUri(siteRequest_, (String)o);
 		case "contextIconGroup":
-			return PageLayout.staticSolrStrContextIconGroup(siteRequest_, (String)o);
+			return PageLayout.staticSearchStrContextIconGroup(siteRequest_, (String)o);
 		case "contextIconName":
-			return PageLayout.staticSolrStrContextIconName(siteRequest_, (String)o);
+			return PageLayout.staticSearchStrContextIconName(siteRequest_, (String)o);
 			default:
 				return null;
 		}
 	}
 
 	//////////////////
-	// staticSolrFq //
+	// staticSearchFq //
 	//////////////////
 
-	public static String staticSolrFqForClass(String entityVar, SiteRequestEnUS siteRequest_, String o) {
-		return staticSolrFqPageLayout(entityVar,  siteRequest_, o);
+	public static String staticSearchFqForClass(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+		return staticSearchFqPageLayout(entityVar,  siteRequest_, o);
 	}
-	public static String staticSolrFqPageLayout(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchFqPageLayout(String entityVar, SiteRequestEnUS siteRequest_, String o) {
 		switch(entityVar) {
 		case "requestZoneId":
-			return PageLayout.staticSolrFqRequestZoneId(siteRequest_, o);
+			return PageLayout.staticSearchFqRequestZoneId(siteRequest_, o);
 		case "requestLocaleId":
-			return PageLayout.staticSolrFqRequestLocaleId(siteRequest_, o);
+			return PageLayout.staticSearchFqRequestLocaleId(siteRequest_, o);
 		case "staticBaseUrl":
-			return PageLayout.staticSolrFqStaticBaseUrl(siteRequest_, o);
+			return PageLayout.staticSearchFqStaticBaseUrl(siteRequest_, o);
 		case "authUrl":
-			return PageLayout.staticSolrFqAuthUrl(siteRequest_, o);
+			return PageLayout.staticSearchFqAuthUrl(siteRequest_, o);
 		case "authRealm":
-			return PageLayout.staticSolrFqAuthRealm(siteRequest_, o);
+			return PageLayout.staticSearchFqAuthRealm(siteRequest_, o);
 		case "pageUri":
-			return PageLayout.staticSolrFqPageUri(siteRequest_, o);
+			return PageLayout.staticSearchFqPageUri(siteRequest_, o);
 		case "pageMethod":
-			return PageLayout.staticSolrFqPageMethod(siteRequest_, o);
+			return PageLayout.staticSearchFqPageMethod(siteRequest_, o);
 		case "userKey":
-			return PageLayout.staticSolrFqUserKey(siteRequest_, o);
+			return PageLayout.staticSearchFqUserKey(siteRequest_, o);
 		case "userFullName":
-			return PageLayout.staticSolrFqUserFullName(siteRequest_, o);
+			return PageLayout.staticSearchFqUserFullName(siteRequest_, o);
 		case "userName":
-			return PageLayout.staticSolrFqUserName(siteRequest_, o);
+			return PageLayout.staticSearchFqUserName(siteRequest_, o);
 		case "userEmail":
-			return PageLayout.staticSolrFqUserEmail(siteRequest_, o);
+			return PageLayout.staticSearchFqUserEmail(siteRequest_, o);
 		case "logoutUrl":
-			return PageLayout.staticSolrFqLogoutUrl(siteRequest_, o);
+			return PageLayout.staticSearchFqLogoutUrl(siteRequest_, o);
 		case "long0":
-			return PageLayout.staticSolrFqLong0(siteRequest_, o);
+			return PageLayout.staticSearchFqLong0(siteRequest_, o);
 		case "long1":
-			return PageLayout.staticSolrFqLong1(siteRequest_, o);
+			return PageLayout.staticSearchFqLong1(siteRequest_, o);
 		case "int0":
-			return PageLayout.staticSolrFqInt0(siteRequest_, o);
+			return PageLayout.staticSearchFqInt0(siteRequest_, o);
 		case "int1":
-			return PageLayout.staticSolrFqInt1(siteRequest_, o);
+			return PageLayout.staticSearchFqInt1(siteRequest_, o);
 		case "classSimpleName":
-			return PageLayout.staticSolrFqClassSimpleName(siteRequest_, o);
+			return PageLayout.staticSearchFqClassSimpleName(siteRequest_, o);
 		case "pageTitle":
-			return PageLayout.staticSolrFqPageTitle(siteRequest_, o);
+			return PageLayout.staticSearchFqPageTitle(siteRequest_, o);
 		case "roles":
-			return PageLayout.staticSolrFqRoles(siteRequest_, o);
+			return PageLayout.staticSearchFqRoles(siteRequest_, o);
 		case "rolesRequired":
-			return PageLayout.staticSolrFqRolesRequired(siteRequest_, o);
+			return PageLayout.staticSearchFqRolesRequired(siteRequest_, o);
 		case "authRolesAdmin":
-			return PageLayout.staticSolrFqAuthRolesAdmin(siteRequest_, o);
+			return PageLayout.staticSearchFqAuthRolesAdmin(siteRequest_, o);
 		case "pageImageUri":
-			return PageLayout.staticSolrFqPageImageUri(siteRequest_, o);
+			return PageLayout.staticSearchFqPageImageUri(siteRequest_, o);
 		case "contextIconGroup":
-			return PageLayout.staticSolrFqContextIconGroup(siteRequest_, o);
+			return PageLayout.staticSearchFqContextIconGroup(siteRequest_, o);
 		case "contextIconName":
-			return PageLayout.staticSolrFqContextIconName(siteRequest_, o);
-			default:
-				return null;
-		}
-	}
-
-	/////////////
-	// define //
-	/////////////
-
-	public boolean defineForClass(String var, Object val) {
-		String[] vars = StringUtils.split(var, ".");
-		Object o = null;
-		if(val != null) {
-			for(String v : vars) {
-				if(o == null)
-					o = definePageLayout(v, val);
-				else if(o instanceof BaseModel) {
-					BaseModel oBaseModel = (BaseModel)o;
-					o = oBaseModel.defineForClass(v, val);
-				}
-			}
-		}
-		return o != null;
-	}
-	public Object definePageLayout(String var, Object val) {
-		switch(var.toLowerCase()) {
+			return PageLayout.staticSearchFqContextIconName(siteRequest_, o);
 			default:
 				return null;
 		}

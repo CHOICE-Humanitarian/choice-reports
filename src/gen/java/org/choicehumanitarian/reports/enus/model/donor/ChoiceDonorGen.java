@@ -5,42 +5,43 @@ import java.util.Arrays;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import java.util.Date;
 import org.slf4j.LoggerFactory;
+import org.computate.search.serialize.ComputateLocalDateDeserializer;
 import java.util.HashMap;
 import org.apache.commons.lang3.StringUtils;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import org.computate.vertx.api.ApiRequest;
 import org.computate.search.response.solr.SolrResponse;
 import java.math.BigDecimal;
 import java.lang.Long;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.choicehumanitarian.reports.enus.java.ZonedDateTimeSerializer;
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.vertx.core.json.JsonObject;
 import java.lang.String;
 import java.math.RoundingMode;
-import org.choicehumanitarian.reports.enus.request.api.ApiRequest;
 import org.slf4j.Logger;
 import java.math.MathContext;
-import org.choicehumanitarian.reports.enus.java.ZonedDateTimeDeserializer;
 import io.vertx.core.Promise;
 import java.util.Set;
-import org.choicehumanitarian.reports.enus.java.LocalDateSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import org.choicehumanitarian.reports.enus.model.report.ChoiceReport;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.vertx.core.Future;
+import org.computate.search.serialize.ComputateZonedDateTimeDeserializer;
 import org.choicehumanitarian.reports.enus.base.BaseModel;
 import java.util.Objects;
+import org.computate.search.serialize.ComputateLocalDateSerializer;
 import io.vertx.core.json.JsonArray;
 import java.util.List;
 import org.computate.search.wrap.Wrap;
 import org.apache.commons.lang3.math.NumberUtils;
 import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.computate.search.serialize.ComputateZonedDateTimeSerializer;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 /**	
@@ -110,16 +111,16 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return (ChoiceDonor)this;
 	}
 
-	public static String staticSolrDonorFullName(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchDonorFullName(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSolrStrDonorFullName(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchStrDonorFullName(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqDonorFullName(SiteRequestEnUS siteRequest_, String o) {
-		return ChoiceDonor.staticSolrStrDonorFullName(siteRequest_, ChoiceDonor.staticSolrDonorFullName(siteRequest_, ChoiceDonor.staticSetDonorFullName(siteRequest_, o)));
+	public static String staticSearchFqDonorFullName(SiteRequestEnUS siteRequest_, String o) {
+		return ChoiceDonor.staticSearchStrDonorFullName(siteRequest_, ChoiceDonor.staticSearchDonorFullName(siteRequest_, ChoiceDonor.staticSetDonorFullName(siteRequest_, o)));
 	}
 
 	public String sqlDonorFullName() {
@@ -163,16 +164,16 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return (ChoiceDonor)this;
 	}
 
-	public static String staticSolrDonorParentName(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchDonorParentName(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSolrStrDonorParentName(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchStrDonorParentName(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqDonorParentName(SiteRequestEnUS siteRequest_, String o) {
-		return ChoiceDonor.staticSolrStrDonorParentName(siteRequest_, ChoiceDonor.staticSolrDonorParentName(siteRequest_, ChoiceDonor.staticSetDonorParentName(siteRequest_, o)));
+	public static String staticSearchFqDonorParentName(SiteRequestEnUS siteRequest_, String o) {
+		return ChoiceDonor.staticSearchStrDonorParentName(siteRequest_, ChoiceDonor.staticSearchDonorParentName(siteRequest_, ChoiceDonor.staticSetDonorParentName(siteRequest_, o)));
 	}
 
 	public String sqlDonorParentName() {
@@ -224,16 +225,16 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return (ChoiceDonor)this;
 	}
 
-	public static Long staticSolrDonorId(SiteRequestEnUS siteRequest_, Long o) {
+	public static Long staticSearchDonorId(SiteRequestEnUS siteRequest_, Long o) {
 		return o;
 	}
 
-	public static String staticSolrStrDonorId(SiteRequestEnUS siteRequest_, Long o) {
+	public static String staticSearchStrDonorId(SiteRequestEnUS siteRequest_, Long o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqDonorId(SiteRequestEnUS siteRequest_, String o) {
-		return ChoiceDonor.staticSolrStrDonorId(siteRequest_, ChoiceDonor.staticSolrDonorId(siteRequest_, ChoiceDonor.staticSetDonorId(siteRequest_, o)));
+	public static String staticSearchFqDonorId(SiteRequestEnUS siteRequest_, String o) {
+		return ChoiceDonor.staticSearchStrDonorId(siteRequest_, ChoiceDonor.staticSearchDonorId(siteRequest_, ChoiceDonor.staticSetDonorId(siteRequest_, o)));
 	}
 
 	public Long sqlDonorId() {
@@ -277,16 +278,16 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return (ChoiceDonor)this;
 	}
 
-	public static String staticSolrDonorAttributeId(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchDonorAttributeId(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSolrStrDonorAttributeId(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchStrDonorAttributeId(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqDonorAttributeId(SiteRequestEnUS siteRequest_, String o) {
-		return ChoiceDonor.staticSolrStrDonorAttributeId(siteRequest_, ChoiceDonor.staticSolrDonorAttributeId(siteRequest_, ChoiceDonor.staticSetDonorAttributeId(siteRequest_, o)));
+	public static String staticSearchFqDonorAttributeId(SiteRequestEnUS siteRequest_, String o) {
+		return ChoiceDonor.staticSearchStrDonorAttributeId(siteRequest_, ChoiceDonor.staticSearchDonorAttributeId(siteRequest_, ChoiceDonor.staticSetDonorAttributeId(siteRequest_, o)));
 	}
 
 	public String sqlDonorAttributeId() {
@@ -338,16 +339,16 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return (ChoiceDonor)this;
 	}
 
-	public static Long staticSolrDonorInKind(SiteRequestEnUS siteRequest_, Long o) {
+	public static Long staticSearchDonorInKind(SiteRequestEnUS siteRequest_, Long o) {
 		return o;
 	}
 
-	public static String staticSolrStrDonorInKind(SiteRequestEnUS siteRequest_, Long o) {
+	public static String staticSearchStrDonorInKind(SiteRequestEnUS siteRequest_, Long o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqDonorInKind(SiteRequestEnUS siteRequest_, String o) {
-		return ChoiceDonor.staticSolrStrDonorInKind(siteRequest_, ChoiceDonor.staticSolrDonorInKind(siteRequest_, ChoiceDonor.staticSetDonorInKind(siteRequest_, o)));
+	public static String staticSearchFqDonorInKind(SiteRequestEnUS siteRequest_, String o) {
+		return ChoiceDonor.staticSearchStrDonorInKind(siteRequest_, ChoiceDonor.staticSearchDonorInKind(siteRequest_, ChoiceDonor.staticSetDonorInKind(siteRequest_, o)));
 	}
 
 	public Long sqlDonorInKind() {
@@ -408,16 +409,16 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return (ChoiceDonor)this;
 	}
 
-	public static Double staticSolrDonorTotal(SiteRequestEnUS siteRequest_, BigDecimal o) {
+	public static Double staticSearchDonorTotal(SiteRequestEnUS siteRequest_, BigDecimal o) {
 		return o == null ? null : o.doubleValue();
 	}
 
-	public static String staticSolrStrDonorTotal(SiteRequestEnUS siteRequest_, Double o) {
+	public static String staticSearchStrDonorTotal(SiteRequestEnUS siteRequest_, Double o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqDonorTotal(SiteRequestEnUS siteRequest_, String o) {
-		return ChoiceDonor.staticSolrStrDonorTotal(siteRequest_, ChoiceDonor.staticSolrDonorTotal(siteRequest_, ChoiceDonor.staticSetDonorTotal(siteRequest_, o)));
+	public static String staticSearchFqDonorTotal(SiteRequestEnUS siteRequest_, String o) {
+		return ChoiceDonor.staticSearchStrDonorTotal(siteRequest_, ChoiceDonor.staticSearchDonorTotal(siteRequest_, ChoiceDonor.staticSetDonorTotal(siteRequest_, o)));
 	}
 
 	public BigDecimal sqlDonorTotal() {
@@ -478,16 +479,16 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return (ChoiceDonor)this;
 	}
 
-	public static Double staticSolrDonorYtd(SiteRequestEnUS siteRequest_, BigDecimal o) {
+	public static Double staticSearchDonorYtd(SiteRequestEnUS siteRequest_, BigDecimal o) {
 		return o == null ? null : o.doubleValue();
 	}
 
-	public static String staticSolrStrDonorYtd(SiteRequestEnUS siteRequest_, Double o) {
+	public static String staticSearchStrDonorYtd(SiteRequestEnUS siteRequest_, Double o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqDonorYtd(SiteRequestEnUS siteRequest_, String o) {
-		return ChoiceDonor.staticSolrStrDonorYtd(siteRequest_, ChoiceDonor.staticSolrDonorYtd(siteRequest_, ChoiceDonor.staticSetDonorYtd(siteRequest_, o)));
+	public static String staticSearchFqDonorYtd(SiteRequestEnUS siteRequest_, String o) {
+		return ChoiceDonor.staticSearchStrDonorYtd(siteRequest_, ChoiceDonor.staticSearchDonorYtd(siteRequest_, ChoiceDonor.staticSetDonorYtd(siteRequest_, o)));
 	}
 
 	public BigDecimal sqlDonorYtd() {
@@ -548,16 +549,16 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return (ChoiceDonor)this;
 	}
 
-	public static Double staticSolrDonorQ1(SiteRequestEnUS siteRequest_, BigDecimal o) {
+	public static Double staticSearchDonorQ1(SiteRequestEnUS siteRequest_, BigDecimal o) {
 		return o == null ? null : o.doubleValue();
 	}
 
-	public static String staticSolrStrDonorQ1(SiteRequestEnUS siteRequest_, Double o) {
+	public static String staticSearchStrDonorQ1(SiteRequestEnUS siteRequest_, Double o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqDonorQ1(SiteRequestEnUS siteRequest_, String o) {
-		return ChoiceDonor.staticSolrStrDonorQ1(siteRequest_, ChoiceDonor.staticSolrDonorQ1(siteRequest_, ChoiceDonor.staticSetDonorQ1(siteRequest_, o)));
+	public static String staticSearchFqDonorQ1(SiteRequestEnUS siteRequest_, String o) {
+		return ChoiceDonor.staticSearchStrDonorQ1(siteRequest_, ChoiceDonor.staticSearchDonorQ1(siteRequest_, ChoiceDonor.staticSetDonorQ1(siteRequest_, o)));
 	}
 
 	public BigDecimal sqlDonorQ1() {
@@ -618,16 +619,16 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return (ChoiceDonor)this;
 	}
 
-	public static Double staticSolrDonorQ2(SiteRequestEnUS siteRequest_, BigDecimal o) {
+	public static Double staticSearchDonorQ2(SiteRequestEnUS siteRequest_, BigDecimal o) {
 		return o == null ? null : o.doubleValue();
 	}
 
-	public static String staticSolrStrDonorQ2(SiteRequestEnUS siteRequest_, Double o) {
+	public static String staticSearchStrDonorQ2(SiteRequestEnUS siteRequest_, Double o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqDonorQ2(SiteRequestEnUS siteRequest_, String o) {
-		return ChoiceDonor.staticSolrStrDonorQ2(siteRequest_, ChoiceDonor.staticSolrDonorQ2(siteRequest_, ChoiceDonor.staticSetDonorQ2(siteRequest_, o)));
+	public static String staticSearchFqDonorQ2(SiteRequestEnUS siteRequest_, String o) {
+		return ChoiceDonor.staticSearchStrDonorQ2(siteRequest_, ChoiceDonor.staticSearchDonorQ2(siteRequest_, ChoiceDonor.staticSetDonorQ2(siteRequest_, o)));
 	}
 
 	public BigDecimal sqlDonorQ2() {
@@ -688,16 +689,16 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return (ChoiceDonor)this;
 	}
 
-	public static Double staticSolrDonorQ3(SiteRequestEnUS siteRequest_, BigDecimal o) {
+	public static Double staticSearchDonorQ3(SiteRequestEnUS siteRequest_, BigDecimal o) {
 		return o == null ? null : o.doubleValue();
 	}
 
-	public static String staticSolrStrDonorQ3(SiteRequestEnUS siteRequest_, Double o) {
+	public static String staticSearchStrDonorQ3(SiteRequestEnUS siteRequest_, Double o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqDonorQ3(SiteRequestEnUS siteRequest_, String o) {
-		return ChoiceDonor.staticSolrStrDonorQ3(siteRequest_, ChoiceDonor.staticSolrDonorQ3(siteRequest_, ChoiceDonor.staticSetDonorQ3(siteRequest_, o)));
+	public static String staticSearchFqDonorQ3(SiteRequestEnUS siteRequest_, String o) {
+		return ChoiceDonor.staticSearchStrDonorQ3(siteRequest_, ChoiceDonor.staticSearchDonorQ3(siteRequest_, ChoiceDonor.staticSetDonorQ3(siteRequest_, o)));
 	}
 
 	public BigDecimal sqlDonorQ3() {
@@ -758,16 +759,16 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return (ChoiceDonor)this;
 	}
 
-	public static Double staticSolrDonorQ4(SiteRequestEnUS siteRequest_, BigDecimal o) {
+	public static Double staticSearchDonorQ4(SiteRequestEnUS siteRequest_, BigDecimal o) {
 		return o == null ? null : o.doubleValue();
 	}
 
-	public static String staticSolrStrDonorQ4(SiteRequestEnUS siteRequest_, Double o) {
+	public static String staticSearchStrDonorQ4(SiteRequestEnUS siteRequest_, Double o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqDonorQ4(SiteRequestEnUS siteRequest_, String o) {
-		return ChoiceDonor.staticSolrStrDonorQ4(siteRequest_, ChoiceDonor.staticSolrDonorQ4(siteRequest_, ChoiceDonor.staticSetDonorQ4(siteRequest_, o)));
+	public static String staticSearchFqDonorQ4(SiteRequestEnUS siteRequest_, String o) {
+		return ChoiceDonor.staticSearchStrDonorQ4(siteRequest_, ChoiceDonor.staticSearchDonorQ4(siteRequest_, ChoiceDonor.staticSetDonorQ4(siteRequest_, o)));
 	}
 
 	public BigDecimal sqlDonorQ4() {
@@ -811,16 +812,16 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return (ChoiceDonor)this;
 	}
 
-	public static String staticSolrDonorLogoFilename(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchDonorLogoFilename(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSolrStrDonorLogoFilename(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchStrDonorLogoFilename(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqDonorLogoFilename(SiteRequestEnUS siteRequest_, String o) {
-		return ChoiceDonor.staticSolrStrDonorLogoFilename(siteRequest_, ChoiceDonor.staticSolrDonorLogoFilename(siteRequest_, ChoiceDonor.staticSetDonorLogoFilename(siteRequest_, o)));
+	public static String staticSearchFqDonorLogoFilename(SiteRequestEnUS siteRequest_, String o) {
+		return ChoiceDonor.staticSearchStrDonorLogoFilename(siteRequest_, ChoiceDonor.staticSearchDonorLogoFilename(siteRequest_, ChoiceDonor.staticSetDonorLogoFilename(siteRequest_, o)));
 	}
 
 	public String sqlDonorLogoFilename() {
@@ -897,16 +898,16 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 		return (ChoiceDonor)this;
 	}
 
-	public static Long staticSolrReportKeys(SiteRequestEnUS siteRequest_, Long o) {
+	public static Long staticSearchReportKeys(SiteRequestEnUS siteRequest_, Long o) {
 		return o;
 	}
 
-	public static String staticSolrStrReportKeys(SiteRequestEnUS siteRequest_, Long o) {
+	public static String staticSearchStrReportKeys(SiteRequestEnUS siteRequest_, Long o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqReportKeys(SiteRequestEnUS siteRequest_, String o) {
-		return ChoiceDonor.staticSolrStrReportKeys(siteRequest_, ChoiceDonor.staticSolrReportKeys(siteRequest_, ChoiceDonor.staticSetReportKeys(siteRequest_, o)));
+	public static String staticSearchFqReportKeys(SiteRequestEnUS siteRequest_, String o) {
+		return ChoiceDonor.staticSearchStrReportKeys(siteRequest_, ChoiceDonor.staticSearchReportKeys(siteRequest_, ChoiceDonor.staticSetReportKeys(siteRequest_, o)));
 	}
 
 	public List<Long> sqlReportKeys() {
@@ -1110,122 +1111,122 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	}
 
 	////////////////
-	// staticSolr //
+	// staticSearch //
 	////////////////
 
-	public static Object staticSolrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
-		return staticSolrChoiceDonor(entityVar,  siteRequest_, o);
+	public static Object staticSearchForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+		return staticSearchChoiceDonor(entityVar,  siteRequest_, o);
 	}
-	public static Object staticSolrChoiceDonor(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+	public static Object staticSearchChoiceDonor(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
 		switch(entityVar) {
 		case "donorFullName":
-			return ChoiceDonor.staticSolrDonorFullName(siteRequest_, (String)o);
+			return ChoiceDonor.staticSearchDonorFullName(siteRequest_, (String)o);
 		case "donorParentName":
-			return ChoiceDonor.staticSolrDonorParentName(siteRequest_, (String)o);
+			return ChoiceDonor.staticSearchDonorParentName(siteRequest_, (String)o);
 		case "donorId":
-			return ChoiceDonor.staticSolrDonorId(siteRequest_, (Long)o);
+			return ChoiceDonor.staticSearchDonorId(siteRequest_, (Long)o);
 		case "donorAttributeId":
-			return ChoiceDonor.staticSolrDonorAttributeId(siteRequest_, (String)o);
+			return ChoiceDonor.staticSearchDonorAttributeId(siteRequest_, (String)o);
 		case "donorInKind":
-			return ChoiceDonor.staticSolrDonorInKind(siteRequest_, (Long)o);
+			return ChoiceDonor.staticSearchDonorInKind(siteRequest_, (Long)o);
 		case "donorTotal":
-			return ChoiceDonor.staticSolrDonorTotal(siteRequest_, (BigDecimal)o);
+			return ChoiceDonor.staticSearchDonorTotal(siteRequest_, (BigDecimal)o);
 		case "donorYtd":
-			return ChoiceDonor.staticSolrDonorYtd(siteRequest_, (BigDecimal)o);
+			return ChoiceDonor.staticSearchDonorYtd(siteRequest_, (BigDecimal)o);
 		case "donorQ1":
-			return ChoiceDonor.staticSolrDonorQ1(siteRequest_, (BigDecimal)o);
+			return ChoiceDonor.staticSearchDonorQ1(siteRequest_, (BigDecimal)o);
 		case "donorQ2":
-			return ChoiceDonor.staticSolrDonorQ2(siteRequest_, (BigDecimal)o);
+			return ChoiceDonor.staticSearchDonorQ2(siteRequest_, (BigDecimal)o);
 		case "donorQ3":
-			return ChoiceDonor.staticSolrDonorQ3(siteRequest_, (BigDecimal)o);
+			return ChoiceDonor.staticSearchDonorQ3(siteRequest_, (BigDecimal)o);
 		case "donorQ4":
-			return ChoiceDonor.staticSolrDonorQ4(siteRequest_, (BigDecimal)o);
+			return ChoiceDonor.staticSearchDonorQ4(siteRequest_, (BigDecimal)o);
 		case "donorLogoFilename":
-			return ChoiceDonor.staticSolrDonorLogoFilename(siteRequest_, (String)o);
+			return ChoiceDonor.staticSearchDonorLogoFilename(siteRequest_, (String)o);
 		case "reportKeys":
-			return ChoiceDonor.staticSolrReportKeys(siteRequest_, (Long)o);
+			return ChoiceDonor.staticSearchReportKeys(siteRequest_, (Long)o);
 			default:
-				return BaseModel.staticSolrBaseModel(entityVar,  siteRequest_, o);
+				return BaseModel.staticSearchBaseModel(entityVar,  siteRequest_, o);
 		}
 	}
 
 	///////////////////
-	// staticSolrStr //
+	// staticSearchStr //
 	///////////////////
 
-	public static String staticSolrStrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
-		return staticSolrStrChoiceDonor(entityVar,  siteRequest_, o);
+	public static String staticSearchStrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+		return staticSearchStrChoiceDonor(entityVar,  siteRequest_, o);
 	}
-	public static String staticSolrStrChoiceDonor(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+	public static String staticSearchStrChoiceDonor(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
 		switch(entityVar) {
 		case "donorFullName":
-			return ChoiceDonor.staticSolrStrDonorFullName(siteRequest_, (String)o);
+			return ChoiceDonor.staticSearchStrDonorFullName(siteRequest_, (String)o);
 		case "donorParentName":
-			return ChoiceDonor.staticSolrStrDonorParentName(siteRequest_, (String)o);
+			return ChoiceDonor.staticSearchStrDonorParentName(siteRequest_, (String)o);
 		case "donorId":
-			return ChoiceDonor.staticSolrStrDonorId(siteRequest_, (Long)o);
+			return ChoiceDonor.staticSearchStrDonorId(siteRequest_, (Long)o);
 		case "donorAttributeId":
-			return ChoiceDonor.staticSolrStrDonorAttributeId(siteRequest_, (String)o);
+			return ChoiceDonor.staticSearchStrDonorAttributeId(siteRequest_, (String)o);
 		case "donorInKind":
-			return ChoiceDonor.staticSolrStrDonorInKind(siteRequest_, (Long)o);
+			return ChoiceDonor.staticSearchStrDonorInKind(siteRequest_, (Long)o);
 		case "donorTotal":
-			return ChoiceDonor.staticSolrStrDonorTotal(siteRequest_, (Double)o);
+			return ChoiceDonor.staticSearchStrDonorTotal(siteRequest_, (Double)o);
 		case "donorYtd":
-			return ChoiceDonor.staticSolrStrDonorYtd(siteRequest_, (Double)o);
+			return ChoiceDonor.staticSearchStrDonorYtd(siteRequest_, (Double)o);
 		case "donorQ1":
-			return ChoiceDonor.staticSolrStrDonorQ1(siteRequest_, (Double)o);
+			return ChoiceDonor.staticSearchStrDonorQ1(siteRequest_, (Double)o);
 		case "donorQ2":
-			return ChoiceDonor.staticSolrStrDonorQ2(siteRequest_, (Double)o);
+			return ChoiceDonor.staticSearchStrDonorQ2(siteRequest_, (Double)o);
 		case "donorQ3":
-			return ChoiceDonor.staticSolrStrDonorQ3(siteRequest_, (Double)o);
+			return ChoiceDonor.staticSearchStrDonorQ3(siteRequest_, (Double)o);
 		case "donorQ4":
-			return ChoiceDonor.staticSolrStrDonorQ4(siteRequest_, (Double)o);
+			return ChoiceDonor.staticSearchStrDonorQ4(siteRequest_, (Double)o);
 		case "donorLogoFilename":
-			return ChoiceDonor.staticSolrStrDonorLogoFilename(siteRequest_, (String)o);
+			return ChoiceDonor.staticSearchStrDonorLogoFilename(siteRequest_, (String)o);
 		case "reportKeys":
-			return ChoiceDonor.staticSolrStrReportKeys(siteRequest_, (Long)o);
+			return ChoiceDonor.staticSearchStrReportKeys(siteRequest_, (Long)o);
 			default:
-				return BaseModel.staticSolrStrBaseModel(entityVar,  siteRequest_, o);
+				return BaseModel.staticSearchStrBaseModel(entityVar,  siteRequest_, o);
 		}
 	}
 
 	//////////////////
-	// staticSolrFq //
+	// staticSearchFq //
 	//////////////////
 
-	public static String staticSolrFqForClass(String entityVar, SiteRequestEnUS siteRequest_, String o) {
-		return staticSolrFqChoiceDonor(entityVar,  siteRequest_, o);
+	public static String staticSearchFqForClass(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+		return staticSearchFqChoiceDonor(entityVar,  siteRequest_, o);
 	}
-	public static String staticSolrFqChoiceDonor(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchFqChoiceDonor(String entityVar, SiteRequestEnUS siteRequest_, String o) {
 		switch(entityVar) {
 		case "donorFullName":
-			return ChoiceDonor.staticSolrFqDonorFullName(siteRequest_, o);
+			return ChoiceDonor.staticSearchFqDonorFullName(siteRequest_, o);
 		case "donorParentName":
-			return ChoiceDonor.staticSolrFqDonorParentName(siteRequest_, o);
+			return ChoiceDonor.staticSearchFqDonorParentName(siteRequest_, o);
 		case "donorId":
-			return ChoiceDonor.staticSolrFqDonorId(siteRequest_, o);
+			return ChoiceDonor.staticSearchFqDonorId(siteRequest_, o);
 		case "donorAttributeId":
-			return ChoiceDonor.staticSolrFqDonorAttributeId(siteRequest_, o);
+			return ChoiceDonor.staticSearchFqDonorAttributeId(siteRequest_, o);
 		case "donorInKind":
-			return ChoiceDonor.staticSolrFqDonorInKind(siteRequest_, o);
+			return ChoiceDonor.staticSearchFqDonorInKind(siteRequest_, o);
 		case "donorTotal":
-			return ChoiceDonor.staticSolrFqDonorTotal(siteRequest_, o);
+			return ChoiceDonor.staticSearchFqDonorTotal(siteRequest_, o);
 		case "donorYtd":
-			return ChoiceDonor.staticSolrFqDonorYtd(siteRequest_, o);
+			return ChoiceDonor.staticSearchFqDonorYtd(siteRequest_, o);
 		case "donorQ1":
-			return ChoiceDonor.staticSolrFqDonorQ1(siteRequest_, o);
+			return ChoiceDonor.staticSearchFqDonorQ1(siteRequest_, o);
 		case "donorQ2":
-			return ChoiceDonor.staticSolrFqDonorQ2(siteRequest_, o);
+			return ChoiceDonor.staticSearchFqDonorQ2(siteRequest_, o);
 		case "donorQ3":
-			return ChoiceDonor.staticSolrFqDonorQ3(siteRequest_, o);
+			return ChoiceDonor.staticSearchFqDonorQ3(siteRequest_, o);
 		case "donorQ4":
-			return ChoiceDonor.staticSolrFqDonorQ4(siteRequest_, o);
+			return ChoiceDonor.staticSearchFqDonorQ4(siteRequest_, o);
 		case "donorLogoFilename":
-			return ChoiceDonor.staticSolrFqDonorLogoFilename(siteRequest_, o);
+			return ChoiceDonor.staticSearchFqDonorLogoFilename(siteRequest_, o);
 		case "reportKeys":
-			return ChoiceDonor.staticSolrFqReportKeys(siteRequest_, o);
+			return ChoiceDonor.staticSearchFqReportKeys(siteRequest_, o);
 			default:
-				return BaseModel.staticSolrFqBaseModel(entityVar,  siteRequest_, o);
+				return BaseModel.staticSearchFqBaseModel(entityVar,  siteRequest_, o);
 		}
 	}
 
@@ -1263,6 +1264,8 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 			case "donorid":
 				if(val instanceof Long)
 					setDonorId((Long)val);
+				else if(val instanceof String)
+					setDonorId((String)val);
 				saves.add("donorId");
 				return val;
 			case "donorattributeid":
@@ -1273,6 +1276,8 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 			case "donorinkind":
 				if(val instanceof Long)
 					setDonorInKind((Long)val);
+				else if(val instanceof String)
+					setDonorInKind((String)val);
 				saves.add("donorInKind");
 				return val;
 			case "donortotal":
@@ -1381,8 +1386,10 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 			doc.put("donorLogoFilename_docvalues_string", donorLogoFilename);
 		}
 		if(reportKeys != null) {
-			for(java.lang.Long o : reportKeys) {
-				doc.put("reportKeys_docvalues_longs", o);
+			JsonArray l = new JsonArray();
+			doc.put("reportKeys_docvalues_longs", l);
+			for(Long o : reportKeys) {
+				l.add(o);
 			}
 		}
 		super.indexBaseModel(doc);
@@ -1470,7 +1477,7 @@ public abstract class ChoiceDonorGen<DEV> extends BaseModel {
 	//////////////////
 
 	public void apiRequestChoiceDonor() {
-		ApiRequest apiRequest = Optional.ofNullable(siteRequest_).map(SiteRequestEnUS::getApiRequest_).orElse(null);
+		ApiRequest apiRequest = Optional.ofNullable(siteRequest_).map(r -> r.getApiRequest_()).orElse(null);
 		Object o = Optional.ofNullable(apiRequest).map(ApiRequest::getOriginal).orElse(null);
 		if(o != null && o instanceof ChoiceDonor) {
 			ChoiceDonor original = (ChoiceDonor)o;

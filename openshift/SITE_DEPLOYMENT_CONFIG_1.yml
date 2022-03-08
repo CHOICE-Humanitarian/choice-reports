@@ -262,88 +262,46 @@ spec:
               value: "{{ API_COUNTER_RESUME }}"
             - name: API_COUNTER_FETCH
               value: "{{ API_COUNTER_FETCH }}"
-            - name: ENABLE_IMPORT_DATA
-              value: "{{ ENABLE_IMPORT_DATA }}"
             - name: TIMER_DB_SOLR_SYNC_IN_SECONDS
               value: "{{ TIMER_DB_SOLR_SYNC_IN_SECONDS }}"
             - name: ENABLE_DB_SOLR_SYNC
               value: "{{ ENABLE_DB_SOLR_SYNC }}"
-            - name: ENABLE_DB_SOLR_SYNC_TrafficContraband
-              value: "{{ ENABLE_DB_SOLR_SYNC_TrafficContraband }}"
-            - name: ENABLE_DB_SOLR_SYNC_SearchBasis
-              value: "{{ ENABLE_DB_SOLR_SYNC_SearchBasis }}"
-            - name: ENABLE_DB_SOLR_SYNC_TrafficSearch
-              value: "{{ ENABLE_DB_SOLR_SYNC_TrafficSearch }}"
-            - name: ENABLE_DB_SOLR_SYNC_TrafficPerson
-              value: "{{ ENABLE_DB_SOLR_SYNC_TrafficPerson }}"
-            - name: ENABLE_DB_SOLR_SYNC_TrafficStop
-              value: "{{ ENABLE_DB_SOLR_SYNC_TrafficStop }}"
-            - name: ENABLE_DB_SOLR_SYNC_SiteAgency
-              value: "{{ ENABLE_DB_SOLR_SYNC_SiteAgency }}"
             - name: ENABLE_REFRESH_DATA
               value: "{{ ENABLE_REFRESH_DATA }}"
-            - name: ENABLE_REFRESH_DATA_TrafficContraband
-              value: "{{ ENABLE_REFRESH_DATA_TrafficContraband }}"
-            - name: ENABLE_REFRESH_DATA_SearchBasis
-              value: "{{ ENABLE_REFRESH_DATA_SearchBasis }}"
-            - name: ENABLE_REFRESH_DATA_TrafficSearch
-              value: "{{ ENABLE_REFRESH_DATA_TrafficSearch }}"
-            - name: ENABLE_REFRESH_DATA_TrafficPerson
-              value: "{{ ENABLE_REFRESH_DATA_TrafficPerson }}"
-            - name: ENABLE_REFRESH_DATA_TrafficStop
-              value: "{{ ENABLE_REFRESH_DATA_TrafficStop }}"
             - name: TIMER_DB_SOLR_SYNC_IN_SECONDS
               value: "{{ TIMER_DB_SOLR_SYNC_IN_SECONDS }}"
             - name: ENABLE_FTP_SYNC
               value: "{{ ENABLE_FTP_SYNC }}"
-            - name: ENABLE_FTP_SYNC_TrafficStop
-              value: "{{ ENABLE_FTP_SYNC_TrafficStop }}"
-            - name: ENABLE_FTP_SYNC_TrafficPerson
-              value: "{{ ENABLE_FTP_SYNC_TrafficPerson }}"
-            - name: ENABLE_FTP_SYNC_TrafficSearch
-              value: "{{ ENABLE_FTP_SYNC_TrafficSearch }}"
-            - name: ENABLE_FTP_SYNC_SearchBasis
-              value: "{{ ENABLE_FTP_SYNC_SearchBasis }}"
-            - name: ENABLE_FTP_SYNC_TrafficContraband
-              value: "{{ ENABLE_FTP_SYNC_TrafficContraband }}"
             - name: FTP_SYNC_PATH_ZIP
               value: "{{ FTP_SYNC_PATH_ZIP }}"
-            - name: FTP_SYNC_PATH_TrafficStop
-              value: "{{ FTP_SYNC_PATH_TrafficStop }}"
-            - name: FTP_SYNC_PATH_TrafficPerson
-              value: "{{ FTP_SYNC_PATH_TrafficPerson }}"
-            - name: FTP_SYNC_PATH_TrafficSearch
-              value: "{{ FTP_SYNC_PATH_TrafficSearch }}"
-            - name: FTP_SYNC_PATH_TrafficContraband
-              value: "{{ FTP_SYNC_PATH_TrafficContraband }}"
-            - name: FTP_SYNC_PATH_TrafficSearchBasis
-              value: "{{ FTP_SYNC_PATH_TrafficSearchBasis }}"
             - name: FTP_MAX_RECORD_SIZE
               value: "{{ FTP_MAX_RECORD_SIZE }}"
             - name: AUTH_ROLES_ADMIN
               value: '{{ AUTH_ROLES_ADMIN | to_json }}'
-            - name: AUTH_ROLES_REQUIRED_ChoiceDonor
-              value: '{{ AUTH_ROLES_REQUIRED_ChoiceDonor | to_json }}'
-            - name: AUTH_ROLES_REQUIRED_ChoiceReport
-              value: '{{ AUTH_ROLES_REQUIRED_ChoiceReport | to_json }}'
+            - name: AUTH_ROLES_REQUIRED_CurrikiResource
+              value: '{{ AUTH_ROLES_REQUIRED_CurrikiResource | to_json }}'
             - name: AUTH_ROLES_REQUIRED_SiteUser
               value: '{{ AUTH_ROLES_REQUIRED_SiteUser | to_json }}'
-            - name: DOMO_HOST_NAME
-              value: "{{ DOMO_HOST_NAME }}"
-            - name: DOMO_PORT
-              value: "{{ DOMO_PORT }}"
-            - name: DOMO_SSL 
-              value: "{{ DOMO_SSL }}"
-            - name: DOMO_AUTH_TOKEN_URI
-              value: "{{ DOMO_AUTH_TOKEN_URI }}"
-            - name: DOMO_AUTH_SCOPE
-              value: "{{ DOMO_AUTH_SCOPE }}"
-            - name: DOMO_AUTH_CLIENT_ID
-              value: "{{ DOMO_AUTH_CLIENT_ID }}"
-            - name: DOMO_AUTH_CLIENT_SECRET
-              value: "{{ DOMO_AUTH_CLIENT_SECRET }}"
-            - name: DOMO_DATASET_CPP_URI
-              value: "{{ DOMO_DATASET_CPP_URI }}"
+            - name: MOONSHOTS_HOST
+              value: "{{ MOONSHOTS_HOST }}"
+            - name: MOONSHOTS_PORT
+              value: "{{ MOONSHOTS_PORT }}"
+            - name: MOONSHOTS_DATABASE 
+              value: "{{ MOONSHOTS_DATABASE }}"
+            - name: MOONSHOTS_USERNAME
+              value: "{{ MOONSHOTS_USERNAME }}"
+            - name: MOONSHOTS_PASSWORD
+              value: "{{ MOONSHOTS_PASSWORD }}"
+            - name: MOONSHOTS_FETCH_SIZE
+              value: "{{ MOONSHOTS_FETCH_SIZE }}"
+            - name: ENABLE_IMPORT_DATA
+              value: "{{ ENABLE_IMPORT_DATA }}"
+            - name: ENABLE_IMPORT_DATA_CurrikiResource
+              value: "{{ ENABLE_IMPORT_DATA_CurrikiResource }}"
+            - name: IMPORT_DATA_START_TIME_CurrikiResource
+              value: "{{ IMPORT_DATA_START_TIME_CurrikiResource }}"
+            - name: IMPORT_DATA_PERIOD_CurrikiResource
+              value: "{{ IMPORT_DATA_PERIOD_CurrikiResource }}"
           volumeMounts:
       volumes:
   triggers:

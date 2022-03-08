@@ -4,40 +4,41 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Arrays;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.slf4j.LoggerFactory;
+import org.computate.search.serialize.ComputateLocalDateDeserializer;
 import java.util.HashMap;
 import org.choicehumanitarian.reports.enus.base.BaseModelPage;
-import org.choicehumanitarian.reports.enus.search.SearchList;
 import org.apache.commons.lang3.StringUtils;
 import java.lang.Integer;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import org.choicehumanitarian.reports.enus.user.SiteUser;
+import org.computate.vertx.api.ApiRequest;
 import java.lang.Long;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.choicehumanitarian.reports.enus.java.ZonedDateTimeSerializer;
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.lang.String;
 import java.math.RoundingMode;
-import org.choicehumanitarian.reports.enus.request.api.ApiRequest;
 import org.slf4j.Logger;
 import java.math.MathContext;
-import org.choicehumanitarian.reports.enus.java.ZonedDateTimeDeserializer;
 import io.vertx.core.Promise;
-import org.choicehumanitarian.reports.enus.java.LocalDateSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.vertx.core.Future;
+import org.computate.search.serialize.ComputateZonedDateTimeDeserializer;
 import org.choicehumanitarian.reports.enus.base.BaseModel;
 import java.util.Objects;
+import org.computate.search.serialize.ComputateLocalDateSerializer;
+import org.computate.vertx.search.list.SearchList;
 import io.vertx.core.json.JsonArray;
 import org.computate.search.wrap.Wrap;
 import org.apache.commons.lang3.math.NumberUtils;
 import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.computate.search.serialize.ComputateZonedDateTimeSerializer;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 /**	
  * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.user.SiteUserGenPage&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
@@ -162,16 +163,16 @@ public abstract class SiteUserGenPageGen<DEV> extends BaseModelPage {
 		return (SiteUserGenPage)this;
 	}
 
-	public static Integer staticSolrSiteUserCount(SiteRequestEnUS siteRequest_, Integer o) {
+	public static Integer staticSearchSiteUserCount(SiteRequestEnUS siteRequest_, Integer o) {
 		return o;
 	}
 
-	public static String staticSolrStrSiteUserCount(SiteRequestEnUS siteRequest_, Integer o) {
+	public static String staticSearchStrSiteUserCount(SiteRequestEnUS siteRequest_, Integer o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqSiteUserCount(SiteRequestEnUS siteRequest_, String o) {
-		return SiteUserGenPage.staticSolrStrSiteUserCount(siteRequest_, SiteUserGenPage.staticSolrSiteUserCount(siteRequest_, SiteUserGenPage.staticSetSiteUserCount(siteRequest_, o)));
+	public static String staticSearchFqSiteUserCount(SiteRequestEnUS siteRequest_, String o) {
+		return SiteUserGenPage.staticSearchStrSiteUserCount(siteRequest_, SiteUserGenPage.staticSearchSiteUserCount(siteRequest_, SiteUserGenPage.staticSetSiteUserCount(siteRequest_, o)));
 	}
 
 	///////////////
@@ -257,16 +258,16 @@ public abstract class SiteUserGenPageGen<DEV> extends BaseModelPage {
 		return (SiteUserGenPage)this;
 	}
 
-	public static Long staticSolrPk(SiteRequestEnUS siteRequest_, Long o) {
+	public static Long staticSearchPk(SiteRequestEnUS siteRequest_, Long o) {
 		return o;
 	}
 
-	public static String staticSolrStrPk(SiteRequestEnUS siteRequest_, Long o) {
+	public static String staticSearchStrPk(SiteRequestEnUS siteRequest_, Long o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqPk(SiteRequestEnUS siteRequest_, String o) {
-		return SiteUserGenPage.staticSolrStrPk(siteRequest_, SiteUserGenPage.staticSolrPk(siteRequest_, SiteUserGenPage.staticSetPk(siteRequest_, o)));
+	public static String staticSearchFqPk(SiteRequestEnUS siteRequest_, String o) {
+		return SiteUserGenPage.staticSearchStrPk(siteRequest_, SiteUserGenPage.staticSearchPk(siteRequest_, SiteUserGenPage.staticSetPk(siteRequest_, o)));
 	}
 
 	//////////////
@@ -415,82 +416,56 @@ public abstract class SiteUserGenPageGen<DEV> extends BaseModelPage {
 	}
 
 	////////////////
-	// staticSolr //
+	// staticSearch //
 	////////////////
 
-	public static Object staticSolrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
-		return staticSolrSiteUserGenPage(entityVar,  siteRequest_, o);
+	public static Object staticSearchForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+		return staticSearchSiteUserGenPage(entityVar,  siteRequest_, o);
 	}
-	public static Object staticSolrSiteUserGenPage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+	public static Object staticSearchSiteUserGenPage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
 		switch(entityVar) {
 		case "siteUserCount":
-			return SiteUserGenPage.staticSolrSiteUserCount(siteRequest_, (Integer)o);
+			return SiteUserGenPage.staticSearchSiteUserCount(siteRequest_, (Integer)o);
 		case "pk":
-			return SiteUserGenPage.staticSolrPk(siteRequest_, (Long)o);
+			return SiteUserGenPage.staticSearchPk(siteRequest_, (Long)o);
 			default:
-				return BaseModelPage.staticSolrBaseModelPage(entityVar,  siteRequest_, o);
+				return BaseModelPage.staticSearchBaseModelPage(entityVar,  siteRequest_, o);
 		}
 	}
 
 	///////////////////
-	// staticSolrStr //
+	// staticSearchStr //
 	///////////////////
 
-	public static String staticSolrStrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
-		return staticSolrStrSiteUserGenPage(entityVar,  siteRequest_, o);
+	public static String staticSearchStrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+		return staticSearchStrSiteUserGenPage(entityVar,  siteRequest_, o);
 	}
-	public static String staticSolrStrSiteUserGenPage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+	public static String staticSearchStrSiteUserGenPage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
 		switch(entityVar) {
 		case "siteUserCount":
-			return SiteUserGenPage.staticSolrStrSiteUserCount(siteRequest_, (Integer)o);
+			return SiteUserGenPage.staticSearchStrSiteUserCount(siteRequest_, (Integer)o);
 		case "pk":
-			return SiteUserGenPage.staticSolrStrPk(siteRequest_, (Long)o);
+			return SiteUserGenPage.staticSearchStrPk(siteRequest_, (Long)o);
 			default:
-				return BaseModelPage.staticSolrStrBaseModelPage(entityVar,  siteRequest_, o);
+				return BaseModelPage.staticSearchStrBaseModelPage(entityVar,  siteRequest_, o);
 		}
 	}
 
 	//////////////////
-	// staticSolrFq //
+	// staticSearchFq //
 	//////////////////
 
-	public static String staticSolrFqForClass(String entityVar, SiteRequestEnUS siteRequest_, String o) {
-		return staticSolrFqSiteUserGenPage(entityVar,  siteRequest_, o);
+	public static String staticSearchFqForClass(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+		return staticSearchFqSiteUserGenPage(entityVar,  siteRequest_, o);
 	}
-	public static String staticSolrFqSiteUserGenPage(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchFqSiteUserGenPage(String entityVar, SiteRequestEnUS siteRequest_, String o) {
 		switch(entityVar) {
 		case "siteUserCount":
-			return SiteUserGenPage.staticSolrFqSiteUserCount(siteRequest_, o);
+			return SiteUserGenPage.staticSearchFqSiteUserCount(siteRequest_, o);
 		case "pk":
-			return SiteUserGenPage.staticSolrFqPk(siteRequest_, o);
+			return SiteUserGenPage.staticSearchFqPk(siteRequest_, o);
 			default:
-				return BaseModelPage.staticSolrFqBaseModelPage(entityVar,  siteRequest_, o);
-		}
-	}
-
-	/////////////
-	// define //
-	/////////////
-
-	@Override public boolean defineForClass(String var, Object val) {
-		String[] vars = StringUtils.split(var, ".");
-		Object o = null;
-		if(val != null) {
-			for(String v : vars) {
-				if(o == null)
-					o = defineSiteUserGenPage(v, val);
-				else if(o instanceof BaseModel) {
-					BaseModel oBaseModel = (BaseModel)o;
-					o = oBaseModel.defineForClass(v, val);
-				}
-			}
-		}
-		return o != null;
-	}
-	public Object defineSiteUserGenPage(String var, Object val) {
-		switch(var.toLowerCase()) {
-			default:
-				return super.defineBaseModelPage(var, val);
+				return BaseModelPage.staticSearchFqBaseModelPage(entityVar,  siteRequest_, o);
 		}
 	}
 

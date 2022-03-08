@@ -10,7 +10,7 @@ import org.choicehumanitarian.reports.enus.user.SiteUser;
 import java.io.IOException;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
-import org.choicehumanitarian.reports.enus.search.SearchList;
+import org.computate.vertx.search.list.SearchList;
 import org.computate.search.wrap.Wrap;
 import org.choicehumanitarian.reports.enus.page.PageLayout;
 import java.time.LocalDateTime;

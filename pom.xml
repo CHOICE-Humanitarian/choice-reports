@@ -25,7 +25,7 @@
 		<postgresql.version>42.2.2.jre7</postgresql.version>
 		<solr.version>8.4.1</solr.version>
 		<junit.version>4.13.1</junit.version>
-		<computate-search.version>1.0.4</computate-search.version>
+		<computate.version>4.2.4.4</computate.version>
 	</properties>
 
 	<dependencyManagement>
@@ -270,11 +270,11 @@
 		<!-- Computate -->
 		<!-- ######### -->
 
-		<!--dependency>
-			<groupId>org.computate.search</groupId>
-			<artifactId>computate-search</artifactId>
-			<version>${computate-search.version}</version>
-		</dependency-->
+		<dependency>
+			<groupId>org.computate</groupId>
+			<artifactId>computate-vertx</artifactId>
+			<version>${computate.version}</version>
+		</dependency>
 
 		<!-- ############ -->
 		<!-- Unit Testing -->
@@ -336,6 +336,7 @@
 					</execution>
 				</executions>
 			</plugin>
+
 			<plugin>
 				<groupId>io.reactiverse</groupId>
 				<artifactId>vertx-maven-plugin</artifactId>

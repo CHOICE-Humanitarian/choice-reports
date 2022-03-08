@@ -1,7 +1,7 @@
 package org.choicehumanitarian.reports.enus.model.report;
 
 import java.lang.Long;
-import org.choicehumanitarian.reports.enus.search.SearchList;
+import org.computate.vertx.search.list.SearchList;
 import org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor;
 import java.lang.String;
 import java.math.BigDecimal;

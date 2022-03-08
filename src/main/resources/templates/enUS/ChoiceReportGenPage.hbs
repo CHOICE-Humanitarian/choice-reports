@@ -491,7 +491,7 @@
 					name="suggestChoiceReport"
 					id="suggestChoiceReport{{id}}"
 					autocomplete="off"
-					oninput="suggestChoiceReportObjectSuggest( [ { 'name': 'q', 'value': 'objectSuggest:' + $(this).val() }, { 'name': 'rows', 'value': '10' }, { 'name': 'fl', 'value': 'pk,pageUrlPk,objectTitle' } ], $('#suggestListChoiceReport{{id}}'), {{pk}}; "
+					oninput="suggestChoiceReportObjectSuggest( [ { 'name': 'q', 'value': 'objectSuggest:' + $(this).val() }, { 'name': 'rows', 'value': '10' }, { 'name': 'fl', 'value': 'classCanonicalName,pk,pageUrlPk,objectTitle' } ], $('#suggestListChoiceReport{{id}}'), {{pk}}; "
 					onkeyup="if (event.keyCode === 13) { event.preventDefault(); window.location.href = '/api/report?q={{query1}}:' + encodeURIComponent(this.value) + '{{fqs}}{{sorts}}&amp;rows={{start2}}&amp;rows={{rows1}}"
 				{{#if listChoiceReport}}
 					value="{{query2}}"
@@ -586,7 +586,7 @@
 															name="setDonorKey"
 															id="{{classApiMethodMethod}}_donorKey"
 															autocomplete="off"
-															oninput="suggestChoiceReportDonorKey($(this).val() ? [ { 'name': 'q', 'value': 'objectSuggest:' + $(this).val() }, { 'name': 'rows', 'value': '10' }, { 'name': 'fl', 'value': 'pk,pageUrlPk,objectTitle' } ] : [{{#if pk}}{'name':'fq','value':'reportKeys:{{pk}}'}{{else}}{{/if}}], $('#listChoiceReportDonorKey_{{classApiMethodMethod}}'), {{pk}}); "
+															oninput="suggestChoiceReportDonorKey($(this).val() ? [ { 'name': 'q', 'value': 'objectSuggest:' + $(this).val() }, { 'name': 'rows', 'value': '10' }, { 'name': 'fl', 'value': 'classCanonicalName,reportKeys,pk,pageUrlPk,objectTitle' } ] : [{{#if pk}}{'name':'fq','value':'reportKeys:{{pk}}'}{{else}}{{/if}}], $('#listChoiceReportDonorKey_{{classApiMethodMethod}}'), {{pk}}); "
 															/>
 
 													{{else}}

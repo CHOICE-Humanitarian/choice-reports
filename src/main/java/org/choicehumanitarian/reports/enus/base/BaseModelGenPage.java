@@ -13,7 +13,7 @@ import org.choicehumanitarian.reports.enus.user.SiteUser;
 import java.io.IOException;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
-import org.choicehumanitarian.reports.enus.search.SearchList;
+import org.computate.vertx.search.list.SearchList;
 import org.computate.search.wrap.Wrap;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -64,11 +64,6 @@ public class BaseModelGenPage extends BaseModelGenPageGen<PageLayout> {
 	protected void _baseModel_(Wrap<BaseModel> w) {
 		if(baseModelCount == 1)
 			w.o(searchListBaseModel_.get(0));
-	}
-
-	protected void _pk(Wrap<Long> w) {
-		if(baseModelCount == 1)
-			w.o(baseModel_.getPk());
 	}
 
 	@Override

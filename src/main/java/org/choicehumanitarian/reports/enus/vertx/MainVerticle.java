@@ -15,9 +15,14 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 import org.choicehumanitarian.reports.enus.model.donor.ChoiceDonorEnUSGenApiService;
 import org.choicehumanitarian.reports.enus.model.report.ChoiceReportEnUSGenApiService;
+import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import org.choicehumanitarian.reports.enus.user.SiteUserEnUSGenApiService;
 import org.computate.search.request.SearchRequest;
 import org.computate.search.response.solr.SolrResponse;
+import org.computate.vertx.handlebars.AuthHelpers;
+import org.computate.vertx.handlebars.SiteHelpers;
+import org.computate.vertx.openapi.OpenApi3Generator;
+import org.computate.vertx.request.ComputateVertxSiteRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -111,7 +116,38 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 	 *	The main method for the Vert.x application that runs the Vert.x Runner class
 	 **/
 	public static void  main(String[] args) {
-		run();
+		String runOpenApi3Generator = System.getenv(ConfigKeys.RUN_OPENAPI3_GENERATOR);
+		if(StringUtils.equalsIgnoreCase("true", runOpenApi3Generator))
+			runOpenApi3Generator(args);
+		else
+			run();
+	}
+
+	public static void  runOpenApi3Generator(String[] args) {
+		Vertx vertx = Vertx.vertx();
+		String configPath = System.getenv("CONFIG_PATH");
+		configureConfig(vertx).onSuccess(config -> {
+			OpenApi3Generator api = new OpenApi3Generator();
+			WebClient webClient = WebClient.create(vertx);
+			SiteRequestEnUS siteRequest = new SiteRequestEnUS();
+			siteRequest.setConfig(config);
+			siteRequest.setWebClient(webClient);
+			api.setWebClient(webClient);
+			api.setConfig(config);
+			siteRequest.initDeepSiteRequestEnUS();
+			api.initDeepOpenApi3Generator(siteRequest);
+			api.writeOpenApi().onSuccess(a -> {
+				LOG.info("Write OpenAPI completed. ");
+				vertx.close();
+			}).onFailure(ex -> {
+				LOG.error("Write OpenAPI failed. ", ex);
+				vertx.close();
+			});
+			
+		}).onFailure(ex -> {
+			LOG.error(String.format("Error loading config: %s", configPath), ex);
+			vertx.close();
+		});
 	}
 
 	/**	
@@ -215,8 +251,6 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 		Consumer<Vertx> runner = vertx -> {
 			configureConfig(vertx).onSuccess(config -> {
 				try {
-					List<Future> futures = new ArrayList<>();
-
 					DeploymentOptions deploymentOptions = new DeploymentOptions();
 					deploymentOptions.setInstances(siteInstances);
 					deploymentOptions.setConfig(config);
@@ -237,12 +271,6 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 						LOG.info("Started main verticle. ");
 						vertx.deployVerticle(WorkerVerticle.class, workerVerticleDeploymentOptions).onSuccess(b -> {
 							LOG.info("Started worker verticle. ");
-//							vertx.deployVerticle(AppCeylonVerticle.class, ceylonVerticleDeploymentOptions).onSuccess(c -> {
-//								scheduling(vertx);
-								LOG.info("Started scheduler verticle. ");
-//							}).onFailure(ex -> {
-//								LOG.error("Failed to start scheduler verticle. ", ex);
-//							});
 						}).onFailure(ex -> {
 							LOG.error("Failed to start worker verticle. ", ex);
 						});

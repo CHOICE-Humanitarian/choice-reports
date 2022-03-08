@@ -14,8 +14,9 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.StringUtils;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
-import org.choicehumanitarian.reports.enus.request.api.ApiRequest;
 import org.computate.search.tool.TimeTool;
+import org.computate.vertx.api.ApiCounter;
+import org.computate.vertx.api.ApiRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

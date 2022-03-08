@@ -8,10 +8,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
-import org.choicehumanitarian.reports.enus.request.api.ApiRequest;
 import org.choicehumanitarian.reports.enus.user.SiteUser;
-import org.computate.search.request.SiteRequest;
 import org.computate.search.wrap.Wrap;
+import org.computate.vertx.api.ApiRequest;
+import org.computate.vertx.model.user.ComputateVertxSiteUser;
+import org.computate.vertx.request.ComputateVertxSiteRequest;
 
 import io.vertx.core.MultiMap;
 import io.vertx.core.json.JsonArray;
@@ -24,7 +25,7 @@ import io.vertx.sqlclient.SqlConnection;
 /**
  * Keyword: classSimpleNameSiteRequest
  */
-public class SiteRequestEnUS extends SiteRequestEnUSGen<SiteRequest> implements Serializable {
+public class SiteRequestEnUS extends SiteRequestEnUSGen<Object> implements ComputateVertxSiteRequest, Serializable {
 
 	private static final Pattern PATTERN_SESSION = Pattern.compile(".*vertx-web.session=(\\w+).*");
 
@@ -51,6 +52,9 @@ public class SiteRequestEnUS extends SiteRequestEnUSGen<SiteRequest> implements 
 	}
 
 	protected void _user(Wrap<User> c) {
+	}
+
+	protected void _userPrincipal(Wrap<JsonObject> w) {
 	}
 
 	protected void _userId(Wrap<String> c) {
@@ -187,5 +191,20 @@ public class SiteRequestEnUS extends SiteRequestEnUSGen<SiteRequest> implements 
 		o.setUserId(userId); // The user identifier in the authentication system
 		o.setApiRequest_(apiRequest_); // The current API request information
 		return o;
+	}
+
+	@Override
+	public void initDeepForClass() {
+		initDeepForClass(siteRequest_);
+	}
+
+	@Override
+	public <T extends ComputateVertxSiteRequest> void setSiteRequest_(T siteRequest) {
+		this.siteRequest_ = (SiteRequestEnUS)siteRequest;
+	}
+
+	@Override
+	public <T extends ComputateVertxSiteUser> T getSiteUser_(Class<T> clazz) {
+		return (T)siteUser_;
 	}
 }

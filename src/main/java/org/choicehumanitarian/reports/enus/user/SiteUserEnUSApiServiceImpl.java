@@ -1,7 +1,5 @@
 package org.choicehumanitarian.reports.enus.user;
 
-import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
-
 import io.vertx.core.WorkerExecutor;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.json.JsonObject;
@@ -18,13 +16,5 @@ public class SiteUserEnUSApiServiceImpl extends SiteUserEnUSGenApiServiceImpl {
 
 	public SiteUserEnUSApiServiceImpl(EventBus eventBus, JsonObject config, WorkerExecutor workerExecutor, PgPool pgPool, WebClient webClient, OAuth2Auth oauth2AuthenticationProvider, AuthorizationProvider authorizationProvider, HandlebarsTemplateEngine templateEngine) {
 		super(eventBus, config, workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine);
-	}
-
-	@Override
-	public Boolean userDefine(SiteRequestEnUS siteRequest, JsonObject jsonObject, Boolean patch) {
-		if("/user".equals(siteRequest.getRequestUri()))
-			return true;
-		else
-			return super.userDefine(siteRequest, jsonObject, patch);
 	}
 }

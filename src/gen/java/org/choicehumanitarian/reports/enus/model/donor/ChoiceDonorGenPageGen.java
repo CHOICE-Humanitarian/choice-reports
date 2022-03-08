@@ -4,40 +4,41 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Arrays;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.slf4j.LoggerFactory;
+import org.computate.search.serialize.ComputateLocalDateDeserializer;
 import java.util.HashMap;
 import org.choicehumanitarian.reports.enus.base.BaseModelPage;
-import org.choicehumanitarian.reports.enus.search.SearchList;
 import org.apache.commons.lang3.StringUtils;
 import java.lang.Integer;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import org.computate.vertx.api.ApiRequest;
 import org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor;
 import java.lang.Long;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.choicehumanitarian.reports.enus.java.ZonedDateTimeSerializer;
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.lang.String;
 import java.math.RoundingMode;
-import org.choicehumanitarian.reports.enus.request.api.ApiRequest;
 import org.slf4j.Logger;
 import java.math.MathContext;
-import org.choicehumanitarian.reports.enus.java.ZonedDateTimeDeserializer;
 import io.vertx.core.Promise;
-import org.choicehumanitarian.reports.enus.java.LocalDateSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.vertx.core.Future;
+import org.computate.search.serialize.ComputateZonedDateTimeDeserializer;
 import org.choicehumanitarian.reports.enus.base.BaseModel;
 import java.util.Objects;
+import org.computate.search.serialize.ComputateLocalDateSerializer;
+import org.computate.vertx.search.list.SearchList;
 import io.vertx.core.json.JsonArray;
 import org.computate.search.wrap.Wrap;
 import org.apache.commons.lang3.math.NumberUtils;
 import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.computate.search.serialize.ComputateZonedDateTimeSerializer;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 /**	
  * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.donor.ChoiceDonorGenPage&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
@@ -162,16 +163,16 @@ public abstract class ChoiceDonorGenPageGen<DEV> extends BaseModelPage {
 		return (ChoiceDonorGenPage)this;
 	}
 
-	public static Integer staticSolrChoiceDonorCount(SiteRequestEnUS siteRequest_, Integer o) {
+	public static Integer staticSearchChoiceDonorCount(SiteRequestEnUS siteRequest_, Integer o) {
 		return o;
 	}
 
-	public static String staticSolrStrChoiceDonorCount(SiteRequestEnUS siteRequest_, Integer o) {
+	public static String staticSearchStrChoiceDonorCount(SiteRequestEnUS siteRequest_, Integer o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqChoiceDonorCount(SiteRequestEnUS siteRequest_, String o) {
-		return ChoiceDonorGenPage.staticSolrStrChoiceDonorCount(siteRequest_, ChoiceDonorGenPage.staticSolrChoiceDonorCount(siteRequest_, ChoiceDonorGenPage.staticSetChoiceDonorCount(siteRequest_, o)));
+	public static String staticSearchFqChoiceDonorCount(SiteRequestEnUS siteRequest_, String o) {
+		return ChoiceDonorGenPage.staticSearchStrChoiceDonorCount(siteRequest_, ChoiceDonorGenPage.staticSearchChoiceDonorCount(siteRequest_, ChoiceDonorGenPage.staticSetChoiceDonorCount(siteRequest_, o)));
 	}
 
 	//////////////////
@@ -257,16 +258,16 @@ public abstract class ChoiceDonorGenPageGen<DEV> extends BaseModelPage {
 		return (ChoiceDonorGenPage)this;
 	}
 
-	public static Long staticSolrPk(SiteRequestEnUS siteRequest_, Long o) {
+	public static Long staticSearchPk(SiteRequestEnUS siteRequest_, Long o) {
 		return o;
 	}
 
-	public static String staticSolrStrPk(SiteRequestEnUS siteRequest_, Long o) {
+	public static String staticSearchStrPk(SiteRequestEnUS siteRequest_, Long o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqPk(SiteRequestEnUS siteRequest_, String o) {
-		return ChoiceDonorGenPage.staticSolrStrPk(siteRequest_, ChoiceDonorGenPage.staticSolrPk(siteRequest_, ChoiceDonorGenPage.staticSetPk(siteRequest_, o)));
+	public static String staticSearchFqPk(SiteRequestEnUS siteRequest_, String o) {
+		return ChoiceDonorGenPage.staticSearchStrPk(siteRequest_, ChoiceDonorGenPage.staticSearchPk(siteRequest_, ChoiceDonorGenPage.staticSetPk(siteRequest_, o)));
 	}
 
 	//////////////
@@ -415,82 +416,56 @@ public abstract class ChoiceDonorGenPageGen<DEV> extends BaseModelPage {
 	}
 
 	////////////////
-	// staticSolr //
+	// staticSearch //
 	////////////////
 
-	public static Object staticSolrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
-		return staticSolrChoiceDonorGenPage(entityVar,  siteRequest_, o);
+	public static Object staticSearchForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+		return staticSearchChoiceDonorGenPage(entityVar,  siteRequest_, o);
 	}
-	public static Object staticSolrChoiceDonorGenPage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+	public static Object staticSearchChoiceDonorGenPage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
 		switch(entityVar) {
 		case "choiceDonorCount":
-			return ChoiceDonorGenPage.staticSolrChoiceDonorCount(siteRequest_, (Integer)o);
+			return ChoiceDonorGenPage.staticSearchChoiceDonorCount(siteRequest_, (Integer)o);
 		case "pk":
-			return ChoiceDonorGenPage.staticSolrPk(siteRequest_, (Long)o);
+			return ChoiceDonorGenPage.staticSearchPk(siteRequest_, (Long)o);
 			default:
-				return BaseModelPage.staticSolrBaseModelPage(entityVar,  siteRequest_, o);
+				return BaseModelPage.staticSearchBaseModelPage(entityVar,  siteRequest_, o);
 		}
 	}
 
 	///////////////////
-	// staticSolrStr //
+	// staticSearchStr //
 	///////////////////
 
-	public static String staticSolrStrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
-		return staticSolrStrChoiceDonorGenPage(entityVar,  siteRequest_, o);
+	public static String staticSearchStrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+		return staticSearchStrChoiceDonorGenPage(entityVar,  siteRequest_, o);
 	}
-	public static String staticSolrStrChoiceDonorGenPage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+	public static String staticSearchStrChoiceDonorGenPage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
 		switch(entityVar) {
 		case "choiceDonorCount":
-			return ChoiceDonorGenPage.staticSolrStrChoiceDonorCount(siteRequest_, (Integer)o);
+			return ChoiceDonorGenPage.staticSearchStrChoiceDonorCount(siteRequest_, (Integer)o);
 		case "pk":
-			return ChoiceDonorGenPage.staticSolrStrPk(siteRequest_, (Long)o);
+			return ChoiceDonorGenPage.staticSearchStrPk(siteRequest_, (Long)o);
 			default:
-				return BaseModelPage.staticSolrStrBaseModelPage(entityVar,  siteRequest_, o);
+				return BaseModelPage.staticSearchStrBaseModelPage(entityVar,  siteRequest_, o);
 		}
 	}
 
 	//////////////////
-	// staticSolrFq //
+	// staticSearchFq //
 	//////////////////
 
-	public static String staticSolrFqForClass(String entityVar, SiteRequestEnUS siteRequest_, String o) {
-		return staticSolrFqChoiceDonorGenPage(entityVar,  siteRequest_, o);
+	public static String staticSearchFqForClass(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+		return staticSearchFqChoiceDonorGenPage(entityVar,  siteRequest_, o);
 	}
-	public static String staticSolrFqChoiceDonorGenPage(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchFqChoiceDonorGenPage(String entityVar, SiteRequestEnUS siteRequest_, String o) {
 		switch(entityVar) {
 		case "choiceDonorCount":
-			return ChoiceDonorGenPage.staticSolrFqChoiceDonorCount(siteRequest_, o);
+			return ChoiceDonorGenPage.staticSearchFqChoiceDonorCount(siteRequest_, o);
 		case "pk":
-			return ChoiceDonorGenPage.staticSolrFqPk(siteRequest_, o);
+			return ChoiceDonorGenPage.staticSearchFqPk(siteRequest_, o);
 			default:
-				return BaseModelPage.staticSolrFqBaseModelPage(entityVar,  siteRequest_, o);
-		}
-	}
-
-	/////////////
-	// define //
-	/////////////
-
-	@Override public boolean defineForClass(String var, Object val) {
-		String[] vars = StringUtils.split(var, ".");
-		Object o = null;
-		if(val != null) {
-			for(String v : vars) {
-				if(o == null)
-					o = defineChoiceDonorGenPage(v, val);
-				else if(o instanceof BaseModel) {
-					BaseModel oBaseModel = (BaseModel)o;
-					o = oBaseModel.defineForClass(v, val);
-				}
-			}
-		}
-		return o != null;
-	}
-	public Object defineChoiceDonorGenPage(String var, Object val) {
-		switch(var.toLowerCase()) {
-			default:
-				return super.defineBaseModelPage(var, val);
+				return BaseModelPage.staticSearchFqBaseModelPage(entityVar,  siteRequest_, o);
 		}
 	}
 

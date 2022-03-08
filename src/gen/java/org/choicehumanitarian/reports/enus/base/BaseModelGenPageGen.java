@@ -4,39 +4,39 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Arrays;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.slf4j.LoggerFactory;
+import org.computate.search.serialize.ComputateLocalDateDeserializer;
 import java.util.HashMap;
-import org.choicehumanitarian.reports.enus.search.SearchList;
 import org.apache.commons.lang3.StringUtils;
 import java.lang.Integer;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.lang.Long;
+import org.computate.vertx.api.ApiRequest;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.choicehumanitarian.reports.enus.java.ZonedDateTimeSerializer;
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.lang.String;
 import java.math.RoundingMode;
-import org.choicehumanitarian.reports.enus.request.api.ApiRequest;
 import org.slf4j.Logger;
 import java.math.MathContext;
-import org.choicehumanitarian.reports.enus.java.ZonedDateTimeDeserializer;
 import io.vertx.core.Promise;
-import org.choicehumanitarian.reports.enus.java.LocalDateSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.vertx.core.Future;
+import org.computate.search.serialize.ComputateZonedDateTimeDeserializer;
 import org.choicehumanitarian.reports.enus.base.BaseModel;
 import java.util.Objects;
+import org.computate.search.serialize.ComputateLocalDateSerializer;
+import org.computate.vertx.search.list.SearchList;
 import org.choicehumanitarian.reports.enus.page.PageLayout;
 import io.vertx.core.json.JsonArray;
 import org.computate.search.wrap.Wrap;
 import org.apache.commons.lang3.math.NumberUtils;
 import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.computate.search.serialize.ComputateZonedDateTimeSerializer;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 /**	
  * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModelGenPage&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
@@ -161,16 +161,16 @@ public abstract class BaseModelGenPageGen<DEV> extends PageLayout {
 		return (BaseModelGenPage)this;
 	}
 
-	public static Integer staticSolrBaseModelCount(SiteRequestEnUS siteRequest_, Integer o) {
+	public static Integer staticSearchBaseModelCount(SiteRequestEnUS siteRequest_, Integer o) {
 		return o;
 	}
 
-	public static String staticSolrStrBaseModelCount(SiteRequestEnUS siteRequest_, Integer o) {
+	public static String staticSearchStrBaseModelCount(SiteRequestEnUS siteRequest_, Integer o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqBaseModelCount(SiteRequestEnUS siteRequest_, String o) {
-		return BaseModelGenPage.staticSolrStrBaseModelCount(siteRequest_, BaseModelGenPage.staticSolrBaseModelCount(siteRequest_, BaseModelGenPage.staticSetBaseModelCount(siteRequest_, o)));
+	public static String staticSearchFqBaseModelCount(SiteRequestEnUS siteRequest_, String o) {
+		return BaseModelGenPage.staticSearchStrBaseModelCount(siteRequest_, BaseModelGenPage.staticSearchBaseModelCount(siteRequest_, BaseModelGenPage.staticSetBaseModelCount(siteRequest_, o)));
 	}
 
 	////////////////
@@ -211,63 +211,6 @@ public abstract class BaseModelGenPageGen<DEV> extends PageLayout {
 		return (BaseModelGenPage)this;
 	}
 
-	////////
-	// pk //
-	////////
-
-	/**	 The entity pk
-	 *	 is defined as null before being initialized. 
-	 */
-	@JsonProperty
-	@JsonSerialize(using = ToStringSerializer.class)
-	@JsonInclude(Include.NON_NULL)
-	protected Long pk;
-
-	/**	<br> The entity pk
-	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.base.BaseModelGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pk">Find the entity pk in Solr</a>
-	 * <br>
-	 * @param w is for wrapping a value to assign to this entity during initialization. 
-	 **/
-	protected abstract void _pk(Wrap<Long> w);
-
-	public Long getPk() {
-		return pk;
-	}
-
-	public void setPk(Long pk) {
-		this.pk = pk;
-	}
-	@JsonIgnore
-	public void setPk(String o) {
-		this.pk = BaseModelGenPage.staticSetPk(siteRequest_, o);
-	}
-	public static Long staticSetPk(SiteRequestEnUS siteRequest_, String o) {
-		if(NumberUtils.isParsable(o))
-			return Long.parseLong(o);
-		return null;
-	}
-	protected BaseModelGenPage pkInit() {
-		Wrap<Long> pkWrap = new Wrap<Long>().var("pk");
-		if(pk == null) {
-			_pk(pkWrap);
-			setPk(pkWrap.o);
-		}
-		return (BaseModelGenPage)this;
-	}
-
-	public static Long staticSolrPk(SiteRequestEnUS siteRequest_, Long o) {
-		return o;
-	}
-
-	public static String staticSolrStrPk(SiteRequestEnUS siteRequest_, Long o) {
-		return o == null ? null : o.toString();
-	}
-
-	public static String staticSolrFqPk(SiteRequestEnUS siteRequest_, String o) {
-		return BaseModelGenPage.staticSolrStrPk(siteRequest_, BaseModelGenPage.staticSolrPk(siteRequest_, BaseModelGenPage.staticSetPk(siteRequest_, o)));
-	}
-
 	//////////////
 	// initDeep //
 	//////////////
@@ -301,7 +244,6 @@ public abstract class BaseModelGenPageGen<DEV> extends PageLayout {
 				listBaseModelInit();
 				baseModelCountInit();
 				baseModel_Init();
-				pkInit();
 				promise2.complete();
 			} catch(Exception ex) {
 				promise2.fail(ex);
@@ -363,8 +305,6 @@ public abstract class BaseModelGenPageGen<DEV> extends PageLayout {
 				return oBaseModelGenPage.baseModelCount;
 			case "baseModel_":
 				return oBaseModelGenPage.baseModel_;
-			case "pk":
-				return oBaseModelGenPage.pk;
 			default:
 				return super.obtainPageLayout(var);
 		}
@@ -406,90 +346,56 @@ public abstract class BaseModelGenPageGen<DEV> extends PageLayout {
 		switch(entityVar) {
 		case "baseModelCount":
 			return BaseModelGenPage.staticSetBaseModelCount(siteRequest_, o);
-		case "pk":
-			return BaseModelGenPage.staticSetPk(siteRequest_, o);
 			default:
 				return PageLayout.staticSetPageLayout(entityVar,  siteRequest_, o);
 		}
 	}
 
 	////////////////
-	// staticSolr //
+	// staticSearch //
 	////////////////
 
-	public static Object staticSolrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
-		return staticSolrBaseModelGenPage(entityVar,  siteRequest_, o);
+	public static Object staticSearchForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+		return staticSearchBaseModelGenPage(entityVar,  siteRequest_, o);
 	}
-	public static Object staticSolrBaseModelGenPage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+	public static Object staticSearchBaseModelGenPage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
 		switch(entityVar) {
 		case "baseModelCount":
-			return BaseModelGenPage.staticSolrBaseModelCount(siteRequest_, (Integer)o);
-		case "pk":
-			return BaseModelGenPage.staticSolrPk(siteRequest_, (Long)o);
+			return BaseModelGenPage.staticSearchBaseModelCount(siteRequest_, (Integer)o);
 			default:
-				return PageLayout.staticSolrPageLayout(entityVar,  siteRequest_, o);
+				return PageLayout.staticSearchPageLayout(entityVar,  siteRequest_, o);
 		}
 	}
 
 	///////////////////
-	// staticSolrStr //
+	// staticSearchStr //
 	///////////////////
 
-	public static String staticSolrStrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
-		return staticSolrStrBaseModelGenPage(entityVar,  siteRequest_, o);
+	public static String staticSearchStrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+		return staticSearchStrBaseModelGenPage(entityVar,  siteRequest_, o);
 	}
-	public static String staticSolrStrBaseModelGenPage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+	public static String staticSearchStrBaseModelGenPage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
 		switch(entityVar) {
 		case "baseModelCount":
-			return BaseModelGenPage.staticSolrStrBaseModelCount(siteRequest_, (Integer)o);
-		case "pk":
-			return BaseModelGenPage.staticSolrStrPk(siteRequest_, (Long)o);
+			return BaseModelGenPage.staticSearchStrBaseModelCount(siteRequest_, (Integer)o);
 			default:
-				return PageLayout.staticSolrStrPageLayout(entityVar,  siteRequest_, o);
+				return PageLayout.staticSearchStrPageLayout(entityVar,  siteRequest_, o);
 		}
 	}
 
 	//////////////////
-	// staticSolrFq //
+	// staticSearchFq //
 	//////////////////
 
-	public static String staticSolrFqForClass(String entityVar, SiteRequestEnUS siteRequest_, String o) {
-		return staticSolrFqBaseModelGenPage(entityVar,  siteRequest_, o);
+	public static String staticSearchFqForClass(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+		return staticSearchFqBaseModelGenPage(entityVar,  siteRequest_, o);
 	}
-	public static String staticSolrFqBaseModelGenPage(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchFqBaseModelGenPage(String entityVar, SiteRequestEnUS siteRequest_, String o) {
 		switch(entityVar) {
 		case "baseModelCount":
-			return BaseModelGenPage.staticSolrFqBaseModelCount(siteRequest_, o);
-		case "pk":
-			return BaseModelGenPage.staticSolrFqPk(siteRequest_, o);
+			return BaseModelGenPage.staticSearchFqBaseModelCount(siteRequest_, o);
 			default:
-				return PageLayout.staticSolrFqPageLayout(entityVar,  siteRequest_, o);
-		}
-	}
-
-	/////////////
-	// define //
-	/////////////
-
-	@Override public boolean defineForClass(String var, Object val) {
-		String[] vars = StringUtils.split(var, ".");
-		Object o = null;
-		if(val != null) {
-			for(String v : vars) {
-				if(o == null)
-					o = defineBaseModelGenPage(v, val);
-				else if(o instanceof BaseModel) {
-					BaseModel oBaseModel = (BaseModel)o;
-					o = oBaseModel.defineForClass(v, val);
-				}
-			}
-		}
-		return o != null;
-	}
-	public Object defineBaseModelGenPage(String var, Object val) {
-		switch(var.toLowerCase()) {
-			default:
-				return super.definePageLayout(var, val);
+				return PageLayout.staticSearchFqPageLayout(entityVar,  siteRequest_, o);
 		}
 	}
 
@@ -507,13 +413,11 @@ public abstract class BaseModelGenPageGen<DEV> extends PageLayout {
 	public static final String VAR_listBaseModel = "listBaseModel";
 	public static final String VAR_baseModelCount = "baseModelCount";
 	public static final String VAR_baseModel_ = "baseModel_";
-	public static final String VAR_pk = "pk";
 
 	public static final String DISPLAY_NAME_searchListBaseModel_ = "";
 	public static final String DISPLAY_NAME_listBaseModel = "";
 	public static final String DISPLAY_NAME_baseModelCount = "";
 	public static final String DISPLAY_NAME_baseModel_ = "";
-	public static final String DISPLAY_NAME_pk = "";
 
 	public static String displayNameForClass(String var) {
 		return BaseModelGenPage.displayNameBaseModelGenPage(var);
@@ -528,8 +432,6 @@ public abstract class BaseModelGenPageGen<DEV> extends PageLayout {
 			return DISPLAY_NAME_baseModelCount;
 		case VAR_baseModel_:
 			return DISPLAY_NAME_baseModel_;
-		case VAR_pk:
-			return DISPLAY_NAME_pk;
 		default:
 			return PageLayout.displayNamePageLayout(var);
 		}

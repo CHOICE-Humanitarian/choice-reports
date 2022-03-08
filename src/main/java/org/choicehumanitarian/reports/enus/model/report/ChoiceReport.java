@@ -4,8 +4,8 @@ import java.math.BigDecimal;
 
 import org.choicehumanitarian.reports.enus.base.BaseModel;
 import org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor;
-import org.choicehumanitarian.reports.enus.search.SearchList;
 import org.computate.search.wrap.Wrap;
+import org.computate.vertx.search.list.SearchList;
 
 import io.vertx.core.Promise;
 
