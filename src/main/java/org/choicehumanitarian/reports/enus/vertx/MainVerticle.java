@@ -595,12 +595,10 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 			});
 			healthCheckHandler.register("solr", 2000, promise2 -> {
 				try {
-					SearchRequest request = new SearchRequest();
-					request.q("*:*");
 					webClient.get(
 							config().getInteger(ConfigKeys.SOLR_PORT)
 							, config().getString(ConfigKeys.SOLR_HOST_NAME)
-							, String.format("/solr/%s/select%s", config().getString(ConfigKeys.SOLR_COLLECTION), request.getQueryString())
+							, String.format("/solr/%s/select%s", config().getString(ConfigKeys.SOLR_COLLECTION), "")
 							).send().onSuccess(a -> {
 						SolrResponse response = a.bodyAsJson(SolrResponse.class);
 						if(response.getError() == null)

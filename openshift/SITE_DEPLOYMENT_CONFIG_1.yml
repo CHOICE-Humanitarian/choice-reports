@@ -233,6 +233,8 @@ spec:
               value: "{{ SOLR_PORT }}"
             - name: SOLR_URL
               value: "http://{{ SOLR_HOST_NAME}}:{{SOLR_PORT}}/solr/{{SITE_SOLR_COLLECTION_ENUS }}"
+            - name: SOLR_COLLECTION
+              value: "{{ SOLR_COLLECTION }}"
             - name: SITE_HOST_NAME
               value: "{{ SITE_HOST_NAME_ENUS }}"
             - name: SITE_PORT
