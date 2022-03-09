@@ -30,7 +30,6 @@ import org.computate.vertx.request.ComputateVertxSiteRequest;
  * ApiUriSearchPage.enUS: /user
  * 
  * Keyword: classSimpleNameSiteUser
- * Role.enUS: SiteAdmin
  * Filter: userId
  * Saves: true
  * 
@@ -40,10 +39,31 @@ import org.computate.vertx.request.ComputateVertxSiteRequest;
  * IconName: user-cog
  * NameVar.enUS: user
  * 
- * RoleUser: true
  * Role.enUS: SiteAdmin
- */ 
+ */
 public class SiteUser extends SiteUserGen<BaseModel> implements ComputateVertxSiteUser {
+
+	/** 
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Relate: ReportNarrative.assigneeKey
+	 * HtmlRow: 4
+	 * HtmlCell: 1
+	 * DisplayName.enUS: narratives
+	 */
+	protected void _narrativeKeys(List<Long> l) {
+	}
+
+	/**  
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Relate: ReportEvent.assigneeKey
+	 * HtmlRow: 4
+	 * HtmlCell: 1
+	 * DisplayName.enUS: events
+	 */
+	protected void _eventKeys(List<Long> l) {
+	}
 
 	/**
 	 * {@inheritDoc}

@@ -6,6 +6,7 @@
 {{#*inline "htmScriptsReportNarrativePage"}}{{> "htmScriptsBaseModelPage"}}		<!-- inline "htmScriptsReportNarrativePage" -->
 		<script src="{{staticBaseUrl}}/js/enUS/ReportNarrativePage.js"></script>
 		<script src="{{staticBaseUrl}}/js/enUS/ReportSchedulePage.js"></script>
+		<script src="{{staticBaseUrl}}/js/enUS/SiteUserPage.js"></script>
 {{/inline}}
 {{#*inline "htmScriptReportNarrativePage"}}		<!-- inline "htmScriptReportNarrativePage" -->
 		<script>
@@ -29,6 +30,11 @@
 					suggestReportNarrativeScheduleKey([{'name':'fq','value':'narrativeKeys:' + pk}], $('#listReportNarrativeScheduleKey_Page'), pk, true);
 		{{else}}
 					suggestReportNarrativeScheduleKey([{'name':'fq','value':'narrativeKeys:' + pk}], $('#listReportNarrativeScheduleKey_Page'), pk, false);
+		{{/ifContainsAnyRoles}}
+		{{#ifContainsAnyRoles roles rolesRequired}}
+					suggestReportNarrativeAssigneeKey([{'name':'fq','value':'narrativeKeys:' + pk}], $('#listReportNarrativeAssigneeKey_Page'), pk, true);
+		{{else}}
+					suggestReportNarrativeAssigneeKey([{'name':'fq','value':'narrativeKeys:' + pk}], $('#listReportNarrativeAssigneeKey_Page'), pk, false);
 		{{/ifContainsAnyRoles}}
 				}
 				websocketReportNarrative(websocketReportNarrativeInner);
@@ -220,6 +226,7 @@
 							</div>
 							<div class="w3-cell-row ">
 {{> "htmScheduleKey" classApiMethodMethod="POST"}}
+{{> "htmAssigneeKey" classApiMethodMethod="POST"}}
 {{> "htmNarrativeName" classApiMethodMethod="POST"}}
 							</div>
 						</div>
@@ -259,6 +266,7 @@
 							</div>
 							<div class="w3-cell-row ">
 {{> "htmScheduleKey" classApiMethodMethod="PATCH"}}
+{{> "htmAssigneeKey" classApiMethodMethod="PATCH"}}
 {{> "htmNarrativeName" classApiMethodMethod="PATCH"}}
 							</div>
 						<button
@@ -294,6 +302,7 @@
 							</div>
 							<div class="w3-cell-row ">
 {{> "htmScheduleKey" classApiMethodMethod="Page"}}
+{{> "htmAssigneeKey" classApiMethodMethod="Page"}}
 {{> "htmNarrativeName" classApiMethodMethod="Page"}}
 							</div>
 						</div>
@@ -530,6 +539,80 @@
 															id="{{classApiMethodMethod}}_scheduleKey"
 															autocomplete="off"
 															oninput="suggestReportNarrativeScheduleKey($(this).val() ? [ { 'name': 'q', 'value': 'objectSuggest:' + $(this).val() }, { 'name': 'rows', 'value': '10' }, { 'name': 'fl', 'value': 'classCanonicalName,narrativeKeys,pk,pageUrlPk,objectTitle' } ] : [{{#if pk}}{'name':'fq','value':'narrativeKeys:{{pk}}'}{{else}}{{/if}}], $('#listReportNarrativeScheduleKey_{{classApiMethodMethod}}'), {{pk}}); "
+															/>
+
+													{{else}}
+		{{/ifContainsAnyRoles}}
+{{/inline}}
+
+{{#*inline "htmAssigneeKey"}}
+								<div class="w3-cell w3-cell-top w3-center w3-mobile ">
+									<div class="w3-padding ">
+										<div id="suggest{{classApiMethodMethod}}ReportNarrativeAssigneeKey">
+											<div class="w3-card ">
+												<div class="w3-cell-row ">
+													<a href="/user?fq=narrativeKeys:{{reportNarrative_.pk}}" class="w3-cell w3-btn w3-center h4 w3-block h4 w3-teal w3-hover-teal ">
+														<i class="far fa-user-cog "></i>
+														assignee
+													</a>
+												</div>
+												<div class="w3-cell-row ">
+													<h5 class="w3-cell ">
+														relate a site user to this report narrative
+													</h5>
+												</div>
+												<div class="w3-cell-row w3-padding ">
+													<div class="w3-cell ">
+														<div class="w3-cell-row ">
+
+														{{> "inputAssigneeKey"}}
+														</div>
+													</div>
+												</div>
+												<div class="w3-cell-row w3-padding ">
+													<div class="w3-cell w3-left-align w3-cell-top ">
+														<ul class="w3-ul w3-hoverable " id="listReportNarrativeAssigneeKey_{{classApiMethodMethod}}">
+														</ul>
+														{{#ifContainsAnyRoles roles rolesRequired}}
+	{{#eq 'Page' classApiMethodMethod}}
+																<div class="w3-cell-row ">
+																	<button
+																		 class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-teal "
+																		 id="{{classApiMethodMethod}}_assigneeKey_add"
+																		 onclick="$(this).addClass('w3-disabled'); this.disabled = true; this.innerHTML = 'Sending…'; postSiteUserVals({ narrativeKeys: [ '{{pk}}' ] }, function() { $('#{{classApiMethodMethod}}_assigneeKey_add').disabled = false; $('#{{classApiMethodMethod}}_assigneeKey_add').innerHTML = 'add a site user'; }, function() { addError($('#{{classApiMethodMethod}}assigneeKey')); });"
+																		>add a site user</button>
+																</div>
+	{{/eq}}
+														{{/ifContainsAnyRoles}}
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+{{/inline}}
+
+{{#*inline "inputAssigneeKey"}}
+		{{#ifContainsAnyRoles roles rolesRequired}}
+														<i class="far fa-search w3-xxlarge w3-cell w3-cell-middle "></i>
+														{{#eq 'PUTCopy' classApiMethodMethod}}
+															<div>
+																<input 
+																	type="checkbox"
+																	id="{{classApiMethodMethod}}_assigneeKey_clear"
+																	class="assigneeKey_clear "
+																	>
+																<label for="{{classApiMethodMethod}}_assigneeKey_clear">clear</label>
+															</div>
+														{{/eq}}
+														<input
+																type="text"
+																placeholder="assignee"
+															class="valueObjectSuggest suggestAssigneeKey w3-input w3-border w3-cell w3-cell-middle "
+															name="setAssigneeKey"
+															id="{{classApiMethodMethod}}_assigneeKey"
+															autocomplete="off"
+															oninput="suggestReportNarrativeAssigneeKey($(this).val() ? [ { 'name': 'q', 'value': 'objectSuggest:' + $(this).val() }, { 'name': 'rows', 'value': '10' }, { 'name': 'fl', 'value': 'classCanonicalName,narrativeKeys,pk,pageUrlPk,objectTitle' } ] : [{{#if pk}}{'name':'fq','value':'narrativeKeys:{{pk}}'}{{else}}{{/if}}], $('#listReportNarrativeAssigneeKey_{{classApiMethodMethod}}'), {{pk}}); "
 															/>
 
 													{{else}}

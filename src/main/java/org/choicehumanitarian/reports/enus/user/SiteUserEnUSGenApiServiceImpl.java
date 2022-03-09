@@ -1,5 +1,9 @@
 package org.choicehumanitarian.reports.enus.user;
 
+import org.choicehumanitarian.reports.enus.model.report.narrative.ReportNarrativeEnUSApiServiceImpl;
+import org.choicehumanitarian.reports.enus.model.report.narrative.ReportNarrative;
+import org.choicehumanitarian.reports.enus.model.report.event.ReportEventEnUSApiServiceImpl;
+import org.choicehumanitarian.reports.enus.model.report.event.ReportEvent;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import org.choicehumanitarian.reports.enus.user.SiteUser;
 import org.computate.vertx.api.ApiRequest;
@@ -105,7 +109,26 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 	public void searchSiteUser(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
 		user(serviceRequest, SiteRequestEnUS.class, SiteUser.class, "choice-reports-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
 			try {
-				{
+
+				List<String> roles = Optional.ofNullable(config.getValue(ConfigKeys.AUTH_ROLES_REQUIRED + "_SiteUser")).map(v -> v instanceof JsonArray ? (JsonArray)v : new JsonArray(v.toString())).orElse(new JsonArray()).getList();
+				List<String> roleReads = Arrays.asList("");
+				if(
+						!CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roles)
+						&& !CollectionUtils.containsAny(siteRequest.getUserRealmRoles(), roles)
+						&& !CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roleReads)
+						&& !CollectionUtils.containsAny(siteRequest.getUserRealmRoles(), roleReads)
+						) {
+					eventHandler.handle(Future.succeededFuture(
+						new ServiceResponse(401, "UNAUTHORIZED", 
+							Buffer.buffer().appendString(
+								new JsonObject()
+									.put("errorCode", "401")
+									.put("errorMessage", "roles required: " + String.join(", ", roles))
+									.encodePrettily()
+								), MultiMap.caseInsensitiveMultiMap()
+						)
+					));
+				} else {
 					searchSiteUserList(siteRequest, false, true, false).onSuccess(listSiteUser -> {
 						response200SearchSiteUser(listSiteUser).onSuccess(response -> {
 							eventHandler.handle(Future.succeededFuture(response));
@@ -288,7 +311,23 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 		user(serviceRequest, SiteRequestEnUS.class, SiteUser.class, "choice-reports-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
 			try {
 				siteRequest.setJsonObject(body);
-				{
+
+				List<String> roles = Optional.ofNullable(config.getValue(ConfigKeys.AUTH_ROLES_REQUIRED + "_SiteUser")).map(v -> v instanceof JsonArray ? (JsonArray)v : new JsonArray(v.toString())).orElse(new JsonArray()).getList();
+				if(
+						!CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roles)
+						&& !CollectionUtils.containsAny(siteRequest.getUserRealmRoles(), roles)
+						) {
+					eventHandler.handle(Future.succeededFuture(
+						new ServiceResponse(401, "UNAUTHORIZED", 
+							Buffer.buffer().appendString(
+								new JsonObject()
+									.put("errorCode", "401")
+									.put("errorMessage", "roles required: " + String.join(", ", roles))
+									.encodePrettily()
+								), MultiMap.caseInsensitiveMultiMap()
+						)
+					));
+				} else {
 					searchSiteUserList(siteRequest, false, true, true).onSuccess(listSiteUser -> {
 						try {
 							List<String> roles2 = Optional.ofNullable(config.getValue(ConfigKeys.AUTH_ROLES_ADMIN)).map(v -> v instanceof JsonArray ? (JsonArray)v : new JsonArray(v.toString())).orElse(new JsonArray()).getList();
@@ -541,6 +580,180 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 							num++;
 							bParams.add(o2.sqlDeleted());
 						break;
+					case "setNarrativeKeys":
+						JsonArray setNarrativeKeysValues = Optional.ofNullable(jsonObject.getJsonArray(entityVar)).orElse(new JsonArray());
+						setNarrativeKeysValues.stream().map(oVal -> oVal.toString()).forEach(val -> {
+							futures2.add(Future.future(promise2 -> {
+								search(siteRequest).query(ReportNarrative.class, val, inheritPk).onSuccess(pk2 -> {
+									if(!pks.contains(pk2)) {
+										pks.add(pk2);
+										classes.add("ReportNarrative");
+									}
+									sql(siteRequest).update(ReportNarrative.class, pk2).set(ReportNarrative.VAR_assigneeKey, SiteUser.class, pk).onSuccess(a -> {
+										promise2.complete();
+									}).onFailure(ex -> {
+										promise2.fail(ex);
+									});
+								}).onFailure(ex -> {
+									promise2.fail(ex);
+								});
+							}));
+						});
+						Optional.ofNullable(o.getNarrativeKeys()).orElse(Arrays.asList()).stream().filter(oVal -> oVal != null && !setNarrativeKeysValues.contains(oVal.toString())).forEach(pk2 -> {
+							if(!pks.contains(pk2)) {
+								pks.add(pk2);
+								classes.add("ReportNarrative");
+							}
+							futures2.add(Future.future(promise2 -> {
+								sql(siteRequest).update(ReportNarrative.class, pk2).setToNull(ReportNarrative.VAR_assigneeKey, SiteUser.class, pk2).onSuccess(a -> {
+									promise2.complete();
+								}).onFailure(ex -> {
+									promise2.fail(ex);
+								});
+							}));
+						});
+						break;
+					case "addAllNarrativeKeys":
+						JsonArray addAllNarrativeKeysValues = Optional.ofNullable(jsonObject.getJsonArray(entityVar)).orElse(new JsonArray());
+						addAllNarrativeKeysValues.stream().map(oVal -> oVal.toString()).forEach(val -> {
+							futures2.add(Future.future(promise2 -> {
+								search(siteRequest).query(ReportNarrative.class, val, inheritPk).onSuccess(pk2 -> {
+									if(!pks.contains(pk2)) {
+										pks.add(pk2);
+										classes.add("ReportNarrative");
+									}
+									sql(siteRequest).update(ReportNarrative.class, pk2).set(ReportNarrative.VAR_assigneeKey, SiteUser.class, pk).onSuccess(a -> {
+										promise2.complete();
+									}).onFailure(ex -> {
+										promise2.fail(ex);
+									});
+								}).onFailure(ex -> {
+									promise2.fail(ex);
+								});
+							}));
+						});
+						break;
+					case "addNarrativeKeys":
+						Optional.ofNullable(jsonObject.getString(entityVar)).ifPresent(val -> {
+							futures2.add(Future.future(promise2 -> {
+								search(siteRequest).query(ReportNarrative.class, val, inheritPk).onSuccess(pk2 -> {
+									if(!pks.contains(pk2)) {
+										pks.add(pk2);
+										classes.add("ReportNarrative");
+									}
+									sql(siteRequest).update(ReportNarrative.class, pk2).set(ReportNarrative.VAR_assigneeKey, SiteUser.class, pk).onSuccess(a -> {
+										promise2.complete();
+									}).onFailure(ex -> {
+										promise2.fail(ex);
+									});
+								}).onFailure(ex -> {
+									promise2.fail(ex);
+								});
+							}));
+						});
+						break;
+					case "removeNarrativeKeys":
+						Optional.ofNullable(jsonObject.getString(entityVar)).map(val -> Long.parseLong(val)).ifPresent(pk2 -> {
+							if(!pks.contains(pk2)) {
+								pks.add(pk2);
+								classes.add("ReportNarrative");
+							}
+							futures2.add(Future.future(promise2 -> {
+								sql(siteRequest).update(ReportNarrative.class, pk2).setToNull(ReportNarrative.VAR_assigneeKey, SiteUser.class, pk2).onSuccess(a -> {
+									promise2.complete();
+								}).onFailure(ex -> {
+									promise2.fail(ex);
+								});
+							}));
+						});
+						break;
+					case "setEventKeys":
+						JsonArray setEventKeysValues = Optional.ofNullable(jsonObject.getJsonArray(entityVar)).orElse(new JsonArray());
+						setEventKeysValues.stream().map(oVal -> oVal.toString()).forEach(val -> {
+							futures2.add(Future.future(promise2 -> {
+								search(siteRequest).query(ReportEvent.class, val, inheritPk).onSuccess(pk2 -> {
+									if(!pks.contains(pk2)) {
+										pks.add(pk2);
+										classes.add("ReportEvent");
+									}
+									sql(siteRequest).update(ReportEvent.class, pk2).set(ReportEvent.VAR_assigneeKey, SiteUser.class, pk).onSuccess(a -> {
+										promise2.complete();
+									}).onFailure(ex -> {
+										promise2.fail(ex);
+									});
+								}).onFailure(ex -> {
+									promise2.fail(ex);
+								});
+							}));
+						});
+						Optional.ofNullable(o.getEventKeys()).orElse(Arrays.asList()).stream().filter(oVal -> oVal != null && !setEventKeysValues.contains(oVal.toString())).forEach(pk2 -> {
+							if(!pks.contains(pk2)) {
+								pks.add(pk2);
+								classes.add("ReportEvent");
+							}
+							futures2.add(Future.future(promise2 -> {
+								sql(siteRequest).update(ReportEvent.class, pk2).setToNull(ReportEvent.VAR_assigneeKey, SiteUser.class, pk2).onSuccess(a -> {
+									promise2.complete();
+								}).onFailure(ex -> {
+									promise2.fail(ex);
+								});
+							}));
+						});
+						break;
+					case "addAllEventKeys":
+						JsonArray addAllEventKeysValues = Optional.ofNullable(jsonObject.getJsonArray(entityVar)).orElse(new JsonArray());
+						addAllEventKeysValues.stream().map(oVal -> oVal.toString()).forEach(val -> {
+							futures2.add(Future.future(promise2 -> {
+								search(siteRequest).query(ReportEvent.class, val, inheritPk).onSuccess(pk2 -> {
+									if(!pks.contains(pk2)) {
+										pks.add(pk2);
+										classes.add("ReportEvent");
+									}
+									sql(siteRequest).update(ReportEvent.class, pk2).set(ReportEvent.VAR_assigneeKey, SiteUser.class, pk).onSuccess(a -> {
+										promise2.complete();
+									}).onFailure(ex -> {
+										promise2.fail(ex);
+									});
+								}).onFailure(ex -> {
+									promise2.fail(ex);
+								});
+							}));
+						});
+						break;
+					case "addEventKeys":
+						Optional.ofNullable(jsonObject.getString(entityVar)).ifPresent(val -> {
+							futures2.add(Future.future(promise2 -> {
+								search(siteRequest).query(ReportEvent.class, val, inheritPk).onSuccess(pk2 -> {
+									if(!pks.contains(pk2)) {
+										pks.add(pk2);
+										classes.add("ReportEvent");
+									}
+									sql(siteRequest).update(ReportEvent.class, pk2).set(ReportEvent.VAR_assigneeKey, SiteUser.class, pk).onSuccess(a -> {
+										promise2.complete();
+									}).onFailure(ex -> {
+										promise2.fail(ex);
+									});
+								}).onFailure(ex -> {
+									promise2.fail(ex);
+								});
+							}));
+						});
+						break;
+					case "removeEventKeys":
+						Optional.ofNullable(jsonObject.getString(entityVar)).map(val -> Long.parseLong(val)).ifPresent(pk2 -> {
+							if(!pks.contains(pk2)) {
+								pks.add(pk2);
+								classes.add("ReportEvent");
+							}
+							futures2.add(Future.future(promise2 -> {
+								sql(siteRequest).update(ReportEvent.class, pk2).setToNull(ReportEvent.VAR_assigneeKey, SiteUser.class, pk2).onSuccess(a -> {
+									promise2.complete();
+								}).onFailure(ex -> {
+									promise2.fail(ex);
+								});
+							}));
+						});
+						break;
 					case "setUserName":
 							o2.setUserName(jsonObject.getString(entityVar));
 							if(bParams.size() > 0)
@@ -656,7 +869,23 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 		user(serviceRequest, SiteRequestEnUS.class, SiteUser.class, "choice-reports-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
 			try {
 				siteRequest.setJsonObject(body);
-				{
+
+				List<String> roles = Optional.ofNullable(config.getValue(ConfigKeys.AUTH_ROLES_REQUIRED + "_SiteUser")).map(v -> v instanceof JsonArray ? (JsonArray)v : new JsonArray(v.toString())).orElse(new JsonArray()).getList();
+				if(
+						!CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roles)
+						&& !CollectionUtils.containsAny(siteRequest.getUserRealmRoles(), roles)
+						) {
+					eventHandler.handle(Future.succeededFuture(
+						new ServiceResponse(401, "UNAUTHORIZED", 
+							Buffer.buffer().appendString(
+								new JsonObject()
+									.put("errorCode", "401")
+									.put("errorMessage", "roles required: " + String.join(", ", roles))
+									.encodePrettily()
+								), MultiMap.caseInsensitiveMultiMap()
+						)
+					));
+				} else {
 					ApiRequest apiRequest = new ApiRequest();
 					apiRequest.setRows(1L);
 					apiRequest.setNumFound(1L);
@@ -911,6 +1140,44 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 						num++;
 						bParams.add(o2.sqlUserKey());
 						break;
+					case SiteUser.VAR_narrativeKeys:
+						Optional.ofNullable(jsonObject.getJsonArray(entityVar)).orElse(new JsonArray()).stream().map(oVal -> oVal.toString()).forEach(val -> {
+							futures2.add(Future.future(promise2 -> {
+								search(siteRequest).query(ReportNarrative.class, val, inheritPk).onSuccess(pk2 -> {
+									if(!pks.contains(pk2)) {
+										pks.add(pk2);
+										classes.add("ReportNarrative");
+									}
+									sql(siteRequest).update(ReportNarrative.class, pk2).set(ReportNarrative.VAR_assigneeKey, SiteUser.class, pk).onSuccess(a -> {
+										promise2.complete();
+									}).onFailure(ex -> {
+										promise2.fail(ex);
+									});
+								}).onFailure(ex -> {
+									promise2.fail(ex);
+								});
+							}));
+						});
+						break;
+					case SiteUser.VAR_eventKeys:
+						Optional.ofNullable(jsonObject.getJsonArray(entityVar)).orElse(new JsonArray()).stream().map(oVal -> oVal.toString()).forEach(val -> {
+							futures2.add(Future.future(promise2 -> {
+								search(siteRequest).query(ReportEvent.class, val, inheritPk).onSuccess(pk2 -> {
+									if(!pks.contains(pk2)) {
+										pks.add(pk2);
+										classes.add("ReportEvent");
+									}
+									sql(siteRequest).update(ReportEvent.class, pk2).set(ReportEvent.VAR_assigneeKey, SiteUser.class, pk).onSuccess(a -> {
+										promise2.complete();
+									}).onFailure(ex -> {
+										promise2.fail(ex);
+									});
+								}).onFailure(ex -> {
+									promise2.fail(ex);
+								});
+							}));
+						});
+						break;
 					case SiteUser.VAR_userId:
 						o2.setUserId(jsonObject.getString(entityVar));
 						if(bParams.size() > 0) {
@@ -1044,7 +1311,26 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 	public void searchpageSiteUser(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
 		user(serviceRequest, SiteRequestEnUS.class, SiteUser.class, "choice-reports-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
 			try {
-				{
+
+				List<String> roles = Optional.ofNullable(config.getValue(ConfigKeys.AUTH_ROLES_REQUIRED + "_SiteUser")).map(v -> v instanceof JsonArray ? (JsonArray)v : new JsonArray(v.toString())).orElse(new JsonArray()).getList();
+				List<String> roleReads = Arrays.asList("");
+				if(
+						!CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roles)
+						&& !CollectionUtils.containsAny(siteRequest.getUserRealmRoles(), roles)
+						&& !CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roleReads)
+						&& !CollectionUtils.containsAny(siteRequest.getUserRealmRoles(), roleReads)
+						) {
+					eventHandler.handle(Future.succeededFuture(
+						new ServiceResponse(401, "UNAUTHORIZED", 
+							Buffer.buffer().appendString(
+								new JsonObject()
+									.put("errorCode", "401")
+									.put("errorMessage", "roles required: " + String.join(", ", roles))
+									.encodePrettily()
+								), MultiMap.caseInsensitiveMultiMap()
+						)
+					));
+				} else {
 					searchSiteUserList(siteRequest, false, true, false).onSuccess(listSiteUser -> {
 						response200SearchPageSiteUser(listSiteUser).onSuccess(response -> {
 							eventHandler.handle(Future.succeededFuture(response));
@@ -1241,18 +1527,6 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 				searchList.fq("objectId_docvalues_string:" + SearchTool.escapeQueryChars(id));
 			}
 
-			List<String> roles = Optional.ofNullable(config.getValue(ConfigKeys.AUTH_ROLES_REQUIRED + "_SiteUser")).map(v -> v instanceof JsonArray ? (JsonArray)v : new JsonArray(v.toString())).orElse(new JsonArray()).getList();
-			List<String> roleReads = Arrays.asList("");
-			if(
-					!CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roles)
-					&& !CollectionUtils.containsAny(siteRequest.getUserRealmRoles(), roles)
-					&& (modify || !CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roleReads))
-					&& (modify || !CollectionUtils.containsAny(siteRequest.getUserRealmRoles(), roleReads))
-					) {
-				searchList.fq("sessionId_docvalues_string:" + SearchTool.escapeQueryChars(Optional.ofNullable(siteRequest.getSessionId()).orElse("-----")) + " OR " + "sessionId_docvalues_string:" + SearchTool.escapeQueryChars(Optional.ofNullable(siteRequest.getSessionIdBefore()).orElse("-----"))
-						+ " OR userKeys_docvalues_longs:" + Optional.ofNullable(siteRequest.getUserKey()).orElse(0L));
-			}
-
 			serviceRequest.getParams().getJsonObject("query").forEach(paramRequest -> {
 				String entityVar = null;
 				String valueIndexed = null;
@@ -1442,7 +1716,34 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 
 	public Future<Void> relateSiteUser(SiteUser o) {
 		Promise<Void> promise = Promise.promise();
-			promise.complete();
+		try {
+			SiteRequestEnUS siteRequest = o.getSiteRequest_();
+			SqlConnection sqlConnection = siteRequest.getSqlConnection();
+			Long pk = o.getPk();
+			sqlConnection.preparedQuery("SELECT pk as pk1, 'narrativeKeys' from ReportNarrative where assigneeKey=$1 UNION SELECT pk as pk1, 'eventKeys' from ReportEvent where assigneeKey=$2")
+					.collecting(Collectors.toList())
+					.execute(Tuple.of(pk, pk)
+					).onSuccess(result -> {
+				try {
+					if(result != null) {
+						for(Row definition : result.value()) {
+							o.relateForClass(definition.getString(1), definition.getLong(0));
+						}
+					}
+					promise.complete();
+				} catch(Exception ex) {
+					LOG.error(String.format("relateSiteUser failed. "), ex);
+					promise.fail(ex);
+				}
+			}).onFailure(ex -> {
+				RuntimeException ex2 = new RuntimeException(ex);
+				LOG.error(String.format("relateSiteUser failed. "), ex2);
+				promise.fail(ex2);
+			});
+		} catch(Exception ex) {
+			LOG.error(String.format("relateSiteUser failed. "), ex);
+			promise.fail(ex);
+		}
 		return promise.future();
 	}
 
@@ -1499,6 +1800,76 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 				for(int i=0; i < pks.size(); i++) {
 					Long pk2 = pks.get(i);
 					String classSimpleName2 = classes.get(i);
+
+					if("ReportNarrative".equals(classSimpleName2) && pk2 != null) {
+						SearchList<ReportNarrative> searchList2 = new SearchList<ReportNarrative>();
+						searchList2.setStore(true);
+						searchList2.q("*:*");
+						searchList2.setC(ReportNarrative.class);
+						searchList2.fq("pk_docvalues_long:" + pk2);
+						searchList2.rows(1L);
+						futures.add(Future.future(promise2 -> {
+							searchList2.promiseDeepSearchList(siteRequest).onSuccess(b -> {
+								ReportNarrative o2 = searchList2.getList().stream().findFirst().orElse(null);
+								if(o2 != null) {
+									JsonObject params = new JsonObject();
+									params.put("body", new JsonObject());
+									params.put("cookie", new JsonObject());
+									params.put("path", new JsonObject());
+									params.put("query", new JsonObject().put("q", "*:*").put("fq", new JsonArray().add("pk:" + pk2)));
+									JsonObject context = new JsonObject().put("params", params).put("user", siteRequest.getUserPrincipal());
+									JsonObject json = new JsonObject().put("context", context);
+									eventBus.request("choice-reports-enUS-ReportNarrative", json, new DeliveryOptions().addHeader("action", "patchReportNarrativeFuture")).onSuccess(c -> {
+										JsonObject responseMessage = (JsonObject)c.body();
+										Integer statusCode = responseMessage.getInteger("statusCode");
+										if(statusCode.equals(200))
+											promise2.complete();
+										else
+											promise2.fail(new RuntimeException(responseMessage.getString("statusMessage")));
+									}).onFailure(ex -> {
+										promise2.fail(ex);
+									});
+								}
+							}).onFailure(ex -> {
+								promise2.fail(ex);
+							});
+						}));
+					}
+
+					if("ReportEvent".equals(classSimpleName2) && pk2 != null) {
+						SearchList<ReportEvent> searchList2 = new SearchList<ReportEvent>();
+						searchList2.setStore(true);
+						searchList2.q("*:*");
+						searchList2.setC(ReportEvent.class);
+						searchList2.fq("pk_docvalues_long:" + pk2);
+						searchList2.rows(1L);
+						futures.add(Future.future(promise2 -> {
+							searchList2.promiseDeepSearchList(siteRequest).onSuccess(b -> {
+								ReportEvent o2 = searchList2.getList().stream().findFirst().orElse(null);
+								if(o2 != null) {
+									JsonObject params = new JsonObject();
+									params.put("body", new JsonObject());
+									params.put("cookie", new JsonObject());
+									params.put("path", new JsonObject());
+									params.put("query", new JsonObject().put("q", "*:*").put("fq", new JsonArray().add("pk:" + pk2)));
+									JsonObject context = new JsonObject().put("params", params).put("user", siteRequest.getUserPrincipal());
+									JsonObject json = new JsonObject().put("context", context);
+									eventBus.request("choice-reports-enUS-ReportEvent", json, new DeliveryOptions().addHeader("action", "patchReportEventFuture")).onSuccess(c -> {
+										JsonObject responseMessage = (JsonObject)c.body();
+										Integer statusCode = responseMessage.getInteger("statusCode");
+										if(statusCode.equals(200))
+											promise2.complete();
+										else
+											promise2.fail(new RuntimeException(responseMessage.getString("statusMessage")));
+									}).onFailure(ex -> {
+										promise2.fail(ex);
+									});
+								}
+							}).onFailure(ex -> {
+								promise2.fail(ex);
+							});
+						}));
+					}
 				}
 
 				promise.complete();

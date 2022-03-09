@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import org.choicehumanitarian.reports.enus.user.SiteUser;
 import org.computate.vertx.api.ApiRequest;
 import org.computate.search.response.solr.SolrResponse;
 import java.lang.Long;
@@ -134,6 +135,67 @@ public abstract class ReportNarrativeGen<DEV> extends BaseModel {
 		return scheduleKey;
 	}
 
+	/////////////////
+	// assigneeKey //
+	/////////////////
+
+	/**	 The entity assigneeKey
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonSerialize(using = ToStringSerializer.class)
+	@JsonInclude(Include.NON_NULL)
+	protected Long assigneeKey;
+
+	/**	<br> The entity assigneeKey
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.narrative.ReportNarrative&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:assigneeKey">Find the entity assigneeKey in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _assigneeKey(Wrap<Long> w);
+
+	public Long getAssigneeKey() {
+		return assigneeKey;
+	}
+
+	public void setAssigneeKey(Long assigneeKey) {
+		this.assigneeKey = assigneeKey;
+	}
+	@JsonIgnore
+	public void setAssigneeKey(String o) {
+		this.assigneeKey = ReportNarrative.staticSetAssigneeKey(siteRequest_, o);
+	}
+	public static Long staticSetAssigneeKey(SiteRequestEnUS siteRequest_, String o) {
+		if(NumberUtils.isParsable(o))
+			return Long.parseLong(o);
+		return null;
+	}
+	protected ReportNarrative assigneeKeyInit() {
+		Wrap<Long> assigneeKeyWrap = new Wrap<Long>().var("assigneeKey");
+		if(assigneeKey == null) {
+			_assigneeKey(assigneeKeyWrap);
+			setAssigneeKey(assigneeKeyWrap.o);
+		}
+		return (ReportNarrative)this;
+	}
+
+	public static Long staticSearchAssigneeKey(SiteRequestEnUS siteRequest_, Long o) {
+		return o;
+	}
+
+	public static String staticSearchStrAssigneeKey(SiteRequestEnUS siteRequest_, Long o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqAssigneeKey(SiteRequestEnUS siteRequest_, String o) {
+		return ReportNarrative.staticSearchStrAssigneeKey(siteRequest_, ReportNarrative.staticSearchAssigneeKey(siteRequest_, ReportNarrative.staticSetAssigneeKey(siteRequest_, o)));
+	}
+
+	public Long sqlAssigneeKey() {
+		return assigneeKey;
+	}
+
 	///////////////////
 	// narrativeName //
 	///////////////////
@@ -217,6 +279,7 @@ public abstract class ReportNarrativeGen<DEV> extends BaseModel {
 			Promise<Void> promise2 = Promise.promise();
 			try {
 				scheduleKeyInit();
+				assigneeKeyInit();
 				narrativeNameInit();
 				promise2.complete();
 			} catch(Exception ex) {
@@ -273,6 +336,8 @@ public abstract class ReportNarrativeGen<DEV> extends BaseModel {
 		switch(var) {
 			case "scheduleKey":
 				return oReportNarrative.scheduleKey;
+			case "assigneeKey":
+				return oReportNarrative.assigneeKey;
 			case "narrativeName":
 				return oReportNarrative.narrativeName;
 			default:
@@ -306,6 +371,12 @@ public abstract class ReportNarrativeGen<DEV> extends BaseModel {
 				if(!saves.contains("scheduleKey"))
 					saves.add("scheduleKey");
 				return val;
+			case "assigneeKey":
+				if(oReportNarrative.getAssigneeKey() == null)
+					oReportNarrative.setAssigneeKey(val == null ? null : (NumberUtils.isCreatable(val.toString()) ? Long.parseLong(val.toString()) : null));
+				if(!saves.contains("assigneeKey"))
+					saves.add("assigneeKey");
+				return val;
 			default:
 				return super.relateBaseModel(var, val);
 		}
@@ -322,6 +393,8 @@ public abstract class ReportNarrativeGen<DEV> extends BaseModel {
 		switch(entityVar) {
 		case "scheduleKey":
 			return ReportNarrative.staticSetScheduleKey(siteRequest_, o);
+		case "assigneeKey":
+			return ReportNarrative.staticSetAssigneeKey(siteRequest_, o);
 		case "narrativeName":
 			return ReportNarrative.staticSetNarrativeName(siteRequest_, o);
 			default:
@@ -340,6 +413,8 @@ public abstract class ReportNarrativeGen<DEV> extends BaseModel {
 		switch(entityVar) {
 		case "scheduleKey":
 			return ReportNarrative.staticSearchScheduleKey(siteRequest_, (Long)o);
+		case "assigneeKey":
+			return ReportNarrative.staticSearchAssigneeKey(siteRequest_, (Long)o);
 		case "narrativeName":
 			return ReportNarrative.staticSearchNarrativeName(siteRequest_, (String)o);
 			default:
@@ -358,6 +433,8 @@ public abstract class ReportNarrativeGen<DEV> extends BaseModel {
 		switch(entityVar) {
 		case "scheduleKey":
 			return ReportNarrative.staticSearchStrScheduleKey(siteRequest_, (Long)o);
+		case "assigneeKey":
+			return ReportNarrative.staticSearchStrAssigneeKey(siteRequest_, (Long)o);
 		case "narrativeName":
 			return ReportNarrative.staticSearchStrNarrativeName(siteRequest_, (String)o);
 			default:
@@ -376,6 +453,8 @@ public abstract class ReportNarrativeGen<DEV> extends BaseModel {
 		switch(entityVar) {
 		case "scheduleKey":
 			return ReportNarrative.staticSearchFqScheduleKey(siteRequest_, o);
+		case "assigneeKey":
+			return ReportNarrative.staticSearchFqAssigneeKey(siteRequest_, o);
 		case "narrativeName":
 			return ReportNarrative.staticSearchFqNarrativeName(siteRequest_, o);
 			default:
@@ -411,6 +490,13 @@ public abstract class ReportNarrativeGen<DEV> extends BaseModel {
 					setScheduleKey((String)val);
 				saves.add("scheduleKey");
 				return val;
+			case "assigneekey":
+				if(val instanceof Long)
+					setAssigneeKey((Long)val);
+				else if(val instanceof String)
+					setAssigneeKey((String)val);
+				saves.add("assigneeKey");
+				return val;
 			case "narrativename":
 				if(val instanceof String)
 					setNarrativeName((String)val);
@@ -441,6 +527,9 @@ public abstract class ReportNarrativeGen<DEV> extends BaseModel {
 		if(scheduleKey != null) {
 			doc.put("scheduleKey_docvalues_long", scheduleKey);
 		}
+		if(assigneeKey != null) {
+			doc.put("assigneeKey_docvalues_long", assigneeKey);
+		}
 		if(narrativeName != null) {
 			doc.put("narrativeName_docvalues_string", narrativeName);
 		}
@@ -452,6 +541,8 @@ public abstract class ReportNarrativeGen<DEV> extends BaseModel {
 		switch(entityVar) {
 			case "scheduleKey":
 				return "scheduleKey_docvalues_long";
+			case "assigneeKey":
+				return "assigneeKey_docvalues_long";
 			case "narrativeName":
 				return "narrativeName_docvalues_string";
 			default:
@@ -484,6 +575,7 @@ public abstract class ReportNarrativeGen<DEV> extends BaseModel {
 		ReportNarrative oReportNarrative = (ReportNarrative)this;
 
 		oReportNarrative.setScheduleKey(Optional.ofNullable(doc.get("scheduleKey_docvalues_long")).map(v -> v.toString()).orElse(null));
+		oReportNarrative.setAssigneeKey(Optional.ofNullable(doc.get("assigneeKey_docvalues_long")).map(v -> v.toString()).orElse(null));
 		oReportNarrative.setNarrativeName(Optional.ofNullable(doc.get("narrativeName_docvalues_string")).map(v -> v.toString()).orElse(null));
 
 		super.storeBaseModel(doc);
@@ -500,6 +592,8 @@ public abstract class ReportNarrativeGen<DEV> extends BaseModel {
 			ReportNarrative original = (ReportNarrative)o;
 			if(!Objects.equals(scheduleKey, original.getScheduleKey()))
 				apiRequest.addVars("scheduleKey");
+			if(!Objects.equals(assigneeKey, original.getAssigneeKey()))
+				apiRequest.addVars("assigneeKey");
 			if(!Objects.equals(narrativeName, original.getNarrativeName()))
 				apiRequest.addVars("narrativeName");
 			super.apiRequestBaseModel();
@@ -514,14 +608,17 @@ public abstract class ReportNarrativeGen<DEV> extends BaseModel {
 		StringBuilder sb = new StringBuilder();
 		sb.append(super.toString());
 		sb.append(Optional.ofNullable(scheduleKey).map(v -> "scheduleKey: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(assigneeKey).map(v -> "assigneeKey: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(narrativeName).map(v -> "narrativeName: \"" + v + "\"\n" ).orElse(""));
 		return sb.toString();
 	}
 
 	public static final String VAR_scheduleKey = "scheduleKey";
+	public static final String VAR_assigneeKey = "assigneeKey";
 	public static final String VAR_narrativeName = "narrativeName";
 
 	public static final String DISPLAY_NAME_scheduleKey = "schedule";
+	public static final String DISPLAY_NAME_assigneeKey = "assignee";
 	public static final String DISPLAY_NAME_narrativeName = "narrative name";
 
 	public static String displayNameForClass(String var) {
@@ -531,6 +628,8 @@ public abstract class ReportNarrativeGen<DEV> extends BaseModel {
 		switch(var) {
 		case VAR_scheduleKey:
 			return DISPLAY_NAME_scheduleKey;
+		case VAR_assigneeKey:
+			return DISPLAY_NAME_assigneeKey;
 		case VAR_narrativeName:
 			return DISPLAY_NAME_narrativeName;
 		default:

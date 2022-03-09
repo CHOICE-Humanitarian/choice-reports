@@ -288,41 +288,5 @@ ENABLE_IMPORT_DATA: false
 
 TIMER_DB_SOLR_SYNC_IN_SECONDS: 1
 ENABLE_DB_SOLR_SYNC: false
-ENABLE_DB_SOLR_SYNC_TrafficContraband: true
-ENABLE_DB_SOLR_SYNC_SearchBasis: true
-ENABLE_DB_SOLR_SYNC_TrafficSearch: true
-ENABLE_DB_SOLR_SYNC_TrafficPerson: true
-ENABLE_DB_SOLR_SYNC_TrafficStop: true
-ENABLE_DB_SOLR_SYNC_SiteAgency: true
 
 ENABLE_REFRESH_DATA: false
-ENABLE_REFRESH_DATA_TrafficContraband: true
-ENABLE_REFRESH_DATA_SearchBasis: true
-ENABLE_REFRESH_DATA_TrafficSearch: true
-ENABLE_REFRESH_DATA_TrafficPerson: true
-ENABLE_REFRESH_DATA_TrafficStop: true
-
-TIMER_DB_SOLR_SYNC_IN_SECONDS: 1
-ENABLE_FTP_DOWNLOAD: true
-ENABLE_FTP_SYNC: false
-ENABLE_FTP_SYNC_TrafficStop: true
-ENABLE_FTP_SYNC_TrafficPerson: true
-ENABLE_FTP_SYNC_TrafficSearch: true
-ENABLE_FTP_SYNC_SearchBasis: true
-ENABLE_FTP_SYNC_TrafficContraband: true
-FTP_SYNC_PATH: /opt/ftp
-FTP_SYNC_PATH_ZIP: /opt/ftp/STOPS_Extract.zip
-FTP_SYNC_PATH_TrafficStop: /opt/ftp/Stop.txt
-FTP_SYNC_PATH_TrafficPerson: /opt/ftp/PERSON.txt
-FTP_SYNC_PATH_TrafficSearch: /opt/ftp/Search.txt
-FTP_SYNC_PATH_TrafficContraband: /opt/ftp/Contraband.txt
-FTP_SYNC_PATH_TrafficSearchBasis: /opt/ftp/SearchBasis.txt
-FTP_MAX_RECORD_SIZE: 100
-FTP_SYNC_HOST_NAME: 
-FTP_SYNC_PORT: 21
-FTP_SYNC_USERNAME: 
-FTP_SYNC_PASSWORD: 
-FTP_SYNC_REMOTE_PATH: 
-# The path to extract the FTP files. 
-
-ACS_API_KEY: 

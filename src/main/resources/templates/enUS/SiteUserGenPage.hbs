@@ -5,6 +5,8 @@
 {{#*inline "htmStyleSiteUserPage"}}{{> "htmStyleBaseModelPage"}}{{/inline}}
 {{#*inline "htmScriptsSiteUserPage"}}{{> "htmScriptsBaseModelPage"}}		<!-- inline "htmScriptsSiteUserPage" -->
 		<script src="{{staticBaseUrl}}/js/enUS/SiteUserPage.js"></script>
+		<script src="{{staticBaseUrl}}/js/enUS/ReportNarrativePage.js"></script>
+		<script src="{{staticBaseUrl}}/js/enUS/ReportEventPage.js"></script>
 {{/inline}}
 {{#*inline "htmScriptSiteUserPage"}}		<!-- inline "htmScriptSiteUserPage" -->
 		<script>
@@ -24,6 +26,16 @@
 				window.eventBus = new EventBus('/eventbus');
 				var pk = {{#if pk}}{{pk}}{{else}}null{{/if}};
 				if(pk != null) {
+		{{#ifContainsAnyRoles roles rolesRequired}}
+					suggestSiteUserNarrativeKeys([{'name':'fq','value':'assigneeKey:' + pk}], $('#listSiteUserNarrativeKeys_Page'), pk, true);
+		{{else}}
+					suggestSiteUserNarrativeKeys([{'name':'fq','value':'assigneeKey:' + pk}], $('#listSiteUserNarrativeKeys_Page'), pk, false);
+		{{/ifContainsAnyRoles}}
+		{{#ifContainsAnyRoles roles rolesRequired}}
+					suggestSiteUserEventKeys([{'name':'fq','value':'assigneeKey:' + pk}], $('#listSiteUserEventKeys_Page'), pk, true);
+		{{else}}
+					suggestSiteUserEventKeys([{'name':'fq','value':'assigneeKey:' + pk}], $('#listSiteUserEventKeys_Page'), pk, false);
+		{{/ifContainsAnyRoles}}
 				}
 				websocketSiteUser(websocketSiteUserInner);
 			});
@@ -181,6 +193,10 @@
 {{> "htmSeeArchived" classApiMethodMethod="PATCH"}}
 {{> "htmSeeDeleted" classApiMethodMethod="PATCH"}}
 							</div>
+							<div class="w3-cell-row ">
+{{> "htmNarrativeKeys" classApiMethodMethod="PATCH"}}
+{{> "htmEventKeys" classApiMethodMethod="PATCH"}}
+							</div>
 						<button
 							class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-margin w3-teal "
 							onclick="patchSiteUser(null, $('#patchSiteUserFormValues')); "
@@ -220,6 +236,10 @@
 {{> "htmSeeArchived" classApiMethodMethod="POST"}}
 {{> "htmSeeDeleted" classApiMethodMethod="POST"}}
 							</div>
+							<div class="w3-cell-row ">
+{{> "htmNarrativeKeys" classApiMethodMethod="POST"}}
+{{> "htmEventKeys" classApiMethodMethod="POST"}}
+							</div>
 						</div>
 						<button
 							class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-margin w3-teal "
@@ -255,6 +275,10 @@
 							<div class="w3-cell-row ">
 {{> "htmSeeArchived" classApiMethodMethod="Page"}}
 {{> "htmSeeDeleted" classApiMethodMethod="Page"}}
+							</div>
+							<div class="w3-cell-row ">
+{{> "htmNarrativeKeys" classApiMethodMethod="Page"}}
+{{> "htmEventKeys" classApiMethodMethod="Page"}}
 							</div>
 						</div>
 						<button
@@ -421,6 +445,154 @@
 {{/inline}}
 {{> BaseModelPage baseModel_=siteUser_}}
 
+{{#*inline "htmNarrativeKeys"}}
+								<div class="w3-cell w3-cell-top w3-center w3-mobile ">
+									<div class="w3-padding ">
+										<div id="suggest{{classApiMethodMethod}}SiteUserNarrativeKeys">
+											<div class="w3-card ">
+												<div class="w3-cell-row ">
+													<a href="/report-narrative?fq=assigneeKey:{{siteUser_.pk}}" class="w3-cell w3-btn w3-center h4 w3-block h4 w3-light-green w3-hover-light-green ">
+														<i class="fad fa-calendar-pen "></i>
+														narratives
+													</a>
+												</div>
+												<div class="w3-cell-row ">
+													<h5 class="w3-cell ">
+														relate  to this site user
+													</h5>
+												</div>
+												<div class="w3-cell-row w3-padding ">
+													<div class="w3-cell ">
+														<div class="w3-cell-row ">
+
+														{{> "inputNarrativeKeys"}}
+														</div>
+													</div>
+												</div>
+												<div class="w3-cell-row w3-padding ">
+													<div class="w3-cell w3-left-align w3-cell-top ">
+														<ul class="w3-ul w3-hoverable " id="listSiteUserNarrativeKeys_{{classApiMethodMethod}}">
+														</ul>
+														{{#ifContainsAnyRoles roles rolesRequired}}
+	{{#eq 'Page' classApiMethodMethod}}
+																<div class="w3-cell-row ">
+																	<button
+																		 class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-light-green "
+																		 id="{{classApiMethodMethod}}_narrativeKeys_add"
+																		 onclick="$(this).addClass('w3-disabled'); this.disabled = true; this.innerHTML = 'Sending…'; postReportNarrativeVals({ assigneeKey: '{{pk}}' }, function() { $('#{{classApiMethodMethod}}_narrativeKeys_add').disabled = false; $('#{{classApiMethodMethod}}_narrativeKeys_add').innerHTML = 'add a report narrative'; }, function() { addError($('#{{classApiMethodMethod}}narrativeKeys')); });"
+																		>add a report narrative</button>
+																</div>
+	{{/eq}}
+														{{/ifContainsAnyRoles}}
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+{{/inline}}
+
+{{#*inline "inputNarrativeKeys"}}
+		{{#ifContainsAnyRoles roles rolesRequired}}
+														<i class="far fa-search w3-xxlarge w3-cell w3-cell-middle "></i>
+														{{#eq 'PUTCopy' classApiMethodMethod}}
+															<div>
+																<input 
+																	type="checkbox"
+																	id="{{classApiMethodMethod}}_narrativeKeys_clear"
+																	class="narrativeKeys_clear "
+																	>
+																<label for="{{classApiMethodMethod}}_narrativeKeys_clear">clear</label>
+															</div>
+														{{/eq}}
+														<input
+																type="text"
+																placeholder="narratives"
+															class="valueObjectSuggest suggestNarrativeKeys w3-input w3-border w3-cell w3-cell-middle "
+															name="setNarrativeKeys"
+															id="{{classApiMethodMethod}}_narrativeKeys"
+															autocomplete="off"
+															oninput="suggestSiteUserNarrativeKeys($(this).val() ? [ { 'name': 'q', 'value': 'objectSuggest:' + $(this).val() }, { 'name': 'rows', 'value': '10' }, { 'name': 'fl', 'value': 'classCanonicalName,assigneeKey,pk,pageUrlPk,objectTitle' } ] : [{{#if pk}}{'name':'fq','value':'assigneeKey:{{pk}}'}{{else}}{{/if}}], $('#listSiteUserNarrativeKeys_{{classApiMethodMethod}}'), {{pk}}); "
+															/>
+
+													{{else}}
+		{{/ifContainsAnyRoles}}
+{{/inline}}
+
+{{#*inline "htmEventKeys"}}
+								<div class="w3-cell w3-cell-top w3-center w3-mobile ">
+									<div class="w3-padding ">
+										<div id="suggest{{classApiMethodMethod}}SiteUserEventKeys">
+											<div class="w3-card ">
+												<div class="w3-cell-row ">
+													<a href="/report-event?fq=assigneeKey:{{siteUser_.pk}}" class="w3-cell w3-btn w3-center h4 w3-block h4 w3-light-green w3-hover-light-green ">
+														<i class="fad fa-calendar-star "></i>
+														events
+													</a>
+												</div>
+												<div class="w3-cell-row ">
+													<h5 class="w3-cell ">
+														relate  to this site user
+													</h5>
+												</div>
+												<div class="w3-cell-row w3-padding ">
+													<div class="w3-cell ">
+														<div class="w3-cell-row ">
+
+														{{> "inputEventKeys"}}
+														</div>
+													</div>
+												</div>
+												<div class="w3-cell-row w3-padding ">
+													<div class="w3-cell w3-left-align w3-cell-top ">
+														<ul class="w3-ul w3-hoverable " id="listSiteUserEventKeys_{{classApiMethodMethod}}">
+														</ul>
+														{{#ifContainsAnyRoles roles rolesRequired}}
+	{{#eq 'Page' classApiMethodMethod}}
+																<div class="w3-cell-row ">
+																	<button
+																		 class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-light-green "
+																		 id="{{classApiMethodMethod}}_eventKeys_add"
+																		 onclick="$(this).addClass('w3-disabled'); this.disabled = true; this.innerHTML = 'Sending…'; postReportEventVals({ assigneeKey: '{{pk}}' }, function() { $('#{{classApiMethodMethod}}_eventKeys_add').disabled = false; $('#{{classApiMethodMethod}}_eventKeys_add').innerHTML = 'add a report event'; }, function() { addError($('#{{classApiMethodMethod}}eventKeys')); });"
+																		>add a report event</button>
+																</div>
+	{{/eq}}
+														{{/ifContainsAnyRoles}}
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+{{/inline}}
+
+{{#*inline "inputEventKeys"}}
+		{{#ifContainsAnyRoles roles rolesRequired}}
+														<i class="far fa-search w3-xxlarge w3-cell w3-cell-middle "></i>
+														{{#eq 'PUTCopy' classApiMethodMethod}}
+															<div>
+																<input 
+																	type="checkbox"
+																	id="{{classApiMethodMethod}}_eventKeys_clear"
+																	class="eventKeys_clear "
+																	>
+																<label for="{{classApiMethodMethod}}_eventKeys_clear">clear</label>
+															</div>
+														{{/eq}}
+														<input
+																type="text"
+																placeholder="events"
+															class="valueObjectSuggest suggestEventKeys w3-input w3-border w3-cell w3-cell-middle "
+															name="setEventKeys"
+															id="{{classApiMethodMethod}}_eventKeys"
+															autocomplete="off"
+															oninput="suggestSiteUserEventKeys($(this).val() ? [ { 'name': 'q', 'value': 'objectSuggest:' + $(this).val() }, { 'name': 'rows', 'value': '10' }, { 'name': 'fl', 'value': 'classCanonicalName,assigneeKey,pk,pageUrlPk,objectTitle' } ] : [{{#if pk}}{'name':'fq','value':'assigneeKey:{{pk}}'}{{else}}{{/if}}], $('#listSiteUserEventKeys_{{classApiMethodMethod}}'), {{pk}}); "
+															/>
+
+													{{else}}
+		{{/ifContainsAnyRoles}}
+{{/inline}}
+
 {{#*inline "htmUserId"}}
 								<div class="w3-cell w3-cell-top w3-center w3-mobile ">
 									<div class="w3-padding ">
@@ -499,7 +671,9 @@
 														/>
 
 													{{else}}
+														{{#ifContainsKeys userKeys}}
 															<span class="varSiteUser{{pk}}UserName ">{{siteUser_.userName}}</span>
+			{{/ifContainsKeys}}
 		{{/ifContainsAnyRoles}}
 {{/inline}}
 
@@ -559,7 +733,9 @@
 														/>
 
 													{{else}}
+														{{#ifContainsKeys userKeys}}
 															<span class="varSiteUser{{pk}}UserEmail ">{{siteUser_.userEmail}}</span>
+			{{/ifContainsKeys}}
 		{{/ifContainsAnyRoles}}
 {{/inline}}
 
@@ -619,7 +795,9 @@
 														/>
 
 													{{else}}
+														{{#ifContainsKeys userKeys}}
 															<span class="varSiteUser{{pk}}UserFirstName ">{{siteUser_.userFirstName}}</span>
+			{{/ifContainsKeys}}
 		{{/ifContainsAnyRoles}}
 {{/inline}}
 
@@ -679,7 +857,9 @@
 														/>
 
 													{{else}}
+														{{#ifContainsKeys userKeys}}
 															<span class="varSiteUser{{pk}}UserLastName ">{{siteUser_.userLastName}}</span>
+			{{/ifContainsKeys}}
 		{{/ifContainsAnyRoles}}
 {{/inline}}
 
@@ -739,7 +919,9 @@
 														/>
 
 													{{else}}
+														{{#ifContainsKeys userKeys}}
 															<span class="varSiteUser{{pk}}UserFullName ">{{siteUser_.userFullName}}</span>
+			{{/ifContainsKeys}}
 		{{/ifContainsAnyRoles}}
 {{/inline}}
 
@@ -802,7 +984,9 @@
 	{{/eq}}
 
 													{{else}}
+														{{#ifContainsKeys userKeys}}
 															<span class="varSiteUser{{pk}}SeeArchived ">{{siteUser_.seeArchived}}</span>
+			{{/ifContainsKeys}}
 		{{/ifContainsAnyRoles}}
 {{/inline}}
 
@@ -865,6 +1049,8 @@
 	{{/eq}}
 
 													{{else}}
+														{{#ifContainsKeys userKeys}}
 															<span class="varSiteUser{{pk}}SeeDeleted ">{{siteUser_.seeDeleted}}</span>
+			{{/ifContainsKeys}}
 		{{/ifContainsAnyRoles}}
 {{/inline}}

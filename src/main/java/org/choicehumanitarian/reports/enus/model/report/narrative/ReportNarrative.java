@@ -47,8 +47,19 @@ public class ReportNarrative extends ReportNarrativeGen<BaseModel> {
 	 * HtmlRow: 3
 	 * HtmlCell: 1
 	 * DisplayName.enUS: schedule
-	 */        
+	 */      
 	protected void _scheduleKey(Wrap<Long> w) {
+	}
+
+	/**  
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Relate: SiteUser.narrativeKeys
+	 * HtmlRow: 3
+	 * HtmlCell: 1
+	 * DisplayName.enUS: assignee
+	 */        
+	protected void _assigneeKey(Wrap<Long> w) {
 	}
 
 	/**  

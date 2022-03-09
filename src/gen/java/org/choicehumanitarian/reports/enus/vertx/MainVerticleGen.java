@@ -138,6 +138,7 @@ CREATE TABLE ReportNarrative(
 	, sessionId text
 	, userKey bigint
 	, scheduleKey bigint references ReportSchedule(pk)
+	, assigneeKey bigint references SiteUser(pk)
 	, narrativeName text
 	);
 CREATE TABLE ReportEvent(
@@ -149,7 +150,9 @@ CREATE TABLE ReportEvent(
 	, sessionId text
 	, userKey bigint
 	, scheduleKey bigint references ReportSchedule(pk)
+	, assigneeKey bigint references SiteUser(pk)
 	, eventName text
+	, eventDate date
 	);
 
 DROP TABLE ChoiceDonor CASCADE;

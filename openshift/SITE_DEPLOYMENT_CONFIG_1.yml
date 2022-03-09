@@ -280,10 +280,20 @@ spec:
               value: "{{ FTP_MAX_RECORD_SIZE }}"
             - name: AUTH_ROLES_ADMIN
               value: '{{ AUTH_ROLES_ADMIN | to_json }}'
-            - name: AUTH_ROLES_REQUIRED_CurrikiResource
-              value: '{{ AUTH_ROLES_REQUIRED_CurrikiResource | to_json }}'
             - name: AUTH_ROLES_REQUIRED_SiteUser
               value: '{{ AUTH_ROLES_REQUIRED_SiteUser | to_json }}'
+            - name: AUTH_ROLES_REQUIRED_ChoiceDonor
+              value: '{{ AUTH_ROLES_REQUIRED_ChoiceDonor | to_json }}'
+            - name: AUTH_ROLES_REQUIRED_ChoiceReport
+              value: '{{ AUTH_ROLES_REQUIRED_ChoiceReport | to_json }}'
+            - name: AUTH_ROLES_REQUIRED_ReportType
+              value: '{{ AUTH_ROLES_REQUIRED_ReportType | to_json }}'
+            - name: AUTH_ROLES_REQUIRED_ReportSchedule
+              value: '{{ AUTH_ROLES_REQUIRED_ReportSchedule | to_json }}'
+            - name: AUTH_ROLES_REQUIRED_ReportNarrative
+              value: '{{ AUTH_ROLES_REQUIRED_ReportNarrative | to_json }}'
+            - name: AUTH_ROLES_REQUIRED_ReportEvent
+              value: '{{ AUTH_ROLES_REQUIRED_ReportEvent | to_json }}'
             - name: MOONSHOTS_HOST
               value: "{{ MOONSHOTS_HOST }}"
             - name: MOONSHOTS_PORT
@@ -298,12 +308,12 @@ spec:
               value: "{{ MOONSHOTS_FETCH_SIZE }}"
             - name: ENABLE_IMPORT_DATA
               value: "{{ ENABLE_IMPORT_DATA }}"
-            - name: ENABLE_IMPORT_DATA_CurrikiResource
-              value: "{{ ENABLE_IMPORT_DATA_CurrikiResource }}"
-            - name: IMPORT_DATA_START_TIME_CurrikiResource
-              value: "{{ IMPORT_DATA_START_TIME_CurrikiResource }}"
-            - name: IMPORT_DATA_PERIOD_CurrikiResource
-              value: "{{ IMPORT_DATA_PERIOD_CurrikiResource }}"
+            - name: ENABLE_IMPORT_DATA_ChoiceDonor
+              value: "{{ ENABLE_IMPORT_DATA_ChoiceDonor }}"
+            - name: IMPORT_DATA_START_TIME_ChoiceImage
+              value: "{{ IMPORT_DATA_START_TIME_ChoiceImage }}"
+            - name: IMPORT_DATA_PERIOD_ReportType
+              value: "{{ IMPORT_DATA_PERIOD_ReportType }}"
           volumeMounts:
       volumes:
   triggers:

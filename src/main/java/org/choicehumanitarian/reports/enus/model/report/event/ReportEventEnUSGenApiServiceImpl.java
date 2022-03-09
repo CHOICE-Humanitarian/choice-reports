@@ -2,6 +2,8 @@ package org.choicehumanitarian.reports.enus.model.report.event;
 
 import org.choicehumanitarian.reports.enus.model.report.schedule.ReportScheduleEnUSApiServiceImpl;
 import org.choicehumanitarian.reports.enus.model.report.schedule.ReportSchedule;
+import org.choicehumanitarian.reports.enus.user.SiteUserEnUSApiServiceImpl;
+import org.choicehumanitarian.reports.enus.user.SiteUser;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import org.choicehumanitarian.reports.enus.user.SiteUser;
 import org.computate.vertx.api.ApiRequest;
@@ -639,6 +641,25 @@ public class ReportEventEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 							}));
 						});
 						break;
+					case ReportEvent.VAR_assigneeKey:
+						Optional.ofNullable(jsonObject.getString(entityVar)).ifPresent(val -> {
+							futures1.add(Future.future(promise2 -> {
+								search(siteRequest).query(SiteUser.class, val, inheritPk).onSuccess(pk2 -> {
+									if(!pks.contains(pk2)) {
+										pks.add(pk2);
+										classes.add("SiteUser");
+									}
+									sql(siteRequest).update(ReportEvent.class, pk).set(ReportEvent.VAR_assigneeKey, SiteUser.class, pk2).onSuccess(a -> {
+										promise2.complete();
+									}).onFailure(ex -> {
+										promise2.fail(ex);
+									});
+								}).onFailure(ex -> {
+									promise2.fail(ex);
+								});
+							}));
+						});
+						break;
 					case ReportEvent.VAR_eventName:
 						o2.setEventName(jsonObject.getString(entityVar));
 						if(bParams.size() > 0) {
@@ -647,6 +668,15 @@ public class ReportEventEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 						bSql.append(ReportEvent.VAR_eventName + "=$" + num);
 						num++;
 						bParams.add(o2.sqlEventName());
+						break;
+					case ReportEvent.VAR_eventDate:
+						o2.setEventDate(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(ReportEvent.VAR_eventDate + "=$" + num);
+						num++;
+						bParams.add(o2.sqlEventDate());
 						break;
 					}
 				}
@@ -994,6 +1024,40 @@ public class ReportEventEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 							}));
 						});
 						break;
+					case "setAssigneeKey":
+						Optional.ofNullable(jsonObject.getString(entityVar)).ifPresent(val -> {
+							futures1.add(Future.future(promise2 -> {
+								search(siteRequest).query(SiteUser.class, val, inheritPk).onSuccess(pk2 -> {
+									if(!pks.contains(pk2)) {
+										pks.add(pk2);
+										classes.add("SiteUser");
+									}
+									sql(siteRequest).update(ReportEvent.class, pk).set(ReportEvent.VAR_assigneeKey, SiteUser.class, pk2).onSuccess(a -> {
+										promise2.complete();
+									}).onFailure(ex -> {
+										promise2.fail(ex);
+									});
+								}).onFailure(ex -> {
+									promise2.fail(ex);
+								});
+							}));
+						});
+						break;
+					case "removeAssigneeKey":
+						Optional.ofNullable(jsonObject.getString(entityVar)).map(val -> Long.parseLong(val)).ifPresent(pk2 -> {
+							if(!pks.contains(pk2)) {
+								pks.add(pk2);
+								classes.add("SiteUser");
+							}
+							futures2.add(Future.future(promise2 -> {
+								sql(siteRequest).update(ReportEvent.class, pk).setToNull(ReportEvent.VAR_assigneeKey, SiteUser.class, pk2).onSuccess(a -> {
+									promise2.complete();
+								}).onFailure(ex -> {
+									promise2.fail(ex);
+								});
+							}));
+						});
+						break;
 					case "setEventName":
 							o2.setEventName(jsonObject.getString(entityVar));
 							if(bParams.size() > 0)
@@ -1001,6 +1065,14 @@ public class ReportEventEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 							bSql.append(ReportEvent.VAR_eventName + "=$" + num);
 							num++;
 							bParams.add(o2.sqlEventName());
+						break;
+					case "setEventDate":
+							o2.setEventDate(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(ReportEvent.VAR_eventDate + "=$" + num);
+							num++;
+							bParams.add(o2.sqlEventDate());
 						break;
 				}
 			}
@@ -1745,9 +1817,9 @@ public class ReportEventEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 			SiteRequestEnUS siteRequest = o.getSiteRequest_();
 			SqlConnection sqlConnection = siteRequest.getSqlConnection();
 			Long pk = o.getPk();
-			sqlConnection.preparedQuery("SELECT scheduleKey as pk1, 'scheduleKey' from ReportEvent where pk=$1")
+			sqlConnection.preparedQuery("SELECT scheduleKey as pk1, 'scheduleKey' from ReportEvent where pk=$1 UNION SELECT assigneeKey as pk2, 'assigneeKey' from ReportEvent where pk=$2")
 					.collecting(Collectors.toList())
-					.execute(Tuple.of(pk)
+					.execute(Tuple.of(pk, pk)
 					).onSuccess(result -> {
 				try {
 					if(result != null) {
@@ -1845,6 +1917,41 @@ public class ReportEventEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 									JsonObject context = new JsonObject().put("params", params).put("user", siteRequest.getUserPrincipal());
 									JsonObject json = new JsonObject().put("context", context);
 									eventBus.request("choice-reports-enUS-ReportSchedule", json, new DeliveryOptions().addHeader("action", "patchReportScheduleFuture")).onSuccess(c -> {
+										JsonObject responseMessage = (JsonObject)c.body();
+										Integer statusCode = responseMessage.getInteger("statusCode");
+										if(statusCode.equals(200))
+											promise2.complete();
+										else
+											promise2.fail(new RuntimeException(responseMessage.getString("statusMessage")));
+									}).onFailure(ex -> {
+										promise2.fail(ex);
+									});
+								}
+							}).onFailure(ex -> {
+								promise2.fail(ex);
+							});
+						}));
+					}
+
+					if("SiteUser".equals(classSimpleName2) && pk2 != null) {
+						SearchList<SiteUser> searchList2 = new SearchList<SiteUser>();
+						searchList2.setStore(true);
+						searchList2.q("*:*");
+						searchList2.setC(SiteUser.class);
+						searchList2.fq("pk_docvalues_long:" + pk2);
+						searchList2.rows(1L);
+						futures.add(Future.future(promise2 -> {
+							searchList2.promiseDeepSearchList(siteRequest).onSuccess(b -> {
+								SiteUser o2 = searchList2.getList().stream().findFirst().orElse(null);
+								if(o2 != null) {
+									JsonObject params = new JsonObject();
+									params.put("body", new JsonObject());
+									params.put("cookie", new JsonObject());
+									params.put("path", new JsonObject());
+									params.put("query", new JsonObject().put("q", "*:*").put("fq", new JsonArray().add("pk:" + pk2)));
+									JsonObject context = new JsonObject().put("params", params).put("user", siteRequest.getUserPrincipal());
+									JsonObject json = new JsonObject().put("context", context);
+									eventBus.request("choice-reports-enUS-SiteUser", json, new DeliveryOptions().addHeader("action", "patchSiteUserFuture")).onSuccess(c -> {
 										JsonObject responseMessage = (JsonObject)c.body();
 										Integer statusCode = responseMessage.getInteger("statusCode");
 										if(statusCode.equals(200))

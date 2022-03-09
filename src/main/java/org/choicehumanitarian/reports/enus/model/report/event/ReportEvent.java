@@ -1,5 +1,7 @@
 package org.choicehumanitarian.reports.enus.model.report.event;
 
+import java.time.LocalDate;
+
 import org.choicehumanitarian.reports.enus.base.BaseModel;
 import org.computate.search.wrap.Wrap;
 
@@ -54,12 +56,34 @@ public class ReportEvent extends ReportEventGen<BaseModel> {
 	/**  
 	 * {@inheritDoc}
 	 * DocValues: true
+	 * Relate: SiteUser.eventKeys
+	 * HtmlRow: 3
+	 * HtmlCell: 2
+	 * DisplayName.enUS: assignee
+	 */       
+	protected void _assigneeKey(Wrap<Long> w) {
+	}
+
+	/**  
+	 * {@inheritDoc}
+	 * DocValues: true
 	 * Define: true
 	 * HtmlRow: 3
-	 * HtmlCell: 1
+	 * HtmlCell: 3
 	 * DisplayName.enUS: event name
 	 */
 	protected void _eventName(Wrap<String> w) {
+	}
+
+	/**  
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Define: true
+	 * HtmlRow: 4
+	 * HtmlCell: 1
+	 * DisplayName.enUS: event date
+	 */  
+	protected void _eventDate(Wrap<LocalDate> w) {
 	}
 
 	@Override

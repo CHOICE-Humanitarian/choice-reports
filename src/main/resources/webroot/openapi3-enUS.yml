@@ -6816,16 +6816,26 @@ components:
           properties:
             scheduleKey:
               type: string
+            assigneeKey:
+              type: string
             eventName:
               type: string
+            eventDate:
+              type: string
+              format: date
     POSTReportEventResponse:
       allOf:
         - type: object
           properties:
             scheduleKey:
               type: string
+            assigneeKey:
+              type: string
             eventName:
               type: string
+            eventDate:
+              type: string
+              format: date
     PATCHReportEventRequest:
       allOf:
         - type: object
@@ -6837,6 +6847,13 @@ components:
               type: string
             removeAllScheduleKey:
               type: string
+            setAssigneeKey:
+              type: string
+              nullable: true
+            removeAssigneeKey:
+              type: string
+            removeAllAssigneeKey:
+              type: string
             setEventName:
               type: string
               nullable: true
@@ -6844,6 +6861,16 @@ components:
               type: string
             removeAllEventName:
               type: string
+            setEventDate:
+              type: string
+              nullable: true
+              format: date
+            removeEventDate:
+              type: string
+              format: date
+            removeAllEventDate:
+              type: string
+              format: date
     PATCHReportEventResponse:
       allOf:
         - type: object
@@ -6855,6 +6882,13 @@ components:
               type: string
             removeAllScheduleKey:
               type: string
+            setAssigneeKey:
+              type: string
+              nullable: true
+            removeAssigneeKey:
+              type: string
+            removeAllAssigneeKey:
+              type: string
             setEventName:
               type: string
               nullable: true
@@ -6862,6 +6896,16 @@ components:
               type: string
             removeAllEventName:
               type: string
+            setEventDate:
+              type: string
+              nullable: true
+              format: date
+            removeEventDate:
+              type: string
+              format: date
+            removeAllEventDate:
+              type: string
+              format: date
     SearchReportEventResponse:
       allOf:
         - type: array
@@ -6870,32 +6914,52 @@ components:
             properties:
               scheduleKey:
                 type: string
+              assigneeKey:
+                type: string
               eventName:
                 type: string
+              eventDate:
+                type: string
+                format: date
     PUTImportReportEventRequest:
       allOf:
         - type: object
           properties:
             scheduleKey:
               type: string
+            assigneeKey:
+              type: string
             eventName:
               type: string
+            eventDate:
+              type: string
+              format: date
     PUTImportReportEventResponse:
       allOf:
         - type: object
           properties:
             scheduleKey:
               type: string
+            assigneeKey:
+              type: string
             eventName:
               type: string
+            eventDate:
+              type: string
+              format: date
     GETReportEventResponse:
       allOf:
         - type: object
           properties:
             scheduleKey:
               type: string
+            assigneeKey:
+              type: string
             eventName:
               type: string
+            eventDate:
+              type: string
+              format: date
     SearchPageReportEventResponse:
       allOf:
         - type: string
@@ -6905,6 +6969,8 @@ components:
           properties:
             scheduleKey:
               type: string
+            assigneeKey:
+              type: string
             narrativeName:
               type: string
     POSTReportNarrativeResponse:
@@ -6912,6 +6978,8 @@ components:
         - type: object
           properties:
             scheduleKey:
+              type: string
+            assigneeKey:
               type: string
             narrativeName:
               type: string
@@ -6925,6 +6993,13 @@ components:
             removeScheduleKey:
               type: string
             removeAllScheduleKey:
+              type: string
+            setAssigneeKey:
+              type: string
+              nullable: true
+            removeAssigneeKey:
+              type: string
+            removeAllAssigneeKey:
               type: string
             setNarrativeName:
               type: string
@@ -6944,6 +7019,13 @@ components:
               type: string
             removeAllScheduleKey:
               type: string
+            setAssigneeKey:
+              type: string
+              nullable: true
+            removeAssigneeKey:
+              type: string
+            removeAllAssigneeKey:
+              type: string
             setNarrativeName:
               type: string
               nullable: true
@@ -6959,6 +7041,8 @@ components:
             properties:
               scheduleKey:
                 type: string
+              assigneeKey:
+                type: string
               narrativeName:
                 type: string
     PUTImportReportNarrativeRequest:
@@ -6966,6 +7050,8 @@ components:
         - type: object
           properties:
             scheduleKey:
+              type: string
+            assigneeKey:
               type: string
             narrativeName:
               type: string
@@ -6975,6 +7061,8 @@ components:
           properties:
             scheduleKey:
               type: string
+            assigneeKey:
+              type: string
             narrativeName:
               type: string
     GETReportNarrativeResponse:
@@ -6982,6 +7070,8 @@ components:
         - type: object
           properties:
             scheduleKey:
+              type: string
+            assigneeKey:
               type: string
             narrativeName:
               type: string
@@ -7526,6 +7616,14 @@ components:
           items:
             type: object
             properties:
+              narrativeKeys:
+                type: array
+                items:
+                  type: string
+              eventKeys:
+                type: array
+                items:
+                  type: string
               userKeys:
                 type: array
                 items:
@@ -7550,6 +7648,40 @@ components:
       allOf:
         - type: object
           properties:
+            setNarrativeKeys:
+              type: array
+              nullable: true
+              items:
+                type: string
+            removeNarrativeKeys:
+              type: string
+            removeAllNarrativeKeys:
+              type: array
+              items:
+                type: string
+            addNarrativeKeys:
+              type: string
+            addAllNarrativeKeys:
+              type: array
+              items:
+                type: string
+            setEventKeys:
+              type: array
+              nullable: true
+              items:
+                type: string
+            removeEventKeys:
+              type: string
+            removeAllEventKeys:
+              type: array
+              items:
+                type: string
+            addEventKeys:
+              type: string
+            addAllEventKeys:
+              type: array
+              items:
+                type: string
             setUserKeys:
               type: array
               nullable: true
@@ -7627,6 +7759,40 @@ components:
       allOf:
         - type: object
           properties:
+            setNarrativeKeys:
+              type: array
+              nullable: true
+              items:
+                type: string
+            removeNarrativeKeys:
+              type: string
+            removeAllNarrativeKeys:
+              type: array
+              items:
+                type: string
+            addNarrativeKeys:
+              type: string
+            addAllNarrativeKeys:
+              type: array
+              items:
+                type: string
+            setEventKeys:
+              type: array
+              nullable: true
+              items:
+                type: string
+            removeEventKeys:
+              type: string
+            removeAllEventKeys:
+              type: array
+              items:
+                type: string
+            addEventKeys:
+              type: string
+            addAllEventKeys:
+              type: array
+              items:
+                type: string
             setUserKeys:
               type: array
               nullable: true
@@ -7704,6 +7870,14 @@ components:
       allOf:
         - type: object
           properties:
+            narrativeKeys:
+              type: array
+              items:
+                type: string
+            eventKeys:
+              type: array
+              items:
+                type: string
             userKeys:
               type: array
               items:
@@ -7728,6 +7902,14 @@ components:
       allOf:
         - type: object
           properties:
+            narrativeKeys:
+              type: array
+              items:
+                type: string
+            eventKeys:
+              type: array
+              items:
+                type: string
             userKeys:
               type: array
               items:

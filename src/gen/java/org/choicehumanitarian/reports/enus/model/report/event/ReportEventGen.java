@@ -2,46 +2,54 @@ package org.choicehumanitarian.reports.enus.model.report.event;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Arrays;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import java.util.Date;
 import org.slf4j.LoggerFactory;
 import org.computate.search.serialize.ComputateLocalDateDeserializer;
-import java.util.HashMap;
 import org.apache.commons.lang3.StringUtils;
-import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import org.computate.vertx.api.ApiRequest;
 import org.computate.search.response.solr.SolrResponse;
 import java.lang.Long;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import java.util.Locale;
 import java.util.Map;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.vertx.core.json.JsonObject;
-import java.lang.String;
+import java.time.ZoneOffset;
 import java.math.RoundingMode;
-import org.choicehumanitarian.reports.enus.model.report.schedule.ReportSchedule;
-import org.slf4j.Logger;
 import java.math.MathContext;
-import io.vertx.core.Promise;
 import java.util.Set;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import java.time.Instant;
 import io.vertx.core.Future;
 import org.computate.search.serialize.ComputateZonedDateTimeDeserializer;
+import java.time.ZoneId;
 import org.choicehumanitarian.reports.enus.base.BaseModel;
 import java.util.Objects;
 import org.computate.search.serialize.ComputateLocalDateSerializer;
-import io.vertx.core.json.JsonArray;
 import java.util.List;
 import org.computate.search.wrap.Wrap;
-import org.apache.commons.lang3.math.NumberUtils;
+import java.time.LocalDate;
 import java.util.Optional;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import org.computate.search.serialize.ComputateZonedDateTimeSerializer;
-import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import java.util.HashMap;
+import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import org.choicehumanitarian.reports.enus.user.SiteUser;
+import org.computate.vertx.api.ApiRequest;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.lang.String;
+import org.choicehumanitarian.reports.enus.model.report.schedule.ReportSchedule;
+import org.slf4j.Logger;
+import io.vertx.core.Promise;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import io.vertx.core.json.JsonArray;
+import java.time.temporal.ChronoUnit;
+import java.time.format.DateTimeFormatter;
+import org.apache.commons.lang3.math.NumberUtils;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 
 /**	
  * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.event.ReportEvent&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
@@ -134,6 +142,67 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 		return scheduleKey;
 	}
 
+	/////////////////
+	// assigneeKey //
+	/////////////////
+
+	/**	 The entity assigneeKey
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonSerialize(using = ToStringSerializer.class)
+	@JsonInclude(Include.NON_NULL)
+	protected Long assigneeKey;
+
+	/**	<br> The entity assigneeKey
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.event.ReportEvent&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:assigneeKey">Find the entity assigneeKey in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _assigneeKey(Wrap<Long> w);
+
+	public Long getAssigneeKey() {
+		return assigneeKey;
+	}
+
+	public void setAssigneeKey(Long assigneeKey) {
+		this.assigneeKey = assigneeKey;
+	}
+	@JsonIgnore
+	public void setAssigneeKey(String o) {
+		this.assigneeKey = ReportEvent.staticSetAssigneeKey(siteRequest_, o);
+	}
+	public static Long staticSetAssigneeKey(SiteRequestEnUS siteRequest_, String o) {
+		if(NumberUtils.isParsable(o))
+			return Long.parseLong(o);
+		return null;
+	}
+	protected ReportEvent assigneeKeyInit() {
+		Wrap<Long> assigneeKeyWrap = new Wrap<Long>().var("assigneeKey");
+		if(assigneeKey == null) {
+			_assigneeKey(assigneeKeyWrap);
+			setAssigneeKey(assigneeKeyWrap.o);
+		}
+		return (ReportEvent)this;
+	}
+
+	public static Long staticSearchAssigneeKey(SiteRequestEnUS siteRequest_, Long o) {
+		return o;
+	}
+
+	public static String staticSearchStrAssigneeKey(SiteRequestEnUS siteRequest_, Long o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqAssigneeKey(SiteRequestEnUS siteRequest_, String o) {
+		return ReportEvent.staticSearchStrAssigneeKey(siteRequest_, ReportEvent.staticSearchAssigneeKey(siteRequest_, ReportEvent.staticSetAssigneeKey(siteRequest_, o)));
+	}
+
+	public Long sqlAssigneeKey() {
+		return assigneeKey;
+	}
+
 	///////////////
 	// eventName //
 	///////////////
@@ -187,6 +256,83 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 		return eventName;
 	}
 
+	///////////////
+	// eventDate //
+	///////////////
+
+	/**	 The entity eventDate
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonDeserialize(using = ComputateLocalDateDeserializer.class)
+	@JsonSerialize(using = ComputateLocalDateSerializer.class)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	@JsonInclude(Include.NON_NULL)
+	protected LocalDate eventDate;
+
+	/**	<br> The entity eventDate
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.event.ReportEvent&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:eventDate">Find the entity eventDate in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _eventDate(Wrap<LocalDate> w);
+
+	public LocalDate getEventDate() {
+		return eventDate;
+	}
+
+	public void setEventDate(LocalDate eventDate) {
+		this.eventDate = eventDate;
+	}
+	@JsonIgnore
+	public void setEventDate(Instant o) {
+		this.eventDate = o == null ? null : LocalDate.from(o);
+	}
+	/** Example: 2011-12-03+01:00 **/
+	@JsonIgnore
+	public void setEventDate(String o) {
+		this.eventDate = ReportEvent.staticSetEventDate(siteRequest_, o);
+	}
+	public static LocalDate staticSetEventDate(SiteRequestEnUS siteRequest_, String o) {
+		if(o != null) {
+			if(o.contains("T")) {
+				return java.time.LocalDateTime.parse(o, DateTimeFormatter.ISO_DATE_TIME).atZone(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).toLocalDate();
+			} else {
+				return LocalDate.parse(o, DateTimeFormatter.ISO_DATE);
+			}
+		}
+		return o == null ? null : LocalDate.parse(o, DateTimeFormatter.ISO_DATE);
+	}
+	@JsonIgnore
+	public void setEventDate(Date o) {
+		this.eventDate = o == null ? null : o.toInstant().atZone(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).toLocalDate();
+	}
+	protected ReportEvent eventDateInit() {
+		Wrap<LocalDate> eventDateWrap = new Wrap<LocalDate>().var("eventDate");
+		if(eventDate == null) {
+			_eventDate(eventDateWrap);
+			setEventDate(eventDateWrap.o);
+		}
+		return (ReportEvent)this;
+	}
+
+	public static Date staticSearchEventDate(SiteRequestEnUS siteRequest_, LocalDate o) {
+		return o == null ? null : Date.from(o.atStartOfDay(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).toInstant().atZone(ZoneId.of("Z")).toInstant());
+	}
+
+	public static String staticSearchStrEventDate(SiteRequestEnUS siteRequest_, Date o) {
+		return "\"" + DateTimeFormatter.ISO_DATE_TIME.format(o.toInstant().atOffset(ZoneOffset.UTC)) + "\"";
+	}
+
+	public static String staticSearchFqEventDate(SiteRequestEnUS siteRequest_, String o) {
+		return ReportEvent.staticSearchStrEventDate(siteRequest_, ReportEvent.staticSearchEventDate(siteRequest_, ReportEvent.staticSetEventDate(siteRequest_, o)));
+	}
+
+	public LocalDate sqlEventDate() {
+		return eventDate;
+	}
+
 	//////////////
 	// initDeep //
 	//////////////
@@ -217,7 +363,9 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 			Promise<Void> promise2 = Promise.promise();
 			try {
 				scheduleKeyInit();
+				assigneeKeyInit();
 				eventNameInit();
+				eventDateInit();
 				promise2.complete();
 			} catch(Exception ex) {
 				promise2.fail(ex);
@@ -273,8 +421,12 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 		switch(var) {
 			case "scheduleKey":
 				return oReportEvent.scheduleKey;
+			case "assigneeKey":
+				return oReportEvent.assigneeKey;
 			case "eventName":
 				return oReportEvent.eventName;
+			case "eventDate":
+				return oReportEvent.eventDate;
 			default:
 				return super.obtainBaseModel(var);
 		}
@@ -306,6 +458,12 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 				if(!saves.contains("scheduleKey"))
 					saves.add("scheduleKey");
 				return val;
+			case "assigneeKey":
+				if(oReportEvent.getAssigneeKey() == null)
+					oReportEvent.setAssigneeKey(val == null ? null : (NumberUtils.isCreatable(val.toString()) ? Long.parseLong(val.toString()) : null));
+				if(!saves.contains("assigneeKey"))
+					saves.add("assigneeKey");
+				return val;
 			default:
 				return super.relateBaseModel(var, val);
 		}
@@ -322,8 +480,12 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 		switch(entityVar) {
 		case "scheduleKey":
 			return ReportEvent.staticSetScheduleKey(siteRequest_, o);
+		case "assigneeKey":
+			return ReportEvent.staticSetAssigneeKey(siteRequest_, o);
 		case "eventName":
 			return ReportEvent.staticSetEventName(siteRequest_, o);
+		case "eventDate":
+			return ReportEvent.staticSetEventDate(siteRequest_, o);
 			default:
 				return BaseModel.staticSetBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -340,8 +502,12 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 		switch(entityVar) {
 		case "scheduleKey":
 			return ReportEvent.staticSearchScheduleKey(siteRequest_, (Long)o);
+		case "assigneeKey":
+			return ReportEvent.staticSearchAssigneeKey(siteRequest_, (Long)o);
 		case "eventName":
 			return ReportEvent.staticSearchEventName(siteRequest_, (String)o);
+		case "eventDate":
+			return ReportEvent.staticSearchEventDate(siteRequest_, (LocalDate)o);
 			default:
 				return BaseModel.staticSearchBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -358,8 +524,12 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 		switch(entityVar) {
 		case "scheduleKey":
 			return ReportEvent.staticSearchStrScheduleKey(siteRequest_, (Long)o);
+		case "assigneeKey":
+			return ReportEvent.staticSearchStrAssigneeKey(siteRequest_, (Long)o);
 		case "eventName":
 			return ReportEvent.staticSearchStrEventName(siteRequest_, (String)o);
+		case "eventDate":
+			return ReportEvent.staticSearchStrEventDate(siteRequest_, (Date)o);
 			default:
 				return BaseModel.staticSearchStrBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -376,8 +546,12 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 		switch(entityVar) {
 		case "scheduleKey":
 			return ReportEvent.staticSearchFqScheduleKey(siteRequest_, o);
+		case "assigneeKey":
+			return ReportEvent.staticSearchFqAssigneeKey(siteRequest_, o);
 		case "eventName":
 			return ReportEvent.staticSearchFqEventName(siteRequest_, o);
+		case "eventDate":
+			return ReportEvent.staticSearchFqEventDate(siteRequest_, o);
 			default:
 				return BaseModel.staticSearchFqBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -411,10 +585,24 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 					setScheduleKey((String)val);
 				saves.add("scheduleKey");
 				return val;
+			case "assigneekey":
+				if(val instanceof Long)
+					setAssigneeKey((Long)val);
+				else if(val instanceof String)
+					setAssigneeKey((String)val);
+				saves.add("assigneeKey");
+				return val;
 			case "eventname":
 				if(val instanceof String)
 					setEventName((String)val);
 				saves.add("eventName");
+				return val;
+			case "eventdate":
+				if(val instanceof LocalDate)
+					setEventDate((LocalDate)val);
+				else if(val instanceof String)
+					setEventDate((String)val);
+				saves.add("eventDate");
 				return val;
 			default:
 				return super.defineBaseModel(var, val);
@@ -441,8 +629,14 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 		if(scheduleKey != null) {
 			doc.put("scheduleKey_docvalues_long", scheduleKey);
 		}
+		if(assigneeKey != null) {
+			doc.put("assigneeKey_docvalues_long", assigneeKey);
+		}
 		if(eventName != null) {
 			doc.put("eventName_docvalues_string", eventName);
+		}
+		if(eventDate != null) {
+			doc.put("eventDate_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(eventDate.atStartOfDay(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).toInstant().atZone(ZoneId.of("Z"))));
 		}
 		super.indexBaseModel(doc);
 
@@ -452,8 +646,12 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 		switch(entityVar) {
 			case "scheduleKey":
 				return "scheduleKey_docvalues_long";
+			case "assigneeKey":
+				return "assigneeKey_docvalues_long";
 			case "eventName":
 				return "eventName_docvalues_string";
+			case "eventDate":
+				return "eventDate_docvalues_date";
 			default:
 				return BaseModel.varIndexedBaseModel(entityVar);
 		}
@@ -484,7 +682,9 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 		ReportEvent oReportEvent = (ReportEvent)this;
 
 		oReportEvent.setScheduleKey(Optional.ofNullable(doc.get("scheduleKey_docvalues_long")).map(v -> v.toString()).orElse(null));
+		oReportEvent.setAssigneeKey(Optional.ofNullable(doc.get("assigneeKey_docvalues_long")).map(v -> v.toString()).orElse(null));
 		oReportEvent.setEventName(Optional.ofNullable(doc.get("eventName_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oReportEvent.setEventDate(Optional.ofNullable(doc.get("eventDate_docvalues_date")).map(v -> v.toString()).orElse(null));
 
 		super.storeBaseModel(doc);
 	}
@@ -500,8 +700,12 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 			ReportEvent original = (ReportEvent)o;
 			if(!Objects.equals(scheduleKey, original.getScheduleKey()))
 				apiRequest.addVars("scheduleKey");
+			if(!Objects.equals(assigneeKey, original.getAssigneeKey()))
+				apiRequest.addVars("assigneeKey");
 			if(!Objects.equals(eventName, original.getEventName()))
 				apiRequest.addVars("eventName");
+			if(!Objects.equals(eventDate, original.getEventDate()))
+				apiRequest.addVars("eventDate");
 			super.apiRequestBaseModel();
 		}
 	}
@@ -514,15 +718,21 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 		StringBuilder sb = new StringBuilder();
 		sb.append(super.toString());
 		sb.append(Optional.ofNullable(scheduleKey).map(v -> "scheduleKey: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(assigneeKey).map(v -> "assigneeKey: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(eventName).map(v -> "eventName: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(eventDate).map(v -> "eventDate: " + v + "\n").orElse(""));
 		return sb.toString();
 	}
 
 	public static final String VAR_scheduleKey = "scheduleKey";
+	public static final String VAR_assigneeKey = "assigneeKey";
 	public static final String VAR_eventName = "eventName";
+	public static final String VAR_eventDate = "eventDate";
 
 	public static final String DISPLAY_NAME_scheduleKey = "schedule";
+	public static final String DISPLAY_NAME_assigneeKey = "assignee";
 	public static final String DISPLAY_NAME_eventName = "event name";
+	public static final String DISPLAY_NAME_eventDate = "event date";
 
 	public static String displayNameForClass(String var) {
 		return ReportEvent.displayNameReportEvent(var);
@@ -531,8 +741,12 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 		switch(var) {
 		case VAR_scheduleKey:
 			return DISPLAY_NAME_scheduleKey;
+		case VAR_assigneeKey:
+			return DISPLAY_NAME_assigneeKey;
 		case VAR_eventName:
 			return DISPLAY_NAME_eventName;
+		case VAR_eventDate:
+			return DISPLAY_NAME_eventDate;
 		default:
 			return BaseModel.displayNameBaseModel(var);
 		}

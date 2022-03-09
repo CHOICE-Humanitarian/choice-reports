@@ -6,6 +6,7 @@
 {{#*inline "htmScriptsReportEventPage"}}{{> "htmScriptsBaseModelPage"}}		<!-- inline "htmScriptsReportEventPage" -->
 		<script src="{{staticBaseUrl}}/js/enUS/ReportEventPage.js"></script>
 		<script src="{{staticBaseUrl}}/js/enUS/ReportSchedulePage.js"></script>
+		<script src="{{staticBaseUrl}}/js/enUS/SiteUserPage.js"></script>
 {{/inline}}
 {{#*inline "htmScriptReportEventPage"}}		<!-- inline "htmScriptReportEventPage" -->
 		<script>
@@ -29,6 +30,11 @@
 					suggestReportEventScheduleKey([{'name':'fq','value':'eventKeys:' + pk}], $('#listReportEventScheduleKey_Page'), pk, true);
 		{{else}}
 					suggestReportEventScheduleKey([{'name':'fq','value':'eventKeys:' + pk}], $('#listReportEventScheduleKey_Page'), pk, false);
+		{{/ifContainsAnyRoles}}
+		{{#ifContainsAnyRoles roles rolesRequired}}
+					suggestReportEventAssigneeKey([{'name':'fq','value':'eventKeys:' + pk}], $('#listReportEventAssigneeKey_Page'), pk, true);
+		{{else}}
+					suggestReportEventAssigneeKey([{'name':'fq','value':'eventKeys:' + pk}], $('#listReportEventAssigneeKey_Page'), pk, false);
 		{{/ifContainsAnyRoles}}
 				}
 				websocketReportEvent(websocketReportEventInner);
@@ -220,7 +226,11 @@
 							</div>
 							<div class="w3-cell-row ">
 {{> "htmScheduleKey" classApiMethodMethod="POST"}}
+{{> "htmAssigneeKey" classApiMethodMethod="POST"}}
 {{> "htmEventName" classApiMethodMethod="POST"}}
+							</div>
+							<div class="w3-cell-row ">
+{{> "htmEventDate" classApiMethodMethod="POST"}}
 							</div>
 						</div>
 						<button
@@ -259,7 +269,11 @@
 							</div>
 							<div class="w3-cell-row ">
 {{> "htmScheduleKey" classApiMethodMethod="PATCH"}}
+{{> "htmAssigneeKey" classApiMethodMethod="PATCH"}}
 {{> "htmEventName" classApiMethodMethod="PATCH"}}
+							</div>
+							<div class="w3-cell-row ">
+{{> "htmEventDate" classApiMethodMethod="PATCH"}}
 							</div>
 						<button
 							class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-margin w3-light-green "
@@ -294,7 +308,11 @@
 							</div>
 							<div class="w3-cell-row ">
 {{> "htmScheduleKey" classApiMethodMethod="Page"}}
+{{> "htmAssigneeKey" classApiMethodMethod="Page"}}
 {{> "htmEventName" classApiMethodMethod="Page"}}
+							</div>
+							<div class="w3-cell-row ">
+{{> "htmEventDate" classApiMethodMethod="Page"}}
 							</div>
 						</div>
 						<button
@@ -536,6 +554,80 @@
 		{{/ifContainsAnyRoles}}
 {{/inline}}
 
+{{#*inline "htmAssigneeKey"}}
+								<div class="w3-cell w3-cell-top w3-center w3-mobile ">
+									<div class="w3-padding ">
+										<div id="suggest{{classApiMethodMethod}}ReportEventAssigneeKey">
+											<div class="w3-card ">
+												<div class="w3-cell-row ">
+													<a href="/user?fq=eventKeys:{{reportEvent_.pk}}" class="w3-cell w3-btn w3-center h4 w3-block h4 w3-teal w3-hover-teal ">
+														<i class="far fa-user-cog "></i>
+														assignee
+													</a>
+												</div>
+												<div class="w3-cell-row ">
+													<h5 class="w3-cell ">
+														relate a site user to this report event
+													</h5>
+												</div>
+												<div class="w3-cell-row w3-padding ">
+													<div class="w3-cell ">
+														<div class="w3-cell-row ">
+
+														{{> "inputAssigneeKey"}}
+														</div>
+													</div>
+												</div>
+												<div class="w3-cell-row w3-padding ">
+													<div class="w3-cell w3-left-align w3-cell-top ">
+														<ul class="w3-ul w3-hoverable " id="listReportEventAssigneeKey_{{classApiMethodMethod}}">
+														</ul>
+														{{#ifContainsAnyRoles roles rolesRequired}}
+	{{#eq 'Page' classApiMethodMethod}}
+																<div class="w3-cell-row ">
+																	<button
+																		 class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-teal "
+																		 id="{{classApiMethodMethod}}_assigneeKey_add"
+																		 onclick="$(this).addClass('w3-disabled'); this.disabled = true; this.innerHTML = 'Sending…'; postSiteUserVals({ eventKeys: [ '{{pk}}' ] }, function() { $('#{{classApiMethodMethod}}_assigneeKey_add').disabled = false; $('#{{classApiMethodMethod}}_assigneeKey_add').innerHTML = 'add a site user'; }, function() { addError($('#{{classApiMethodMethod}}assigneeKey')); });"
+																		>add a site user</button>
+																</div>
+	{{/eq}}
+														{{/ifContainsAnyRoles}}
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+{{/inline}}
+
+{{#*inline "inputAssigneeKey"}}
+		{{#ifContainsAnyRoles roles rolesRequired}}
+														<i class="far fa-search w3-xxlarge w3-cell w3-cell-middle "></i>
+														{{#eq 'PUTCopy' classApiMethodMethod}}
+															<div>
+																<input 
+																	type="checkbox"
+																	id="{{classApiMethodMethod}}_assigneeKey_clear"
+																	class="assigneeKey_clear "
+																	>
+																<label for="{{classApiMethodMethod}}_assigneeKey_clear">clear</label>
+															</div>
+														{{/eq}}
+														<input
+																type="text"
+																placeholder="assignee"
+															class="valueObjectSuggest suggestAssigneeKey w3-input w3-border w3-cell w3-cell-middle "
+															name="setAssigneeKey"
+															id="{{classApiMethodMethod}}_assigneeKey"
+															autocomplete="off"
+															oninput="suggestReportEventAssigneeKey($(this).val() ? [ { 'name': 'q', 'value': 'objectSuggest:' + $(this).val() }, { 'name': 'rows', 'value': '10' }, { 'name': 'fl', 'value': 'classCanonicalName,eventKeys,pk,pageUrlPk,objectTitle' } ] : [{{#if pk}}{'name':'fq','value':'eventKeys:{{pk}}'}{{else}}{{/if}}], $('#listReportEventAssigneeKey_{{classApiMethodMethod}}'), {{pk}}); "
+															/>
+
+													{{else}}
+		{{/ifContainsAnyRoles}}
+{{/inline}}
+
 {{#*inline "htmEventName"}}
 								<div class="w3-cell w3-cell-top w3-center w3-mobile ">
 									<div class="w3-padding ">
@@ -598,6 +690,56 @@
 													{{else}}
 														{{#ifContainsKeys userKeys}}
 															<span class="varReportEvent{{pk}}EventName ">{{reportEvent_.eventName}}</span>
+			{{/ifContainsKeys}}
+		{{/ifContainsAnyRoles}}
+{{/inline}}
+
+{{#*inline "htmEventDate"}}
+								<div class="w3-cell w3-cell-top w3-center w3-mobile ">
+									<div class="w3-padding ">
+										<div id="suggest{{classApiMethodMethod}}ReportEventEventDate">
+											<div class="w3-card ">
+												<div class="w3-cell-row w3-light-green">
+													<label for="{{classApiMethodMethod}}_eventDate">event date</label>
+												</div>
+												<div class="w3-cell-row  ">
+													<div class="w3-cell ">
+														{{> "inputEventDate"}}
+													</div>
+	{{#ifContainsAnyRoles roles rolesRequired}}
+		{{#eq 'Page' classApiMethodMethod}}
+															<div class="w3-cell w3-left-align w3-cell-top ">
+																<button
+																		tabindex="-1"
+																		class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-bar-item w3-light-green "
+																		onclick="removeGlow($('#{{classApiMethodMethod}}_eventDate')); $('#{{classApiMethodMethod}}_eventDate').val(null); patch{{classSimpleName}}Val([{ name: 'softCommit', value: 'true' }, { name: 'fq', value: 'pk:' + $('#ReportEventForm :input[name=pk]').val() }], 'setEventDate', null, function() { addGlow($('#{{classApiMethodMethod}}_eventDate')); }, function() { addError($('#{{classApiMethodMethod}}_eventDate')); }); "
+																		>
+																	<i class="far fa-eraser "></i>
+																</button>
+															</div>
+														{{/eq}}
+	{{/ifContainsAnyRoles}}
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+{{/inline}}
+
+{{#*inline "inputEventDate"}}
+		{{#ifContainsAnyRoles roles rolesRequired}}
+														<input
+																type="date"
+																class="w3-input w3-border setEventDate classReportEvent inputReportEvent{{pk}}EventDate w3-input w3-border "
+																id="{{classApiMethodMethod}}_eventDate"
+																value="{{reportEvent_.eventDate}}"
+														{{#eq 'Page' classApiMethodMethod}}
+															onchange="if(this.value) { patch{{classSimpleName}}Val([{ name: 'softCommit', value: 'true' }, { name: 'fq', value: 'pk:{{pk}}' }], 'setEventDate', this.value, function() { addGlow($('#{{classApiMethodMethod}}_eventDate')); }, function() { addError($('#{{classApiMethodMethod}}_eventDate')); }); } "
+														{{/eq}}
+														/>
+													{{else}}
+														{{#ifContainsKeys userKeys}}
+															<span class="varReportEvent{{pk}}EventDate ">{{reportEvent_.eventDate}}</span>
 			{{/ifContainsKeys}}
 		{{/ifContainsAnyRoles}}
 {{/inline}}

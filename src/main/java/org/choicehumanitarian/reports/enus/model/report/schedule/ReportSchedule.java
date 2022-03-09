@@ -152,7 +152,7 @@ public class ReportSchedule extends ReportScheduleGen<BaseModel> {
 	 * HtmlRow: 4
 	 * HtmlCell: 3
 	 * DisplayName.enUS: years after completion
-	 */ 
+	 */
 	protected void _frequencyYearsAfterCompletion(Wrap<Integer> w) {
 	}
 
