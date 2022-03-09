@@ -1,5 +1,7 @@
 package org.choicehumanitarian.reports.enus.model.report.narrative;
 
+import java.lang.Long;
+import java.lang.String;
 import org.choicehumanitarian.reports.enus.base.BaseModelPage;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import org.choicehumanitarian.reports.enus.user.SiteUser;
@@ -229,6 +231,6 @@ public class ReportNarrativeGenPage extends ReportNarrativeGenPageGen<BaseModelP
 
 	@Override
 	protected void _contextIconName(Wrap<String> c) {
-			c.o("hands-heart");
+			c.o("calendar-pen");
 	}
 }

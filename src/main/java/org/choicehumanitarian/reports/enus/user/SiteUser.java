@@ -15,7 +15,7 @@ import org.computate.vertx.request.ComputateVertxSiteRequest;
  * Page: true
  * SuperPage.enUS: BaseModelPage
  * Indexed: true
- * Map.Integer.sqlSort: 3
+ * Map.Integer.sqlSort: 1
  * 
  * ApiTag.enUS: User
  * ApiUri.enUS: /api/user

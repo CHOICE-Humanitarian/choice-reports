@@ -12,7 +12,7 @@ import org.computate.search.wrap.Wrap;
  * SuperPage.enUS: BaseModelPage
  * Indexed: true
  * Saved: true
- * Map.Integer.sqlSort: 5
+ * Map.Integer.sqlSort: 4
  * Sort.asc: objectId
  * 
  * ApiTag.enUS: Report Type
@@ -30,10 +30,10 @@ import org.computate.search.wrap.Wrap;
  * PageSuperSearchPage.enUS: BaseModelPage
  * ApiUriSearchPage.enUS: /report-type
  * 
- * AName.enUS: a donor
+ * AName.enUS: a report type
  * Color: light-green
  * IconGroup: duotone
- * IconName: hands-heart
+ * IconName: list-dropdown
  * NameVar.enUS: reportType
  * 
  * Role.enUS: SiteAdmin

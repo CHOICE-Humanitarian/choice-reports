@@ -1,6 +1,7 @@
 package org.choicehumanitarian.reports.enus.model.report.schedule;
 
 import java.lang.Long;
+import java.util.List;
 import org.computate.vertx.search.list.SearchList;
 import org.choicehumanitarian.reports.enus.model.report.type.ReportType;
 import java.lang.String;
@@ -27,7 +28,6 @@ import java.net.URLDecoder;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.StringUtils;
 import java.util.Map;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 import java.util.stream.Collectors;
@@ -89,11 +89,11 @@ public class ReportScheduleGenPage extends ReportScheduleGenPageGen<BaseModelPag
 		if(reportSchedule_ != null && reportSchedule_.getObjectTitle() != null)
 			c.o(reportSchedule_.getObjectTitle());
 		else if(reportSchedule_ != null)
-			c.o("donors");
+			c.o("report schedules");
 		else if(searchListReportSchedule_ == null || reportScheduleCount == 0)
-			c.o("no donor found");
+			c.o("no report schedule found");
 		else
-			c.o("donors");
+			c.o("report schedules");
 	}
 
 	@Override
@@ -234,6 +234,6 @@ public class ReportScheduleGenPage extends ReportScheduleGenPageGen<BaseModelPag
 
 	@Override
 	protected void _contextIconName(Wrap<String> c) {
-			c.o("hands-heart");
+			c.o("calendar-days");
 	}
 }

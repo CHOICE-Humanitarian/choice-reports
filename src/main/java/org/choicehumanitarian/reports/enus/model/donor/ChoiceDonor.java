@@ -13,7 +13,7 @@ import org.computate.search.wrap.Wrap;
  * SuperPage.enUS: BaseModelPage
  * Indexed: true
  * Saved: true
- * Map.Integer.sqlSort: 5
+ * Map.Integer.sqlSort: 1
  * Sort.asc: objectId
  * 
  * ApiTag.enUS: Donor

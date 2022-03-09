@@ -10,7 +10,7 @@ import org.computate.search.wrap.Wrap;
  * SuperPage.enUS: BaseModelPage
  * Indexed: true
  * Saved: true
- * Map.Integer.sqlSort: 5
+ * Map.Integer.sqlSort: 7
  * Sort.asc: objectId
  * 
  * ApiTag.enUS: Report Event
@@ -28,10 +28,10 @@ import org.computate.search.wrap.Wrap;
  * PageSuperSearchPage.enUS: BaseModelPage
  * ApiUriSearchPage.enUS: /report-event
  * 
- * AName.enUS: a donor
+ * AName.enUS: a report event
  * Color: light-green
  * IconGroup: duotone
- * IconName: hands-heart
+ * IconName: calendar-star
  * NameVar.enUS: reportEvent
  * 
  * Role.enUS: SiteAdmin
@@ -39,6 +39,17 @@ import org.computate.search.wrap.Wrap;
  * Rows: 100
 **/          
 public class ReportEvent extends ReportEventGen<BaseModel> {
+
+	/**  
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Relate: ReportSchedule.eventKeys
+	 * HtmlRow: 3
+	 * HtmlCell: 1
+	 * DisplayName.enUS: schedule
+	 */        
+	protected void _scheduleKey(Wrap<Long> w) {
+	}
 
 	/**  
 	 * {@inheritDoc}

@@ -25,7 +25,7 @@
 		<postgresql.version>42.2.2.jre7</postgresql.version>
 		<solr.version>8.4.1</solr.version>
 		<junit.version>4.13.1</junit.version>
-		<computate.version>4.2.4.4</computate.version>
+		<computate.version>4.1.8.4</computate.version>
 	</properties>
 
 	<dependencyManagement>

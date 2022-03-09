@@ -13,12 +13,14 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import org.computate.vertx.api.ApiRequest;
 import org.computate.search.response.solr.SolrResponse;
+import java.lang.Long;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.vertx.core.json.JsonObject;
 import java.lang.String;
 import java.math.RoundingMode;
+import org.choicehumanitarian.reports.enus.model.report.schedule.ReportSchedule;
 import org.slf4j.Logger;
 import java.math.MathContext;
 import io.vertx.core.Promise;
@@ -48,28 +50,89 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 public abstract class ReportEventGen<DEV> extends BaseModel {
 	protected static final Logger LOG = LoggerFactory.getLogger(ReportEvent.class);
 
-	public static final String ReportEvent_AName = "a donor";
+	public static final String ReportEvent_AName = "a report event";
 	public static final String ReportEvent_This = "this ";
-	public static final String ReportEvent_ThisName = "this donor";
+	public static final String ReportEvent_ThisName = "this report event";
 	public static final String ReportEvent_A = "a ";
-	public static final String ReportEvent_TheName = "the donor";
-	public static final String ReportEvent_NameSingular = "donor";
-	public static final String ReportEvent_NamePlural = "donors";
-	public static final String ReportEvent_NameActual = "current donor";
-	public static final String ReportEvent_AllName = "all the donors";
-	public static final String ReportEvent_SearchAllNameBy = "search donors by ";
-	public static final String ReportEvent_Title = "donors";
-	public static final String ReportEvent_ThePluralName = "the donors";
-	public static final String ReportEvent_NoNameFound = "no donor found";
+	public static final String ReportEvent_TheName = "the report event";
+	public static final String ReportEvent_NameSingular = "report event";
+	public static final String ReportEvent_NamePlural = "report events";
+	public static final String ReportEvent_NameActual = "current report event";
+	public static final String ReportEvent_AllName = "all the report events";
+	public static final String ReportEvent_SearchAllNameBy = "search report events by ";
+	public static final String ReportEvent_Title = "report events";
+	public static final String ReportEvent_ThePluralName = "the report events";
+	public static final String ReportEvent_NoNameFound = "no report event found";
 	public static final String ReportEvent_NameVar = "reportEvent";
-	public static final String ReportEvent_OfName = "of donor";
-	public static final String ReportEvent_ANameAdjective = "a donor";
-	public static final String ReportEvent_NameAdjectiveSingular = "donor";
-	public static final String ReportEvent_NameAdjectivePlural = "donors";
+	public static final String ReportEvent_OfName = "of report event";
+	public static final String ReportEvent_ANameAdjective = "a report event";
+	public static final String ReportEvent_NameAdjectiveSingular = "report event";
+	public static final String ReportEvent_NameAdjectivePlural = "report events";
 	public static final String ReportEvent_Color = "light-green";
 	public static final String ReportEvent_IconGroup = "duotone";
-	public static final String ReportEvent_IconName = "hands-heart";
+	public static final String ReportEvent_IconName = "calendar-star";
 	public static final Integer ReportEvent_Rows = 100;
+
+	/////////////////
+	// scheduleKey //
+	/////////////////
+
+	/**	 The entity scheduleKey
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonSerialize(using = ToStringSerializer.class)
+	@JsonInclude(Include.NON_NULL)
+	protected Long scheduleKey;
+
+	/**	<br> The entity scheduleKey
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.event.ReportEvent&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:scheduleKey">Find the entity scheduleKey in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _scheduleKey(Wrap<Long> w);
+
+	public Long getScheduleKey() {
+		return scheduleKey;
+	}
+
+	public void setScheduleKey(Long scheduleKey) {
+		this.scheduleKey = scheduleKey;
+	}
+	@JsonIgnore
+	public void setScheduleKey(String o) {
+		this.scheduleKey = ReportEvent.staticSetScheduleKey(siteRequest_, o);
+	}
+	public static Long staticSetScheduleKey(SiteRequestEnUS siteRequest_, String o) {
+		if(NumberUtils.isParsable(o))
+			return Long.parseLong(o);
+		return null;
+	}
+	protected ReportEvent scheduleKeyInit() {
+		Wrap<Long> scheduleKeyWrap = new Wrap<Long>().var("scheduleKey");
+		if(scheduleKey == null) {
+			_scheduleKey(scheduleKeyWrap);
+			setScheduleKey(scheduleKeyWrap.o);
+		}
+		return (ReportEvent)this;
+	}
+
+	public static Long staticSearchScheduleKey(SiteRequestEnUS siteRequest_, Long o) {
+		return o;
+	}
+
+	public static String staticSearchStrScheduleKey(SiteRequestEnUS siteRequest_, Long o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqScheduleKey(SiteRequestEnUS siteRequest_, String o) {
+		return ReportEvent.staticSearchStrScheduleKey(siteRequest_, ReportEvent.staticSearchScheduleKey(siteRequest_, ReportEvent.staticSetScheduleKey(siteRequest_, o)));
+	}
+
+	public Long sqlScheduleKey() {
+		return scheduleKey;
+	}
 
 	///////////////
 	// eventName //
@@ -153,6 +216,7 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 		Future.future(a -> a.complete()).compose(a -> {
 			Promise<Void> promise2 = Promise.promise();
 			try {
+				scheduleKeyInit();
 				eventNameInit();
 				promise2.complete();
 			} catch(Exception ex) {
@@ -207,6 +271,8 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 	public Object obtainReportEvent(String var) {
 		ReportEvent oReportEvent = (ReportEvent)this;
 		switch(var) {
+			case "scheduleKey":
+				return oReportEvent.scheduleKey;
 			case "eventName":
 				return oReportEvent.eventName;
 			default:
@@ -234,6 +300,12 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 	public Object relateReportEvent(String var, Object val) {
 		ReportEvent oReportEvent = (ReportEvent)this;
 		switch(var) {
+			case "scheduleKey":
+				if(oReportEvent.getScheduleKey() == null)
+					oReportEvent.setScheduleKey(val == null ? null : (NumberUtils.isCreatable(val.toString()) ? Long.parseLong(val.toString()) : null));
+				if(!saves.contains("scheduleKey"))
+					saves.add("scheduleKey");
+				return val;
 			default:
 				return super.relateBaseModel(var, val);
 		}
@@ -248,6 +320,8 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 	}
 	public static Object staticSetReportEvent(String entityVar, SiteRequestEnUS siteRequest_, String o) {
 		switch(entityVar) {
+		case "scheduleKey":
+			return ReportEvent.staticSetScheduleKey(siteRequest_, o);
 		case "eventName":
 			return ReportEvent.staticSetEventName(siteRequest_, o);
 			default:
@@ -264,6 +338,8 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 	}
 	public static Object staticSearchReportEvent(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
 		switch(entityVar) {
+		case "scheduleKey":
+			return ReportEvent.staticSearchScheduleKey(siteRequest_, (Long)o);
 		case "eventName":
 			return ReportEvent.staticSearchEventName(siteRequest_, (String)o);
 			default:
@@ -280,6 +356,8 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 	}
 	public static String staticSearchStrReportEvent(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
 		switch(entityVar) {
+		case "scheduleKey":
+			return ReportEvent.staticSearchStrScheduleKey(siteRequest_, (Long)o);
 		case "eventName":
 			return ReportEvent.staticSearchStrEventName(siteRequest_, (String)o);
 			default:
@@ -296,6 +374,8 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 	}
 	public static String staticSearchFqReportEvent(String entityVar, SiteRequestEnUS siteRequest_, String o) {
 		switch(entityVar) {
+		case "scheduleKey":
+			return ReportEvent.staticSearchFqScheduleKey(siteRequest_, o);
 		case "eventName":
 			return ReportEvent.staticSearchFqEventName(siteRequest_, o);
 			default:
@@ -324,6 +404,13 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 	}
 	public Object defineReportEvent(String var, Object val) {
 		switch(var.toLowerCase()) {
+			case "schedulekey":
+				if(val instanceof Long)
+					setScheduleKey((Long)val);
+				else if(val instanceof String)
+					setScheduleKey((String)val);
+				saves.add("scheduleKey");
+				return val;
 			case "eventname":
 				if(val instanceof String)
 					setEventName((String)val);
@@ -351,6 +438,9 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 	}
 
 	public void indexReportEvent(JsonObject doc) {
+		if(scheduleKey != null) {
+			doc.put("scheduleKey_docvalues_long", scheduleKey);
+		}
 		if(eventName != null) {
 			doc.put("eventName_docvalues_string", eventName);
 		}
@@ -360,6 +450,8 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 
 	public static String varIndexedReportEvent(String entityVar) {
 		switch(entityVar) {
+			case "scheduleKey":
+				return "scheduleKey_docvalues_long";
 			case "eventName":
 				return "eventName_docvalues_string";
 			default:
@@ -391,6 +483,7 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 	public void storeReportEvent(SolrResponse.Doc doc) {
 		ReportEvent oReportEvent = (ReportEvent)this;
 
+		oReportEvent.setScheduleKey(Optional.ofNullable(doc.get("scheduleKey_docvalues_long")).map(v -> v.toString()).orElse(null));
 		oReportEvent.setEventName(Optional.ofNullable(doc.get("eventName_docvalues_string")).map(v -> v.toString()).orElse(null));
 
 		super.storeBaseModel(doc);
@@ -405,6 +498,8 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 		Object o = Optional.ofNullable(apiRequest).map(ApiRequest::getOriginal).orElse(null);
 		if(o != null && o instanceof ReportEvent) {
 			ReportEvent original = (ReportEvent)o;
+			if(!Objects.equals(scheduleKey, original.getScheduleKey()))
+				apiRequest.addVars("scheduleKey");
 			if(!Objects.equals(eventName, original.getEventName()))
 				apiRequest.addVars("eventName");
 			super.apiRequestBaseModel();
@@ -418,12 +513,15 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 	@Override public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(super.toString());
+		sb.append(Optional.ofNullable(scheduleKey).map(v -> "scheduleKey: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(eventName).map(v -> "eventName: \"" + v + "\"\n" ).orElse(""));
 		return sb.toString();
 	}
 
+	public static final String VAR_scheduleKey = "scheduleKey";
 	public static final String VAR_eventName = "eventName";
 
+	public static final String DISPLAY_NAME_scheduleKey = "schedule";
 	public static final String DISPLAY_NAME_eventName = "event name";
 
 	public static String displayNameForClass(String var) {
@@ -431,6 +529,8 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 	}
 	public static String displayNameReportEvent(String var) {
 		switch(var) {
+		case VAR_scheduleKey:
+			return DISPLAY_NAME_scheduleKey;
 		case VAR_eventName:
 			return DISPLAY_NAME_eventName;
 		default:

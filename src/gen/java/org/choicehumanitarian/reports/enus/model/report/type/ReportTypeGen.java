@@ -50,27 +50,27 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 public abstract class ReportTypeGen<DEV> extends BaseModel {
 	protected static final Logger LOG = LoggerFactory.getLogger(ReportType.class);
 
-	public static final String ReportType_AName = "a donor";
+	public static final String ReportType_AName = "a report type";
 	public static final String ReportType_This = "this ";
-	public static final String ReportType_ThisName = "this donor";
+	public static final String ReportType_ThisName = "this report type";
 	public static final String ReportType_A = "a ";
-	public static final String ReportType_TheName = "the donor";
-	public static final String ReportType_NameSingular = "donor";
-	public static final String ReportType_NamePlural = "donors";
-	public static final String ReportType_NameActual = "current donor";
-	public static final String ReportType_AllName = "all the donors";
-	public static final String ReportType_SearchAllNameBy = "search donors by ";
-	public static final String ReportType_Title = "donors";
-	public static final String ReportType_ThePluralName = "the donors";
-	public static final String ReportType_NoNameFound = "no donor found";
+	public static final String ReportType_TheName = "the report type";
+	public static final String ReportType_NameSingular = "report type";
+	public static final String ReportType_NamePlural = "report types";
+	public static final String ReportType_NameActual = "current report type";
+	public static final String ReportType_AllName = "all the report types";
+	public static final String ReportType_SearchAllNameBy = "search report types by ";
+	public static final String ReportType_Title = "report types";
+	public static final String ReportType_ThePluralName = "the report types";
+	public static final String ReportType_NoNameFound = "no report type found";
 	public static final String ReportType_NameVar = "reportType";
-	public static final String ReportType_OfName = "of donor";
-	public static final String ReportType_ANameAdjective = "a donor";
-	public static final String ReportType_NameAdjectiveSingular = "donor";
-	public static final String ReportType_NameAdjectivePlural = "donors";
+	public static final String ReportType_OfName = "of report type";
+	public static final String ReportType_ANameAdjective = "a report type";
+	public static final String ReportType_NameAdjectiveSingular = "report type";
+	public static final String ReportType_NameAdjectivePlural = "report types";
 	public static final String ReportType_Color = "light-green";
 	public static final String ReportType_IconGroup = "duotone";
-	public static final String ReportType_IconName = "hands-heart";
+	public static final String ReportType_IconName = "list-dropdown";
 	public static final Integer ReportType_Rows = 100;
 
 	//////////////////

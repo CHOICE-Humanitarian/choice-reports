@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
+import org.choicehumanitarian.reports.enus.model.report.type.ReportType;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import org.computate.search.tool.TimeTool;
 import org.computate.vertx.api.ApiCounter;
@@ -208,25 +209,41 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 			String importStartTime = config().getString(String.format("%s_%s", ConfigKeys.IMPORT_DATA_START_TIME, classSimpleName));
 			String importPeriod = config().getString(String.format("%s_%s", ConfigKeys.IMPORT_DATA_PERIOD, classSimpleName));
 			// Get the duration of the import period. 
-			Duration duration = TimeTool.parseNextDuration(importPeriod);
 			// Calculate the next start time, or the next start time after that, if the start time is in less than a minute, 
 			// to give the following code enough time to complete it's calculations to ensure the import starts correctly. 
-			ZonedDateTime nextStartTime = Optional.of(TimeTool.parseNextZonedTime(importStartTime))
-					.map(t -> Duration.between(Instant.now(), t).toMinutes() < 1L ? t.plus(duration) : t).get();
-			// Get the time now for the import start time zone. 
-			ZonedDateTime now = ZonedDateTime.now(nextStartTime.getZone());
-			BigDecimal[] divideAndRemainder = BigDecimal.valueOf(Duration.between(now, nextStartTime).toMillis())
-					.divideAndRemainder(BigDecimal.valueOf(duration.toMillis()));
-			Duration nextStartDuration = Duration.between(now, nextStartTime);
-			if(divideAndRemainder[0].compareTo(BigDecimal.ONE) >= 0) {
-				nextStartDuration = Duration.ofMillis(divideAndRemainder[1].longValueExact());
-				nextStartTime = now.plus(nextStartDuration);
+
+			Duration nextStartDuration = null;
+			ZonedDateTime nextStartTime = null;
+			if(importPeriod != null) {
+				Duration duration = TimeTool.parseNextDuration(importPeriod);
+				if(importStartTime == null) {
+					nextStartTime = Optional.of(ZonedDateTime.now(ZoneId.of(config().getString(ConfigKeys.SITE_ZONE))))
+							.map(t -> Duration.between(Instant.now(), t).toMinutes() < 1L ? t.plus(duration) : t).get();
+				} else {
+					nextStartTime = Optional.of(ZonedDateTime.now(ZoneId.of(config().getString(ConfigKeys.SITE_ZONE))))
+							.map(t -> Duration.between(Instant.now(), t).toMinutes() < 1L ? t.plus(duration) : t).get();
+				}
+
+				// Get the time now for the import start time zone. 
+				ZonedDateTime now = ZonedDateTime.now(nextStartTime.getZone());
+				BigDecimal[] divideAndRemainder = BigDecimal.valueOf(Duration.between(now, nextStartTime).toMillis())
+						.divideAndRemainder(BigDecimal.valueOf(duration.toMillis()));
+				nextStartDuration = Duration.between(now, nextStartTime);
+				if(divideAndRemainder[0].compareTo(BigDecimal.ONE) >= 0) {
+					nextStartDuration = Duration.ofMillis(divideAndRemainder[1].longValueExact());
+					nextStartTime = now.plus(nextStartDuration);
+				}
+				LOG.info(String.format(importTimerScheduling, classSimpleName, nextStartTime.format(TIME_FORMAT)));
 			}
-			LOG.info(String.format(importTimerScheduling, classSimpleName, nextStartTime.format(TIME_FORMAT)));
 			ZonedDateTime nextStartTime2 = nextStartTime;
-			vertx.setTimer(nextStartDuration.toMillis(), a -> {
+
+			if(importStartTime == null) {
 				importData(classSimpleName, nextStartTime2);
-			});
+			} else {
+				vertx.setTimer(nextStartDuration.toMillis(), a -> {
+					importData(classSimpleName, nextStartTime2);
+				});
+			}
 		} else {
 			LOG.info(String.format(importTimerSkip, classSimpleName));
 		}
@@ -236,24 +253,41 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 		if("ChoiceDonor".equals(classSimpleName)) {
 			importDataChoiceDonor().onComplete(a -> {
 				String importPeriod = config().getString(String.format("%s_%s", ConfigKeys.IMPORT_DATA_PERIOD, classSimpleName));
-				Duration duration = TimeTool.parseNextDuration(importPeriod);
-				ZonedDateTime nextStartTime = startDateTime.plus(duration);
-				LOG.info(String.format(importTimerScheduling, classSimpleName, nextStartTime.format(TIME_FORMAT)));
-				Duration nextStartDuration = Duration.between(Instant.now(), nextStartTime);
-				vertx.setTimer(nextStartDuration.toMillis(), b -> {
-					importData(classSimpleName, nextStartTime);
-				});
+				if(importPeriod != null && startDateTime != null) {
+					Duration duration = TimeTool.parseNextDuration(importPeriod);
+					ZonedDateTime nextStartTime = startDateTime.plus(duration);
+					LOG.info(String.format(importTimerScheduling, classSimpleName, nextStartTime.format(TIME_FORMAT)));
+					Duration nextStartDuration = Duration.between(Instant.now(), nextStartTime);
+					vertx.setTimer(nextStartDuration.toMillis(), b -> {
+						importData(classSimpleName, nextStartTime);
+					});
+				}
 			});
 		} else if("ChoiceImage".equals(classSimpleName)) {
 			importDataChoiceImage().onComplete(a -> {
 				String importPeriod = config().getString(String.format("%s_%s", ConfigKeys.IMPORT_DATA_PERIOD, classSimpleName));
-				Duration duration = TimeTool.parseNextDuration(importPeriod);
-				ZonedDateTime nextStartTime = startDateTime.plus(duration);
-				LOG.info(String.format(importTimerScheduling, classSimpleName, nextStartTime.format(TIME_FORMAT)));
-				Duration nextStartDuration = Duration.between(Instant.now(), nextStartTime);
-				vertx.setTimer(nextStartDuration.toMillis(), b -> {
-					importData(classSimpleName, nextStartTime);
-				});
+				if(importPeriod != null && startDateTime != null) {
+					Duration duration = TimeTool.parseNextDuration(importPeriod);
+					ZonedDateTime nextStartTime = startDateTime.plus(duration);
+					LOG.info(String.format(importTimerScheduling, classSimpleName, nextStartTime.format(TIME_FORMAT)));
+					Duration nextStartDuration = Duration.between(Instant.now(), nextStartTime);
+					vertx.setTimer(nextStartDuration.toMillis(), c -> {
+						importData(classSimpleName, nextStartTime);
+					});
+				}
+			});
+		} else if("ReportType".equals(classSimpleName)) {
+			importDataReportType().onComplete(a -> {
+				String importPeriod = config().getString(String.format("%s_%s", ConfigKeys.IMPORT_DATA_PERIOD, classSimpleName));
+				if(importPeriod != null && startDateTime != null) {
+					Duration duration = TimeTool.parseNextDuration(importPeriod);
+					ZonedDateTime nextStartTime = startDateTime.plus(duration);
+					LOG.info(String.format(importTimerScheduling, classSimpleName, nextStartTime.format(TIME_FORMAT)));
+					Duration nextStartDuration = Duration.between(Instant.now(), nextStartTime);
+					vertx.setTimer(nextStartDuration.toMillis(), c -> {
+						importData(classSimpleName, nextStartTime);
+					});
+				}
 			});
 		}
 	}
@@ -268,6 +302,7 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 		Promise<Void> promise = Promise.promise();
 		importTimer("ChoiceDonor");
 		importTimer("ChoiceImage");
+		importTimer("ReportType");
 		return promise.future();
 	}
 
@@ -414,6 +449,37 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 				LOG.error(importDataFail, ex);
 				promise.fail(ex);
 			});
+		}).onFailure(ex -> {
+			LOG.error(importDataFail, ex);
+			promise.fail(ex);
+		});
+		return promise.future();
+	}
+
+	private Future<Void> importDataReportType() {
+		Promise<Void> promise = Promise.promise();
+		JsonArray reportTypes = Optional.ofNullable(config().getValue(String.format("IMPORT_DATA_%s", "ReportType"))).map(v -> v instanceof JsonArray ? (JsonArray)v : new JsonArray(v.toString())).orElse(new JsonArray());
+		List<Future> futures = new ArrayList<>();
+
+		reportTypes.stream().map(o -> (JsonObject)o).forEach(reportType -> {
+	
+			JsonObject body = new JsonObject()
+					.put(ReportType.VAR_saves, new JsonArray().add(ReportType.VAR_inheritPk).add(ReportType.VAR_typeName))
+					.put(ReportType.VAR_pk, reportType.getString(ReportType.VAR_typeName))
+					.put(ReportType.VAR_typeName, reportType.getString(ReportType.VAR_typeName))
+					;
+			JsonObject params = new JsonObject();
+			params.put("body", body);
+			params.put("path", new JsonObject());
+			params.put("cookie", new JsonObject());
+			params.put("query", new JsonObject().put("commitWithin", 10000).put("q", "*:*").put("var", new JsonArray().add("refresh:false")));
+			JsonObject context = new JsonObject().put("params", params);
+			JsonObject json = new JsonObject().put("context", context);
+			futures.add(vertx.eventBus().request(String.format("choice-reports-enUS-%s", "ReportType"), json, new DeliveryOptions().addHeader("action", String.format("putimport%sFuture", "ReportType"))));
+		});
+		CompositeFuture.all(futures).onSuccess(a -> {
+			LOG.info(importDataComplete);
+			promise.complete();
 		}).onFailure(ex -> {
 			LOG.error(importDataFail, ex);
 			promise.fail(ex);

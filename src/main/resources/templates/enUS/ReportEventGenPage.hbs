@@ -1,10 +1,11 @@
 {{#*inline "htmTitleReportEventPage"}}		<!-- inline "htmTitleReportEventPage" -->
-		<title>{{#if searchListReportEvent_}}{{#eq reportEventCount int1}}{{#eq params.query.q "*:*"}}donor{{else}}donor{{/eq}}{{else}}no donor found{{/eq}}{{else}}donors{{/if}}</title>
+		<title>{{#if searchListReportEvent_}}{{#eq reportEventCount int1}}{{#eq params.query.q "*:*"}}report event{{else}}report event{{/eq}}{{else}}no report event found{{/eq}}{{else}}report events{{/if}}</title>
 {{/inline}}
 {{#*inline "htmMetaReportEventPage"}}{{> "htmMetaBaseModelPage"}}{{/inline}}
 {{#*inline "htmStyleReportEventPage"}}{{> "htmStyleBaseModelPage"}}{{/inline}}
 {{#*inline "htmScriptsReportEventPage"}}{{> "htmScriptsBaseModelPage"}}		<!-- inline "htmScriptsReportEventPage" -->
 		<script src="{{staticBaseUrl}}/js/enUS/ReportEventPage.js"></script>
+		<script src="{{staticBaseUrl}}/js/enUS/ReportSchedulePage.js"></script>
 {{/inline}}
 {{#*inline "htmScriptReportEventPage"}}		<!-- inline "htmScriptReportEventPage" -->
 		<script>
@@ -24,6 +25,11 @@
 				window.eventBus = new EventBus('/eventbus');
 				var pk = {{#if pk}}{{pk}}{{else}}null{{/if}};
 				if(pk != null) {
+		{{#ifContainsAnyRoles roles rolesRequired}}
+					suggestReportEventScheduleKey([{'name':'fq','value':'eventKeys:' + pk}], $('#listReportEventScheduleKey_Page'), pk, true);
+		{{else}}
+					suggestReportEventScheduleKey([{'name':'fq','value':'eventKeys:' + pk}], $('#listReportEventScheduleKey_Page'), pk, false);
+		{{/ifContainsAnyRoles}}
 				}
 				websocketReportEvent(websocketReportEventInner);
 			});
@@ -37,7 +43,7 @@
 				{{#if contextIconCssClasses}}
 					<i class="contextIconCssClasses site-menu-icon "></i>
 				{{/if}}
-				<span class="">donors</span>
+				<span class="">report events</span>
 			</a>
 		</h1>
 		<h2>
@@ -45,7 +51,7 @@
 				{{#if contextIconCssClasses}}
 					<i class="contextIconCssClasses + " site-menu-icon "></i>
 				{{/if}}
-				<span class="">no donor found</span>
+				<span class="">no report event found</span>
 			</span>
 		</h2>
 {{/inline}}
@@ -55,7 +61,7 @@
 			{{#if contextIconCssClasses}}
 				<i class="contextIconCssClasses site-menu-icon "></i>
 			{{/if}}
-				<span class="">donor</span>
+				<span class="">report event</span>
 			</a>
 		</h1>
 		<h2 class="w3-center ">
@@ -71,7 +77,7 @@
 	{{#if contextIconCssClasses}}
 				<i class="contextIconCssClasses + " site-menu-icon "></i>
 	{{/if}}
-				<span class="">donors</span>
+				<span class="">report events</span>
 			</a>
 		</h1>
 		<div>
@@ -109,7 +115,7 @@
 	{{#if contextIconCssClasses}}
 				<i class="contextIconCssClasses + " site-menu-icon "></i>
 	{{/if}}
-				<span class="">donors</span>
+				<span class="">report events</span>
 			</a>
 		</h1>
 		<div class="">
@@ -158,7 +164,7 @@
 			onclick="$('#putimportReportEventModal').show(); "
 			>
 			<i class="fas fa-file-import "></i>
-			Import donors
+			Import report events
 		</button>
 		<div id="putimportReportEventModal" class="w3-modal w3-padding-32 ">
 			<div class="w3-modal-content ">
@@ -167,7 +173,7 @@
 	{{#eq "Page" classApiMethodMethod}}
 						<span class="w3-button w3-display-topright " onclick="$('#putimportReportEventModal').hide(); ">×</span>
 	{{/eq}}
-						<h2 class="w3-padding ">Import donors</h2>
+						<h2 class="w3-padding ">Import report events</h2>
 					</header>
 					<div class="" id="putimportReportEventFormValues">
 						<div class="w3-cell-row ">
@@ -180,7 +186,7 @@
 						<button
 							class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-margin w3-light-green "
 							onclick="putimportReportEvent($('#putimportReportEventFormValues')); "
-							>Import donors</button>
+							>Import report events</button>
 					</div>
 				</div>
 			</div>
@@ -192,7 +198,7 @@
 			onclick="$('#postReportEventModal').show(); "
 			>
 			<i class="fas fa-file-plus "></i>
-			Create a donor
+			Create a report event
 		</button>
 		<div id="postReportEventModal" class="w3-modal w3-padding-32 ">
 			<div class="w3-modal-content ">
@@ -201,7 +207,7 @@
 	{{#eq "Page" classApiMethodMethod}}
 						<span class="w3-button w3-display-topright " onclick="$('#postReportEventModal').hide(); ">×</span>
 	{{/eq}}
-						<h2 class="w3-padding ">Create a donor</h2>
+						<h2 class="w3-padding ">Create a report event</h2>
 					</header>
 					<div class="" id="postReportEventFormValues">
 						<div id="postReportEventForm">
@@ -213,13 +219,14 @@
 {{> "htmDeleted" classApiMethodMethod="POST"}}
 							</div>
 							<div class="w3-cell-row ">
+{{> "htmScheduleKey" classApiMethodMethod="POST"}}
 {{> "htmEventName" classApiMethodMethod="POST"}}
 							</div>
 						</div>
 						<button
 							class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-margin w3-light-green "
 							onclick="postReportEvent($('#postReportEventForm')); "
-							>Create a donor</button>
+							>Create a report event</button>
 					</div>
 				</div>
 			</div>
@@ -231,7 +238,7 @@
 			onclick="$('#patchReportEventModal').show(); "
 			>
 			<i class="fas fa-edit "></i>
-			Modify donors
+			Modify report events
 		</button>
 		<div id="patchReportEventModal" class="w3-modal w3-padding-32 ">
 			<div class="w3-modal-content ">
@@ -240,7 +247,7 @@
 	{{#eq "Page" classApiMethodMethod}}
 						<span class="w3-button w3-display-topright " onclick="$('#patchReportEventModal').hide(); ">×</span>
 	{{/eq}}
-						<h2 class="w3-padding ">Modify donors</h2>
+						<h2 class="w3-padding ">Modify report events</h2>
 					</header>
 					<div class="" id="patchReportEventFormValues">
 							<div class="w3-cell-row ">
@@ -251,12 +258,13 @@
 {{> "htmDeleted" classApiMethodMethod="PATCH"}}
 							</div>
 							<div class="w3-cell-row ">
+{{> "htmScheduleKey" classApiMethodMethod="PATCH"}}
 {{> "htmEventName" classApiMethodMethod="PATCH"}}
 							</div>
 						<button
 							class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-margin w3-light-green "
 							onclick="patchReportEvent(null, $('#patchReportEventFormValues')); "
-							>Modify donors</button>
+							>Modify report events</button>
 					</div>
 				</div>
 			</div>
@@ -270,7 +278,7 @@
 	{{#eq "Page" classApiMethodMethod}}
 						<span class="w3-button w3-display-topright " onclick="$('#searchpageReportEventModal').hide(); ">×</span>
 	{{/eq}}
-						<h2 class="w3-padding ">Delete donors</h2>
+						<h2 class="w3-padding ">Delete report events</h2>
 					</header>
 					<div class="" id="searchpageReportEventFormValues">
 						<div id="searchpageReportEventForm">
@@ -285,13 +293,14 @@
 {{> "htmDeleted" classApiMethodMethod="Page"}}
 							</div>
 							<div class="w3-cell-row ">
+{{> "htmScheduleKey" classApiMethodMethod="Page"}}
 {{> "htmEventName" classApiMethodMethod="Page"}}
 							</div>
 						</div>
 						<button
 							class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-margin w3-light-green "
 							onclick="searchpageReportEvent(); "
-							>Delete donors</button>
+							>Delete report events</button>
 					</div>
 				</div>
 			</div>
@@ -357,7 +366,7 @@
 					</td>
 					<td>
 						<a href="{{pageUrlPk}}">
-							<i class="fad fa-hands-heart "></i>
+							<i class="fad fa-calendar-star "></i>
 							<span class="white-space-pre-wrap ">{{objectTitle}}</span>
 						</a>
 					</td>
@@ -389,7 +398,7 @@
 			id="refreshThisReportEventGenPage"
 			onclick="patch{{classSimpleName}}Vals( [ {name: 'fq', value: 'pk:{{pk}}' } ], {}, function() { addGlow($('#refreshThisReportEventGenPage')); }, function() { addError($('#refreshThisReportEventGenPage')); }); return false; ">
 			<i class="fas fa-sync-alt "></i>
-			refresh this donor
+			refresh this report event
 		</button>
 		{{/eq}}
 	{{/ifContainsAnyRoles}}
@@ -407,14 +416,14 @@
 							onclick="patch{{classSimpleName}}Vals([], {}, function() { addGlow($('#refreshAllReportEventGenPage{{id}}')); }, function() { addError($('#refreshAllReportEventGenPage{{id}}')); }); "
 							>
 							<i class="fas fa-sync-alt "></i>
-							refresh all the donors
+							refresh all the report events
 						</button>
 					</div>
 			{{/ifContainsAnyRoles}}
 			<div class="w3-cell-row ">
 				<div class="w3-cell ">
 					<span>
-						search donors: 
+						search report events: 
 					</span>
 				</div>
 			</div>
@@ -446,12 +455,86 @@
 			</div>
 			<div class="">
 				<a href="/api/report-event" class="">
-					<i class="fad fa-hands-heart"></i>
-					see all the donors
+					<i class="fad fa-calendar-star"></i>
+					see all the report events
 				</a>
 			</div>
 {{/inline}}
 {{> BaseModelPage baseModel_=reportEvent_}}
+
+{{#*inline "htmScheduleKey"}}
+								<div class="w3-cell w3-cell-top w3-center w3-mobile ">
+									<div class="w3-padding ">
+										<div id="suggest{{classApiMethodMethod}}ReportEventScheduleKey">
+											<div class="w3-card ">
+												<div class="w3-cell-row ">
+													<a href="/report-schedule?fq=eventKeys:{{reportEvent_.pk}}" class="w3-cell w3-btn w3-center h4 w3-block h4 w3-light-green w3-hover-light-green ">
+														<i class="fad fa-calendar-days "></i>
+														schedule
+													</a>
+												</div>
+												<div class="w3-cell-row ">
+													<h5 class="w3-cell ">
+														relate a report schedule to this report event
+													</h5>
+												</div>
+												<div class="w3-cell-row w3-padding ">
+													<div class="w3-cell ">
+														<div class="w3-cell-row ">
+
+														{{> "inputScheduleKey"}}
+														</div>
+													</div>
+												</div>
+												<div class="w3-cell-row w3-padding ">
+													<div class="w3-cell w3-left-align w3-cell-top ">
+														<ul class="w3-ul w3-hoverable " id="listReportEventScheduleKey_{{classApiMethodMethod}}">
+														</ul>
+														{{#ifContainsAnyRoles roles rolesRequired}}
+	{{#eq 'Page' classApiMethodMethod}}
+																<div class="w3-cell-row ">
+																	<button
+																		 class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-light-green "
+																		 id="{{classApiMethodMethod}}_scheduleKey_add"
+																		 onclick="$(this).addClass('w3-disabled'); this.disabled = true; this.innerHTML = 'Sending…'; postReportScheduleVals({ eventKeys: [ '{{pk}}' ] }, function() { $('#{{classApiMethodMethod}}_scheduleKey_add').disabled = false; $('#{{classApiMethodMethod}}_scheduleKey_add').innerHTML = 'add a report schedule'; }, function() { addError($('#{{classApiMethodMethod}}scheduleKey')); });"
+																		>add a report schedule</button>
+																</div>
+	{{/eq}}
+														{{/ifContainsAnyRoles}}
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+{{/inline}}
+
+{{#*inline "inputScheduleKey"}}
+		{{#ifContainsAnyRoles roles rolesRequired}}
+														<i class="far fa-search w3-xxlarge w3-cell w3-cell-middle "></i>
+														{{#eq 'PUTCopy' classApiMethodMethod}}
+															<div>
+																<input 
+																	type="checkbox"
+																	id="{{classApiMethodMethod}}_scheduleKey_clear"
+																	class="scheduleKey_clear "
+																	>
+																<label for="{{classApiMethodMethod}}_scheduleKey_clear">clear</label>
+															</div>
+														{{/eq}}
+														<input
+																type="text"
+																placeholder="schedule"
+															class="valueObjectSuggest suggestScheduleKey w3-input w3-border w3-cell w3-cell-middle "
+															name="setScheduleKey"
+															id="{{classApiMethodMethod}}_scheduleKey"
+															autocomplete="off"
+															oninput="suggestReportEventScheduleKey($(this).val() ? [ { 'name': 'q', 'value': 'objectSuggest:' + $(this).val() }, { 'name': 'rows', 'value': '10' }, { 'name': 'fl', 'value': 'classCanonicalName,eventKeys,pk,pageUrlPk,objectTitle' } ] : [{{#if pk}}{'name':'fq','value':'eventKeys:{{pk}}'}{{else}}{{/if}}], $('#listReportEventScheduleKey_{{classApiMethodMethod}}'), {{pk}}); "
+															/>
+
+													{{else}}
+		{{/ifContainsAnyRoles}}
+{{/inline}}
 
 {{#*inline "htmEventName"}}
 								<div class="w3-cell w3-cell-top w3-center w3-mobile ">

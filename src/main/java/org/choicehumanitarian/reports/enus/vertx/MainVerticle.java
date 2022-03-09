@@ -3,8 +3,6 @@ package org.choicehumanitarian.reports.enus.vertx;
 import java.net.URLDecoder;
 import java.text.Normalizer;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -15,6 +13,10 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 import org.choicehumanitarian.reports.enus.model.donor.ChoiceDonorEnUSGenApiService;
 import org.choicehumanitarian.reports.enus.model.report.ChoiceReportEnUSGenApiService;
+import org.choicehumanitarian.reports.enus.model.report.event.ReportEventEnUSGenApiService;
+import org.choicehumanitarian.reports.enus.model.report.narrative.ReportNarrativeEnUSGenApiService;
+import org.choicehumanitarian.reports.enus.model.report.schedule.ReportScheduleEnUSGenApiService;
+import org.choicehumanitarian.reports.enus.model.report.type.ReportTypeEnUSGenApiService;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import org.choicehumanitarian.reports.enus.user.SiteUserEnUSGenApiService;
 import org.computate.search.request.SearchRequest;
@@ -22,7 +24,7 @@ import org.computate.search.response.solr.SolrResponse;
 import org.computate.vertx.handlebars.AuthHelpers;
 import org.computate.vertx.handlebars.SiteHelpers;
 import org.computate.vertx.openapi.OpenApi3Generator;
-import org.computate.vertx.request.ComputateVertxSiteRequest;
+import org.computate.vertx.verticle.EmailVerticle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -116,36 +118,40 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 	 *	The main method for the Vert.x application that runs the Vert.x Runner class
 	 **/
 	public static void  main(String[] args) {
-		String runOpenApi3Generator = System.getenv(ConfigKeys.RUN_OPENAPI3_GENERATOR);
-		if(StringUtils.equalsIgnoreCase("true", runOpenApi3Generator))
-			runOpenApi3Generator(args);
-		else
-			run();
-	}
-
-	public static void  runOpenApi3Generator(String[] args) {
 		Vertx vertx = Vertx.vertx();
-		String configPath = System.getenv("CONFIG_PATH");
+		String configPath = System.getenv(ConfigKeys.CONFIG_PATH);
 		configureConfig(vertx).onSuccess(config -> {
-			OpenApi3Generator api = new OpenApi3Generator();
-			WebClient webClient = WebClient.create(vertx);
-			SiteRequestEnUS siteRequest = new SiteRequestEnUS();
-			siteRequest.setConfig(config);
-			siteRequest.setWebClient(webClient);
-			api.setWebClient(webClient);
-			api.setConfig(config);
-			siteRequest.initDeepSiteRequestEnUS();
-			api.initDeepOpenApi3Generator(siteRequest);
-			api.writeOpenApi().onSuccess(a -> {
-				LOG.info("Write OpenAPI completed. ");
+			try {
+				Boolean runOpenApi3Generator = Optional.ofNullable(config.getBoolean(ConfigKeys.RUN_OPENAPI3_GENERATOR)).orElse(false);
+				if(runOpenApi3Generator)
+					runOpenApi3Generator(args, vertx, config);
+				else
+					run(config);
+			} catch(Exception ex) {
+				LOG.error(String.format("Error loading config: %s", configPath), ex);
 				vertx.close();
-			}).onFailure(ex -> {
-				LOG.error("Write OpenAPI failed. ", ex);
-				vertx.close();
-			});
-			
+			}
 		}).onFailure(ex -> {
 			LOG.error(String.format("Error loading config: %s", configPath), ex);
+			vertx.close();
+		});
+	}
+
+	public static void  runOpenApi3Generator(String[] args, Vertx vertx, JsonObject config) {
+		OpenApi3Generator api = new OpenApi3Generator();
+		WebClient webClient = WebClient.create(vertx);
+		SiteRequestEnUS siteRequest = new SiteRequestEnUS();
+		siteRequest.setConfig(config);
+		siteRequest.setWebClient(webClient);
+		api.setWebClient(webClient);
+		api.setConfig(config);
+		siteRequest.initDeepSiteRequestEnUS();
+		api.initDeepOpenApi3Generator(siteRequest);
+		api.writeOpenApi().onSuccess(a -> {
+			LOG.info("Write OpenAPI completed. ");
+			vertx.close();
+		}).onFailure(ex -> {
+			LOG.error("Write OpenAPI failed. ", ex);
 			vertx.close();
 		});
 	}
@@ -187,22 +193,22 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 		return promise.future();
 	}
 
-	public static void  run() {
-		Boolean enableZookeeperCluster = Optional.ofNullable(System.getenv(ConfigKeys.ENABLE_ZOOKEEPER_CLUSTER)).map(s -> Boolean.parseBoolean(s)).orElse(false);
+	public static void  run(JsonObject config) {
+		Boolean enableZookeeperCluster = Optional.ofNullable(config.getBoolean(ConfigKeys.ENABLE_ZOOKEEPER_CLUSTER)).orElse(false);
 		VertxOptions vertxOptions = new VertxOptions();
 		EventBusOptions eventBusOptions = new EventBusOptions();
 
 		if(enableZookeeperCluster) {
 			JsonObject zkConfig = new JsonObject();
-			String hostname = System.getenv(ConfigKeys.HOSTNAME);
-			String openshiftService = System.getenv(ConfigKeys.OPENSHIFT_SERVICE);
-			String zookeeperHostName = System.getenv(ConfigKeys.ZOOKEEPER_HOST_NAME);
-			Integer zookeeperPort = Integer.parseInt(Optional.ofNullable(System.getenv(ConfigKeys.ZOOKEEPER_PORT)).orElse("2181"));
-			String zookeeperHosts = Optional.ofNullable(System.getenv(ConfigKeys.ZOOKEEPER_HOSTS)).orElse(zookeeperHostName + ":" + zookeeperPort);
-			Integer clusterPort = Optional.ofNullable(System.getenv(ConfigKeys.CLUSTER_PORT)).map(s -> Integer.parseInt(s)).orElse(null);
-			String clusterHostName = System.getenv(ConfigKeys.CLUSTER_HOST_NAME);
-			Integer clusterPublicPort = Optional.ofNullable(System.getenv(ConfigKeys.CLUSTER_PUBLIC_PORT)).map(s -> Integer.parseInt(s)).orElse(null);
-			String clusterPublicHostName = System.getenv(ConfigKeys.CLUSTER_PUBLIC_HOST_NAME);
+			String hostname = config.getString(ConfigKeys.HOSTNAME);
+			String openshiftService = config.getString(ConfigKeys.OPENSHIFT_SERVICE);
+			String zookeeperHostName = config.getString(ConfigKeys.ZOOKEEPER_HOST_NAME);
+			Integer zookeeperPort = config.getInteger(ConfigKeys.ZOOKEEPER_PORT);
+			String zookeeperHosts = Optional.ofNullable(config.getString(ConfigKeys.ZOOKEEPER_HOSTS)).orElse(zookeeperHostName + ":" + zookeeperPort);
+			String clusterHostName = config.getString(ConfigKeys.CLUSTER_HOST_NAME);
+			Integer clusterPort = config.getInteger(ConfigKeys.CLUSTER_PORT);
+			String clusterPublicHostName = config.getString(ConfigKeys.CLUSTER_PUBLIC_HOST_NAME);
+			Integer clusterPublicPort = config.getInteger(ConfigKeys.CLUSTER_PUBLIC_PORT);
 			zkConfig.put("zookeeperHosts", zookeeperHosts);
 			zkConfig.put("sessionTimeout", 500000);
 			zkConfig.put("connectTimeout", 3000);
@@ -242,49 +248,49 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 			}
 			vertxOptions.setClusterManager(clusterManager);
 		}
-		Long vertxWarningExceptionSeconds = Optional.ofNullable(System.getenv(ConfigKeys.VERTX_WARNING_EXCEPTION_SECONDS)).map(s -> Long.parseLong(s)).orElse(10L);
-		Integer siteInstances = Optional.ofNullable(System.getenv(ConfigKeys.SITE_INSTANCES)).map(s -> Integer.parseInt(s)).orElse(1);
+		Long vertxWarningExceptionSeconds = config.getLong(ConfigKeys.VERTX_WARNING_EXCEPTION_SECONDS);
+		Integer siteInstances = config.getInteger(ConfigKeys.SITE_INSTANCES);
 		vertxOptions.setEventBusOptions(eventBusOptions);
 		vertxOptions.setWarningExceptionTime(vertxWarningExceptionSeconds);
 		vertxOptions.setWarningExceptionTimeUnit(TimeUnit.SECONDS);
-		vertxOptions.setWorkerPoolSize(System.getenv(ConfigKeys.WORKER_POOL_SIZE) == null ? 5 : Integer.parseInt(System.getenv(ConfigKeys.WORKER_POOL_SIZE)));
+		vertxOptions.setWorkerPoolSize(config.getInteger(ConfigKeys.WORKER_POOL_SIZE));
 		Consumer<Vertx> runner = vertx -> {
-			configureConfig(vertx).onSuccess(config -> {
-				try {
-					DeploymentOptions deploymentOptions = new DeploymentOptions();
-					deploymentOptions.setInstances(siteInstances);
-					deploymentOptions.setConfig(config);
-		
-					DeploymentOptions mailVerticleDeploymentOptions = new DeploymentOptions();
-					mailVerticleDeploymentOptions.setConfig(config);
-					mailVerticleDeploymentOptions.setWorker(true);
-		
-					DeploymentOptions workerVerticleDeploymentOptions = new DeploymentOptions();
-					workerVerticleDeploymentOptions.setConfig(config);
-					workerVerticleDeploymentOptions.setInstances(1);
-		
-					DeploymentOptions ceylonVerticleDeploymentOptions = new DeploymentOptions();
-					ceylonVerticleDeploymentOptions.setConfig(config);
-					ceylonVerticleDeploymentOptions.setInstances(1);
-		
-					vertx.deployVerticle(MainVerticle.class, deploymentOptions).onSuccess(a -> {
-						LOG.info("Started main verticle. ");
-						vertx.deployVerticle(WorkerVerticle.class, workerVerticleDeploymentOptions).onSuccess(b -> {
-							LOG.info("Started worker verticle. ");
+			try {
+				DeploymentOptions deploymentOptions = new DeploymentOptions();
+				deploymentOptions.setInstances(siteInstances);
+				deploymentOptions.setConfig(config);
+	
+				DeploymentOptions emailVerticleDeploymentOptions = new DeploymentOptions();
+				emailVerticleDeploymentOptions.setConfig(config);
+				emailVerticleDeploymentOptions.setWorker(true);
+	
+				DeploymentOptions workerVerticleDeploymentOptions = new DeploymentOptions();
+				workerVerticleDeploymentOptions.setConfig(config);
+				workerVerticleDeploymentOptions.setInstances(1);
+	
+				DeploymentOptions ceylonVerticleDeploymentOptions = new DeploymentOptions();
+				ceylonVerticleDeploymentOptions.setConfig(config);
+				ceylonVerticleDeploymentOptions.setInstances(1);
+	
+				vertx.deployVerticle(MainVerticle.class, deploymentOptions).onSuccess(a -> {
+					LOG.info("Started main verticle. ");
+					vertx.deployVerticle(WorkerVerticle.class, workerVerticleDeploymentOptions).onSuccess(b -> {
+						LOG.info("Started worker verticle. ");
+						vertx.deployVerticle(EmailVerticle.class, emailVerticleDeploymentOptions).onSuccess(c -> {
+							LOG.info("Started email verticle. ");
 						}).onFailure(ex -> {
 							LOG.error("Failed to start worker verticle. ", ex);
 						});
 					}).onFailure(ex -> {
-						LOG.error("Failed to start main verticle. ", ex);
+						LOG.error("Failed to start worker verticle. ", ex);
 					});
-				} catch (Throwable ex) {
-					LOG.error("Creating clustered Vertx failed. ", ex);
-					ExceptionUtils.rethrow(ex);
-				}
-			}).onFailure(ex -> {
+				}).onFailure(ex -> {
+					LOG.error("Failed to start main verticle. ", ex);
+				});
+			} catch (Throwable ex) {
 				LOG.error("Creating clustered Vertx failed. ", ex);
 				ExceptionUtils.rethrow(ex);
-			});
+			}
 		};
 
 		if(enableZookeeperCluster) {
@@ -687,6 +693,10 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 			SiteUserEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine, vertx);
 			ChoiceDonorEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine, vertx);
 			ChoiceReportEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine, vertx);
+			ReportTypeEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine, vertx);
+			ReportScheduleEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine, vertx);
+			ReportNarrativeEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine, vertx);
+			ReportEventEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine, vertx);
 
 			LOG.info(configureApiComplete);
 			promise.complete();

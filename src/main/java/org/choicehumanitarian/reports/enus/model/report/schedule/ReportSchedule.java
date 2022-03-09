@@ -1,6 +1,7 @@
 package org.choicehumanitarian.reports.enus.model.report.schedule;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.choicehumanitarian.reports.enus.base.BaseModel;
 import org.choicehumanitarian.reports.enus.model.report.type.ReportType;
@@ -34,10 +35,10 @@ import io.vertx.core.Promise;
  * PageSuperSearchPage.enUS: BaseModelPage
  * ApiUriSearchPage.enUS: /report-schedule
  * 
- * AName.enUS: a donor
+ * AName.enUS: a report schedule
  * Color: light-green
  * IconGroup: duotone
- * IconName: hands-heart
+ * IconName: calendar-days
  * NameVar.enUS: reportSchedule
  * 
  * Role.enUS: SiteAdmin
@@ -53,8 +54,30 @@ public class ReportSchedule extends ReportScheduleGen<BaseModel> {
 	 * HtmlRow: 3
 	 * HtmlCell: 1
 	 * DisplayName.enUS: report type
-	 */         
+	 */       
 	protected void _typeKey(Wrap<Long> w) {
+	}
+
+	/**  
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Relate: ReportNarrative.scheduleKey
+	 * HtmlRow: 3
+	 * HtmlCell: 1
+	 * DisplayName.enUS: narratives
+	 */
+	protected void _narrativeKeys(List<Long> l) {
+	}
+
+	/**  
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Relate: ReportEvent.scheduleKey
+	 * HtmlRow: 3
+	 * HtmlCell: 1
+	 * DisplayName.enUS: events
+	 */
+	protected void _eventKeys(List<Long> l) {
 	}
 
 	/**
@@ -63,10 +86,12 @@ public class ReportSchedule extends ReportScheduleGen<BaseModel> {
 	 */      
 	protected void _typeSearch(Promise<SearchList<ReportType>> promise) {
 		SearchList<ReportType> l = new SearchList<>();
-		l.q("*:*");
-		l.fq("pk_docvalues_long:" + typeKey);
-		l.setC(ReportType.class);
-		l.setStore(true);
+		if(typeKey != null) {
+			l.q("*:*");
+			l.fq("pk_docvalues_long:" + typeKey);
+			l.setC(ReportType.class);
+			l.setStore(true);
+		}
 		promise.complete(l);
 	}
 
@@ -127,7 +152,7 @@ public class ReportSchedule extends ReportScheduleGen<BaseModel> {
 	 * HtmlRow: 4
 	 * HtmlCell: 3
 	 * DisplayName.enUS: years after completion
-	 */  
+	 */ 
 	protected void _frequencyYearsAfterCompletion(Wrap<Integer> w) {
 	}
 
@@ -153,7 +178,7 @@ public class ReportSchedule extends ReportScheduleGen<BaseModel> {
 	protected void _dataPullDate(Wrap<LocalDate> w) {
 	}
 
-	/**  
+	/**
 	 * {@inheritDoc}
 	 * DocValues: true
 	 * Define: true
@@ -161,7 +186,7 @@ public class ReportSchedule extends ReportScheduleGen<BaseModel> {
 	 * HtmlCell: 2
 	 * Multiline: true
 	 * DisplayName.enUS: data sources
-	 */  
+	 */
 	protected void _dataSources(Wrap<String> w) {
 	}
 
@@ -180,9 +205,9 @@ public class ReportSchedule extends ReportScheduleGen<BaseModel> {
 		if(frequencyOneTime) {
 			b.append(" one time");
 		} else if(frequencyTimesPerYear != null && frequencyYearsAfterCompletion != null) {
-			b.append(String.format("%sx/year until complete + %s-yrs after completion", frequencyTimesPerYear, frequencyYearsAfterCompletion));
+			b.append(String.format(" %sx/year until complete + %s-yrs after completion", frequencyTimesPerYear, frequencyYearsAfterCompletion));
 		} else if(frequencyTimesPerYear != null) {
-			b.append(String.format("%sx/year until complete", frequencyTimesPerYear));
+			b.append(String.format(" %sx/year", frequencyTimesPerYear));
 		}
 		w.o(b.toString());
 	}

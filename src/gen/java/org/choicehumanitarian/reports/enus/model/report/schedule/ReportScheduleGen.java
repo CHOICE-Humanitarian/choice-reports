@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.lang.Integer;
 import org.computate.search.response.solr.SolrResponse;
 import java.lang.Long;
+import org.choicehumanitarian.reports.enus.model.report.narrative.ReportNarrative;
 import java.util.Locale;
 import java.util.Map;
 import io.vertx.core.json.JsonObject;
@@ -52,6 +53,7 @@ import java.time.format.DateTimeFormatter;
 import org.apache.commons.lang3.math.NumberUtils;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
+import org.choicehumanitarian.reports.enus.model.report.event.ReportEvent;
 
 /**	
  * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.schedule.ReportSchedule&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
@@ -60,27 +62,27 @@ import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 public abstract class ReportScheduleGen<DEV> extends BaseModel {
 	protected static final Logger LOG = LoggerFactory.getLogger(ReportSchedule.class);
 
-	public static final String ReportSchedule_AName = "a donor";
+	public static final String ReportSchedule_AName = "a report schedule";
 	public static final String ReportSchedule_This = "this ";
-	public static final String ReportSchedule_ThisName = "this donor";
+	public static final String ReportSchedule_ThisName = "this report schedule";
 	public static final String ReportSchedule_A = "a ";
-	public static final String ReportSchedule_TheName = "the donor";
-	public static final String ReportSchedule_NameSingular = "donor";
-	public static final String ReportSchedule_NamePlural = "donors";
-	public static final String ReportSchedule_NameActual = "current donor";
-	public static final String ReportSchedule_AllName = "all the donors";
-	public static final String ReportSchedule_SearchAllNameBy = "search donors by ";
-	public static final String ReportSchedule_Title = "donors";
-	public static final String ReportSchedule_ThePluralName = "the donors";
-	public static final String ReportSchedule_NoNameFound = "no donor found";
+	public static final String ReportSchedule_TheName = "the report schedule";
+	public static final String ReportSchedule_NameSingular = "report schedule";
+	public static final String ReportSchedule_NamePlural = "report schedules";
+	public static final String ReportSchedule_NameActual = "current report schedule";
+	public static final String ReportSchedule_AllName = "all the report schedules";
+	public static final String ReportSchedule_SearchAllNameBy = "search report schedules by ";
+	public static final String ReportSchedule_Title = "report schedules";
+	public static final String ReportSchedule_ThePluralName = "the report schedules";
+	public static final String ReportSchedule_NoNameFound = "no report schedule found";
 	public static final String ReportSchedule_NameVar = "reportSchedule";
-	public static final String ReportSchedule_OfName = "of donor";
-	public static final String ReportSchedule_ANameAdjective = "a donor";
-	public static final String ReportSchedule_NameAdjectiveSingular = "donor";
-	public static final String ReportSchedule_NameAdjectivePlural = "donors";
+	public static final String ReportSchedule_OfName = "of report schedule";
+	public static final String ReportSchedule_ANameAdjective = "a report schedule";
+	public static final String ReportSchedule_NameAdjectiveSingular = "report schedule";
+	public static final String ReportSchedule_NameAdjectivePlural = "report schedules";
 	public static final String ReportSchedule_Color = "light-green";
 	public static final String ReportSchedule_IconGroup = "duotone";
-	public static final String ReportSchedule_IconName = "hands-heart";
+	public static final String ReportSchedule_IconName = "calendar-days";
 	public static final Integer ReportSchedule_Rows = 100;
 
 	/////////////
@@ -142,6 +144,178 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 
 	public Long sqlTypeKey() {
 		return typeKey;
+	}
+
+	///////////////////
+	// narrativeKeys //
+	///////////////////
+
+	/**	 The entity narrativeKeys
+	 *	 It is constructed before being initialized with the constructor by default. 
+	 */
+	@JsonProperty
+	@JsonFormat(shape = JsonFormat.Shape.ARRAY)
+	@JsonSerialize(contentUsing = ToStringSerializer.class)
+	@JsonInclude(Include.NON_NULL)
+	protected List<Long> narrativeKeys = new ArrayList<Long>();
+
+	/**	<br> The entity narrativeKeys
+	 *  It is constructed before being initialized with the constructor by default. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.schedule.ReportSchedule&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:narrativeKeys">Find the entity narrativeKeys in Solr</a>
+	 * <br>
+	 * @param l is the entity already constructed. 
+	 **/
+	protected abstract void _narrativeKeys(List<Long> l);
+
+	public List<Long> getNarrativeKeys() {
+		return narrativeKeys;
+	}
+
+	public void setNarrativeKeys(List<Long> narrativeKeys) {
+		this.narrativeKeys = narrativeKeys;
+	}
+	@JsonIgnore
+	public void setNarrativeKeys(String o) {
+		Long l = ReportSchedule.staticSetNarrativeKeys(siteRequest_, o);
+		if(l != null)
+			addNarrativeKeys(l);
+	}
+	public static Long staticSetNarrativeKeys(SiteRequestEnUS siteRequest_, String o) {
+		if(NumberUtils.isParsable(o))
+			return Long.parseLong(o);
+		return null;
+	}
+	public ReportSchedule addNarrativeKeys(Long...objets) {
+		for(Long o : objets) {
+			addNarrativeKeys(o);
+		}
+		return (ReportSchedule)this;
+	}
+	public ReportSchedule addNarrativeKeys(Long o) {
+		if(o != null)
+			this.narrativeKeys.add(o);
+		return (ReportSchedule)this;
+	}
+	@JsonIgnore
+	public void setNarrativeKeys(JsonArray objets) {
+		narrativeKeys.clear();
+		for(int i = 0; i < objets.size(); i++) {
+			Long o = objets.getLong(i);
+			addNarrativeKeys(o);
+		}
+	}
+	public ReportSchedule addNarrativeKeys(String o) {
+		if(NumberUtils.isParsable(o)) {
+			Long p = Long.parseLong(o);
+			addNarrativeKeys(p);
+		}
+		return (ReportSchedule)this;
+	}
+	protected ReportSchedule narrativeKeysInit() {
+		_narrativeKeys(narrativeKeys);
+		return (ReportSchedule)this;
+	}
+
+	public static Long staticSearchNarrativeKeys(SiteRequestEnUS siteRequest_, Long o) {
+		return o;
+	}
+
+	public static String staticSearchStrNarrativeKeys(SiteRequestEnUS siteRequest_, Long o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqNarrativeKeys(SiteRequestEnUS siteRequest_, String o) {
+		return ReportSchedule.staticSearchStrNarrativeKeys(siteRequest_, ReportSchedule.staticSearchNarrativeKeys(siteRequest_, ReportSchedule.staticSetNarrativeKeys(siteRequest_, o)));
+	}
+
+	public List<Long> sqlNarrativeKeys() {
+		return narrativeKeys;
+	}
+
+	///////////////
+	// eventKeys //
+	///////////////
+
+	/**	 The entity eventKeys
+	 *	 It is constructed before being initialized with the constructor by default. 
+	 */
+	@JsonProperty
+	@JsonFormat(shape = JsonFormat.Shape.ARRAY)
+	@JsonSerialize(contentUsing = ToStringSerializer.class)
+	@JsonInclude(Include.NON_NULL)
+	protected List<Long> eventKeys = new ArrayList<Long>();
+
+	/**	<br> The entity eventKeys
+	 *  It is constructed before being initialized with the constructor by default. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.schedule.ReportSchedule&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:eventKeys">Find the entity eventKeys in Solr</a>
+	 * <br>
+	 * @param l is the entity already constructed. 
+	 **/
+	protected abstract void _eventKeys(List<Long> l);
+
+	public List<Long> getEventKeys() {
+		return eventKeys;
+	}
+
+	public void setEventKeys(List<Long> eventKeys) {
+		this.eventKeys = eventKeys;
+	}
+	@JsonIgnore
+	public void setEventKeys(String o) {
+		Long l = ReportSchedule.staticSetEventKeys(siteRequest_, o);
+		if(l != null)
+			addEventKeys(l);
+	}
+	public static Long staticSetEventKeys(SiteRequestEnUS siteRequest_, String o) {
+		if(NumberUtils.isParsable(o))
+			return Long.parseLong(o);
+		return null;
+	}
+	public ReportSchedule addEventKeys(Long...objets) {
+		for(Long o : objets) {
+			addEventKeys(o);
+		}
+		return (ReportSchedule)this;
+	}
+	public ReportSchedule addEventKeys(Long o) {
+		if(o != null)
+			this.eventKeys.add(o);
+		return (ReportSchedule)this;
+	}
+	@JsonIgnore
+	public void setEventKeys(JsonArray objets) {
+		eventKeys.clear();
+		for(int i = 0; i < objets.size(); i++) {
+			Long o = objets.getLong(i);
+			addEventKeys(o);
+		}
+	}
+	public ReportSchedule addEventKeys(String o) {
+		if(NumberUtils.isParsable(o)) {
+			Long p = Long.parseLong(o);
+			addEventKeys(p);
+		}
+		return (ReportSchedule)this;
+	}
+	protected ReportSchedule eventKeysInit() {
+		_eventKeys(eventKeys);
+		return (ReportSchedule)this;
+	}
+
+	public static Long staticSearchEventKeys(SiteRequestEnUS siteRequest_, Long o) {
+		return o;
+	}
+
+	public static String staticSearchStrEventKeys(SiteRequestEnUS siteRequest_, Long o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqEventKeys(SiteRequestEnUS siteRequest_, String o) {
+		return ReportSchedule.staticSearchStrEventKeys(siteRequest_, ReportSchedule.staticSearchEventKeys(siteRequest_, ReportSchedule.staticSetEventKeys(siteRequest_, o)));
+	}
+
+	public List<Long> sqlEventKeys() {
+		return eventKeys;
 	}
 
 	////////////////
@@ -553,6 +727,13 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 		this.firstDueDate = ReportSchedule.staticSetFirstDueDate(siteRequest_, o);
 	}
 	public static LocalDate staticSetFirstDueDate(SiteRequestEnUS siteRequest_, String o) {
+		if(o != null) {
+			if(o.contains("T")) {
+				return java.time.LocalDateTime.parse(o, DateTimeFormatter.ISO_DATE_TIME).atZone(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).toLocalDate();
+			} else {
+				return LocalDate.parse(o, DateTimeFormatter.ISO_DATE);
+			}
+		}
 		return o == null ? null : LocalDate.parse(o, DateTimeFormatter.ISO_DATE);
 	}
 	@JsonIgnore
@@ -623,6 +804,13 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 		this.dataPullDate = ReportSchedule.staticSetDataPullDate(siteRequest_, o);
 	}
 	public static LocalDate staticSetDataPullDate(SiteRequestEnUS siteRequest_, String o) {
+		if(o != null) {
+			if(o.contains("T")) {
+				return java.time.LocalDateTime.parse(o, DateTimeFormatter.ISO_DATE_TIME).atZone(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).toLocalDate();
+			} else {
+				return LocalDate.parse(o, DateTimeFormatter.ISO_DATE);
+			}
+		}
 		return o == null ? null : LocalDate.parse(o, DateTimeFormatter.ISO_DATE);
 	}
 	@JsonIgnore
@@ -737,6 +925,8 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 			Promise<Void> promise2 = Promise.promise();
 			try {
 				typeKeyInit();
+				narrativeKeysInit();
+				eventKeysInit();
 				promise2.complete();
 			} catch(Exception ex) {
 				promise2.fail(ex);
@@ -819,6 +1009,10 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 		switch(var) {
 			case "typeKey":
 				return oReportSchedule.typeKey;
+			case "narrativeKeys":
+				return oReportSchedule.narrativeKeys;
+			case "eventKeys":
+				return oReportSchedule.eventKeys;
 			case "typeSearch":
 				return oReportSchedule.typeSearch;
 			case "type_":
@@ -870,6 +1064,16 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 				if(!saves.contains("typeKey"))
 					saves.add("typeKey");
 				return val;
+			case "narrativeKeys":
+				oReportSchedule.addNarrativeKeys((Long)val);
+				if(!saves.contains("narrativeKeys"))
+					saves.add("narrativeKeys");
+				return val;
+			case "eventKeys":
+				oReportSchedule.addEventKeys((Long)val);
+				if(!saves.contains("eventKeys"))
+					saves.add("eventKeys");
+				return val;
 			default:
 				return super.relateBaseModel(var, val);
 		}
@@ -886,6 +1090,10 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 		switch(entityVar) {
 		case "typeKey":
 			return ReportSchedule.staticSetTypeKey(siteRequest_, o);
+		case "narrativeKeys":
+			return ReportSchedule.staticSetNarrativeKeys(siteRequest_, o);
+		case "eventKeys":
+			return ReportSchedule.staticSetEventKeys(siteRequest_, o);
 		case "typeName":
 			return ReportSchedule.staticSetTypeName(siteRequest_, o);
 		case "scheduleName":
@@ -918,6 +1126,10 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 		switch(entityVar) {
 		case "typeKey":
 			return ReportSchedule.staticSearchTypeKey(siteRequest_, (Long)o);
+		case "narrativeKeys":
+			return ReportSchedule.staticSearchNarrativeKeys(siteRequest_, (Long)o);
+		case "eventKeys":
+			return ReportSchedule.staticSearchEventKeys(siteRequest_, (Long)o);
 		case "typeName":
 			return ReportSchedule.staticSearchTypeName(siteRequest_, (String)o);
 		case "scheduleName":
@@ -950,6 +1162,10 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 		switch(entityVar) {
 		case "typeKey":
 			return ReportSchedule.staticSearchStrTypeKey(siteRequest_, (Long)o);
+		case "narrativeKeys":
+			return ReportSchedule.staticSearchStrNarrativeKeys(siteRequest_, (Long)o);
+		case "eventKeys":
+			return ReportSchedule.staticSearchStrEventKeys(siteRequest_, (Long)o);
 		case "typeName":
 			return ReportSchedule.staticSearchStrTypeName(siteRequest_, (String)o);
 		case "scheduleName":
@@ -982,6 +1198,10 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 		switch(entityVar) {
 		case "typeKey":
 			return ReportSchedule.staticSearchFqTypeKey(siteRequest_, o);
+		case "narrativeKeys":
+			return ReportSchedule.staticSearchFqNarrativeKeys(siteRequest_, o);
+		case "eventKeys":
+			return ReportSchedule.staticSearchFqEventKeys(siteRequest_, o);
 		case "typeName":
 			return ReportSchedule.staticSearchFqTypeName(siteRequest_, o);
 		case "scheduleName":
@@ -1101,6 +1321,20 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 		if(typeKey != null) {
 			doc.put("typeKey_docvalues_long", typeKey);
 		}
+		if(narrativeKeys != null) {
+			JsonArray l = new JsonArray();
+			doc.put("narrativeKeys_docvalues_longs", l);
+			for(Long o : narrativeKeys) {
+				l.add(o);
+			}
+		}
+		if(eventKeys != null) {
+			JsonArray l = new JsonArray();
+			doc.put("eventKeys_docvalues_longs", l);
+			for(Long o : eventKeys) {
+				l.add(o);
+			}
+		}
 		if(typeName != null) {
 			doc.put("typeName_docvalues_string", typeName);
 		}
@@ -1133,6 +1367,10 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 		switch(entityVar) {
 			case "typeKey":
 				return "typeKey_docvalues_long";
+			case "narrativeKeys":
+				return "narrativeKeys_docvalues_longs";
+			case "eventKeys":
+				return "eventKeys_docvalues_longs";
 			case "typeName":
 				return "typeName_docvalues_string";
 			case "scheduleName":
@@ -1179,6 +1417,12 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 		ReportSchedule oReportSchedule = (ReportSchedule)this;
 
 		oReportSchedule.setTypeKey(Optional.ofNullable(doc.get("typeKey_docvalues_long")).map(v -> v.toString()).orElse(null));
+		Optional.ofNullable((List<?>)doc.get("narrativeKeys_docvalues_longs")).orElse(Arrays.asList()).stream().filter(v -> v != null).forEach(v -> {
+			oReportSchedule.addNarrativeKeys(v.toString());
+		});
+		Optional.ofNullable((List<?>)doc.get("eventKeys_docvalues_longs")).orElse(Arrays.asList()).stream().filter(v -> v != null).forEach(v -> {
+			oReportSchedule.addEventKeys(v.toString());
+		});
 		oReportSchedule.setTypeName(Optional.ofNullable(doc.get("typeName_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oReportSchedule.setScheduleName(Optional.ofNullable(doc.get("scheduleName_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oReportSchedule.setFrequencyOneTime(Optional.ofNullable(doc.get("frequencyOneTime_docvalues_boolean")).map(v -> v.toString()).orElse(null));
@@ -1202,6 +1446,10 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 			ReportSchedule original = (ReportSchedule)o;
 			if(!Objects.equals(typeKey, original.getTypeKey()))
 				apiRequest.addVars("typeKey");
+			if(!Objects.equals(narrativeKeys, original.getNarrativeKeys()))
+				apiRequest.addVars("narrativeKeys");
+			if(!Objects.equals(eventKeys, original.getEventKeys()))
+				apiRequest.addVars("eventKeys");
 			if(!Objects.equals(typeName, original.getTypeName()))
 				apiRequest.addVars("typeName");
 			if(!Objects.equals(scheduleName, original.getScheduleName()))
@@ -1230,6 +1478,8 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 		StringBuilder sb = new StringBuilder();
 		sb.append(super.toString());
 		sb.append(Optional.ofNullable(typeKey).map(v -> "typeKey: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(narrativeKeys).map(v -> "narrativeKeys: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(eventKeys).map(v -> "eventKeys: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(typeName).map(v -> "typeName: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(scheduleName).map(v -> "scheduleName: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(frequencyOneTime).map(v -> "frequencyOneTime: " + v + "\n").orElse(""));
@@ -1242,6 +1492,8 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 	}
 
 	public static final String VAR_typeKey = "typeKey";
+	public static final String VAR_narrativeKeys = "narrativeKeys";
+	public static final String VAR_eventKeys = "eventKeys";
 	public static final String VAR_typeSearch = "typeSearch";
 	public static final String VAR_type_ = "type_";
 	public static final String VAR_typeName = "typeName";
@@ -1254,6 +1506,8 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 	public static final String VAR_dataSources = "dataSources";
 
 	public static final String DISPLAY_NAME_typeKey = "report type";
+	public static final String DISPLAY_NAME_narrativeKeys = "narratives";
+	public static final String DISPLAY_NAME_eventKeys = "events";
 	public static final String DISPLAY_NAME_typeSearch = "";
 	public static final String DISPLAY_NAME_type_ = "";
 	public static final String DISPLAY_NAME_typeName = "report type name";
@@ -1272,6 +1526,10 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 		switch(var) {
 		case VAR_typeKey:
 			return DISPLAY_NAME_typeKey;
+		case VAR_narrativeKeys:
+			return DISPLAY_NAME_narrativeKeys;
+		case VAR_eventKeys:
+			return DISPLAY_NAME_eventKeys;
 		case VAR_typeSearch:
 			return DISPLAY_NAME_typeSearch;
 		case VAR_type_:

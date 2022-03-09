@@ -86,11 +86,11 @@ public class ReportTypeGenPage extends ReportTypeGenPageGen<BaseModelPage> {
 		if(reportType_ != null && reportType_.getObjectTitle() != null)
 			c.o(reportType_.getObjectTitle());
 		else if(reportType_ != null)
-			c.o("donors");
+			c.o("report types");
 		else if(searchListReportType_ == null || reportTypeCount == 0)
-			c.o("no donor found");
+			c.o("no report type found");
 		else
-			c.o("donors");
+			c.o("report types");
 	}
 
 	@Override
@@ -231,6 +231,6 @@ public class ReportTypeGenPage extends ReportTypeGenPageGen<BaseModelPage> {
 
 	@Override
 	protected void _contextIconName(Wrap<String> c) {
-			c.o("hands-heart");
+			c.o("list-dropdown");
 	}
 }

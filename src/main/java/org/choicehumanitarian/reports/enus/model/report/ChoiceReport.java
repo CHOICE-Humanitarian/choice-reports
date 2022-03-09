@@ -16,7 +16,7 @@ import io.vertx.core.Promise;
  * SuperPage.enUS: BaseModelPage
  * Indexed: true
  * Saved: true
- * Map.Integer.sqlSort: 6
+ * Map.Integer.sqlSort: 3
  * 
  * ApiTag.enUS: Report
  * ApiUri.enUS: /api/report

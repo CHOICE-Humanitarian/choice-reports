@@ -42,52 +42,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 public abstract class MainVerticleGen<DEV> extends AbstractVerticle {
 
 /*
-CREATE TABLE SiteUser(
-	pk bigserial primary key
-	, inheritPk text
-	, created timestamp with time zone
-	, archived boolean
-	, deleted boolean
-	, sessionId text
-	, userKey bigint
-	, userId text
-	, userName text
-	, userEmail text
-	, userFirstName text
-	, userLastName text
-	, userFullName text
-	, seeArchived boolean
-	, seeDeleted boolean
-	);
-CREATE TABLE ReportNarrative(
-	);
-CREATE TABLE ReportEvent(
-	pk bigserial primary key
-	, inheritPk text
-	, created timestamp with time zone
-	, archived boolean
-	, deleted boolean
-	, sessionId text
-	, userKey bigint
-	, eventName text
-	);
-CREATE TABLE ReportSchedule(
-	pk bigserial primary key
-	, inheritPk text
-	, created timestamp with time zone
-	, archived boolean
-	, deleted boolean
-	, sessionId text
-	, userKey bigint
-	, typeKey bigint references ReportType(pk)
-	, scheduleName text
-	, frequencyOneTime boolean
-	, frequencyTimesPerYear integer
-	, frequencyYearsAfterCompletion integer
-	, firstDueDate date
-	, dataPullDate date
-	, dataSources text
-	);
 CREATE TABLE ChoiceDonor(
 	pk bigserial primary key
 	, inheritPk text
@@ -109,7 +63,7 @@ CREATE TABLE ChoiceDonor(
 	, donorQ4 decimal
 	, donorLogoFilename text
 	);
-CREATE TABLE ReportType(
+CREATE TABLE SiteUser(
 	pk bigserial primary key
 	, inheritPk text
 	, created timestamp with time zone
@@ -117,7 +71,14 @@ CREATE TABLE ReportType(
 	, deleted boolean
 	, sessionId text
 	, userKey bigint
-	, typeName text
+	, userId text
+	, userName text
+	, userEmail text
+	, userFirstName text
+	, userLastName text
+	, userFullName text
+	, seeArchived boolean
+	, seeDeleted boolean
 	);
 CREATE TABLE ChoiceReport(
 	pk bigserial primary key
@@ -141,14 +102,63 @@ CREATE TABLE ChoiceReport(
 	, donorQ4 decimal
 	, donorLogoFilename text
 	);
+CREATE TABLE ReportType(
+	pk bigserial primary key
+	, inheritPk text
+	, created timestamp with time zone
+	, archived boolean
+	, deleted boolean
+	, sessionId text
+	, userKey bigint
+	, typeName text
+	);
+CREATE TABLE ReportSchedule(
+	pk bigserial primary key
+	, inheritPk text
+	, created timestamp with time zone
+	, archived boolean
+	, deleted boolean
+	, sessionId text
+	, userKey bigint
+	, typeKey bigint references ReportType(pk)
+	, scheduleName text
+	, frequencyOneTime boolean
+	, frequencyTimesPerYear integer
+	, frequencyYearsAfterCompletion integer
+	, firstDueDate date
+	, dataPullDate date
+	, dataSources text
+	);
+CREATE TABLE ReportNarrative(
+	pk bigserial primary key
+	, inheritPk text
+	, created timestamp with time zone
+	, archived boolean
+	, deleted boolean
+	, sessionId text
+	, userKey bigint
+	, scheduleKey bigint references ReportSchedule(pk)
+	, narrativeName text
+	);
+CREATE TABLE ReportEvent(
+	pk bigserial primary key
+	, inheritPk text
+	, created timestamp with time zone
+	, archived boolean
+	, deleted boolean
+	, sessionId text
+	, userKey bigint
+	, scheduleKey bigint references ReportSchedule(pk)
+	, eventName text
+	);
 
+DROP TABLE ChoiceDonor CASCADE;
 DROP TABLE SiteUser CASCADE;
+DROP TABLE ChoiceReport CASCADE;
+DROP TABLE ReportType CASCADE;
+DROP TABLE ReportSchedule CASCADE;
 DROP TABLE ReportNarrative CASCADE;
 DROP TABLE ReportEvent CASCADE;
-DROP TABLE ReportSchedule CASCADE;
-DROP TABLE ChoiceDonor CASCADE;
-DROP TABLE ReportType CASCADE;
-DROP TABLE ChoiceReport CASCADE;
 */
 
 	protected static final Logger LOG = LoggerFactory.getLogger(MainVerticle.class);

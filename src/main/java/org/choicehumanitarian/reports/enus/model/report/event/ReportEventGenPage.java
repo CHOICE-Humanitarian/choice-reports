@@ -1,5 +1,6 @@
 package org.choicehumanitarian.reports.enus.model.report.event;
 
+import java.lang.Long;
 import java.lang.String;
 import org.choicehumanitarian.reports.enus.base.BaseModelPage;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
@@ -85,11 +86,11 @@ public class ReportEventGenPage extends ReportEventGenPageGen<BaseModelPage> {
 		if(reportEvent_ != null && reportEvent_.getObjectTitle() != null)
 			c.o(reportEvent_.getObjectTitle());
 		else if(reportEvent_ != null)
-			c.o("donors");
+			c.o("report events");
 		else if(searchListReportEvent_ == null || reportEventCount == 0)
-			c.o("no donor found");
+			c.o("no report event found");
 		else
-			c.o("donors");
+			c.o("report events");
 	}
 
 	@Override
@@ -230,6 +231,6 @@ public class ReportEventGenPage extends ReportEventGenPageGen<BaseModelPage> {
 
 	@Override
 	protected void _contextIconName(Wrap<String> c) {
-			c.o("hands-heart");
+			c.o("calendar-star");
 	}
 }

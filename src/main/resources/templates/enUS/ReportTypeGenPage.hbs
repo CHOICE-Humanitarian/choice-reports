@@ -1,5 +1,5 @@
 {{#*inline "htmTitleReportTypePage"}}		<!-- inline "htmTitleReportTypePage" -->
-		<title>{{#if searchListReportType_}}{{#eq reportTypeCount int1}}{{#eq params.query.q "*:*"}}donor{{else}}donor{{/eq}}{{else}}no donor found{{/eq}}{{else}}donors{{/if}}</title>
+		<title>{{#if searchListReportType_}}{{#eq reportTypeCount int1}}{{#eq params.query.q "*:*"}}report type{{else}}report type{{/eq}}{{else}}no report type found{{/eq}}{{else}}report types{{/if}}</title>
 {{/inline}}
 {{#*inline "htmMetaReportTypePage"}}{{> "htmMetaBaseModelPage"}}{{/inline}}
 {{#*inline "htmStyleReportTypePage"}}{{> "htmStyleBaseModelPage"}}{{/inline}}
@@ -43,7 +43,7 @@
 				{{#if contextIconCssClasses}}
 					<i class="contextIconCssClasses site-menu-icon "></i>
 				{{/if}}
-				<span class="">donors</span>
+				<span class="">report types</span>
 			</a>
 		</h1>
 		<h2>
@@ -51,7 +51,7 @@
 				{{#if contextIconCssClasses}}
 					<i class="contextIconCssClasses + " site-menu-icon "></i>
 				{{/if}}
-				<span class="">no donor found</span>
+				<span class="">no report type found</span>
 			</span>
 		</h2>
 {{/inline}}
@@ -61,7 +61,7 @@
 			{{#if contextIconCssClasses}}
 				<i class="contextIconCssClasses site-menu-icon "></i>
 			{{/if}}
-				<span class="">donor</span>
+				<span class="">report type</span>
 			</a>
 		</h1>
 		<h2 class="w3-center ">
@@ -77,7 +77,7 @@
 	{{#if contextIconCssClasses}}
 				<i class="contextIconCssClasses + " site-menu-icon "></i>
 	{{/if}}
-				<span class="">donors</span>
+				<span class="">report types</span>
 			</a>
 		</h1>
 		<div>
@@ -115,7 +115,7 @@
 	{{#if contextIconCssClasses}}
 				<i class="contextIconCssClasses + " site-menu-icon "></i>
 	{{/if}}
-				<span class="">donors</span>
+				<span class="">report types</span>
 			</a>
 		</h1>
 		<div class="">
@@ -164,7 +164,7 @@
 			onclick="$('#putimportReportTypeModal').show(); "
 			>
 			<i class="fas fa-file-import "></i>
-			Import donors
+			Import report types
 		</button>
 		<div id="putimportReportTypeModal" class="w3-modal w3-padding-32 ">
 			<div class="w3-modal-content ">
@@ -173,7 +173,7 @@
 	{{#eq "Page" classApiMethodMethod}}
 						<span class="w3-button w3-display-topright " onclick="$('#putimportReportTypeModal').hide(); ">×</span>
 	{{/eq}}
-						<h2 class="w3-padding ">Import donors</h2>
+						<h2 class="w3-padding ">Import report types</h2>
 					</header>
 					<div class="" id="putimportReportTypeFormValues">
 						<div class="w3-cell-row ">
@@ -186,7 +186,7 @@
 						<button
 							class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-margin w3-light-green "
 							onclick="putimportReportType($('#putimportReportTypeFormValues')); "
-							>Import donors</button>
+							>Import report types</button>
 					</div>
 				</div>
 			</div>
@@ -198,7 +198,7 @@
 			onclick="$('#postReportTypeModal').show(); "
 			>
 			<i class="fas fa-file-plus "></i>
-			Create a donor
+			Create a report type
 		</button>
 		<div id="postReportTypeModal" class="w3-modal w3-padding-32 ">
 			<div class="w3-modal-content ">
@@ -207,7 +207,7 @@
 	{{#eq "Page" classApiMethodMethod}}
 						<span class="w3-button w3-display-topright " onclick="$('#postReportTypeModal').hide(); ">×</span>
 	{{/eq}}
-						<h2 class="w3-padding ">Create a donor</h2>
+						<h2 class="w3-padding ">Create a report type</h2>
 					</header>
 					<div class="" id="postReportTypeFormValues">
 						<div id="postReportTypeForm">
@@ -226,7 +226,7 @@
 						<button
 							class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-margin w3-light-green "
 							onclick="postReportType($('#postReportTypeForm')); "
-							>Create a donor</button>
+							>Create a report type</button>
 					</div>
 				</div>
 			</div>
@@ -238,7 +238,7 @@
 			onclick="$('#patchReportTypeModal').show(); "
 			>
 			<i class="fas fa-edit "></i>
-			Modify donors
+			Modify report types
 		</button>
 		<div id="patchReportTypeModal" class="w3-modal w3-padding-32 ">
 			<div class="w3-modal-content ">
@@ -247,7 +247,7 @@
 	{{#eq "Page" classApiMethodMethod}}
 						<span class="w3-button w3-display-topright " onclick="$('#patchReportTypeModal').hide(); ">×</span>
 	{{/eq}}
-						<h2 class="w3-padding ">Modify donors</h2>
+						<h2 class="w3-padding ">Modify report types</h2>
 					</header>
 					<div class="" id="patchReportTypeFormValues">
 							<div class="w3-cell-row ">
@@ -264,7 +264,7 @@
 						<button
 							class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-margin w3-light-green "
 							onclick="patchReportType(null, $('#patchReportTypeFormValues')); "
-							>Modify donors</button>
+							>Modify report types</button>
 					</div>
 				</div>
 			</div>
@@ -278,7 +278,7 @@
 	{{#eq "Page" classApiMethodMethod}}
 						<span class="w3-button w3-display-topright " onclick="$('#searchpageReportTypeModal').hide(); ">×</span>
 	{{/eq}}
-						<h2 class="w3-padding ">Delete donors</h2>
+						<h2 class="w3-padding ">Delete report types</h2>
 					</header>
 					<div class="" id="searchpageReportTypeFormValues">
 						<div id="searchpageReportTypeForm">
@@ -300,7 +300,7 @@
 						<button
 							class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-margin w3-light-green "
 							onclick="searchpageReportType(); "
-							>Delete donors</button>
+							>Delete report types</button>
 					</div>
 				</div>
 			</div>
@@ -366,7 +366,7 @@
 					</td>
 					<td>
 						<a href="{{pageUrlPk}}">
-							<i class="fad fa-hands-heart "></i>
+							<i class="fad fa-list-dropdown "></i>
 							<span class="white-space-pre-wrap ">{{objectTitle}}</span>
 						</a>
 					</td>
@@ -398,7 +398,7 @@
 			id="refreshThisReportTypeGenPage"
 			onclick="patch{{classSimpleName}}Vals( [ {name: 'fq', value: 'pk:{{pk}}' } ], {}, function() { addGlow($('#refreshThisReportTypeGenPage')); }, function() { addError($('#refreshThisReportTypeGenPage')); }); return false; ">
 			<i class="fas fa-sync-alt "></i>
-			refresh this donor
+			refresh this report type
 		</button>
 		{{/eq}}
 	{{/ifContainsAnyRoles}}
@@ -416,14 +416,14 @@
 							onclick="patch{{classSimpleName}}Vals([], {}, function() { addGlow($('#refreshAllReportTypeGenPage{{id}}')); }, function() { addError($('#refreshAllReportTypeGenPage{{id}}')); }); "
 							>
 							<i class="fas fa-sync-alt "></i>
-							refresh all the donors
+							refresh all the report types
 						</button>
 					</div>
 			{{/ifContainsAnyRoles}}
 			<div class="w3-cell-row ">
 				<div class="w3-cell ">
 					<span>
-						search donors: 
+						search report types: 
 					</span>
 				</div>
 			</div>
@@ -455,8 +455,8 @@
 			</div>
 			<div class="">
 				<a href="/api/report-type" class="">
-					<i class="fad fa-hands-heart"></i>
-					see all the donors
+					<i class="fad fa-list-dropdown"></i>
+					see all the report types
 				</a>
 			</div>
 {{/inline}}
@@ -469,13 +469,13 @@
 											<div class="w3-card ">
 												<div class="w3-cell-row ">
 													<a href="/report-schedule?fq=typeKey:{{reportType_.pk}}" class="w3-cell w3-btn w3-center h4 w3-block h4 w3-light-green w3-hover-light-green ">
-														<i class="fad fa-hands-heart "></i>
+														<i class="fad fa-calendar-days "></i>
 														report schedules
 													</a>
 												</div>
 												<div class="w3-cell-row ">
 													<h5 class="w3-cell ">
-														relate  to this donor
+														relate  to this report type
 													</h5>
 												</div>
 												<div class="w3-cell-row w3-padding ">
@@ -496,8 +496,8 @@
 																	<button
 																		 class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-light-green "
 																		 id="{{classApiMethodMethod}}_scheduleKeys_add"
-																		 onclick="$(this).addClass('w3-disabled'); this.disabled = true; this.innerHTML = 'Sending…'; postReportScheduleVals({ typeKey: '{{pk}}' }, function() { $('#{{classApiMethodMethod}}_scheduleKeys_add').disabled = false; $('#{{classApiMethodMethod}}_scheduleKeys_add').innerHTML = 'add a donor'; }, function() { addError($('#{{classApiMethodMethod}}scheduleKeys')); });"
-																		>add a donor</button>
+																		 onclick="$(this).addClass('w3-disabled'); this.disabled = true; this.innerHTML = 'Sending…'; postReportScheduleVals({ typeKey: '{{pk}}' }, function() { $('#{{classApiMethodMethod}}_scheduleKeys_add').disabled = false; $('#{{classApiMethodMethod}}_scheduleKeys_add').innerHTML = 'add a report schedule'; }, function() { addError($('#{{classApiMethodMethod}}scheduleKeys')); });"
+																		>add a report schedule</button>
 																</div>
 	{{/eq}}
 														{{/ifContainsAnyRoles}}
