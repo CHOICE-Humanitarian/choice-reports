@@ -1,12 +1,11 @@
 package org.choicehumanitarian.reports.enus.model.report;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import org.choicehumanitarian.reports.enus.base.BaseModel;
 import org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor;
-import org.choicehumanitarian.reports.enus.search.SearchList;
-import org.choicehumanitarian.reports.enus.wrap.Wrap;
+import org.computate.search.wrap.Wrap;
+import org.computate.vertx.search.list.SearchList;
 
 import io.vertx.core.Promise;
 
@@ -73,8 +72,8 @@ public class ChoiceReport extends ChoiceReportGen<BaseModel> {
 	 */      
 	protected void _donorSearch(Promise<SearchList<ChoiceDonor>> promise) {
 		SearchList<ChoiceDonor> l = new SearchList<>();
-		l.setQuery("*:*");
-		l.addFilterQuery("pk_docvalues_long:" + donorKey);
+		l.q("*:*");
+		l.fq("pk_docvalues_long:" + donorKey);
 		l.setC(ChoiceDonor.class);
 		l.setStore(true);
 		promise.complete(l);

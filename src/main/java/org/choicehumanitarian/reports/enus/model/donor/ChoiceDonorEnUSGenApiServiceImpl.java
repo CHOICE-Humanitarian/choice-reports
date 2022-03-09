@@ -4,16 +4,17 @@ import org.choicehumanitarian.reports.enus.model.report.ChoiceReportEnUSApiServi
 import org.choicehumanitarian.reports.enus.model.report.ChoiceReport;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import org.choicehumanitarian.reports.enus.user.SiteUser;
-import org.choicehumanitarian.reports.enus.request.api.ApiRequest;
-import org.choicehumanitarian.reports.enus.search.SearchResult;
-import org.choicehumanitarian.reports.enus.vertx.MailVerticle;
+import org.computate.vertx.api.ApiRequest;
+import org.computate.vertx.search.list.SearchResult;
+import org.computate.vertx.verticle.EmailVerticle;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
-import org.choicehumanitarian.reports.enus.base.BaseApiServiceImpl;
+import org.computate.vertx.api.BaseApiServiceImpl;
 import io.vertx.ext.web.client.WebClient;
 import java.util.Objects;
 import io.vertx.core.WorkerExecutor;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.pgclient.PgPool;
+import io.vertx.core.json.impl.JsonUtil;
 import io.vertx.ext.auth.authorization.AuthorizationProvider;
 import io.vertx.ext.web.templ.handlebars.HandlebarsTemplateEngine;
 import io.vertx.core.eventbus.DeliveryOptions;
@@ -24,17 +25,10 @@ import java.util.concurrent.TimeUnit;
 import java.time.Instant;
 import java.util.stream.Collectors;
 import io.vertx.core.json.Json;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrQuery.ORDER;
-import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.commons.lang3.StringUtils;
 import java.security.Principal;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import java.io.PrintWriter;
-import org.apache.solr.common.SolrDocumentList;
-import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrInputDocument;
 import java.util.Collection;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -73,9 +67,7 @@ import java.net.URLEncoder;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.http.HttpHeaders;
-import org.apache.http.client.utils.URLEncodedUtils;
 import java.nio.charset.Charset;
-import org.apache.http.NameValuePair;
 import io.vertx.ext.web.api.service.ServiceRequest;
 import io.vertx.ext.web.api.service.ServiceResponse;
 import io.vertx.ext.web.client.predicate.ResponsePredicate;
@@ -84,22 +76,18 @@ import io.vertx.ext.auth.User;
 import java.util.Optional;
 import java.util.stream.Stream;
 import java.net.URLDecoder;
-import org.apache.solr.util.DateMathParser;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
-import org.apache.solr.common.util.NamedList;
-import org.apache.solr.client.solrj.response.PivotField;
-import org.apache.solr.client.solrj.response.RangeFacet;
-import org.apache.solr.client.solrj.response.FacetField;
 import java.util.Map.Entry;
 import java.util.Iterator;
+import org.computate.search.tool.SearchTool;
+import org.computate.search.response.solr.SolrResponse;
 import java.util.Base64;
 import java.time.ZonedDateTime;
-import org.apache.solr.common.util.SimpleOrderedMap;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.choicehumanitarian.reports.enus.user.SiteUserEnUSApiServiceImpl;
-import org.choicehumanitarian.reports.enus.search.SearchList;
+import org.computate.vertx.search.list.SearchList;
 
 
 /**
@@ -118,7 +106,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 	@Override
 	public void putimportChoiceDonor(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
 		LOG.debug(String.format("putimportChoiceDonor started. "));
-		user(serviceRequest).onSuccess(siteRequest -> {
+		user(serviceRequest, SiteRequestEnUS.class, SiteUser.class, "choice-reports-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
 			try {
 				siteRequest.setJsonObject(body);
 
@@ -141,8 +129,8 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 					try {
 						ApiRequest apiRequest = new ApiRequest();
 						JsonArray jsonArray = Optional.ofNullable(siteRequest.getJsonObject()).map(o -> o.getJsonArray("list")).orElse(new JsonArray());
-						apiRequest.setRows(jsonArray.size());
-						apiRequest.setNumFound(new Integer(jsonArray.size()).longValue());
+						apiRequest.setRows(Long.valueOf(jsonArray.size()));
+						apiRequest.setNumFound(Long.valueOf(jsonArray.size()));
 						apiRequest.setNumPATCH(0L);
 						apiRequest.initDeepApiRequest(siteRequest);
 						siteRequest.setApiRequest_(apiRequest);
@@ -174,7 +162,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -207,12 +195,12 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 					Integer commitWithin = Optional.ofNullable(siteRequest.getServiceRequest().getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getInteger("commitWithin")).orElse(null);
 					if(softCommit == null && commitWithin == null)
 						softCommit = true;
-					if(softCommit)
+					if(softCommit != null)
 						query.put("softCommit", softCommit);
 					if(commitWithin != null)
 						query.put("commitWithin", commitWithin);
 					params.put("query", query);
-					JsonObject context = new JsonObject().put("params", params).put("user", Optional.ofNullable(siteRequest.getUser()).map(user -> user.attributes().getJsonObject("tokenPrincipal")).orElse(null));
+					JsonObject context = new JsonObject().put("params", params).put("user", siteRequest.getUserPrincipal());
 					JsonObject json = new JsonObject().put("context", context);
 					eventBus.request("choice-reports-enUS-ChoiceDonor", json, new DeliveryOptions().addHeader("action", "putimportChoiceDonorFuture")).onSuccess(a -> {
 						promise1.complete();
@@ -238,10 +226,10 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 
 	@Override
 	public void putimportChoiceDonorFuture(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		user(serviceRequest).onSuccess(siteRequest -> {
+		user(serviceRequest, SiteRequestEnUS.class, SiteUser.class, "choice-reports-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
 			try {
 				ApiRequest apiRequest = new ApiRequest();
-				apiRequest.setRows(1);
+				apiRequest.setRows(1L);
 				apiRequest.setNumFound(1L);
 				apiRequest.setNumPATCH(0L);
 				apiRequest.initDeepApiRequest(siteRequest);
@@ -253,11 +241,11 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 
 				SearchList<ChoiceDonor> searchList = new SearchList<ChoiceDonor>();
 				searchList.setStore(true);
-				searchList.setQuery("*:*");
+				searchList.q("*:*");
 				searchList.setC(ChoiceDonor.class);
-				searchList.addFilterQuery("deleted_docvalues_boolean:false");
-				searchList.addFilterQuery("archived_docvalues_boolean:false");
-				searchList.addFilterQuery("inheritPk_docvalues_string:" + ClientUtils.escapeQueryChars(body.getString("pk")));
+				searchList.fq("deleted_docvalues_boolean:false");
+				searchList.fq("archived_docvalues_boolean:false");
+				searchList.fq("inheritPk_docvalues_string:" + SearchTool.escapeQueryChars(body.getString("pk")));
 				searchList.promiseDeepForClass(siteRequest).onSuccess(a -> {
 					try {
 						if(searchList.size() >= 1) {
@@ -335,7 +323,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 				eventHandler.handle(Future.failedFuture(ex));
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -348,7 +336,6 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 			}
 		});
 	}
-
 
 	public Future<ServiceResponse> response200PUTImportChoiceDonor(SiteRequestEnUS siteRequest) {
 		Promise<ServiceResponse> promise = Promise.promise();
@@ -367,7 +354,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 	@Override
 	public void postChoiceDonor(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
 		LOG.debug(String.format("postChoiceDonor started. "));
-		user(serviceRequest).onSuccess(siteRequest -> {
+		user(serviceRequest, SiteRequestEnUS.class, SiteUser.class, "choice-reports-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
 			try {
 				siteRequest.setJsonObject(body);
 
@@ -388,7 +375,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 					));
 				} else {
 					ApiRequest apiRequest = new ApiRequest();
-					apiRequest.setRows(1);
+					apiRequest.setRows(1L);
 					apiRequest.setNumFound(1L);
 					apiRequest.setNumPATCH(0L);
 					apiRequest.initDeepApiRequest(siteRequest);
@@ -405,16 +392,16 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 					Integer commitWithin = Optional.ofNullable(siteRequest.getServiceRequest().getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getInteger("commitWithin")).orElse(null);
 					if(softCommit == null && commitWithin == null)
 						softCommit = true;
-					if(softCommit)
+					if(softCommit != null)
 						query.put("softCommit", softCommit);
 					if(commitWithin != null)
 						query.put("commitWithin", commitWithin);
 					params.put("query", query);
-					JsonObject context = new JsonObject().put("params", params).put("user", Optional.ofNullable(siteRequest.getUser()).map(user -> user.attributes().getJsonObject("tokenPrincipal")).orElse(null));
+					JsonObject context = new JsonObject().put("params", params).put("user", siteRequest.getUserPrincipal());
 					JsonObject json = new JsonObject().put("context", context);
 					eventBus.request("choice-reports-enUS-ChoiceDonor", json, new DeliveryOptions().addHeader("action", "postChoiceDonorFuture")).onSuccess(a -> {
 						JsonObject responseMessage = (JsonObject)a.body();
-						JsonObject responseBody = new JsonObject(new String(Base64.getDecoder().decode(responseMessage.getString("payload")), Charset.forName("UTF-8")));
+						JsonObject responseBody = new JsonObject(Buffer.buffer(JsonUtil.BASE64_DECODER.decode(responseMessage.getString("payload"))));
 						apiRequest.setPk(Long.parseLong(responseBody.getString("pk")));
 						eventHandler.handle(Future.succeededFuture(ServiceResponse.completedWithJson(Buffer.buffer(responseBody.encodePrettily()))));
 						LOG.debug(String.format("postChoiceDonor succeeded. "));
@@ -428,7 +415,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -445,9 +432,9 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 
 	@Override
 	public void postChoiceDonorFuture(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		user(serviceRequest).onSuccess(siteRequest -> {
+		user(serviceRequest, SiteRequestEnUS.class, SiteUser.class, "choice-reports-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
 			ApiRequest apiRequest = new ApiRequest();
-			apiRequest.setRows(1);
+			apiRequest.setRows(1L);
 			apiRequest.setNumFound(1L);
 			apiRequest.setNumPATCH(0L);
 			apiRequest.initDeepApiRequest(siteRequest);
@@ -461,7 +448,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 				eventHandler.handle(Future.failedFuture(ex));
 			});
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -797,7 +784,6 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 		return promise.future();
 	}
 
-
 	public Future<ServiceResponse> response200POSTChoiceDonor(ChoiceDonor o) {
 		Promise<ServiceResponse> promise = Promise.promise();
 		try {
@@ -816,7 +802,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 	@Override
 	public void patchChoiceDonor(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
 		LOG.debug(String.format("patchChoiceDonor started. "));
-		user(serviceRequest).onSuccess(siteRequest -> {
+		user(serviceRequest, SiteRequestEnUS.class, SiteUser.class, "choice-reports-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
 			try {
 				siteRequest.setJsonObject(body);
 
@@ -839,7 +825,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 					searchChoiceDonorList(siteRequest, false, true, true).onSuccess(listChoiceDonor -> {
 						try {
 							List<String> roles2 = Optional.ofNullable(config.getValue(ConfigKeys.AUTH_ROLES_ADMIN)).map(v -> v instanceof JsonArray ? (JsonArray)v : new JsonArray(v.toString())).orElse(new JsonArray()).getList();
-							if(listChoiceDonor.getQueryResponse().getResults().getNumFound() > 1
+							if(listChoiceDonor.getQueryResponse().getResponse().getNumFound() > 1
 									&& !CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roles2)
 									&& !CollectionUtils.containsAny(siteRequest.getUserRealmRoles(), roles2)
 									) {
@@ -849,8 +835,8 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 							} else {
 
 								ApiRequest apiRequest = new ApiRequest();
-								apiRequest.setRows(listChoiceDonor.getRows());
-								apiRequest.setNumFound(listChoiceDonor.getQueryResponse().getResults().getNumFound());
+								apiRequest.setRows(listChoiceDonor.getRequest().getRows());
+								apiRequest.setNumFound(listChoiceDonor.getQueryResponse().getResponse().getNumFound());
 								apiRequest.setNumPATCH(0L);
 								apiRequest.initDeepApiRequest(siteRequest);
 								siteRequest.setApiRequest_(apiRequest);
@@ -886,7 +872,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -904,10 +890,11 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 	public Future<Void> listPATCHChoiceDonor(ApiRequest apiRequest, SearchList<ChoiceDonor> listChoiceDonor) {
 		Promise<Void> promise = Promise.promise();
 		List<Future> futures = new ArrayList<>();
-		SiteRequestEnUS siteRequest = listChoiceDonor.getSiteRequest_();
+		SiteRequestEnUS siteRequest = listChoiceDonor.getSiteRequest_(SiteRequestEnUS.class);
 		listChoiceDonor.getList().forEach(o -> {
-			SiteRequestEnUS siteRequest2 = generateSiteRequestEnUS(siteRequest.getUser(), siteRequest.getServiceRequest(), siteRequest.getJsonObject());
+			SiteRequestEnUS siteRequest2 = generateSiteRequest(siteRequest.getUser(), siteRequest.getServiceRequest(), siteRequest.getJsonObject(), SiteRequestEnUS.class);
 			o.setSiteRequest_(siteRequest2);
+			siteRequest2.setApiRequest_(siteRequest.getApiRequest_());
 			futures.add(Future.future(promise1 -> {
 				patchChoiceDonorFuture(o, false).onSuccess(a -> {
 					promise1.complete();
@@ -919,7 +906,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 		});
 		CompositeFuture.all(futures).onSuccess( a -> {
 			if(apiRequest != null) {
-				apiRequest.setNumPATCH(apiRequest.getNumPATCH() + listChoiceDonor.getQueryResponse().getResults().size());
+				apiRequest.setNumPATCH(apiRequest.getNumPATCH() + listChoiceDonor.getQueryResponse().getResponse().getDocs().size());
 				if(apiRequest.getNumFound() == 1L)
 					listChoiceDonor.first().apiRequestChoiceDonor();
 				eventBus.publish("websocketChoiceDonor", JsonObject.mapFrom(apiRequest).toString());
@@ -943,16 +930,16 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 
 	@Override
 	public void patchChoiceDonorFuture(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		user(serviceRequest).onSuccess(siteRequest -> {
+		user(serviceRequest, SiteRequestEnUS.class, SiteUser.class, "choice-reports-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
 			try {
 				siteRequest.setJsonObject(body);
 				serviceRequest.getParams().getJsonObject("query").put("rows", 1);
 				searchChoiceDonorList(siteRequest, false, true, true).onSuccess(listChoiceDonor -> {
 					try {
 						ChoiceDonor o = listChoiceDonor.first();
-						if(o != null && listChoiceDonor.getQueryResponse().getResults().getNumFound() == 1) {
+						if(o != null && listChoiceDonor.getQueryResponse().getResponse().getNumFound() == 1) {
 							ApiRequest apiRequest = new ApiRequest();
-							apiRequest.setRows(1);
+							apiRequest.setRows(1L);
 							apiRequest.setNumFound(1L);
 							apiRequest.setNumPATCH(0L);
 							apiRequest.initDeepApiRequest(siteRequest);
@@ -1309,7 +1296,6 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 		return promise.future();
 	}
 
-
 	public Future<ServiceResponse> response200PATCHChoiceDonor(SiteRequestEnUS siteRequest) {
 		Promise<ServiceResponse> promise = Promise.promise();
 		try {
@@ -1326,7 +1312,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 
 	@Override
 	public void getChoiceDonor(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		user(serviceRequest).onSuccess(siteRequest -> {
+		user(serviceRequest, SiteRequestEnUS.class, SiteUser.class, "choice-reports-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
 			try {
 
 				List<String> roles = Optional.ofNullable(config.getValue(ConfigKeys.AUTH_ROLES_REQUIRED + "_ChoiceDonor")).map(v -> v instanceof JsonArray ? (JsonArray)v : new JsonArray(v.toString())).orElse(new JsonArray()).getList();
@@ -1366,7 +1352,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -1381,13 +1367,10 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 	}
 
 
-
 	public Future<ServiceResponse> response200GETChoiceDonor(SearchList<ChoiceDonor> listChoiceDonor) {
 		Promise<ServiceResponse> promise = Promise.promise();
 		try {
-			SiteRequestEnUS siteRequest = listChoiceDonor.getSiteRequest_();
-			SolrDocumentList solrDocuments = listChoiceDonor.getSolrDocumentList();
-
+			SiteRequestEnUS siteRequest = listChoiceDonor.getSiteRequest_(SiteRequestEnUS.class);
 			JsonObject json = JsonObject.mapFrom(listChoiceDonor.getList().stream().findFirst().orElse(null));
 			promise.complete(ServiceResponse.completedWithJson(Buffer.buffer(Optional.ofNullable(json).orElse(new JsonObject()).encodePrettily())));
 		} catch(Exception ex) {
@@ -1401,7 +1384,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 
 	@Override
 	public void searchChoiceDonor(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		user(serviceRequest).onSuccess(siteRequest -> {
+		user(serviceRequest, SiteRequestEnUS.class, SiteUser.class, "choice-reports-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
 			try {
 
 				List<String> roles = Optional.ofNullable(config.getValue(ConfigKeys.AUTH_ROLES_REQUIRED + "_ChoiceDonor")).map(v -> v instanceof JsonArray ? (JsonArray)v : new JsonArray(v.toString())).orElse(new JsonArray()).getList();
@@ -1441,7 +1424,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -1456,23 +1439,20 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 	}
 
 
-
 	public Future<ServiceResponse> response200SearchChoiceDonor(SearchList<ChoiceDonor> listChoiceDonor) {
 		Promise<ServiceResponse> promise = Promise.promise();
 		try {
-			SiteRequestEnUS siteRequest = listChoiceDonor.getSiteRequest_();
-			QueryResponse responseSearch = listChoiceDonor.getQueryResponse();
-			SolrDocumentList solrDocuments = listChoiceDonor.getSolrDocumentList();
-			Long searchInMillis = Long.valueOf(responseSearch.getQTime());
-			Long transmissionInMillis = responseSearch.getElapsedTime();
-			Long startNum = responseSearch.getResults().getStart();
-			Long foundNum = responseSearch.getResults().getNumFound();
-			Integer returnedNum = responseSearch.getResults().size();
+			SiteRequestEnUS siteRequest = listChoiceDonor.getSiteRequest_(SiteRequestEnUS.class);
+			SolrResponse responseSearch = listChoiceDonor.getQueryResponse();
+			List<SolrResponse.Doc> solrDocuments = listChoiceDonor.getQueryResponse().getResponse().getDocs();
+			Long searchInMillis = Long.valueOf(responseSearch.getResponseHeader().getqTime());
+			Long startNum = listChoiceDonor.getRequest().getStart();
+			Long foundNum = responseSearch.getResponse().getNumFound();
+			Integer returnedNum = responseSearch.getResponse().getDocs().size();
 			String searchTime = String.format("%d.%03d sec", TimeUnit.MILLISECONDS.toSeconds(searchInMillis), TimeUnit.MILLISECONDS.toMillis(searchInMillis) - TimeUnit.SECONDS.toMillis(TimeUnit.MILLISECONDS.toSeconds(searchInMillis)));
-			String transmissionTime = String.format("%d.%03d sec", TimeUnit.MILLISECONDS.toSeconds(transmissionInMillis), TimeUnit.MILLISECONDS.toMillis(transmissionInMillis) - TimeUnit.SECONDS.toSeconds(TimeUnit.MILLISECONDS.toSeconds(transmissionInMillis)));
 			String nextCursorMark = responseSearch.getNextCursorMark();
-			Exception exceptionSearch = responseSearch.getException();
-			List<String> fls = listChoiceDonor.getFields();
+			String exceptionSearch = Optional.ofNullable(responseSearch.getError()).map(error -> error.getMsg()).orElse(null);
+			List<String> fls = listChoiceDonor.getRequest().getFields();
 
 			JsonObject json = new JsonObject();
 			json.put("startNum", startNum);
@@ -1480,7 +1460,6 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 			json.put("returnedNum", returnedNum);
 			if(fls.size() == 1 && fls.stream().findFirst().orElse(null).equals("saves")) {
 				json.put("searchTime", searchTime);
-				json.put("transmissionTime", transmissionTime);
 			}
 			if(nextCursorMark != null) {
 				json.put("nextCursorMark", nextCursorMark);
@@ -1490,11 +1469,15 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 				JsonObject json2 = JsonObject.mapFrom(o);
 				if(fls.size() > 0) {
 					Set<String> fieldNames = new HashSet<String>();
-					fieldNames.addAll(json2.fieldNames());
-					if(fls.size() == 1 && fls.stream().findFirst().orElse(null).equals("saves")) {
-						fieldNames.removeAll(Optional.ofNullable(json2.getJsonArray("saves")).orElse(new JsonArray()).stream().map(s -> s.toString()).collect(Collectors.toList()));
-						fieldNames.remove("pk");
-						fieldNames.remove("created");
+					for(String fieldName : json2.fieldNames()) {
+						String v = ChoiceDonor.varIndexedChoiceDonor(fieldName);
+						if(v != null)
+							fieldNames.add(ChoiceDonor.varIndexedChoiceDonor(fieldName));
+					}
+					if(fls.size() == 1 && fls.stream().findFirst().orElse(null).equals("saves_docvalues_strings")) {
+						fieldNames.removeAll(Optional.ofNullable(json2.getJsonArray("saves_docvalues_strings")).orElse(new JsonArray()).stream().map(s -> s.toString()).collect(Collectors.toList()));
+						fieldNames.remove("pk_docvalues_long");
+						fieldNames.remove("created_docvalues_date");
 					}
 					else if(fls.size() >= 1) {
 						fieldNames.removeAll(fls);
@@ -1508,49 +1491,42 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 			});
 			json.put("list", l);
 
-			List<FacetField> facetFields = responseSearch.getFacetFields();
+			SolrResponse.FacetFields facetFields = Optional.ofNullable(responseSearch.getFacetCounts()).map(f -> f.getFacetFields()).orElse(null);
 			if(facetFields != null) {
 				JsonObject facetFieldsJson = new JsonObject();
 				json.put("facet_fields", facetFieldsJson);
-				for(FacetField facetField : facetFields) {
+				for(SolrResponse.FacetField facetField : facetFields.getFacets().values()) {
 					String facetFieldVar = StringUtils.substringBefore(facetField.getName(), "_docvalues_");
 					JsonObject facetFieldCounts = new JsonObject();
 					facetFieldsJson.put(facetFieldVar, facetFieldCounts);
-					List<FacetField.Count> facetFieldValues = facetField.getValues();
-					for(Integer i = 0; i < facetFieldValues.size(); i+= 1) {
-						FacetField.Count count = (FacetField.Count)facetFieldValues.get(i);
-						facetFieldCounts.put(count.getName(), count.getCount());
-					}
+					facetField.getCounts().forEach((name, count) -> {
+						facetFieldCounts.put(name, count);
+					});
 				}
 			}
 
-			List<RangeFacet> facetRanges = responseSearch.getFacetRanges();
+			SolrResponse.FacetRanges facetRanges = Optional.ofNullable(responseSearch.getFacetCounts()).map(f -> f.getFacetRanges()).orElse(null);
 			if(facetRanges != null) {
 				JsonObject rangeJson = new JsonObject();
 				json.put("facet_ranges", rangeJson);
-				for(RangeFacet rangeFacet : facetRanges) {
+				for(SolrResponse.FacetRange rangeFacet : facetRanges.getRanges().values()) {
 					JsonObject rangeFacetJson = new JsonObject();
 					String rangeFacetVar = StringUtils.substringBefore(rangeFacet.getName(), "_docvalues_");
 					rangeJson.put(rangeFacetVar, rangeFacetJson);
 					JsonObject rangeFacetCountsMap = new JsonObject();
 					rangeFacetJson.put("counts", rangeFacetCountsMap);
-					List<?> rangeFacetCounts = rangeFacet.getCounts();
-					for(Integer i = 0; i < rangeFacetCounts.size(); i+= 1) {
-						RangeFacet.Count count = (RangeFacet.Count)rangeFacetCounts.get(i);
-						rangeFacetCountsMap.put(count.getValue(), count.getCount());
-					}
+					rangeFacet.getCounts().forEach((name, count) -> {
+						rangeFacetCountsMap.put(name, count);
+					});
 				}
 			}
 
-			NamedList<List<PivotField>> facetPivot = responseSearch.getFacetPivot();
+			SolrResponse.FacetPivot facetPivot = Optional.ofNullable(responseSearch.getFacetCounts()).map(f -> f.getFacetPivot()).orElse(null);
 			if(facetPivot != null) {
 				JsonObject facetPivotJson = new JsonObject();
 				json.put("facet_pivot", facetPivotJson);
-				Iterator<Entry<String, List<PivotField>>> facetPivotIterator = responseSearch.getFacetPivot().iterator();
-				while(facetPivotIterator.hasNext()) {
-					Entry<String, List<PivotField>> pivotEntry = facetPivotIterator.next();
-					List<PivotField> pivotFields = pivotEntry.getValue();
-					String[] varsIndexed = pivotEntry.getKey().trim().split(",");
+				for(SolrResponse.Pivot pivot : facetPivot.getPivot().values()) {
+					String[] varsIndexed = pivot.getName().trim().split(",");
 					String[] entityVars = new String[varsIndexed.length];
 					for(Integer i = 0; i < entityVars.length; i++) {
 						String entityIndexed = varsIndexed[i];
@@ -1558,11 +1534,11 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 					}
 					JsonArray pivotArray = new JsonArray();
 					facetPivotJson.put(StringUtils.join(entityVars, ","), pivotArray);
-					responsePivotSearchChoiceDonor(pivotFields, pivotArray);
+					responsePivotSearchChoiceDonor(pivot.getInternalPivot(), pivotArray);
 				}
 			}
 			if(exceptionSearch != null) {
-				json.put("exceptionSearch", exceptionSearch.getMessage());
+				json.put("exceptionSearch", exceptionSearch);
 			}
 			promise.complete(ServiceResponse.completedWithJson(Buffer.buffer(Optional.ofNullable(json).orElse(new JsonObject()).encodePrettily())));
 		} catch(Exception ex) {
@@ -1571,8 +1547,8 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 		}
 		return promise.future();
 	}
-	public void responsePivotSearchChoiceDonor(List<PivotField> pivotFields, JsonArray pivotArray) {
-		for(PivotField pivotField : pivotFields) {
+	public void responsePivotSearchChoiceDonor(List<SolrResponse.Pivot> pivots, JsonArray pivotArray) {
+		for(SolrResponse.Pivot pivotField : pivots) {
 			String entityIndexed = pivotField.getField();
 			String entityVar = StringUtils.substringBefore(entityIndexed, "_docvalues_");
 			JsonObject pivotJson = new JsonObject();
@@ -1580,22 +1556,20 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 			pivotJson.put("field", entityVar);
 			pivotJson.put("value", pivotField.getValue());
 			pivotJson.put("count", pivotField.getCount());
-			List<RangeFacet> pivotRanges = pivotField.getFacetRanges();
-			List<PivotField> pivotFields2 = pivotField.getPivot();
+			Collection<SolrResponse.PivotRange> pivotRanges = pivotField.getRanges().values();
+			List<SolrResponse.Pivot> pivotFields2 = pivotField.getInternalPivot();
 			if(pivotRanges != null) {
 				JsonObject rangeJson = new JsonObject();
 				pivotJson.put("ranges", rangeJson);
-				for(RangeFacet rangeFacet : pivotRanges) {
+				for(SolrResponse.PivotRange rangeFacet : pivotRanges) {
 					JsonObject rangeFacetJson = new JsonObject();
 					String rangeFacetVar = StringUtils.substringBefore(rangeFacet.getName(), "_docvalues_");
 					rangeJson.put(rangeFacetVar, rangeFacetJson);
 					JsonObject rangeFacetCountsObject = new JsonObject();
 					rangeFacetJson.put("counts", rangeFacetCountsObject);
-					List<?> rangeFacetCounts = rangeFacet.getCounts();
-					for(Integer i = 0; i < rangeFacetCounts.size(); i+= 1) {
-						RangeFacet.Count count = (RangeFacet.Count)rangeFacetCounts.get(i);
-						rangeFacetCountsObject.put(count.getValue(), count.getCount());
-					}
+					rangeFacet.getCounts().forEach((value, count) -> {
+						rangeFacetCountsObject.put(value, count);
+					});
 				}
 			}
 			if(pivotFields2 != null) {
@@ -1615,7 +1589,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 
 	@Override
 	public void searchpageChoiceDonor(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		user(serviceRequest).onSuccess(siteRequest -> {
+		user(serviceRequest, SiteRequestEnUS.class, SiteUser.class, "choice-reports-enUS-SiteUser", "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
 			try {
 
 				List<String> roles = Optional.ofNullable(config.getValue(ConfigKeys.AUTH_ROLES_REQUIRED + "_ChoiceDonor")).map(v -> v instanceof JsonArray ? (JsonArray)v : new JsonArray(v.toString())).orElse(new JsonArray()).getList();
@@ -1655,7 +1629,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -1672,13 +1646,14 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 
 	public void searchpageChoiceDonorPageInit(ChoiceDonorPage page, SearchList<ChoiceDonor> listChoiceDonor) {
 	}
+
 	public String templateSearchPageChoiceDonor() {
 		return Optional.ofNullable(config.getString(ConfigKeys.TEMPLATE_PATH)).orElse("templates") + "/enUS/ChoiceDonorPage";
 	}
 	public Future<ServiceResponse> response200SearchPageChoiceDonor(SearchList<ChoiceDonor> listChoiceDonor) {
 		Promise<ServiceResponse> promise = Promise.promise();
 		try {
-			SiteRequestEnUS siteRequest = listChoiceDonor.getSiteRequest_();
+			SiteRequestEnUS siteRequest = listChoiceDonor.getSiteRequest_(SiteRequestEnUS.class);
 			ChoiceDonorPage page = new ChoiceDonorPage();
 			MultiMap requestHeaders = MultiMap.caseInsensitiveMultiMap();
 			siteRequest.setRequestHeaders(requestHeaders);
@@ -1736,7 +1711,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 	}
 
 	public void searchChoiceDonorQ(SearchList<ChoiceDonor> searchList, String entityVar, String valueIndexed, String varIndexed) {
-		searchList.setQuery(varIndexed + ":" + ("*".equals(valueIndexed) ? valueIndexed : ClientUtils.escapeQueryChars(valueIndexed)));
+		searchList.q(varIndexed + ":" + ("*".equals(valueIndexed) ? valueIndexed : SearchTool.escapeQueryChars(valueIndexed)));
 		if(!"*".equals(entityVar)) {
 		}
 	}
@@ -1748,30 +1723,30 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 			String[] fqs = StringUtils.substringBefore(StringUtils.substringAfter(valueIndexed, "["), "]").split(" TO ");
 			if(fqs.length != 2)
 				throw new RuntimeException(String.format("\"%s\" invalid range query. ", valueIndexed));
-			String fq1 = fqs[0].equals("*") ? fqs[0] : ChoiceDonor.staticSolrFqForClass(entityVar, searchList.getSiteRequest_(), fqs[0]);
-			String fq2 = fqs[1].equals("*") ? fqs[1] : ChoiceDonor.staticSolrFqForClass(entityVar, searchList.getSiteRequest_(), fqs[1]);
+			String fq1 = fqs[0].equals("*") ? fqs[0] : ChoiceDonor.staticSearchFqForClass(entityVar, searchList.getSiteRequest_(SiteRequestEnUS.class), fqs[0]);
+			String fq2 = fqs[1].equals("*") ? fqs[1] : ChoiceDonor.staticSearchFqForClass(entityVar, searchList.getSiteRequest_(SiteRequestEnUS.class), fqs[1]);
 			 return varIndexed + ":[" + fq1 + " TO " + fq2 + "]";
 		} else {
-			return varIndexed + ":" + ClientUtils.escapeQueryChars(ChoiceDonor.staticSolrFqForClass(entityVar, searchList.getSiteRequest_(), valueIndexed)).replace("\\", "\\\\");
+			return varIndexed + ":" + SearchTool.escapeQueryChars(ChoiceDonor.staticSearchFqForClass(entityVar, searchList.getSiteRequest_(SiteRequestEnUS.class), valueIndexed)).replace("\\", "\\\\");
 		}
 	}
 
 	public void searchChoiceDonorSort(SearchList<ChoiceDonor> searchList, String entityVar, String valueIndexed, String varIndexed) {
 		if(varIndexed == null)
 			throw new RuntimeException(String.format("\"%s\" is not an indexed entity. ", entityVar));
-		searchList.addSort(varIndexed, ORDER.valueOf(valueIndexed));
+		searchList.sort(varIndexed, valueIndexed);
 	}
 
-	public void searchChoiceDonorRows(SearchList<ChoiceDonor> searchList, Integer valueRows) {
-			searchList.setRows(valueRows != null ? valueRows : 10);
+	public void searchChoiceDonorRows(SearchList<ChoiceDonor> searchList, Long valueRows) {
+			searchList.rows(valueRows != null ? valueRows : 10L);
 	}
 
-	public void searchChoiceDonorStart(SearchList<ChoiceDonor> searchList, Integer valueStart) {
-		searchList.setStart(valueStart);
+	public void searchChoiceDonorStart(SearchList<ChoiceDonor> searchList, Long valueStart) {
+		searchList.start(valueStart);
 	}
 
 	public void searchChoiceDonorVar(SearchList<ChoiceDonor> searchList, String var, String value) {
-		searchList.getSiteRequest_().getRequestVars().put(var, value);
+		searchList.getSiteRequest_(SiteRequestEnUS.class).getRequestVars().put(var, value);
 	}
 
 	public void searchChoiceDonorUri(SearchList<ChoiceDonor> searchList) {
@@ -1816,17 +1791,20 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 			SearchList<ChoiceDonor> searchList = new SearchList<ChoiceDonor>();
 			searchList.setPopulate(populate);
 			searchList.setStore(store);
-			searchList.setQuery("*:*");
+			searchList.q("*:*");
 			searchList.setC(ChoiceDonor.class);
 			searchList.setSiteRequest_(siteRequest);
-			if(entityList != null)
-				searchList.addFields(entityList);
+			if(entityList != null) {
+				for(String v : entityList) {
+					searchList.fl(ChoiceDonor.varIndexedChoiceDonor(v));
+				}
+			}
 
 			String id = serviceRequest.getParams().getJsonObject("path").getString("id");
 			if(id != null && NumberUtils.isCreatable(id)) {
-				searchList.addFilterQuery("(pk_docvalues_long:" + ClientUtils.escapeQueryChars(id) + " OR objectId_docvalues_string:" + ClientUtils.escapeQueryChars(id) + ")");
+				searchList.fq("(pk_docvalues_long:" + SearchTool.escapeQueryChars(id) + " OR objectId_docvalues_string:" + SearchTool.escapeQueryChars(id) + ")");
 			} else if(id != null) {
-				searchList.addFilterQuery("objectId_docvalues_string:" + ClientUtils.escapeQueryChars(id));
+				searchList.fq("objectId_docvalues_string:" + SearchTool.escapeQueryChars(id));
 			}
 
 			serviceRequest.getParams().getJsonObject("query").forEach(paramRequest -> {
@@ -1834,8 +1812,8 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 				String valueIndexed = null;
 				String varIndexed = null;
 				String valueSort = null;
-				Integer valueStart = null;
-				Integer valueRows = null;
+				Long valueStart = null;
+				Long valueRows = null;
 				String valueCursorMark = null;
 				String paramName = paramRequest.getKey();
 				Object paramValuesObject = paramRequest.getValue();
@@ -1853,7 +1831,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 								entityVar = entityVars[i];
 								varsIndexed[i] = ChoiceDonor.varIndexedChoiceDonor(entityVar);
 							}
-							searchList.add("facet.pivot", (solrLocalParams == null ? "" : solrLocalParams) + StringUtils.join(varsIndexed, ","));
+							searchList.facetPivot((solrLocalParams == null ? "" : solrLocalParams) + StringUtils.join(varsIndexed, ","));
 						}
 					} else if(paramValuesObject != null) {
 						for(Object paramObject : paramObjects) {
@@ -1872,7 +1850,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 											foundQ = mQ.find();
 										}
 										mQ.appendTail(sb);
-										searchList.setQuery(sb.toString());
+										searchList.q(sb.toString());
 									}
 									break;
 								case "fq":
@@ -1889,7 +1867,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 											foundFq = mFq.find();
 										}
 										mFq.appendTail(sb);
-										searchList.addFilterQuery(sb.toString());
+										searchList.fq(sb.toString());
 									}
 									break;
 								case "sort":
@@ -1899,29 +1877,29 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 									searchChoiceDonorSort(searchList, entityVar, valueIndexed, varIndexed);
 									break;
 								case "start":
-									valueStart = paramObject instanceof Integer ? (Integer)paramObject : Integer.parseInt(paramObject.toString());
+									valueStart = paramObject instanceof Long ? (Long)paramObject : Long.parseLong(paramObject.toString());
 									searchChoiceDonorStart(searchList, valueStart);
 									break;
 								case "rows":
-									valueRows = paramObject instanceof Integer ? (Integer)paramObject : Integer.parseInt(paramObject.toString());
+									valueRows = paramObject instanceof Long ? (Long)paramObject : Long.parseLong(paramObject.toString());
 									searchChoiceDonorRows(searchList, valueRows);
 									break;
 								case "facet":
-									searchList.add("facet", ((Boolean)paramObject).toString());
+									searchList.facet((Boolean)paramObject);
 									break;
 								case "facet.range.start":
 									String startMathStr = (String)paramObject;
-									Date start = DateMathParser.parseMath(null, startMathStr);
-									searchList.add("facet.range.start", start.toInstant().toString());
+									Date start = SearchTool.parseMath(startMathStr);
+									searchList.facetRangeStart(start.toInstant().toString());
 									break;
 								case "facet.range.end":
 									String endMathStr = (String)paramObject;
-									Date end = DateMathParser.parseMath(null, endMathStr);
-									searchList.add("facet.range.end", end.toInstant().toString());
+									Date end = SearchTool.parseMath(endMathStr);
+									searchList.facetRangeEnd(end.toInstant().toString());
 									break;
 								case "facet.range.gap":
 									String gap = (String)paramObject;
-									searchList.add("facet.range.gap", gap);
+									searchList.facetRangeGap(gap);
 									break;
 								case "facet.range":
 									Matcher mFacetRange = Pattern.compile("(?:(\\{![^\\}]+\\}))?(.*)").matcher((String)paramObject);
@@ -1930,14 +1908,14 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 										String solrLocalParams = mFacetRange.group(1);
 										entityVar = mFacetRange.group(2).trim();
 										varIndexed = ChoiceDonor.varIndexedChoiceDonor(entityVar);
-										searchList.add("facet.range", (solrLocalParams == null ? "" : solrLocalParams) + varIndexed);
+										searchList.facetRange((solrLocalParams == null ? "" : solrLocalParams) + varIndexed);
 									}
 									break;
 								case "facet.field":
 									entityVar = (String)paramObject;
 									varIndexed = ChoiceDonor.varIndexedChoiceDonor(entityVar);
 									if(varIndexed != null)
-										searchList.addFacetField(varIndexed);
+										searchList.facetField(varIndexed);
 									break;
 								case "var":
 									entityVar = StringUtils.trim(StringUtils.substringBefore((String)paramObject, ":"));
@@ -1946,7 +1924,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 									break;
 								case "cursorMark":
 									valueCursorMark = (String)paramObject;
-									searchList.add("cursorMark", (String)paramObject);
+									searchList.cursorMark((String)paramObject);
 									break;
 							}
 						}
@@ -1957,7 +1935,7 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 				}
 			});
 			if("*:*".equals(searchList.getQuery()) && searchList.getSorts().size() == 0) {
-				searchList.addSort("objectId_docvalues_string", ORDER.asc);
+				searchList.sort("objectId_docvalues_string", "asc");
 			}
 			searchChoiceDonor2(siteRequest, populate, store, modify, searchList);
 			searchList.promiseDeepForClass(siteRequest).onSuccess(a -> {
@@ -2055,8 +2033,12 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 			SiteRequestEnUS siteRequest = o.getSiteRequest_();
 			ApiRequest apiRequest = siteRequest.getApiRequest_();
 			o.promiseDeepForClass(siteRequest).onSuccess(a -> {
-				SolrInputDocument document = new SolrInputDocument();
-				o.indexChoiceDonor(document);
+				JsonObject json = new JsonObject();
+				JsonObject add = new JsonObject();
+				json.put("add", add);
+				JsonObject doc = new JsonObject();
+				add.put("doc", doc);
+				o.indexChoiceDonor(doc);
 				String solrHostName = siteRequest.getConfig().getString(ConfigKeys.SOLR_HOST_NAME);
 				Integer solrPort = siteRequest.getConfig().getInteger(ConfigKeys.SOLR_PORT);
 				String solrCollection = siteRequest.getConfig().getString(ConfigKeys.SOLR_COLLECTION);
@@ -2067,7 +2049,6 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 					else if(softCommit == null)
 						softCommit = false;
 				String solrRequestUri = String.format("/solr/%s/update%s%s%s", solrCollection, "?overwrite=true&wt=json", softCommit ? "&softCommit=true" : "", commitWithin != null ? ("&commitWithin=" + commitWithin) : "");
-				JsonArray json = new JsonArray().add(new JsonObject(document.toMap(new HashMap<String, Object>())));
 				webClient.post(solrPort, solrHostName, solrRequestUri).putHeader("Content-Type", "application/json").expect(ResponsePredicate.SC_OK).sendBuffer(json.toBuffer()).onSuccess(b -> {
 					promise.complete();
 				}).onFailure(ex -> {
@@ -2103,10 +2084,10 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 					if("ChoiceReport".equals(classSimpleName2) && pk2 != null) {
 						SearchList<ChoiceReport> searchList2 = new SearchList<ChoiceReport>();
 						searchList2.setStore(true);
-						searchList2.setQuery("*:*");
+						searchList2.q("*:*");
 						searchList2.setC(ChoiceReport.class);
-						searchList2.addFilterQuery("pk_docvalues_long:" + pk2);
-						searchList2.setRows(1);
+						searchList2.fq("pk_docvalues_long:" + pk2);
+						searchList2.rows(1L);
 						futures.add(Future.future(promise2 -> {
 							searchList2.promiseDeepSearchList(siteRequest).onSuccess(b -> {
 								ChoiceReport o2 = searchList2.getList().stream().findFirst().orElse(null);
@@ -2116,10 +2097,10 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 									params.put("cookie", new JsonObject());
 									params.put("path", new JsonObject());
 									params.put("query", new JsonObject().put("q", "*:*").put("fq", new JsonArray().add("pk:" + pk2)));
-									JsonObject context = new JsonObject().put("params", params).put("user", Optional.ofNullable(siteRequest.getUser()).map(user -> user.principal()).orElse(null));
+									JsonObject context = new JsonObject().put("params", params).put("user", siteRequest.getUserPrincipal());
 									JsonObject json = new JsonObject().put("context", context);
 									eventBus.request("choice-reports-enUS-ChoiceReport", json, new DeliveryOptions().addHeader("action", "patchChoiceReportFuture")).onSuccess(c -> {
-						JsonObject responseMessage = (JsonObject)c.body();
+										JsonObject responseMessage = (JsonObject)c.body();
 										Integer statusCode = responseMessage.getInteger("statusCode");
 										if(statusCode.equals(200))
 											promise2.complete();
@@ -2148,13 +2129,13 @@ public class ChoiceDonorEnUSGenApiServiceImpl extends BaseApiServiceImpl impleme
 					Integer commitWithin = Optional.ofNullable(siteRequest.getServiceRequest().getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getInteger("commitWithin")).orElse(null);
 					if(softCommit == null && commitWithin == null)
 						softCommit = true;
-					if(softCommit)
+					if(softCommit != null)
 						query.put("softCommit", softCommit);
 					if(commitWithin != null)
 						query.put("commitWithin", commitWithin);
 					query.put("q", "*:*").put("fq", new JsonArray().add("pk:" + o.getPk()));
 					params.put("query", query);
-					JsonObject context = new JsonObject().put("params", params).put("user", Optional.ofNullable(siteRequest.getUser()).map(user -> user.attributes().getJsonObject("tokenPrincipal")).orElse(null));
+					JsonObject context = new JsonObject().put("params", params).put("user", siteRequest.getUserPrincipal());
 					JsonObject json = new JsonObject().put("context", context);
 					eventBus.request("choice-reports-enUS-ChoiceDonor", json, new DeliveryOptions().addHeader("action", "patchChoiceDonorFuture")).onSuccess(c -> {
 						JsonObject responseMessage = (JsonObject)c.body();

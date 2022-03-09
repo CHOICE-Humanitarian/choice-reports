@@ -1,9 +1,12 @@
-package org.choicehumanitarian.reports.enus.user;        
+package org.choicehumanitarian.reports.enus.user;       
 
 import java.util.List;
 
 import org.choicehumanitarian.reports.enus.base.BaseModel;
-import org.choicehumanitarian.reports.enus.wrap.Wrap;
+import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
+import org.computate.search.wrap.Wrap;
+import org.computate.vertx.model.user.ComputateVertxSiteUser;
+import org.computate.vertx.request.ComputateVertxSiteRequest;
 
 
 /**   
@@ -40,7 +43,7 @@ import org.choicehumanitarian.reports.enus.wrap.Wrap;
  * RoleUser: true
  * Role.enUS: SiteAdmin
  */ 
-public class SiteUser extends SiteUserGen<BaseModel> {
+public class SiteUser extends SiteUserGen<BaseModel> implements ComputateVertxSiteUser {
 
 	/**
 	 * {@inheritDoc}
@@ -127,5 +130,11 @@ public class SiteUser extends SiteUserGen<BaseModel> {
 	@Override
 	protected void _objectTitle(Wrap<String> c) {
 		c.o(String.format("%s (%s) <%s>", userFullName, userName, userEmail));
+//		c.o(String.format("%s (%s)", userFullName, userName));
+	}
+
+	@Override
+	public <T extends ComputateVertxSiteRequest> void setSiteRequest_(T siteRequest) {
+		siteRequest_ = (SiteRequestEnUS)siteRequest;
 	}
 }

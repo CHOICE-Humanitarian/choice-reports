@@ -8,18 +8,18 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
-
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
-import org.choicehumanitarian.reports.enus.wrap.Wrap;
+import org.computate.search.wrap.Wrap;
+import org.computate.vertx.model.base.ComputateVertxBaseModel;
 
 /**
  * Indexed: true
  * Page: true
  * SuperPage: PageLayout
- * Keyword: classSimpleNameCluster
+ * Keyword: classSimpleNameBaseModel
  */
-public class BaseModel extends BaseModelGen<Object> {
+public class BaseModel extends BaseModelGen<Object> implements ComputateVertxBaseModel {
 
 	/**
 	 * {@inheritDoc}
@@ -77,7 +77,7 @@ public class BaseModel extends BaseModelGen<Object> {
 	 * HtmlRow: 1
 	 * HtmlCell: 3
 	 * DisplayName.enUS: modified
-	 */ 
+	 */
 	protected void _modified(Wrap<ZonedDateTime> w) {
 		w.o(ZonedDateTime.now(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))));
 	}
@@ -89,7 +89,7 @@ public class BaseModel extends BaseModelGen<Object> {
 	 * HtmlRow: 2
 	 * HtmlCell: 1
 	 * DisplayName.enUS: archived
-	 */ 
+	 */
 	protected void _archived(Wrap<Boolean> w) {
 		w.o(false);
 	}
@@ -148,7 +148,7 @@ public class BaseModel extends BaseModelGen<Object> {
 	 * DocValues: true
 	 * Define: true
 	 * Modify: false
-	 */               
+	 */
 	protected void _userKey(Wrap<Long> c) {
 	}
 	/**
@@ -178,12 +178,12 @@ public class BaseModel extends BaseModelGen<Object> {
 	 * HtmlCell: 4
 	 * DisplayName.enUS: ID
 	 */ 
-	protected void _objectId(Wrap<String> c) {
+	protected void _objectId(Wrap<String> w) {
 		if(objectTitle != null) {
-			c.o(toId(objectTitle));
+			w.o(toId(objectTitle));
 		}
 		else if(pk != null){
-			c.o(pk.toString());
+			w.o(pk.toString());
 		}
 	}
 
@@ -217,7 +217,7 @@ public class BaseModel extends BaseModelGen<Object> {
 	 * {@inheritDoc}
 	 * Suggested: true
 	 */    
-	protected void _objectSuggest(Wrap<String> c) { 
+	protected void _objectSuggest(Wrap<String> w) { 
 		StringBuilder b = new StringBuilder();
 		if(pk != null)
 			b.append(" ").append(pk);
@@ -227,7 +227,7 @@ public class BaseModel extends BaseModelGen<Object> {
 			b.append(" ").append(objectId);
 		if(objectTitle != null)
 			b.append(" ").append(objectTitle);
-		c.o(b.toString());
+		w.o(b.toString());
 	}
 
 	/**
@@ -235,7 +235,7 @@ public class BaseModel extends BaseModelGen<Object> {
 	 * Text: true
 	 * DocValues: true
 	 */ 
-	protected void _objectText(Wrap<String> c) { 
+	protected void _objectText(Wrap<String> w) { 
 		StringBuilder b = new StringBuilder();
 		if(pk != null)
 			b.append(" ").append(pk);
@@ -245,7 +245,7 @@ public class BaseModel extends BaseModelGen<Object> {
 			b.append(" ").append(objectId);
 		if(objectTitle != null)
 			b.append(" ").append(objectTitle);
-		c.o(b.toString());
+		w.o(b.toString());
 	}
 
 	/**

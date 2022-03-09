@@ -1,0 +1,603 @@
+{{#*inline "htmTitleReportTypePage"}}		<!-- inline "htmTitleReportTypePage" -->
+		<title>{{#if searchListReportType_}}{{#eq reportTypeCount int1}}{{#eq params.query.q "*:*"}}donor{{else}}donor{{/eq}}{{else}}no donor found{{/eq}}{{else}}donors{{/if}}</title>
+{{/inline}}
+{{#*inline "htmMetaReportTypePage"}}{{> "htmMetaBaseModelPage"}}{{/inline}}
+{{#*inline "htmStyleReportTypePage"}}{{> "htmStyleBaseModelPage"}}{{/inline}}
+{{#*inline "htmScriptsReportTypePage"}}{{> "htmScriptsBaseModelPage"}}		<!-- inline "htmScriptsReportTypePage" -->
+		<script src="{{staticBaseUrl}}/js/enUS/ReportTypePage.js"></script>
+		<script src="{{staticBaseUrl}}/js/enUS/ReportSchedulePage.js"></script>
+{{/inline}}
+{{#*inline "htmScriptReportTypePage"}}		<!-- inline "htmScriptReportTypePage" -->
+		<script>
+			$(document).ready(function() {
+				document.onkeydown = function(evt) {
+					evt = evt || window.event;
+					var isEscape = false;
+					if ('key' in evt) {
+						isEscape = (evt.key === 'Escape' || evt.key === 'Esc');
+					} else {
+						isEscape = (evt.keyCode === 27);
+					}
+					if (isEscape) {
+						$('.w3-modal:visible').hide();
+					}
+				};
+				window.eventBus = new EventBus('/eventbus');
+				var pk = {{#if pk}}{{pk}}{{else}}null{{/if}};
+				if(pk != null) {
+		{{#ifContainsAnyRoles roles rolesRequired}}
+					suggestReportTypeScheduleKeys([{'name':'fq','value':'typeKey:' + pk}], $('#listReportTypeScheduleKeys_Page'), pk, true);
+		{{else}}
+					suggestReportTypeScheduleKeys([{'name':'fq','value':'typeKey:' + pk}], $('#listReportTypeScheduleKeys_Page'), pk, false);
+		{{/ifContainsAnyRoles}}
+				}
+				websocketReportType(websocketReportTypeInner);
+			});
+		</script>
+{{/inline}}
+{{#*inline "htmUrlReportType"}}{{pageUri}}?q={{query.q}}&amp;rows={{#if rows}}{{rows}}{{else}}{{pagination.rows}}{{/if}}&amp;rows={{#if start}}{{start}}{{else}}{{pagination.start}}{{/if}}{{#each query.fq}}{{#eq fq this}}{{else}}&fq={{fq}}:{{val}}{{/eq}}{{/each}}{{#each query.sort}}{{#eq sort this}}{{else}}&sort={{var}} {{order}}{{/eq}}{{/each}}{{/inline}}
+{{#*inline "htmHeadReportTypePage"}}{{> "htmTitleReportTypePage"}}{{> "htmMetaReportTypePage"}}{{> "htmStyleReportTypePage"}}{{> "htmScriptsReportTypePage"}}{{> "htmScriptReportTypePage"}}{{/inline}}
+{{#*inline "htmBodyCount0ReportTypePage"}}		<!-- #*inline "htmBodyCount0ReportTypePage" -->
+		<h1>
+			<a href="{{pageUri}}" class="w3-bar-item w3-btn w3-center w3-block w3-light-green w3-hover-light-green">
+				{{#if contextIconCssClasses}}
+					<i class="contextIconCssClasses site-menu-icon "></i>
+				{{/if}}
+				<span class="">donors</span>
+			</a>
+		</h1>
+		<h2>
+			<span class="w3-bar-item w3-padding w3-center w3-block w3-light-green">
+				{{#if contextIconCssClasses}}
+					<i class="contextIconCssClasses + " site-menu-icon "></i>
+				{{/if}}
+				<span class="">no donor found</span>
+			</span>
+		</h2>
+{{/inline}}
+{{#*inline "htmBodyCount1AllReportTypePage"}}		<!-- #*inline "htmBodyCount1AllReportTypePage" -->
+		<h1 class="w3-center ">
+			<a href="{{pageUri}}" class="w3-bar-item w3-btn w3-block w3-light-green w3-hover-light-green">
+			{{#if contextIconCssClasses}}
+				<i class="contextIconCssClasses site-menu-icon "></i>
+			{{/if}}
+				<span class="">donor</span>
+			</a>
+		</h1>
+		<h2 class="w3-center ">
+			<span class="w3-bar-item w3-padding w3-center w3-block w3-light-green">
+				<span class="">{{reportType_.objectTitle}}</span>
+			</span>
+		</h2>
+{{#block "htmForm"}}{{/block}}
+{{/inline}}
+{{#*inline "htmBodyCount1ReportTypePage"}}		<!-- #*inline "htmBodyCount1ReportTypePage" -->
+		<h1>
+			<a href="{{pageUri}}" class="w3-bar-item w3-btn w3-center w3-block w3-light-green w3-hover-light-green">
+	{{#if contextIconCssClasses}}
+				<i class="contextIconCssClasses + " site-menu-icon "></i>
+	{{/if}}
+				<span class="">donors</span>
+			</a>
+		</h1>
+		<div>
+	{{#if pagination.pagePrevious}}
+			<a href="{{pageUri}}?start={{pagination.pagePrevious.start}}&amp;rows={{pagination.rows}}">
+				<i class="fas fa-arrow-square-left "></i>
+			</a>
+	{{else}}
+			<i class="fas fa-arrow-square-left w3-opacity "></i>
+	{{/if}}
+	{{#gte pagination.rowsPrevious pagination.1L}}
+			<a href="{{pageUri}}?start={{pagination.start}}&amp;rows={{ pagination.rowsPrevious }}">
+				<i class="fas fa-minus-square "></i>
+			</a>
+	{{else}}
+			<i class="fas fa-minus-square w3-opacity "></i>
+	{{/gte}}
+			<a href="{{pageUri}}?start={{pagination.start}}&amp;rows={{ pagination.rowsNext }}">
+				<i class="fas fa-plus-square "></i>
+			</a>
+	{{#if pagination.pageNext}}
+			<a href="{{pageUri}}?start={{pagination.pageNext.start}}&amp;rows={{pagination.rows}}">
+				<i class="fas fa-arrow-square-right "></i>
+			</a>
+	{{else}}
+			<i class="fas fa-arrow-square-right w3-opacity "></i>
+	{{/if}}
+			<span>{{ pagination.startNum }} - {{ pagination.endNum }} of {{ pagination.foundNum }}</span>
+		</div>
+{{> "table1ReportTypePage"}}
+{{/inline}}
+{{#*inline "htmBodyAllReportTypePage"}}		<!-- #*inline "htmBodyAllReportTypePage" -->
+		<h1>
+			<a href="{{pageUri}}" class="w3-bar-item w3-btn w3-center w3-block w3-light-green w3-hover-light-green">
+	{{#if contextIconCssClasses}}
+				<i class="contextIconCssClasses + " site-menu-icon "></i>
+	{{/if}}
+				<span class="">donors</span>
+			</a>
+		</h1>
+		<div class="">
+			<div>
+	{{#if pagination.pagePrevious}}
+				<a href="{{pageUri}}?start={{pagination.pagePrevious.start}}&amp;rows={{pagination.rows}}">
+					<i class="fas fa-arrow-square-left "></i>
+				</a>
+	{{else}}
+				<i class="fas fa-arrow-square-left w3-opacity "></i>
+	{{/if}}
+	{{#gte pagination.rowsPrevious pagination.1L}}
+				<a href="{{pageUri}}?start={{pagination.start}}&amp;rows={{ pagination.rowsPrevious }}">
+					<i class="fas fa-minus-square "></i>
+				</a>
+	{{else}}
+				<i class="fas fa-minus-square w3-opacity "></i>
+	{{/gte}}
+				<a href="{{pageUri}}?start={{pagination.start}}&amp;rows={{ pagination.rowsNext }}">
+					<i class="fas fa-plus-square "></i>
+				</a>
+	{{#if pagination.pageNext}}
+				<a href="{{pageUri}}?start={{pagination.pageNext.start}}&amp;rows={{pagination.rows}}">
+					<i class="fas fa-arrow-square-right "></i>
+				</a>
+	{{else}}
+				<i class="fas fa-arrow-square-right w3-opacity "></i>
+	{{/if}}
+				<span>{{ pagination.startNum }} - {{ pagination.endNum }} of {{ pagination.foundNum }}</span>
+			</div>
+{{> "table1ReportTypePage"}}
+		</div>
+{{/inline}}
+{{#*inline "htmFormReportTypePage"}}	{{#if pk}}
+		<!-- #*inline "htmForm" -->
+		<form action="" id="ReportTypeForm" style="display: inline-block; width: 100%; " onsubmit="event.preventDefault(); return false; ">
+			<input name="pk" class="valuePk" type="hidden" value="{{pk}}"/>
+			<input name="focusId" type="hidden"/>
+		</form>
+{{#block "htmForm_searchpageReportType"}}{{/block}}
+	{{/if}}
+{{/inline}}
+{{#*inline "htmFormReportTypePage_putimportReportType"}}
+		<button
+			class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-light-green "
+			onclick="$('#putimportReportTypeModal').show(); "
+			>
+			<i class="fas fa-file-import "></i>
+			Import donors
+		</button>
+		<div id="putimportReportTypeModal" class="w3-modal w3-padding-32 ">
+			<div class="w3-modal-content ">
+				<div class="w3-card-4 ">
+					<header class="w3-container w3-light-green">
+	{{#eq "Page" classApiMethodMethod}}
+						<span class="w3-button w3-display-topright " onclick="$('#putimportReportTypeModal').hide(); ">×</span>
+	{{/eq}}
+						<h2 class="w3-padding ">Import donors</h2>
+					</header>
+					<div class="" id="putimportReportTypeFormValues">
+						<div class="w3-cell-row ">
+							<textarea
+								class="PUTImport_searchList w3-input w3-border "
+								style="height: 400px; "
+								placeholder="{ 'searchList': [ { 'pk': ... , 'saves': [ ... ] }, ... ] }"
+								></textarea>
+						</div>
+						<button
+							class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-margin w3-light-green "
+							onclick="putimportReportType($('#putimportReportTypeFormValues')); "
+							>Import donors</button>
+					</div>
+				</div>
+			</div>
+		</div>
+{{/inline}}
+{{#*inline "htmFormReportTypePage_postReportType"}}
+		<button
+			class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-light-green "
+			onclick="$('#postReportTypeModal').show(); "
+			>
+			<i class="fas fa-file-plus "></i>
+			Create a donor
+		</button>
+		<div id="postReportTypeModal" class="w3-modal w3-padding-32 ">
+			<div class="w3-modal-content ">
+				<div class="w3-card-4 ">
+					<header class="w3-container w3-light-green">
+	{{#eq "Page" classApiMethodMethod}}
+						<span class="w3-button w3-display-topright " onclick="$('#postReportTypeModal').hide(); ">×</span>
+	{{/eq}}
+						<h2 class="w3-padding ">Create a donor</h2>
+					</header>
+					<div class="" id="postReportTypeFormValues">
+						<div id="postReportTypeForm">
+							<div class="w3-cell-row ">
+{{> "htmCreated" classApiMethodMethod="POST"}}
+							</div>
+							<div class="w3-cell-row ">
+{{> "htmArchived" classApiMethodMethod="POST"}}
+{{> "htmDeleted" classApiMethodMethod="POST"}}
+							</div>
+							<div class="w3-cell-row ">
+{{> "htmScheduleKeys" classApiMethodMethod="POST"}}
+{{> "htmTypeName" classApiMethodMethod="POST"}}
+							</div>
+						</div>
+						<button
+							class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-margin w3-light-green "
+							onclick="postReportType($('#postReportTypeForm')); "
+							>Create a donor</button>
+					</div>
+				</div>
+			</div>
+		</div>
+{{/inline}}
+{{#*inline "htmFormReportTypePage_patchReportType"}}
+		<button
+			class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-light-green "
+			onclick="$('#patchReportTypeModal').show(); "
+			>
+			<i class="fas fa-edit "></i>
+			Modify donors
+		</button>
+		<div id="patchReportTypeModal" class="w3-modal w3-padding-32 ">
+			<div class="w3-modal-content ">
+				<div class="w3-card-4 ">
+					<header class="w3-container w3-light-green">
+	{{#eq "Page" classApiMethodMethod}}
+						<span class="w3-button w3-display-topright " onclick="$('#patchReportTypeModal').hide(); ">×</span>
+	{{/eq}}
+						<h2 class="w3-padding ">Modify donors</h2>
+					</header>
+					<div class="" id="patchReportTypeFormValues">
+							<div class="w3-cell-row ">
+{{> "htmCreated" classApiMethodMethod="PATCH"}}
+							</div>
+							<div class="w3-cell-row ">
+{{> "htmArchived" classApiMethodMethod="PATCH"}}
+{{> "htmDeleted" classApiMethodMethod="PATCH"}}
+							</div>
+							<div class="w3-cell-row ">
+{{> "htmScheduleKeys" classApiMethodMethod="PATCH"}}
+{{> "htmTypeName" classApiMethodMethod="PATCH"}}
+							</div>
+						<button
+							class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-margin w3-light-green "
+							onclick="patchReportType(null, $('#patchReportTypeFormValues')); "
+							>Modify donors</button>
+					</div>
+				</div>
+			</div>
+		</div>
+{{/inline}}
+{{#*inline "htmFormReportTypePage_searchpageReportType"}}
+		<div id="searchpageReportTypeModal" class="w3-padding-32 ">
+			<div class="">
+				<div class="w3-card-4 ">
+					<header class="w3-container w3-light-green">
+	{{#eq "Page" classApiMethodMethod}}
+						<span class="w3-button w3-display-topright " onclick="$('#searchpageReportTypeModal').hide(); ">×</span>
+	{{/eq}}
+						<h2 class="w3-padding ">Delete donors</h2>
+					</header>
+					<div class="" id="searchpageReportTypeFormValues">
+						<div id="searchpageReportTypeForm">
+							<div class="w3-cell-row ">
+{{> "htmPk" classApiMethodMethod="Page"}}
+{{> "htmCreated" classApiMethodMethod="Page"}}
+{{> "htmModified" classApiMethodMethod="Page"}}
+{{> "htmObjectId" classApiMethodMethod="Page"}}
+							</div>
+							<div class="w3-cell-row ">
+{{> "htmArchived" classApiMethodMethod="Page"}}
+{{> "htmDeleted" classApiMethodMethod="Page"}}
+							</div>
+							<div class="w3-cell-row ">
+{{> "htmScheduleKeys" classApiMethodMethod="Page"}}
+{{> "htmTypeName" classApiMethodMethod="Page"}}
+							</div>
+						</div>
+						<button
+							class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-margin w3-light-green "
+							onclick="searchpageReportType(); "
+							>Delete donors</button>
+					</div>
+				</div>
+			</div>
+		</div>
+{{/inline}}
+{{#*inline "htmBodyStartReportTypePage"}}
+{{> "htmBodyStartBaseModelPage"}}
+{{/inline}}
+{{#*inline "htmBodyEndReportTypePage"}}
+{{> "htmBodyEndBaseModelPage"}}
+{{/inline}}
+{{#*inline "htmBodyReportTypePage"}}
+{{#block "htmBodyStart"}}{{/block}}
+	{{#eq reportTypeCount int0}}
+{{#block "htmBodyCount0"}}{{/block}}
+	{{else}}
+		{{#eq reportTypeCount int1}}
+			{{#eq params.query.q "*:*"}}
+{{#block "htmBodyCount1All"}}{{/block}}
+			{{else}}
+{{#block "htmBodyCount1"}}{{/block}}
+			{{/eq}}
+		{{else}}
+{{#block "htmBodyAll"}}{{/block}}
+		{{/eq}}
+	{{/eq}}
+{{#block "htmForms"}}{{/block}}
+{{#block "htmBodyEnd"}}{{/block}}
+{{/inline}}
+{{#*inline "table1ReportTypePage"}}
+		<table class="w3-table w3-bordered w3-striped w3-border w3-hoverable ">
+			{{> table2ReportTypePage}}
+		</table>
+{{/inline}}
+{{#*inline "table2ReportTypePage"}}
+		{{> "thead1ReportTypePage"}}
+		{{> "tbody1ReportTypePage"}}
+		{{> "tfoot1ReportTypePage"}}
+	{{/inline}}
+{{#*inline "thead1ReportTypePage"}}
+		<thead class="w3-light-green w3-hover-light-green">
+			{{> thead2ReportTypePage}}
+		</thead>
+	{{/inline}}
+{{#*inline "thead2ReportTypePage"}}
+			<tr>
+				<th>created</th>
+				<th></th>
+			</tr>
+{{/inline}}
+{{#*inline "tbody1ReportTypePage"}}
+		<tbody>
+			{{> tbody2ReportTypePage}}
+		</tbody>
+{{/inline}}
+{{#*inline "tbody2ReportTypePage"}}
+		{{#each listReportType}}
+			<tr>
+					<td>
+						<a href="{{pageUrlPk}}">
+							<span class="white-space-pre-wrap ">{{siteZonedDateTimeFormat created "MMM d, yyyy h:mm:ss a" siteLocale}}</span>
+						</a>
+					</td>
+					<td>
+						<a href="{{pageUrlPk}}">
+							<i class="fad fa-hands-heart "></i>
+							<span class="white-space-pre-wrap ">{{objectTitle}}</span>
+						</a>
+					</td>
+			</tr>
+		{{/each}}
+{{/inline}}
+{{#*inline "tfoot1ReportTypePage"}}
+		<tfoot class="w3-light-green w3-hover-light-green">
+			{{> tfoot2ReportTypePage}}
+		</tfoot>
+{{/inline}}
+{{#*inline "tfoot2ReportTypePage"}}
+		<tr>
+			{{#if getColumnCreated}}
+				<td>
+				</td>
+			{{/if}}
+			{{#if getColumnObjectTitle}}
+				<td>
+				</td>
+			{{/if}}
+		</tr>
+	{{/inline}}
+{{#*inline "htmFormsReportTypePage"}}
+	{{#ifContainsAnyRoles roles rolesRequired}}
+		{{#eq reportTypeCount int1}}
+		<button
+			class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-light-green "
+			id="refreshThisReportTypeGenPage"
+			onclick="patch{{classSimpleName}}Vals( [ {name: 'fq', value: 'pk:{{pk}}' } ], {}, function() { addGlow($('#refreshThisReportTypeGenPage')); }, function() { addError($('#refreshThisReportTypeGenPage')); }); return false; ">
+			<i class="fas fa-sync-alt "></i>
+			refresh this donor
+		</button>
+		{{/eq}}
+	{{/ifContainsAnyRoles}}
+	{{#ifContainsAnyRoles roles authRolesAdmin}}
+{{#block "htmForm_putimportReportType"}}{{/block}}
+{{#block "htmForm_postReportType"}}{{/block}}
+{{#block "htmForm_patchReportType"}}{{/block}}
+	{{/ifContainsAnyRoles}}
+{{#block "htmSuggested"}}{{/block}}
+{{/inline}}
+{{#*inline "htmSuggestedReportTypePage"}}
+			{{#ifContainsAnyRoles roles rolesRequired}}
+					<div class="">
+						<button id="refreshAllReportTypeGenPage{{id}}" class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-light-green "
+							onclick="patch{{classSimpleName}}Vals([], {}, function() { addGlow($('#refreshAllReportTypeGenPage{{id}}')); }, function() { addError($('#refreshAllReportTypeGenPage{{id}}')); }); "
+							>
+							<i class="fas fa-sync-alt "></i>
+							refresh all the donors
+						</button>
+					</div>
+			{{/ifContainsAnyRoles}}
+			<div class="w3-cell-row ">
+				<div class="w3-cell ">
+					<span>
+						search donors: 
+					</span>
+				</div>
+			</div>
+			<div class="w3-bar ">
+				<input
+					type="text"
+					class="suggestReportType w3-input w3-border w3-bar-item "
+					name="suggestReportType"
+					id="suggestReportType{{id}}"
+					autocomplete="off"
+					oninput="suggestReportTypeObjectSuggest( [ { 'name': 'q', 'value': 'objectSuggest:' + $(this).val() }, { 'name': 'rows', 'value': '10' }, { 'name': 'fl', 'value': 'classCanonicalName,pk,pageUrlPk,objectTitle' } ], $('#suggestListReportType{{id}}'), {{pk}}; "
+					onkeyup="if (event.keyCode === 13) { event.preventDefault(); window.location.href = '/api/report-type?q={{query1}}:' + encodeURIComponent(this.value) + '{{fqs}}{{sorts}}&amp;rows={{start2}}&amp;rows={{rows1}}"
+				{{#if listReportType}}
+					value="{{query2}}"
+				{{/if}}
+				/>
+				<button
+					class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-bar-item w3-light-green "
+					onclick="window.location.href = '/api/report-type?q=&quot;, query1, &quot;:' + encodeURIComponent(this.previousElementSibling.value) + '&quot;, fqs, sorts, &quot;&amp;rows=&quot;, start2, &quot;&amp;rows=&quot;, rows1, &quot;'; "
+					>
+					<i class="fas fa-search "></i>
+				</button>
+			<div>
+			<div class="w3-cell-row ">
+				<div class="w3-cell w3-left-align w3-cell-top ">
+					<ul class="w3-ul w3-hoverable " id="suggestListReportType{{id}}">
+					</ul>
+				</div>
+			</div>
+			<div class="">
+				<a href="/api/report-type" class="">
+					<i class="fad fa-hands-heart"></i>
+					see all the donors
+				</a>
+			</div>
+{{/inline}}
+{{> BaseModelPage baseModel_=reportType_}}
+
+{{#*inline "htmScheduleKeys"}}
+								<div class="w3-cell w3-cell-top w3-center w3-mobile ">
+									<div class="w3-padding ">
+										<div id="suggest{{classApiMethodMethod}}ReportTypeScheduleKeys">
+											<div class="w3-card ">
+												<div class="w3-cell-row ">
+													<a href="/report-schedule?fq=typeKey:{{reportType_.pk}}" class="w3-cell w3-btn w3-center h4 w3-block h4 w3-light-green w3-hover-light-green ">
+														<i class="fad fa-hands-heart "></i>
+														report schedules
+													</a>
+												</div>
+												<div class="w3-cell-row ">
+													<h5 class="w3-cell ">
+														relate  to this donor
+													</h5>
+												</div>
+												<div class="w3-cell-row w3-padding ">
+													<div class="w3-cell ">
+														<div class="w3-cell-row ">
+
+														{{> "inputScheduleKeys"}}
+														</div>
+													</div>
+												</div>
+												<div class="w3-cell-row w3-padding ">
+													<div class="w3-cell w3-left-align w3-cell-top ">
+														<ul class="w3-ul w3-hoverable " id="listReportTypeScheduleKeys_{{classApiMethodMethod}}">
+														</ul>
+														{{#ifContainsAnyRoles roles rolesRequired}}
+	{{#eq 'Page' classApiMethodMethod}}
+																<div class="w3-cell-row ">
+																	<button
+																		 class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-light-green "
+																		 id="{{classApiMethodMethod}}_scheduleKeys_add"
+																		 onclick="$(this).addClass('w3-disabled'); this.disabled = true; this.innerHTML = 'Sending…'; postReportScheduleVals({ typeKey: '{{pk}}' }, function() { $('#{{classApiMethodMethod}}_scheduleKeys_add').disabled = false; $('#{{classApiMethodMethod}}_scheduleKeys_add').innerHTML = 'add a donor'; }, function() { addError($('#{{classApiMethodMethod}}scheduleKeys')); });"
+																		>add a donor</button>
+																</div>
+	{{/eq}}
+														{{/ifContainsAnyRoles}}
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+{{/inline}}
+
+{{#*inline "inputScheduleKeys"}}
+		{{#ifContainsAnyRoles roles rolesRequired}}
+														<i class="far fa-search w3-xxlarge w3-cell w3-cell-middle "></i>
+														{{#eq 'PUTCopy' classApiMethodMethod}}
+															<div>
+																<input 
+																	type="checkbox"
+																	id="{{classApiMethodMethod}}_scheduleKeys_clear"
+																	class="scheduleKeys_clear "
+																	>
+																<label for="{{classApiMethodMethod}}_scheduleKeys_clear">clear</label>
+															</div>
+														{{/eq}}
+														<input
+																type="text"
+																placeholder="report schedules"
+															class="valueObjectSuggest suggestScheduleKeys w3-input w3-border w3-cell w3-cell-middle "
+															name="setScheduleKeys"
+															id="{{classApiMethodMethod}}_scheduleKeys"
+															autocomplete="off"
+															oninput="suggestReportTypeScheduleKeys($(this).val() ? [ { 'name': 'q', 'value': 'objectSuggest:' + $(this).val() }, { 'name': 'rows', 'value': '10' }, { 'name': 'fl', 'value': 'classCanonicalName,typeKey,pk,pageUrlPk,objectTitle' } ] : [{{#if pk}}{'name':'fq','value':'typeKey:{{pk}}'}{{else}}{{/if}}], $('#listReportTypeScheduleKeys_{{classApiMethodMethod}}'), {{pk}}); "
+															/>
+
+													{{else}}
+		{{/ifContainsAnyRoles}}
+{{/inline}}
+
+{{#*inline "htmTypeName"}}
+								<div class="w3-cell w3-cell-top w3-center w3-mobile ">
+									<div class="w3-padding ">
+										<div id="suggest{{classApiMethodMethod}}ReportTypeTypeName">
+											<div class="w3-card ">
+												<div class="w3-cell-row w3-light-green">
+													<label for="{{classApiMethodMethod}}_typeName">type name</label>
+												</div>
+												<div class="w3-cell-row w3-padding ">
+													<div class="w3-cell ">
+														{{> "inputTypeName"}}
+													</div>
+	{{#ifContainsAnyRoles roles rolesRequired}}
+		{{#eq 'Page' classApiMethodMethod}}
+															<div class="w3-cell w3-left-align w3-cell-top ">
+																<button
+																		tabindex="-1"
+																		class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-bar-item w3-light-green "
+																		onclick="removeGlow($('#{{classApiMethodMethod}}_typeName')); $('#{{classApiMethodMethod}}_typeName').val(null); patch{{classSimpleName}}Val([{ name: 'softCommit', value: 'true' }, { name: 'fq', value: 'pk:' + $('#ReportTypeForm :input[name=pk]').val() }], 'setTypeName', null, function() { addGlow($('#{{classApiMethodMethod}}_typeName')); }, function() { addError($('#{{classApiMethodMethod}}_typeName')); }); "
+																		>
+																	<i class="far fa-eraser "></i>
+																</button>
+															</div>
+														{{/eq}}
+	{{/ifContainsAnyRoles}}
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+{{/inline}}
+
+{{#*inline "inputTypeName"}}
+		{{#ifContainsAnyRoles roles rolesRequired}}
+														<input
+															type="text"
+															placeholder="type name"
+															id="{{classApiMethodMethod}}_typeName"
+	{{#eq "Page" classApiMethodMethod}}
+																class="setTypeName classReportType inputReportType{{pk}}TypeName w3-input w3-border "
+																name="setTypeName"
+	{{else}}
+		{{#eq "PATCH" classApiMethodMethod}}
+																class="setTypeName classReportType inputReportType{{pk}}TypeName w3-input w3-border "
+																name="setTypeName"
+		{{else}}
+																class="valueTypeName w3-input w3-border classReportType inputReportType{{pk}}TypeName w3-input w3-border "
+																name="typeName"
+		{{/eq}}
+	{{/eq}}
+	{{#eq "Page" classApiMethodMethod}}
+																onclick="removeGlow($(this)); "
+																onchange="patch{{classSimpleName}}Val([{ name: 'softCommit', value: 'true' }, { name: 'fq', value: 'pk:{{pk}}' }], 'setTypeName', $(this).val(), function() { addGlow($('#{{classApiMethodMethod}}_typeName')); }, function() { addError($('#{{classApiMethodMethod}}_typeName')); }); "
+	{{/eq}}
+	{{#eq "Page" classApiMethodMethod}}
+															value="{{reportType_.typeName}}"
+	{{/eq}}
+														/>
+
+													{{else}}
+														{{#ifContainsKeys userKeys}}
+															<span class="varReportType{{pk}}TypeName ">{{reportType_.typeName}}</span>
+			{{/ifContainsKeys}}
+		{{/ifContainsAnyRoles}}
+{{/inline}}

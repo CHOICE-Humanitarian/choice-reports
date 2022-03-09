@@ -10,8 +10,8 @@ import org.choicehumanitarian.reports.enus.user.SiteUser;
 import java.io.IOException;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
-import org.choicehumanitarian.reports.enus.search.SearchList;
-import org.choicehumanitarian.reports.enus.wrap.Wrap;
+import org.computate.vertx.search.list.SearchList;
+import org.computate.search.wrap.Wrap;
 import org.choicehumanitarian.reports.enus.page.PageLayout;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -28,15 +28,12 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
-import org.apache.solr.common.util.SimpleOrderedMap;
 import java.util.stream.Collectors;
 import java.util.Arrays;
-import org.apache.solr.client.solrj.response.QueryResponse;
 import java.math.RoundingMode;
 import java.math.MathContext;
 import org.apache.commons.collections.CollectionUtils;
 import java.util.Objects;
-import org.apache.solr.client.solrj.SolrQuery.SortClause;
 import io.vertx.core.Promise;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 
@@ -118,7 +115,7 @@ public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<BaseModelPage> {
 		JsonArray pages = new JsonArray();
 		Long start = searchListChoiceDonor_.getStart().longValue();
 		Long rows = searchListChoiceDonor_.getRows().longValue();
-		Long foundNum = searchListChoiceDonor_.getQueryResponse().getResults().getNumFound();
+		Long foundNum = searchListChoiceDonor_.getQueryResponse().getResponse().getNumFound().longValue();
 		Long startNum = start + 1L;
 		Long endNum = start + rows;
 		Long floorMod = Math.floorMod(foundNum, rows);
@@ -164,7 +161,7 @@ public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<BaseModelPage> {
 		JsonObject params = serviceRequest.getParams();
 
 		JsonObject queryParams = Optional.ofNullable(serviceRequest).map(ServiceRequest::getParams).map(or -> or.getJsonObject("query")).orElse(new JsonObject());
-		Long num = searchListChoiceDonor_.getQueryResponse().getResults().getNumFound();
+		Long num = searchListChoiceDonor_.getQueryResponse().getResponse().getNumFound().longValue();
 		String q = "*:*";
 		String q1 = "objectText";
 		String q2 = "";
@@ -192,15 +189,15 @@ public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<BaseModelPage> {
 		}
 		query.put("q", q);
 
-		Integer rows1 = Optional.ofNullable(searchListChoiceDonor_).map(l -> l.getRows()).orElse(10);
-		Integer start1 = Optional.ofNullable(searchListChoiceDonor_).map(l -> l.getStart()).orElse(1);
-		Integer start2 = start1 - rows1;
-		Integer start3 = start1 + rows1;
-		Integer rows2 = rows1 / 2;
-		Integer rows3 = rows1 * 2;
+		Long rows1 = Optional.ofNullable(searchListChoiceDonor_).map(l -> l.getRows()).orElse(10L);
+		Long start1 = Optional.ofNullable(searchListChoiceDonor_).map(l -> l.getStart()).orElse(1L);
+		Long start2 = start1 - rows1;
+		Long start3 = start1 + rows1;
+		Long rows2 = rows1 / 2;
+		Long rows3 = rows1 * 2;
 		start2 = start2 < 0 ? 0 : start2;
 		JsonArray fqs = new JsonArray();
-		for(String fq : Optional.ofNullable(searchListChoiceDonor_).map(l -> l.getFilterQueries()).orElse(new String[0])) {
+		for(String fq : Optional.ofNullable(searchListChoiceDonor_).map(l -> l.getFilterQueries()).orElse(Arrays.asList())) {
 			if(!StringUtils.contains(fq, "(")) {
 				String fq1 = StringUtils.substringBefore(fq, "_");
 				String fq2 = StringUtils.substringAfter(fq, ":");
@@ -211,8 +208,8 @@ public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<BaseModelPage> {
 		query.put("fq", fqs);
 
 		JsonArray sorts = new JsonArray();
-		for(SortClause sort : Optional.ofNullable(searchListChoiceDonor_).map(l -> l.getSorts()).orElse(Arrays.asList())) {
-			sorts.add(new JsonObject().put("var", StringUtils.substringBefore(sort.getItem(), "_")).put("order", sort.getOrder().name()));
+		for(String sort : Optional.ofNullable(searchListChoiceDonor_).map(l -> l.getSorts()).orElse(Arrays.asList())) {
+			sorts.add(new JsonObject().put("var", StringUtils.substringBefore(sort, "_")).put("order", StringUtils.substringAfter(sort, " ")));
 		}
 		query.put("sort", sorts);
 	}

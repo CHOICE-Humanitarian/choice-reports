@@ -393,7 +393,7 @@
 					name="suggestSiteUser"
 					id="suggestSiteUser{{id}}"
 					autocomplete="off"
-					oninput="suggestSiteUserObjectSuggest( [ { 'name': 'q', 'value': 'objectSuggest:' + $(this).val() }, { 'name': 'rows', 'value': '10' }, { 'name': 'fl', 'value': 'pk,pageUrlPk,objectTitle' } ], $('#suggestListSiteUser{{id}}'), {{pk}}; "
+					oninput="suggestSiteUserObjectSuggest( [ { 'name': 'q', 'value': 'objectSuggest:' + $(this).val() }, { 'name': 'rows', 'value': '10' }, { 'name': 'fl', 'value': 'classCanonicalName,pk,pageUrlPk,objectTitle' } ], $('#suggestListSiteUser{{id}}'), {{pk}}; "
 					onkeyup="if (event.keyCode === 13) { event.preventDefault(); window.location.href = '/api/user?q={{query1}}:' + encodeURIComponent(this.value) + '{{fqs}}{{sorts}}&amp;rows={{start2}}&amp;rows={{rows1}}"
 				{{#if listSiteUser}}
 					value="{{query2}}"

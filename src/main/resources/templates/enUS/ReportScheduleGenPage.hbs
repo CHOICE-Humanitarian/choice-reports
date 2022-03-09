@@ -1,0 +1,998 @@
+{{#*inline "htmTitleReportSchedulePage"}}		<!-- inline "htmTitleReportSchedulePage" -->
+		<title>{{#if searchListReportSchedule_}}{{#eq reportScheduleCount int1}}{{#eq params.query.q "*:*"}}donor{{else}}donor{{/eq}}{{else}}no donor found{{/eq}}{{else}}donors{{/if}}</title>
+{{/inline}}
+{{#*inline "htmMetaReportSchedulePage"}}{{> "htmMetaBaseModelPage"}}{{/inline}}
+{{#*inline "htmStyleReportSchedulePage"}}{{> "htmStyleBaseModelPage"}}{{/inline}}
+{{#*inline "htmScriptsReportSchedulePage"}}{{> "htmScriptsBaseModelPage"}}		<!-- inline "htmScriptsReportSchedulePage" -->
+		<script src="{{staticBaseUrl}}/js/enUS/ReportSchedulePage.js"></script>
+		<script src="{{staticBaseUrl}}/js/enUS/ReportTypePage.js"></script>
+{{/inline}}
+{{#*inline "htmScriptReportSchedulePage"}}		<!-- inline "htmScriptReportSchedulePage" -->
+		<script>
+			$(document).ready(function() {
+				document.onkeydown = function(evt) {
+					evt = evt || window.event;
+					var isEscape = false;
+					if ('key' in evt) {
+						isEscape = (evt.key === 'Escape' || evt.key === 'Esc');
+					} else {
+						isEscape = (evt.keyCode === 27);
+					}
+					if (isEscape) {
+						$('.w3-modal:visible').hide();
+					}
+				};
+				window.eventBus = new EventBus('/eventbus');
+				var pk = {{#if pk}}{{pk}}{{else}}null{{/if}};
+				if(pk != null) {
+		{{#ifContainsAnyRoles roles rolesRequired}}
+					suggestReportScheduleTypeKey([{'name':'fq','value':'scheduleKeys:' + pk}], $('#listReportScheduleTypeKey_Page'), pk, true);
+		{{else}}
+					suggestReportScheduleTypeKey([{'name':'fq','value':'scheduleKeys:' + pk}], $('#listReportScheduleTypeKey_Page'), pk, false);
+		{{/ifContainsAnyRoles}}
+				}
+				websocketReportSchedule(websocketReportScheduleInner);
+			});
+		</script>
+{{/inline}}
+{{#*inline "htmUrlReportSchedule"}}{{pageUri}}?q={{query.q}}&amp;rows={{#if rows}}{{rows}}{{else}}{{pagination.rows}}{{/if}}&amp;rows={{#if start}}{{start}}{{else}}{{pagination.start}}{{/if}}{{#each query.fq}}{{#eq fq this}}{{else}}&fq={{fq}}:{{val}}{{/eq}}{{/each}}{{#each query.sort}}{{#eq sort this}}{{else}}&sort={{var}} {{order}}{{/eq}}{{/each}}{{/inline}}
+{{#*inline "htmHeadReportSchedulePage"}}{{> "htmTitleReportSchedulePage"}}{{> "htmMetaReportSchedulePage"}}{{> "htmStyleReportSchedulePage"}}{{> "htmScriptsReportSchedulePage"}}{{> "htmScriptReportSchedulePage"}}{{/inline}}
+{{#*inline "htmBodyCount0ReportSchedulePage"}}		<!-- #*inline "htmBodyCount0ReportSchedulePage" -->
+		<h1>
+			<a href="{{pageUri}}" class="w3-bar-item w3-btn w3-center w3-block w3-light-green w3-hover-light-green">
+				{{#if contextIconCssClasses}}
+					<i class="contextIconCssClasses site-menu-icon "></i>
+				{{/if}}
+				<span class="">donors</span>
+			</a>
+		</h1>
+		<h2>
+			<span class="w3-bar-item w3-padding w3-center w3-block w3-light-green">
+				{{#if contextIconCssClasses}}
+					<i class="contextIconCssClasses + " site-menu-icon "></i>
+				{{/if}}
+				<span class="">no donor found</span>
+			</span>
+		</h2>
+{{/inline}}
+{{#*inline "htmBodyCount1AllReportSchedulePage"}}		<!-- #*inline "htmBodyCount1AllReportSchedulePage" -->
+		<h1 class="w3-center ">
+			<a href="{{pageUri}}" class="w3-bar-item w3-btn w3-block w3-light-green w3-hover-light-green">
+			{{#if contextIconCssClasses}}
+				<i class="contextIconCssClasses site-menu-icon "></i>
+			{{/if}}
+				<span class="">donor</span>
+			</a>
+		</h1>
+		<h2 class="w3-center ">
+			<span class="w3-bar-item w3-padding w3-center w3-block w3-light-green">
+				<span class="">{{reportSchedule_.objectTitle}}</span>
+			</span>
+		</h2>
+{{#block "htmForm"}}{{/block}}
+{{/inline}}
+{{#*inline "htmBodyCount1ReportSchedulePage"}}		<!-- #*inline "htmBodyCount1ReportSchedulePage" -->
+		<h1>
+			<a href="{{pageUri}}" class="w3-bar-item w3-btn w3-center w3-block w3-light-green w3-hover-light-green">
+	{{#if contextIconCssClasses}}
+				<i class="contextIconCssClasses + " site-menu-icon "></i>
+	{{/if}}
+				<span class="">donors</span>
+			</a>
+		</h1>
+		<div>
+	{{#if pagination.pagePrevious}}
+			<a href="{{pageUri}}?start={{pagination.pagePrevious.start}}&amp;rows={{pagination.rows}}">
+				<i class="fas fa-arrow-square-left "></i>
+			</a>
+	{{else}}
+			<i class="fas fa-arrow-square-left w3-opacity "></i>
+	{{/if}}
+	{{#gte pagination.rowsPrevious pagination.1L}}
+			<a href="{{pageUri}}?start={{pagination.start}}&amp;rows={{ pagination.rowsPrevious }}">
+				<i class="fas fa-minus-square "></i>
+			</a>
+	{{else}}
+			<i class="fas fa-minus-square w3-opacity "></i>
+	{{/gte}}
+			<a href="{{pageUri}}?start={{pagination.start}}&amp;rows={{ pagination.rowsNext }}">
+				<i class="fas fa-plus-square "></i>
+			</a>
+	{{#if pagination.pageNext}}
+			<a href="{{pageUri}}?start={{pagination.pageNext.start}}&amp;rows={{pagination.rows}}">
+				<i class="fas fa-arrow-square-right "></i>
+			</a>
+	{{else}}
+			<i class="fas fa-arrow-square-right w3-opacity "></i>
+	{{/if}}
+			<span>{{ pagination.startNum }} - {{ pagination.endNum }} of {{ pagination.foundNum }}</span>
+		</div>
+{{> "table1ReportSchedulePage"}}
+{{/inline}}
+{{#*inline "htmBodyAllReportSchedulePage"}}		<!-- #*inline "htmBodyAllReportSchedulePage" -->
+		<h1>
+			<a href="{{pageUri}}" class="w3-bar-item w3-btn w3-center w3-block w3-light-green w3-hover-light-green">
+	{{#if contextIconCssClasses}}
+				<i class="contextIconCssClasses + " site-menu-icon "></i>
+	{{/if}}
+				<span class="">donors</span>
+			</a>
+		</h1>
+		<div class="">
+			<div>
+	{{#if pagination.pagePrevious}}
+				<a href="{{pageUri}}?start={{pagination.pagePrevious.start}}&amp;rows={{pagination.rows}}">
+					<i class="fas fa-arrow-square-left "></i>
+				</a>
+	{{else}}
+				<i class="fas fa-arrow-square-left w3-opacity "></i>
+	{{/if}}
+	{{#gte pagination.rowsPrevious pagination.1L}}
+				<a href="{{pageUri}}?start={{pagination.start}}&amp;rows={{ pagination.rowsPrevious }}">
+					<i class="fas fa-minus-square "></i>
+				</a>
+	{{else}}
+				<i class="fas fa-minus-square w3-opacity "></i>
+	{{/gte}}
+				<a href="{{pageUri}}?start={{pagination.start}}&amp;rows={{ pagination.rowsNext }}">
+					<i class="fas fa-plus-square "></i>
+				</a>
+	{{#if pagination.pageNext}}
+				<a href="{{pageUri}}?start={{pagination.pageNext.start}}&amp;rows={{pagination.rows}}">
+					<i class="fas fa-arrow-square-right "></i>
+				</a>
+	{{else}}
+				<i class="fas fa-arrow-square-right w3-opacity "></i>
+	{{/if}}
+				<span>{{ pagination.startNum }} - {{ pagination.endNum }} of {{ pagination.foundNum }}</span>
+			</div>
+{{> "table1ReportSchedulePage"}}
+		</div>
+{{/inline}}
+{{#*inline "htmFormReportSchedulePage"}}	{{#if pk}}
+		<!-- #*inline "htmForm" -->
+		<form action="" id="ReportScheduleForm" style="display: inline-block; width: 100%; " onsubmit="event.preventDefault(); return false; ">
+			<input name="pk" class="valuePk" type="hidden" value="{{pk}}"/>
+			<input name="focusId" type="hidden"/>
+		</form>
+{{#block "htmForm_searchpageReportSchedule"}}{{/block}}
+	{{/if}}
+{{/inline}}
+{{#*inline "htmFormReportSchedulePage_putimportReportSchedule"}}
+		<button
+			class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-light-green "
+			onclick="$('#putimportReportScheduleModal').show(); "
+			>
+			<i class="fas fa-file-import "></i>
+			Import donors
+		</button>
+		<div id="putimportReportScheduleModal" class="w3-modal w3-padding-32 ">
+			<div class="w3-modal-content ">
+				<div class="w3-card-4 ">
+					<header class="w3-container w3-light-green">
+	{{#eq "Page" classApiMethodMethod}}
+						<span class="w3-button w3-display-topright " onclick="$('#putimportReportScheduleModal').hide(); ">×</span>
+	{{/eq}}
+						<h2 class="w3-padding ">Import donors</h2>
+					</header>
+					<div class="" id="putimportReportScheduleFormValues">
+						<div class="w3-cell-row ">
+							<textarea
+								class="PUTImport_searchList w3-input w3-border "
+								style="height: 400px; "
+								placeholder="{ 'searchList': [ { 'pk': ... , 'saves': [ ... ] }, ... ] }"
+								></textarea>
+						</div>
+						<button
+							class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-margin w3-light-green "
+							onclick="putimportReportSchedule($('#putimportReportScheduleFormValues')); "
+							>Import donors</button>
+					</div>
+				</div>
+			</div>
+		</div>
+{{/inline}}
+{{#*inline "htmFormReportSchedulePage_postReportSchedule"}}
+		<button
+			class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-light-green "
+			onclick="$('#postReportScheduleModal').show(); "
+			>
+			<i class="fas fa-file-plus "></i>
+			Create a donor
+		</button>
+		<div id="postReportScheduleModal" class="w3-modal w3-padding-32 ">
+			<div class="w3-modal-content ">
+				<div class="w3-card-4 ">
+					<header class="w3-container w3-light-green">
+	{{#eq "Page" classApiMethodMethod}}
+						<span class="w3-button w3-display-topright " onclick="$('#postReportScheduleModal').hide(); ">×</span>
+	{{/eq}}
+						<h2 class="w3-padding ">Create a donor</h2>
+					</header>
+					<div class="" id="postReportScheduleFormValues">
+						<div id="postReportScheduleForm">
+							<div class="w3-cell-row ">
+{{> "htmCreated" classApiMethodMethod="POST"}}
+							</div>
+							<div class="w3-cell-row ">
+{{> "htmArchived" classApiMethodMethod="POST"}}
+{{> "htmDeleted" classApiMethodMethod="POST"}}
+							</div>
+							<div class="w3-cell-row ">
+{{> "htmTypeKey" classApiMethodMethod="POST"}}
+							</div>
+							<div class="w3-cell-row ">
+{{> "htmFrequencyOneTime" classApiMethodMethod="POST"}}
+{{> "htmScheduleName" classApiMethodMethod="POST"}}
+{{> "htmFrequencyTimesPerYear" classApiMethodMethod="POST"}}
+{{> "htmFrequencyYearsAfterCompletion" classApiMethodMethod="POST"}}
+							</div>
+							<div class="w3-cell-row ">
+{{> "htmFirstDueDate" classApiMethodMethod="POST"}}
+{{> "htmDataPullDate" classApiMethodMethod="POST"}}
+{{> "htmDataSources" classApiMethodMethod="POST"}}
+							</div>
+						</div>
+						<button
+							class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-margin w3-light-green "
+							onclick="postReportSchedule($('#postReportScheduleForm')); "
+							>Create a donor</button>
+					</div>
+				</div>
+			</div>
+		</div>
+{{/inline}}
+{{#*inline "htmFormReportSchedulePage_patchReportSchedule"}}
+		<button
+			class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-light-green "
+			onclick="$('#patchReportScheduleModal').show(); "
+			>
+			<i class="fas fa-edit "></i>
+			Modify donors
+		</button>
+		<div id="patchReportScheduleModal" class="w3-modal w3-padding-32 ">
+			<div class="w3-modal-content ">
+				<div class="w3-card-4 ">
+					<header class="w3-container w3-light-green">
+	{{#eq "Page" classApiMethodMethod}}
+						<span class="w3-button w3-display-topright " onclick="$('#patchReportScheduleModal').hide(); ">×</span>
+	{{/eq}}
+						<h2 class="w3-padding ">Modify donors</h2>
+					</header>
+					<div class="" id="patchReportScheduleFormValues">
+							<div class="w3-cell-row ">
+{{> "htmCreated" classApiMethodMethod="PATCH"}}
+							</div>
+							<div class="w3-cell-row ">
+{{> "htmArchived" classApiMethodMethod="PATCH"}}
+{{> "htmDeleted" classApiMethodMethod="PATCH"}}
+							</div>
+							<div class="w3-cell-row ">
+{{> "htmTypeKey" classApiMethodMethod="PATCH"}}
+							</div>
+							<div class="w3-cell-row ">
+{{> "htmFrequencyOneTime" classApiMethodMethod="PATCH"}}
+{{> "htmScheduleName" classApiMethodMethod="PATCH"}}
+{{> "htmFrequencyTimesPerYear" classApiMethodMethod="PATCH"}}
+{{> "htmFrequencyYearsAfterCompletion" classApiMethodMethod="PATCH"}}
+							</div>
+							<div class="w3-cell-row ">
+{{> "htmFirstDueDate" classApiMethodMethod="PATCH"}}
+{{> "htmDataPullDate" classApiMethodMethod="PATCH"}}
+{{> "htmDataSources" classApiMethodMethod="PATCH"}}
+							</div>
+						<button
+							class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-margin w3-light-green "
+							onclick="patchReportSchedule(null, $('#patchReportScheduleFormValues')); "
+							>Modify donors</button>
+					</div>
+				</div>
+			</div>
+		</div>
+{{/inline}}
+{{#*inline "htmFormReportSchedulePage_searchpageReportSchedule"}}
+		<div id="searchpageReportScheduleModal" class="w3-padding-32 ">
+			<div class="">
+				<div class="w3-card-4 ">
+					<header class="w3-container w3-light-green">
+	{{#eq "Page" classApiMethodMethod}}
+						<span class="w3-button w3-display-topright " onclick="$('#searchpageReportScheduleModal').hide(); ">×</span>
+	{{/eq}}
+						<h2 class="w3-padding ">Delete donors</h2>
+					</header>
+					<div class="" id="searchpageReportScheduleFormValues">
+						<div id="searchpageReportScheduleForm">
+							<div class="w3-cell-row ">
+{{> "htmPk" classApiMethodMethod="Page"}}
+{{> "htmCreated" classApiMethodMethod="Page"}}
+{{> "htmModified" classApiMethodMethod="Page"}}
+{{> "htmObjectId" classApiMethodMethod="Page"}}
+							</div>
+							<div class="w3-cell-row ">
+{{> "htmArchived" classApiMethodMethod="Page"}}
+{{> "htmDeleted" classApiMethodMethod="Page"}}
+							</div>
+							<div class="w3-cell-row ">
+{{> "htmTypeKey" classApiMethodMethod="Page"}}
+							</div>
+							<div class="w3-cell-row ">
+{{> "htmFrequencyOneTime" classApiMethodMethod="Page"}}
+{{> "htmScheduleName" classApiMethodMethod="Page"}}
+{{> "htmFrequencyTimesPerYear" classApiMethodMethod="Page"}}
+{{> "htmFrequencyYearsAfterCompletion" classApiMethodMethod="Page"}}
+							</div>
+							<div class="w3-cell-row ">
+{{> "htmFirstDueDate" classApiMethodMethod="Page"}}
+{{> "htmDataPullDate" classApiMethodMethod="Page"}}
+{{> "htmDataSources" classApiMethodMethod="Page"}}
+							</div>
+						</div>
+						<button
+							class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-margin w3-light-green "
+							onclick="searchpageReportSchedule(); "
+							>Delete donors</button>
+					</div>
+				</div>
+			</div>
+		</div>
+{{/inline}}
+{{#*inline "htmBodyStartReportSchedulePage"}}
+{{> "htmBodyStartBaseModelPage"}}
+{{/inline}}
+{{#*inline "htmBodyEndReportSchedulePage"}}
+{{> "htmBodyEndBaseModelPage"}}
+{{/inline}}
+{{#*inline "htmBodyReportSchedulePage"}}
+{{#block "htmBodyStart"}}{{/block}}
+	{{#eq reportScheduleCount int0}}
+{{#block "htmBodyCount0"}}{{/block}}
+	{{else}}
+		{{#eq reportScheduleCount int1}}
+			{{#eq params.query.q "*:*"}}
+{{#block "htmBodyCount1All"}}{{/block}}
+			{{else}}
+{{#block "htmBodyCount1"}}{{/block}}
+			{{/eq}}
+		{{else}}
+{{#block "htmBodyAll"}}{{/block}}
+		{{/eq}}
+	{{/eq}}
+{{#block "htmForms"}}{{/block}}
+{{#block "htmBodyEnd"}}{{/block}}
+{{/inline}}
+{{#*inline "table1ReportSchedulePage"}}
+		<table class="w3-table w3-bordered w3-striped w3-border w3-hoverable ">
+			{{> table2ReportSchedulePage}}
+		</table>
+{{/inline}}
+{{#*inline "table2ReportSchedulePage"}}
+		{{> "thead1ReportSchedulePage"}}
+		{{> "tbody1ReportSchedulePage"}}
+		{{> "tfoot1ReportSchedulePage"}}
+	{{/inline}}
+{{#*inline "thead1ReportSchedulePage"}}
+		<thead class="w3-light-green w3-hover-light-green">
+			{{> thead2ReportSchedulePage}}
+		</thead>
+	{{/inline}}
+{{#*inline "thead2ReportSchedulePage"}}
+			<tr>
+				<th>created</th>
+				<th></th>
+			</tr>
+{{/inline}}
+{{#*inline "tbody1ReportSchedulePage"}}
+		<tbody>
+			{{> tbody2ReportSchedulePage}}
+		</tbody>
+{{/inline}}
+{{#*inline "tbody2ReportSchedulePage"}}
+		{{#each listReportSchedule}}
+			<tr>
+					<td>
+						<a href="{{pageUrlPk}}">
+							<span class="white-space-pre-wrap ">{{siteZonedDateTimeFormat created "MMM d, yyyy h:mm:ss a" siteLocale}}</span>
+						</a>
+					</td>
+					<td>
+						<a href="{{pageUrlPk}}">
+							<i class="fad fa-hands-heart "></i>
+							<span class="white-space-pre-wrap ">{{objectTitle}}</span>
+						</a>
+					</td>
+			</tr>
+		{{/each}}
+{{/inline}}
+{{#*inline "tfoot1ReportSchedulePage"}}
+		<tfoot class="w3-light-green w3-hover-light-green">
+			{{> tfoot2ReportSchedulePage}}
+		</tfoot>
+{{/inline}}
+{{#*inline "tfoot2ReportSchedulePage"}}
+		<tr>
+			{{#if getColumnCreated}}
+				<td>
+				</td>
+			{{/if}}
+			{{#if getColumnObjectTitle}}
+				<td>
+				</td>
+			{{/if}}
+		</tr>
+	{{/inline}}
+{{#*inline "htmFormsReportSchedulePage"}}
+	{{#ifContainsAnyRoles roles rolesRequired}}
+		{{#eq reportScheduleCount int1}}
+		<button
+			class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-light-green "
+			id="refreshThisReportScheduleGenPage"
+			onclick="patch{{classSimpleName}}Vals( [ {name: 'fq', value: 'pk:{{pk}}' } ], {}, function() { addGlow($('#refreshThisReportScheduleGenPage')); }, function() { addError($('#refreshThisReportScheduleGenPage')); }); return false; ">
+			<i class="fas fa-sync-alt "></i>
+			refresh this donor
+		</button>
+		{{/eq}}
+	{{/ifContainsAnyRoles}}
+	{{#ifContainsAnyRoles roles authRolesAdmin}}
+{{#block "htmForm_putimportReportSchedule"}}{{/block}}
+{{#block "htmForm_postReportSchedule"}}{{/block}}
+{{#block "htmForm_patchReportSchedule"}}{{/block}}
+	{{/ifContainsAnyRoles}}
+{{#block "htmSuggested"}}{{/block}}
+{{/inline}}
+{{#*inline "htmSuggestedReportSchedulePage"}}
+			{{#ifContainsAnyRoles roles rolesRequired}}
+					<div class="">
+						<button id="refreshAllReportScheduleGenPage{{id}}" class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-light-green "
+							onclick="patch{{classSimpleName}}Vals([], {}, function() { addGlow($('#refreshAllReportScheduleGenPage{{id}}')); }, function() { addError($('#refreshAllReportScheduleGenPage{{id}}')); }); "
+							>
+							<i class="fas fa-sync-alt "></i>
+							refresh all the donors
+						</button>
+					</div>
+			{{/ifContainsAnyRoles}}
+			<div class="w3-cell-row ">
+				<div class="w3-cell ">
+					<span>
+						search donors: 
+					</span>
+				</div>
+			</div>
+			<div class="w3-bar ">
+				<input
+					type="text"
+					class="suggestReportSchedule w3-input w3-border w3-bar-item "
+					name="suggestReportSchedule"
+					id="suggestReportSchedule{{id}}"
+					autocomplete="off"
+					oninput="suggestReportScheduleObjectSuggest( [ { 'name': 'q', 'value': 'objectSuggest:' + $(this).val() }, { 'name': 'rows', 'value': '10' }, { 'name': 'fl', 'value': 'classCanonicalName,pk,pageUrlPk,objectTitle' } ], $('#suggestListReportSchedule{{id}}'), {{pk}}; "
+					onkeyup="if (event.keyCode === 13) { event.preventDefault(); window.location.href = '/api/report-schedule?q={{query1}}:' + encodeURIComponent(this.value) + '{{fqs}}{{sorts}}&amp;rows={{start2}}&amp;rows={{rows1}}"
+				{{#if listReportSchedule}}
+					value="{{query2}}"
+				{{/if}}
+				/>
+				<button
+					class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-bar-item w3-light-green "
+					onclick="window.location.href = '/api/report-schedule?q=&quot;, query1, &quot;:' + encodeURIComponent(this.previousElementSibling.value) + '&quot;, fqs, sorts, &quot;&amp;rows=&quot;, start2, &quot;&amp;rows=&quot;, rows1, &quot;'; "
+					>
+					<i class="fas fa-search "></i>
+				</button>
+			<div>
+			<div class="w3-cell-row ">
+				<div class="w3-cell w3-left-align w3-cell-top ">
+					<ul class="w3-ul w3-hoverable " id="suggestListReportSchedule{{id}}">
+					</ul>
+				</div>
+			</div>
+			<div class="">
+				<a href="/api/report-schedule" class="">
+					<i class="fad fa-hands-heart"></i>
+					see all the donors
+				</a>
+			</div>
+{{/inline}}
+{{> BaseModelPage baseModel_=reportSchedule_}}
+
+{{#*inline "htmTypeKey"}}
+								<div class="w3-cell w3-cell-top w3-center w3-mobile ">
+									<div class="w3-padding ">
+										<div id="suggest{{classApiMethodMethod}}ReportScheduleTypeKey">
+											<div class="w3-card ">
+												<div class="w3-cell-row ">
+													<a href="/report-type?fq=scheduleKeys:{{reportSchedule_.pk}}" class="w3-cell w3-btn w3-center h4 w3-block h4 w3-light-green w3-hover-light-green ">
+														<i class="fad fa-hands-heart "></i>
+														report type
+													</a>
+												</div>
+												<div class="w3-cell-row ">
+													<h5 class="w3-cell ">
+														relate a donor to this donor
+													</h5>
+												</div>
+												<div class="w3-cell-row w3-padding ">
+													<div class="w3-cell ">
+														<div class="w3-cell-row ">
+
+														{{> "inputTypeKey"}}
+														</div>
+													</div>
+												</div>
+												<div class="w3-cell-row w3-padding ">
+													<div class="w3-cell w3-left-align w3-cell-top ">
+														<ul class="w3-ul w3-hoverable " id="listReportScheduleTypeKey_{{classApiMethodMethod}}">
+														</ul>
+														{{#ifContainsAnyRoles roles rolesRequired}}
+	{{#eq 'Page' classApiMethodMethod}}
+																<div class="w3-cell-row ">
+																	<button
+																		 class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-light-green "
+																		 id="{{classApiMethodMethod}}_typeKey_add"
+																		 onclick="$(this).addClass('w3-disabled'); this.disabled = true; this.innerHTML = 'Sending…'; postReportTypeVals({ scheduleKeys: [ '{{pk}}' ] }, function() { $('#{{classApiMethodMethod}}_typeKey_add').disabled = false; $('#{{classApiMethodMethod}}_typeKey_add').innerHTML = 'add a donor'; }, function() { addError($('#{{classApiMethodMethod}}typeKey')); });"
+																		>add a donor</button>
+																</div>
+	{{/eq}}
+														{{/ifContainsAnyRoles}}
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+{{/inline}}
+
+{{#*inline "inputTypeKey"}}
+		{{#ifContainsAnyRoles roles rolesRequired}}
+														<i class="far fa-search w3-xxlarge w3-cell w3-cell-middle "></i>
+														{{#eq 'PUTCopy' classApiMethodMethod}}
+															<div>
+																<input 
+																	type="checkbox"
+																	id="{{classApiMethodMethod}}_typeKey_clear"
+																	class="typeKey_clear "
+																	>
+																<label for="{{classApiMethodMethod}}_typeKey_clear">clear</label>
+															</div>
+														{{/eq}}
+														<input
+																type="text"
+																placeholder="report type"
+															class="valueObjectSuggest suggestTypeKey w3-input w3-border w3-cell w3-cell-middle "
+															name="setTypeKey"
+															id="{{classApiMethodMethod}}_typeKey"
+															autocomplete="off"
+															oninput="suggestReportScheduleTypeKey($(this).val() ? [ { 'name': 'q', 'value': 'objectSuggest:' + $(this).val() }, { 'name': 'rows', 'value': '10' }, { 'name': 'fl', 'value': 'classCanonicalName,scheduleKeys,pk,pageUrlPk,objectTitle' } ] : [{{#if pk}}{'name':'fq','value':'scheduleKeys:{{pk}}'}{{else}}{{/if}}], $('#listReportScheduleTypeKey_{{classApiMethodMethod}}'), {{pk}}); "
+															/>
+
+													{{else}}
+		{{/ifContainsAnyRoles}}
+{{/inline}}
+
+{{#*inline "htmScheduleName"}}
+								<div class="w3-cell w3-cell-top w3-center w3-mobile ">
+									<div class="w3-padding ">
+										<div id="suggest{{classApiMethodMethod}}ReportScheduleScheduleName">
+											<div class="w3-card ">
+												<div class="w3-cell-row w3-light-green">
+													<label for="{{classApiMethodMethod}}_scheduleName">schedule name</label>
+												</div>
+												<div class="w3-cell-row w3-padding ">
+													<div class="w3-cell ">
+														{{> "inputScheduleName"}}
+													</div>
+	{{#ifContainsAnyRoles roles rolesRequired}}
+		{{#eq 'Page' classApiMethodMethod}}
+															<div class="w3-cell w3-left-align w3-cell-top ">
+																<button
+																		tabindex="-1"
+																		class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-bar-item w3-light-green "
+																		onclick="removeGlow($('#{{classApiMethodMethod}}_scheduleName')); $('#{{classApiMethodMethod}}_scheduleName').val(null); patch{{classSimpleName}}Val([{ name: 'softCommit', value: 'true' }, { name: 'fq', value: 'pk:' + $('#ReportScheduleForm :input[name=pk]').val() }], 'setScheduleName', null, function() { addGlow($('#{{classApiMethodMethod}}_scheduleName')); }, function() { addError($('#{{classApiMethodMethod}}_scheduleName')); }); "
+																		>
+																	<i class="far fa-eraser "></i>
+																</button>
+															</div>
+														{{/eq}}
+	{{/ifContainsAnyRoles}}
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+{{/inline}}
+
+{{#*inline "inputScheduleName"}}
+		{{#ifContainsAnyRoles roles rolesRequired}}
+														<input
+															type="text"
+															placeholder="schedule name"
+															id="{{classApiMethodMethod}}_scheduleName"
+	{{#eq "Page" classApiMethodMethod}}
+																class="setScheduleName classReportSchedule inputReportSchedule{{pk}}ScheduleName w3-input w3-border "
+																name="setScheduleName"
+	{{else}}
+		{{#eq "PATCH" classApiMethodMethod}}
+																class="setScheduleName classReportSchedule inputReportSchedule{{pk}}ScheduleName w3-input w3-border "
+																name="setScheduleName"
+		{{else}}
+																class="valueScheduleName w3-input w3-border classReportSchedule inputReportSchedule{{pk}}ScheduleName w3-input w3-border "
+																name="scheduleName"
+		{{/eq}}
+	{{/eq}}
+	{{#eq "Page" classApiMethodMethod}}
+																onclick="removeGlow($(this)); "
+																onchange="patch{{classSimpleName}}Val([{ name: 'softCommit', value: 'true' }, { name: 'fq', value: 'pk:{{pk}}' }], 'setScheduleName', $(this).val(), function() { addGlow($('#{{classApiMethodMethod}}_scheduleName')); }, function() { addError($('#{{classApiMethodMethod}}_scheduleName')); }); "
+	{{/eq}}
+	{{#eq "Page" classApiMethodMethod}}
+															value="{{reportSchedule_.scheduleName}}"
+	{{/eq}}
+														/>
+
+													{{else}}
+														{{#ifContainsKeys userKeys}}
+															<span class="varReportSchedule{{pk}}ScheduleName ">{{reportSchedule_.scheduleName}}</span>
+			{{/ifContainsKeys}}
+		{{/ifContainsAnyRoles}}
+{{/inline}}
+
+{{#*inline "htmFrequencyOneTime"}}
+								<div class="w3-cell w3-cell-top w3-center w3-mobile ">
+									<div class="w3-padding ">
+										<div id="suggest{{classApiMethodMethod}}ReportScheduleFrequencyOneTime">
+											<div class="w3-card ">
+												<div class="w3-cell-row w3-light-green">
+													<label for="{{classApiMethodMethod}}_frequencyOneTime">one time</label>
+												</div>
+												<div class="w3-cell-row w3-padding ">
+													<div class="w3-cell ">
+														{{> "inputFrequencyOneTime"}}
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+{{/inline}}
+
+{{#*inline "inputFrequencyOneTime"}}
+		{{#ifContainsAnyRoles roles rolesRequired}}
+	{{#eq 'Page' classApiMethodMethod}}
+															<input
+																type="checkbox"
+																id="{{classApiMethodMethod}}_frequencyOneTime"
+																value="true"
+	{{else}}
+														<select
+															id="{{classApiMethodMethod}}_frequencyOneTime"
+	{{/eq}}
+	{{#eq 'Page' classApiMethodMethod}}
+															class="classReportSchedule inputReportSchedule{{pk}}FrequencyOneTime w3-input w3-border "
+															name="setFrequencyOneTime"
+	{{else}}
+		{{#eq 'Page' classApiMethodMethod}}
+																class="classReportSchedule inputReportSchedule{{pk}}FrequencyOneTime w3-input w3-border "
+																name="setFrequencyOneTime"
+		{{else}}
+																class="setFrequencyOneTime valueFrequencyOneTime classReportSchedule inputReportSchedule{{pk}}FrequencyOneTime w3-input w3-border "
+																name="setFrequencyOneTime"
+		{{/eq}}
+	{{/eq}}
+	{{#eq 'Page' classApiMethodMethod}}
+															onchange="patch{{classSimpleName}}Val([{ name: 'softCommit', value: 'true' }, { name: 'fq', value: 'pk:{{pk}}' }], 'setFrequencyOneTime', $(this).prop('checked'), function() { addGlow($('#{{classApiMethodMethod}}_frequencyOneTime')); }, function() { addError($('#{{classApiMethodMethod}}_frequencyOneTime')); }); "
+	{{/eq}}
+	{{#eq 'Page' classApiMethodMethod}}
+		{{#if reportSchedule_.frequencyOneTime}}
+																checked="checked"
+		{{/if}}
+																/>
+	{{else}}
+															>
+															<option value="" selected="selected"></option>
+															<option value="true">true</option>
+															<option value="false">false</option>
+														</select>
+	{{/eq}}
+
+													{{else}}
+														{{#ifContainsKeys userKeys}}
+															<span class="varReportSchedule{{pk}}FrequencyOneTime ">{{reportSchedule_.frequencyOneTime}}</span>
+			{{/ifContainsKeys}}
+		{{/ifContainsAnyRoles}}
+{{/inline}}
+
+{{#*inline "htmFrequencyTimesPerYear"}}
+								<div class="w3-cell w3-cell-top w3-center w3-mobile ">
+									<div class="w3-padding ">
+										<div id="suggest{{classApiMethodMethod}}ReportScheduleFrequencyTimesPerYear">
+											<div class="w3-card ">
+												<div class="w3-cell-row w3-light-green">
+													<label for="{{classApiMethodMethod}}_frequencyTimesPerYear">times per year</label>
+												</div>
+												<div class="w3-cell-row w3-padding ">
+													<div class="w3-cell ">
+														{{> "inputFrequencyTimesPerYear"}}
+													</div>
+	{{#ifContainsAnyRoles roles rolesRequired}}
+		{{#eq 'Page' classApiMethodMethod}}
+															<div class="w3-cell w3-left-align w3-cell-top ">
+																<button
+																		tabindex="-1"
+																		class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-bar-item w3-light-green "
+																		onclick="removeGlow($('#{{classApiMethodMethod}}_frequencyTimesPerYear')); $('#{{classApiMethodMethod}}_frequencyTimesPerYear').val(null); patch{{classSimpleName}}Val([{ name: 'softCommit', value: 'true' }, { name: 'fq', value: 'pk:' + $('#ReportScheduleForm :input[name=pk]').val() }], 'setFrequencyTimesPerYear', null, function() { addGlow($('#{{classApiMethodMethod}}_frequencyTimesPerYear')); }, function() { addError($('#{{classApiMethodMethod}}_frequencyTimesPerYear')); }); "
+																		>
+																	<i class="far fa-eraser "></i>
+																</button>
+															</div>
+														{{/eq}}
+	{{/ifContainsAnyRoles}}
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+{{/inline}}
+
+{{#*inline "inputFrequencyTimesPerYear"}}
+		{{#ifContainsAnyRoles roles rolesRequired}}
+														<input
+															type="text"
+															placeholder="times per year"
+															id="{{classApiMethodMethod}}_frequencyTimesPerYear"
+	{{#eq "Page" classApiMethodMethod}}
+																class="setFrequencyTimesPerYear classReportSchedule inputReportSchedule{{pk}}FrequencyTimesPerYear w3-input w3-border "
+																name="setFrequencyTimesPerYear"
+	{{else}}
+		{{#eq "PATCH" classApiMethodMethod}}
+																class="setFrequencyTimesPerYear classReportSchedule inputReportSchedule{{pk}}FrequencyTimesPerYear w3-input w3-border "
+																name="setFrequencyTimesPerYear"
+		{{else}}
+																class="valueFrequencyTimesPerYear w3-input w3-border classReportSchedule inputReportSchedule{{pk}}FrequencyTimesPerYear w3-input w3-border "
+																name="frequencyTimesPerYear"
+		{{/eq}}
+	{{/eq}}
+	{{#eq "Page" classApiMethodMethod}}
+																onclick="removeGlow($(this)); "
+																onchange="patch{{classSimpleName}}Val([{ name: 'softCommit', value: 'true' }, { name: 'fq', value: 'pk:{{pk}}' }], 'setFrequencyTimesPerYear', $(this).val(), function() { addGlow($('#{{classApiMethodMethod}}_frequencyTimesPerYear')); }, function() { addError($('#{{classApiMethodMethod}}_frequencyTimesPerYear')); }); "
+	{{/eq}}
+	{{#eq "Page" classApiMethodMethod}}
+															value="{{reportSchedule_.frequencyTimesPerYear}}"
+	{{/eq}}
+														/>
+
+													{{else}}
+														{{#ifContainsKeys userKeys}}
+															<span class="varReportSchedule{{pk}}FrequencyTimesPerYear ">{{reportSchedule_.frequencyTimesPerYear}}</span>
+			{{/ifContainsKeys}}
+		{{/ifContainsAnyRoles}}
+{{/inline}}
+
+{{#*inline "htmFrequencyYearsAfterCompletion"}}
+								<div class="w3-cell w3-cell-top w3-center w3-mobile ">
+									<div class="w3-padding ">
+										<div id="suggest{{classApiMethodMethod}}ReportScheduleFrequencyYearsAfterCompletion">
+											<div class="w3-card ">
+												<div class="w3-cell-row w3-light-green">
+													<label for="{{classApiMethodMethod}}_frequencyYearsAfterCompletion">years after completion</label>
+												</div>
+												<div class="w3-cell-row w3-padding ">
+													<div class="w3-cell ">
+														{{> "inputFrequencyYearsAfterCompletion"}}
+													</div>
+	{{#ifContainsAnyRoles roles rolesRequired}}
+		{{#eq 'Page' classApiMethodMethod}}
+															<div class="w3-cell w3-left-align w3-cell-top ">
+																<button
+																		tabindex="-1"
+																		class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-bar-item w3-light-green "
+																		onclick="removeGlow($('#{{classApiMethodMethod}}_frequencyYearsAfterCompletion')); $('#{{classApiMethodMethod}}_frequencyYearsAfterCompletion').val(null); patch{{classSimpleName}}Val([{ name: 'softCommit', value: 'true' }, { name: 'fq', value: 'pk:' + $('#ReportScheduleForm :input[name=pk]').val() }], 'setFrequencyYearsAfterCompletion', null, function() { addGlow($('#{{classApiMethodMethod}}_frequencyYearsAfterCompletion')); }, function() { addError($('#{{classApiMethodMethod}}_frequencyYearsAfterCompletion')); }); "
+																		>
+																	<i class="far fa-eraser "></i>
+																</button>
+															</div>
+														{{/eq}}
+	{{/ifContainsAnyRoles}}
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+{{/inline}}
+
+{{#*inline "inputFrequencyYearsAfterCompletion"}}
+		{{#ifContainsAnyRoles roles rolesRequired}}
+														<input
+															type="text"
+															placeholder="years after completion"
+															id="{{classApiMethodMethod}}_frequencyYearsAfterCompletion"
+	{{#eq "Page" classApiMethodMethod}}
+																class="setFrequencyYearsAfterCompletion classReportSchedule inputReportSchedule{{pk}}FrequencyYearsAfterCompletion w3-input w3-border "
+																name="setFrequencyYearsAfterCompletion"
+	{{else}}
+		{{#eq "PATCH" classApiMethodMethod}}
+																class="setFrequencyYearsAfterCompletion classReportSchedule inputReportSchedule{{pk}}FrequencyYearsAfterCompletion w3-input w3-border "
+																name="setFrequencyYearsAfterCompletion"
+		{{else}}
+																class="valueFrequencyYearsAfterCompletion w3-input w3-border classReportSchedule inputReportSchedule{{pk}}FrequencyYearsAfterCompletion w3-input w3-border "
+																name="frequencyYearsAfterCompletion"
+		{{/eq}}
+	{{/eq}}
+	{{#eq "Page" classApiMethodMethod}}
+																onclick="removeGlow($(this)); "
+																onchange="patch{{classSimpleName}}Val([{ name: 'softCommit', value: 'true' }, { name: 'fq', value: 'pk:{{pk}}' }], 'setFrequencyYearsAfterCompletion', $(this).val(), function() { addGlow($('#{{classApiMethodMethod}}_frequencyYearsAfterCompletion')); }, function() { addError($('#{{classApiMethodMethod}}_frequencyYearsAfterCompletion')); }); "
+	{{/eq}}
+	{{#eq "Page" classApiMethodMethod}}
+															value="{{reportSchedule_.frequencyYearsAfterCompletion}}"
+	{{/eq}}
+														/>
+
+													{{else}}
+														{{#ifContainsKeys userKeys}}
+															<span class="varReportSchedule{{pk}}FrequencyYearsAfterCompletion ">{{reportSchedule_.frequencyYearsAfterCompletion}}</span>
+			{{/ifContainsKeys}}
+		{{/ifContainsAnyRoles}}
+{{/inline}}
+
+{{#*inline "htmFirstDueDate"}}
+								<div class="w3-cell w3-cell-top w3-center w3-mobile ">
+									<div class="w3-padding ">
+										<div id="suggest{{classApiMethodMethod}}ReportScheduleFirstDueDate">
+											<div class="w3-card ">
+												<div class="w3-cell-row w3-light-green">
+													<label for="{{classApiMethodMethod}}_firstDueDate">first due date</label>
+												</div>
+												<div class="w3-cell-row  ">
+													<div class="w3-cell ">
+														{{> "inputFirstDueDate"}}
+													</div>
+	{{#ifContainsAnyRoles roles rolesRequired}}
+		{{#eq 'Page' classApiMethodMethod}}
+															<div class="w3-cell w3-left-align w3-cell-top ">
+																<button
+																		tabindex="-1"
+																		class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-bar-item w3-light-green "
+																		onclick="removeGlow($('#{{classApiMethodMethod}}_firstDueDate')); $('#{{classApiMethodMethod}}_firstDueDate').val(null); patch{{classSimpleName}}Val([{ name: 'softCommit', value: 'true' }, { name: 'fq', value: 'pk:' + $('#ReportScheduleForm :input[name=pk]').val() }], 'setFirstDueDate', null, function() { addGlow($('#{{classApiMethodMethod}}_firstDueDate')); }, function() { addError($('#{{classApiMethodMethod}}_firstDueDate')); }); "
+																		>
+																	<i class="far fa-eraser "></i>
+																</button>
+															</div>
+														{{/eq}}
+	{{/ifContainsAnyRoles}}
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+{{/inline}}
+
+{{#*inline "inputFirstDueDate"}}
+		{{#ifContainsAnyRoles roles rolesRequired}}
+														<input
+																type="text"
+																class="w3-input w3-border datepicker setFirstDueDate classReportSchedule inputReportSchedule{{pk}}FirstDueDate w3-input w3-border "
+																placeholder="MM/DD/YYYY"
+																data-timeformat="MM/dd/yyyy"
+																id="{{classApiMethodMethod}}_firstDueDate"
+																value="{{reportSchedule_.firstDueDate}}"
+														{{#eq 'Page' classApiMethodMethod}}
+															onclick="removeGlow($(this)); ";
+															onchange="var t = moment(this.value, 'MM/DD/YYYY'); if(t) { var s = t.format('YYYY-MM-DD'); patch{{classSimpleName}}Val([{ name: 'softCommit', value: 'true' }, { name: 'fq', value: 'pk:{{pk}}' }], 'setFirstDueDate', s, function() { addGlow($('#{{classApiMethodMethod}}_firstDueDate')); }, function() { addError($('#{{classApiMethodMethod}}_firstDueDate')); }); } "
+														{{/eq}}
+														/>
+													{{else}}
+														{{#ifContainsKeys userKeys}}
+															<span class="varReportSchedule{{pk}}FirstDueDate ">{{reportSchedule_.firstDueDate}}</span>
+			{{/ifContainsKeys}}
+		{{/ifContainsAnyRoles}}
+{{/inline}}
+
+{{#*inline "htmDataPullDate"}}
+								<div class="w3-cell w3-cell-top w3-center w3-mobile ">
+									<div class="w3-padding ">
+										<div id="suggest{{classApiMethodMethod}}ReportScheduleDataPullDate">
+											<div class="w3-card ">
+												<div class="w3-cell-row w3-light-green">
+													<label for="{{classApiMethodMethod}}_dataPullDate">data pull date</label>
+												</div>
+												<div class="w3-cell-row  ">
+													<div class="w3-cell ">
+														{{> "inputDataPullDate"}}
+													</div>
+	{{#ifContainsAnyRoles roles rolesRequired}}
+		{{#eq 'Page' classApiMethodMethod}}
+															<div class="w3-cell w3-left-align w3-cell-top ">
+																<button
+																		tabindex="-1"
+																		class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-bar-item w3-light-green "
+																		onclick="removeGlow($('#{{classApiMethodMethod}}_dataPullDate')); $('#{{classApiMethodMethod}}_dataPullDate').val(null); patch{{classSimpleName}}Val([{ name: 'softCommit', value: 'true' }, { name: 'fq', value: 'pk:' + $('#ReportScheduleForm :input[name=pk]').val() }], 'setDataPullDate', null, function() { addGlow($('#{{classApiMethodMethod}}_dataPullDate')); }, function() { addError($('#{{classApiMethodMethod}}_dataPullDate')); }); "
+																		>
+																	<i class="far fa-eraser "></i>
+																</button>
+															</div>
+														{{/eq}}
+	{{/ifContainsAnyRoles}}
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+{{/inline}}
+
+{{#*inline "inputDataPullDate"}}
+		{{#ifContainsAnyRoles roles rolesRequired}}
+														<input
+																type="text"
+																class="w3-input w3-border datepicker setDataPullDate classReportSchedule inputReportSchedule{{pk}}DataPullDate w3-input w3-border "
+																placeholder="MM/DD/YYYY"
+																data-timeformat="MM/dd/yyyy"
+																id="{{classApiMethodMethod}}_dataPullDate"
+																value="{{reportSchedule_.dataPullDate}}"
+														{{#eq 'Page' classApiMethodMethod}}
+															onclick="removeGlow($(this)); ";
+															onchange="var t = moment(this.value, 'MM/DD/YYYY'); if(t) { var s = t.format('YYYY-MM-DD'); patch{{classSimpleName}}Val([{ name: 'softCommit', value: 'true' }, { name: 'fq', value: 'pk:{{pk}}' }], 'setDataPullDate', s, function() { addGlow($('#{{classApiMethodMethod}}_dataPullDate')); }, function() { addError($('#{{classApiMethodMethod}}_dataPullDate')); }); } "
+														{{/eq}}
+														/>
+													{{else}}
+														{{#ifContainsKeys userKeys}}
+															<span class="varReportSchedule{{pk}}DataPullDate ">{{reportSchedule_.dataPullDate}}</span>
+			{{/ifContainsKeys}}
+		{{/ifContainsAnyRoles}}
+{{/inline}}
+
+{{#*inline "htmDataSources"}}
+								<div class="w3-cell w3-cell-top w3-center w3-mobile ">
+									<div class="w3-padding ">
+										<div id="suggest{{classApiMethodMethod}}ReportScheduleDataSources">
+											<div class="w3-card ">
+												<div class="w3-cell-row w3-light-green">
+													<label for="{{classApiMethodMethod}}_dataSources">data sources</label>
+												</div>
+												<div class="w3-cell-row w3-padding ">
+													<div class="w3-cell ">
+														{{> "inputDataSources"}}
+													</div>
+	{{#ifContainsAnyRoles roles rolesRequired}}
+		{{#eq 'Page' classApiMethodMethod}}
+															<div class="w3-cell w3-left-align w3-cell-top ">
+																<button
+																		tabindex="-1"
+																		class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-bar-item w3-light-green "
+																		onclick="removeGlow($('#{{classApiMethodMethod}}_dataSources')); $('#{{classApiMethodMethod}}_dataSources').val(null); patch{{classSimpleName}}Val([{ name: 'softCommit', value: 'true' }, { name: 'fq', value: 'pk:' + $('#ReportScheduleForm :input[name=pk]').val() }], 'setDataSources', null, function() { addGlow($('#{{classApiMethodMethod}}_dataSources')); }, function() { addError($('#{{classApiMethodMethod}}_dataSources')); }); "
+																		>
+																	<i class="far fa-eraser "></i>
+																</button>
+															</div>
+														{{/eq}}
+	{{/ifContainsAnyRoles}}
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+{{/inline}}
+
+{{#*inline "inputDataSources"}}
+		{{#ifContainsAnyRoles roles rolesRequired}}
+														<textarea
+															placeholder="data sources"
+															id="{{classApiMethodMethod}}_dataSources"
+	{{#eq "Page" classApiMethodMethod}}
+																class="setDataSources classReportSchedule inputReportSchedule{{pk}}DataSources w3-input w3-border "
+																name="setDataSources"
+	{{else}}
+		{{#eq "PATCH" classApiMethodMethod}}
+																class="setDataSources classReportSchedule inputReportSchedule{{pk}}DataSources w3-input w3-border "
+																name="setDataSources"
+		{{else}}
+																class="valueDataSources w3-input w3-border classReportSchedule inputReportSchedule{{pk}}DataSources w3-input w3-border "
+																name="dataSources"
+		{{/eq}}
+	{{/eq}}
+	{{#eq "Page" classApiMethodMethod}}
+																onclick="removeGlow($(this)); "
+																onchange="patch{{classSimpleName}}Val([{ name: 'softCommit', value: 'true' }, { name: 'fq', value: 'pk:{{pk}}' }], 'setDataSources', $(this).val(), function() { addGlow($('#{{classApiMethodMethod}}_dataSources')); }, function() { addError($('#{{classApiMethodMethod}}_dataSources')); }); "
+	{{/eq}}
+														>{{reportSchedule_.dataSources}}
+</textarea>
+													{{else}}
+														{{#ifContainsKeys userKeys}}
+															<span class="varReportSchedule{{pk}}DataSources ">{{reportSchedule_.dataSources}}</span>
+			{{/ifContainsKeys}}
+		{{/ifContainsAnyRoles}}
+{{/inline}}

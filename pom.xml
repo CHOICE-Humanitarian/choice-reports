@@ -25,6 +25,7 @@
 		<postgresql.version>42.2.2.jre7</postgresql.version>
 		<solr.version>8.4.1</solr.version>
 		<junit.version>4.13.1</junit.version>
+		<computate.version>4.2.4.4</computate.version>
 	</properties>
 
 	<dependencyManagement>
@@ -101,44 +102,6 @@
 			<groupId>org.apache.curator</groupId>
 			<artifactId>curator-recipes</artifactId>
 			<version>${apache-curator.version}</version>
-		</dependency>
-
-		<!-- #### -->
-		<!-- Solr -->
-		<!-- #### -->
-
-		<dependency>
-			<groupId>org.apache.solr</groupId>
-			<artifactId>solr-core</artifactId>
-			<version>${solr.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.apache.logging.log4j</groupId>
-					<artifactId>log4j-core</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.logging.log4j</groupId>
-					<artifactId>log4j-api</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.logging.log4j</groupId>
-					<artifactId>log4j-1.2-api</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.logging.log4j</groupId>
-					<artifactId>log4j-slf4j-impl</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.logging.log4j</groupId>
-					<artifactId>log4j-web</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.solr</groupId>
-			<artifactId>solr-solrj</artifactId>
-			<version>${solr.version}</version>
 		</dependency>
 
 		<!-- ################# -->
@@ -270,18 +233,6 @@
 			<artifactId>vertx-health-check</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>io.opentracing.contrib</groupId>
-			<artifactId>opentracing-vertx-web</artifactId>
-			<version>0.1.0</version>
-		</dependency>
-
-		<dependency>
-			<groupId>io.opentracing.contrib</groupId>
-			<artifactId>opentracing-solr-client</artifactId>
-			<version>0.1.0</version>
-		</dependency>
-
 		<!-- ###### -->
 		<!-- Charts -->
 		<!-- ###### -->
@@ -313,6 +264,16 @@
 			<groupId>org.ceylon-lang</groupId>
 			<artifactId>ceylon-complete</artifactId>
 			<version>${ceylon-lang.version}</version>
+		</dependency>
+
+		<!-- ######### -->
+		<!-- Computate -->
+		<!-- ######### -->
+
+		<dependency>
+			<groupId>org.computate</groupId>
+			<artifactId>computate-vertx</artifactId>
+			<version>${computate.version}</version>
 		</dependency>
 
 		<!-- ############ -->
@@ -375,6 +336,7 @@
 					</execution>
 				</executions>
 			</plugin>
+
 			<plugin>
 				<groupId>io.reactiverse</groupId>
 				<artifactId>vertx-maven-plugin</artifactId>

@@ -4,46 +4,45 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Arrays;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.slf4j.LoggerFactory;
+import org.computate.search.serialize.ComputateLocalDateDeserializer;
 import java.util.HashMap;
 import org.choicehumanitarian.reports.enus.base.BaseModelPage;
-import org.choicehumanitarian.reports.enus.search.SearchList;
 import org.apache.commons.lang3.StringUtils;
 import java.lang.Integer;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import org.choicehumanitarian.reports.enus.wrap.Wrap;
-import org.apache.commons.collections.CollectionUtils;
+import org.computate.vertx.api.ApiRequest;
 import java.lang.Long;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.choicehumanitarian.reports.enus.java.ZonedDateTimeSerializer;
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.lang.String;
 import java.math.RoundingMode;
-import org.choicehumanitarian.reports.enus.request.api.ApiRequest;
 import org.slf4j.Logger;
 import java.math.MathContext;
-import org.choicehumanitarian.reports.enus.java.ZonedDateTimeDeserializer;
 import io.vertx.core.Promise;
-import org.choicehumanitarian.reports.enus.java.LocalDateSerializer;
-import org.apache.commons.text.StringEscapeUtils;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import org.choicehumanitarian.reports.enus.model.report.ChoiceReport;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.vertx.core.Future;
+import org.computate.search.serialize.ComputateZonedDateTimeDeserializer;
 import org.choicehumanitarian.reports.enus.base.BaseModel;
 import java.util.Objects;
+import org.computate.search.serialize.ComputateLocalDateSerializer;
+import org.computate.vertx.search.list.SearchList;
 import io.vertx.core.json.JsonArray;
+import org.computate.search.wrap.Wrap;
 import org.apache.commons.lang3.math.NumberUtils;
 import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.computate.search.serialize.ComputateZonedDateTimeSerializer;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 /**	
- * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.ChoiceReportGenPage&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
- * <br/>
+ * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.ChoiceReportGenPage&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
+ * <br>
  **/
 public abstract class ChoiceReportGenPageGen<DEV> extends BaseModelPage {
 	protected static final Logger LOG = LoggerFactory.getLogger(ChoiceReportGenPage.class);
@@ -59,10 +58,10 @@ public abstract class ChoiceReportGenPageGen<DEV> extends BaseModelPage {
 	@JsonInclude(Include.NON_NULL)
 	protected SearchList<ChoiceReport> searchListChoiceReport_;
 
-	/**	<br/> The entity searchListChoiceReport_
+	/**	<br> The entity searchListChoiceReport_
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.ChoiceReportGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:searchListChoiceReport_">Find the entity searchListChoiceReport_ in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.ChoiceReportGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:searchListChoiceReport_">Find the entity searchListChoiceReport_ in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _searchListChoiceReport_(Wrap<SearchList<ChoiceReport>> w);
@@ -91,16 +90,16 @@ public abstract class ChoiceReportGenPageGen<DEV> extends BaseModelPage {
 	//////////////////////
 
 	/**	 The entity listChoiceReport
-	 *	Il est construit avant d'être initialisé avec le constructeur par défaut JsonArray(). 
+	 *	 It is constructed before being initialized with the constructor by default. 
 	 */
 	@JsonInclude(Include.NON_NULL)
 	protected JsonArray listChoiceReport = new JsonArray();
 
-	/**	<br/> The entity listChoiceReport
-	 *  It is constructed before being initialized with the constructor by default JsonArray(). 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.ChoiceReportGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:listChoiceReport">Find the entity listChoiceReport in Solr</a>
-	 * <br/>
-	 * @param listChoiceReport is the entity already constructed. 
+	/**	<br> The entity listChoiceReport
+	 *  It is constructed before being initialized with the constructor by default. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.ChoiceReportGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:listChoiceReport">Find the entity listChoiceReport in Solr</a>
+	 * <br>
+	 * @param l is the entity already constructed. 
 	 **/
 	protected abstract void _listChoiceReport(JsonArray l);
 
@@ -131,10 +130,10 @@ public abstract class ChoiceReportGenPageGen<DEV> extends BaseModelPage {
 	@JsonInclude(Include.NON_NULL)
 	protected Integer choiceReportCount;
 
-	/**	<br/> The entity choiceReportCount
+	/**	<br> The entity choiceReportCount
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.ChoiceReportGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:choiceReportCount">Find the entity choiceReportCount in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.ChoiceReportGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:choiceReportCount">Find the entity choiceReportCount in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _choiceReportCount(Wrap<Integer> w);
@@ -164,16 +163,16 @@ public abstract class ChoiceReportGenPageGen<DEV> extends BaseModelPage {
 		return (ChoiceReportGenPage)this;
 	}
 
-	public static Integer staticSolrChoiceReportCount(SiteRequestEnUS siteRequest_, Integer o) {
+	public static Integer staticSearchChoiceReportCount(SiteRequestEnUS siteRequest_, Integer o) {
 		return o;
 	}
 
-	public static String staticSolrStrChoiceReportCount(SiteRequestEnUS siteRequest_, Integer o) {
+	public static String staticSearchStrChoiceReportCount(SiteRequestEnUS siteRequest_, Integer o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqChoiceReportCount(SiteRequestEnUS siteRequest_, String o) {
-		return ChoiceReportGenPage.staticSolrStrChoiceReportCount(siteRequest_, ChoiceReportGenPage.staticSolrChoiceReportCount(siteRequest_, ChoiceReportGenPage.staticSetChoiceReportCount(siteRequest_, o)));
+	public static String staticSearchFqChoiceReportCount(SiteRequestEnUS siteRequest_, String o) {
+		return ChoiceReportGenPage.staticSearchStrChoiceReportCount(siteRequest_, ChoiceReportGenPage.staticSearchChoiceReportCount(siteRequest_, ChoiceReportGenPage.staticSetChoiceReportCount(siteRequest_, o)));
 	}
 
 	///////////////////
@@ -187,10 +186,10 @@ public abstract class ChoiceReportGenPageGen<DEV> extends BaseModelPage {
 	@JsonInclude(Include.NON_NULL)
 	protected ChoiceReport choiceReport_;
 
-	/**	<br/> The entity choiceReport_
+	/**	<br> The entity choiceReport_
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.ChoiceReportGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:choiceReport_">Find the entity choiceReport_ in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.ChoiceReportGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:choiceReport_">Find the entity choiceReport_ in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _choiceReport_(Wrap<ChoiceReport> w);
@@ -226,10 +225,10 @@ public abstract class ChoiceReportGenPageGen<DEV> extends BaseModelPage {
 	@JsonInclude(Include.NON_NULL)
 	protected Long pk;
 
-	/**	<br/> The entity pk
+	/**	<br> The entity pk
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.ChoiceReportGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pk">Find the entity pk in Solr</a>
-	 * <br/>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.ChoiceReportGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pk">Find the entity pk in Solr</a>
+	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _pk(Wrap<Long> w);
@@ -259,16 +258,16 @@ public abstract class ChoiceReportGenPageGen<DEV> extends BaseModelPage {
 		return (ChoiceReportGenPage)this;
 	}
 
-	public static Long staticSolrPk(SiteRequestEnUS siteRequest_, Long o) {
+	public static Long staticSearchPk(SiteRequestEnUS siteRequest_, Long o) {
 		return o;
 	}
 
-	public static String staticSolrStrPk(SiteRequestEnUS siteRequest_, Long o) {
+	public static String staticSearchStrPk(SiteRequestEnUS siteRequest_, Long o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSolrFqPk(SiteRequestEnUS siteRequest_, String o) {
-		return ChoiceReportGenPage.staticSolrStrPk(siteRequest_, ChoiceReportGenPage.staticSolrPk(siteRequest_, ChoiceReportGenPage.staticSetPk(siteRequest_, o)));
+	public static String staticSearchFqPk(SiteRequestEnUS siteRequest_, String o) {
+		return ChoiceReportGenPage.staticSearchStrPk(siteRequest_, ChoiceReportGenPage.staticSearchPk(siteRequest_, ChoiceReportGenPage.staticSetPk(siteRequest_, o)));
 	}
 
 	//////////////
@@ -417,95 +416,56 @@ public abstract class ChoiceReportGenPageGen<DEV> extends BaseModelPage {
 	}
 
 	////////////////
-	// staticSolr //
+	// staticSearch //
 	////////////////
 
-	public static Object staticSolrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
-		return staticSolrChoiceReportGenPage(entityVar,  siteRequest_, o);
+	public static Object staticSearchForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+		return staticSearchChoiceReportGenPage(entityVar,  siteRequest_, o);
 	}
-	public static Object staticSolrChoiceReportGenPage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+	public static Object staticSearchChoiceReportGenPage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
 		switch(entityVar) {
 		case "choiceReportCount":
-			return ChoiceReportGenPage.staticSolrChoiceReportCount(siteRequest_, (Integer)o);
+			return ChoiceReportGenPage.staticSearchChoiceReportCount(siteRequest_, (Integer)o);
 		case "pk":
-			return ChoiceReportGenPage.staticSolrPk(siteRequest_, (Long)o);
+			return ChoiceReportGenPage.staticSearchPk(siteRequest_, (Long)o);
 			default:
-				return BaseModelPage.staticSolrBaseModelPage(entityVar,  siteRequest_, o);
+				return BaseModelPage.staticSearchBaseModelPage(entityVar,  siteRequest_, o);
 		}
 	}
 
 	///////////////////
-	// staticSolrStr //
+	// staticSearchStr //
 	///////////////////
 
-	public static String staticSolrStrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
-		return staticSolrStrChoiceReportGenPage(entityVar,  siteRequest_, o);
+	public static String staticSearchStrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+		return staticSearchStrChoiceReportGenPage(entityVar,  siteRequest_, o);
 	}
-	public static String staticSolrStrChoiceReportGenPage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+	public static String staticSearchStrChoiceReportGenPage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
 		switch(entityVar) {
 		case "choiceReportCount":
-			return ChoiceReportGenPage.staticSolrStrChoiceReportCount(siteRequest_, (Integer)o);
+			return ChoiceReportGenPage.staticSearchStrChoiceReportCount(siteRequest_, (Integer)o);
 		case "pk":
-			return ChoiceReportGenPage.staticSolrStrPk(siteRequest_, (Long)o);
+			return ChoiceReportGenPage.staticSearchStrPk(siteRequest_, (Long)o);
 			default:
-				return BaseModelPage.staticSolrStrBaseModelPage(entityVar,  siteRequest_, o);
+				return BaseModelPage.staticSearchStrBaseModelPage(entityVar,  siteRequest_, o);
 		}
 	}
 
 	//////////////////
-	// staticSolrFq //
+	// staticSearchFq //
 	//////////////////
 
-	public static String staticSolrFqForClass(String entityVar, SiteRequestEnUS siteRequest_, String o) {
-		return staticSolrFqChoiceReportGenPage(entityVar,  siteRequest_, o);
+	public static String staticSearchFqForClass(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+		return staticSearchFqChoiceReportGenPage(entityVar,  siteRequest_, o);
 	}
-	public static String staticSolrFqChoiceReportGenPage(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchFqChoiceReportGenPage(String entityVar, SiteRequestEnUS siteRequest_, String o) {
 		switch(entityVar) {
 		case "choiceReportCount":
-			return ChoiceReportGenPage.staticSolrFqChoiceReportCount(siteRequest_, o);
+			return ChoiceReportGenPage.staticSearchFqChoiceReportCount(siteRequest_, o);
 		case "pk":
-			return ChoiceReportGenPage.staticSolrFqPk(siteRequest_, o);
+			return ChoiceReportGenPage.staticSearchFqPk(siteRequest_, o);
 			default:
-				return BaseModelPage.staticSolrFqBaseModelPage(entityVar,  siteRequest_, o);
-		}
-	}
-
-	/////////////
-	// define //
-	/////////////
-
-	@Override public boolean defineForClass(String var, Object val) {
-		String[] vars = StringUtils.split(var, ".");
-		Object o = null;
-		if(val != null) {
-			for(String v : vars) {
-				if(o == null)
-					o = defineChoiceReportGenPage(v, val);
-				else if(o instanceof BaseModel) {
-					BaseModel oBaseModel = (BaseModel)o;
-					o = oBaseModel.defineForClass(v, val);
-				}
-			}
-		}
-		return o != null;
-	}
-	public Object defineChoiceReportGenPage(String var, Object val) {
-		switch(var.toLowerCase()) {
-			default:
-				return super.defineBaseModelPage(var, val);
-		}
-	}
-
-	//////////////////
-	// apiRequest //
-	//////////////////
-
-	public void apiRequestChoiceReportGenPage() {
-		ApiRequest apiRequest = Optional.ofNullable(siteRequest_).map(SiteRequestEnUS::getApiRequest_).orElse(null);
-		Object o = Optional.ofNullable(apiRequest).map(ApiRequest::getOriginal).orElse(null);
-		if(o != null && o instanceof ChoiceReportGenPage) {
-			ChoiceReportGenPage original = (ChoiceReportGenPage)o;
-			super.apiRequestBaseModelPage();
+				return BaseModelPage.staticSearchFqBaseModelPage(entityVar,  siteRequest_, o);
 		}
 	}
 
@@ -524,4 +484,30 @@ public abstract class ChoiceReportGenPageGen<DEV> extends BaseModelPage {
 	public static final String VAR_choiceReportCount = "choiceReportCount";
 	public static final String VAR_choiceReport_ = "choiceReport_";
 	public static final String VAR_pk = "pk";
+
+	public static final String DISPLAY_NAME_searchListChoiceReport_ = "";
+	public static final String DISPLAY_NAME_listChoiceReport = "";
+	public static final String DISPLAY_NAME_choiceReportCount = "";
+	public static final String DISPLAY_NAME_choiceReport_ = "";
+	public static final String DISPLAY_NAME_pk = "";
+
+	public static String displayNameForClass(String var) {
+		return ChoiceReportGenPage.displayNameChoiceReportGenPage(var);
+	}
+	public static String displayNameChoiceReportGenPage(String var) {
+		switch(var) {
+		case VAR_searchListChoiceReport_:
+			return DISPLAY_NAME_searchListChoiceReport_;
+		case VAR_listChoiceReport:
+			return DISPLAY_NAME_listChoiceReport;
+		case VAR_choiceReportCount:
+			return DISPLAY_NAME_choiceReportCount;
+		case VAR_choiceReport_:
+			return DISPLAY_NAME_choiceReport_;
+		case VAR_pk:
+			return DISPLAY_NAME_pk;
+		default:
+			return BaseModelPage.displayNameBaseModelPage(var);
+		}
+	}
 }
