@@ -2,10 +2,10 @@ package org.choicehumanitarian.reports.enus.model.report.narrative;
 
 import org.choicehumanitarian.reports.enus.model.report.schedule.ReportScheduleEnUSApiServiceImpl;
 import org.choicehumanitarian.reports.enus.model.report.schedule.ReportSchedule;
-import org.choicehumanitarian.reports.enus.user.SiteUserEnUSApiServiceImpl;
-import org.choicehumanitarian.reports.enus.user.SiteUser;
+import org.choicehumanitarian.reports.enus.model.user.SiteUserEnUSApiServiceImpl;
+import org.choicehumanitarian.reports.enus.model.user.SiteUser;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
-import org.choicehumanitarian.reports.enus.user.SiteUser;
+import org.choicehumanitarian.reports.enus.model.user.SiteUser;
 import org.computate.vertx.api.ApiRequest;
 import org.computate.vertx.search.list.SearchResult;
 import org.computate.vertx.verticle.EmailVerticle;
@@ -35,6 +35,7 @@ import java.util.Collection;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Date;
+import org.computate.search.serialize.ComputateZonedDateTimeSerializer;
 import java.time.format.DateTimeFormatter;
 import java.time.ZoneId;
 import java.util.List;
@@ -88,7 +89,7 @@ import java.util.Base64;
 import java.time.ZonedDateTime;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
-import org.choicehumanitarian.reports.enus.user.SiteUserEnUSApiServiceImpl;
+import org.choicehumanitarian.reports.enus.model.user.SiteUserEnUSApiServiceImpl;
 import org.computate.vertx.search.list.SearchList;
 
 
@@ -247,12 +248,13 @@ public class ReportNarrativeEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 				searchList.setC(ReportNarrative.class);
 				searchList.fq("deleted_docvalues_boolean:false");
 				searchList.fq("archived_docvalues_boolean:false");
-				searchList.fq("inheritPk_docvalues_string:" + SearchTool.escapeQueryChars(body.getString("pk")));
+				searchList.fq("inheritPk_docvalues_string:" + SearchTool.escapeQueryChars(body.getString(ReportNarrative.VAR_pk)));
 				searchList.promiseDeepForClass(siteRequest).onSuccess(a -> {
 					try {
 						if(searchList.size() >= 1) {
 							ReportNarrative o = searchList.getList().stream().findFirst().orElse(null);
 							ReportNarrative o2 = new ReportNarrative();
+							o2.setSiteRequest_(siteRequest);
 							JsonObject body2 = new JsonObject();
 							for(String f : body.fieldNames()) {
 								Object bodyVal = body.getValue(f);
@@ -279,7 +281,7 @@ public class ReportNarrativeEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 										body2.put("set" + StringUtils.capitalize(f), bodyVal);
 									}
 								} else {
-									o2.defineForClass(f, bodyVal);
+									o2.persistForClass(f, bodyVal);
 									o2.relateForClass(f, bodyVal);
 									if(!StringUtils.containsAny(f, "pk", "created", "setCreated") && !Objects.equals(o.obtainForClass(f), o2.obtainForClass(f)))
 										body2.put("set" + StringUtils.capitalize(f), bodyVal);
@@ -294,7 +296,7 @@ public class ReportNarrativeEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 							if(body2.size() > 0) {
 								siteRequest.setJsonObject(body2);
 								patchReportNarrativeFuture(o, true).onSuccess(b -> {
-									LOG.info("Import ReportNarrative {} succeeded, modified ReportNarrative. ", body.getValue("pk"));
+									LOG.info("Import ReportNarrative {} succeeded, modified ReportNarrative. ", body.getValue(ReportNarrative.VAR_pk));
 									eventHandler.handle(Future.succeededFuture());
 								}).onFailure(ex -> {
 									LOG.error(String.format("putimportReportNarrativeFuture failed. "), ex);
@@ -305,7 +307,7 @@ public class ReportNarrativeEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 							}
 						} else {
 							postReportNarrativeFuture(siteRequest, true).onSuccess(b -> {
-								LOG.info("Import ReportNarrative {} succeeded, created new ReportNarrative. ", body.getValue("pk"));
+								LOG.info("Import ReportNarrative {} succeeded, created new ReportNarrative. ", body.getValue(ReportNarrative.VAR_pk));
 								eventHandler.handle(Future.succeededFuture());
 							}).onFailure(ex -> {
 								LOG.error(String.format("putimportReportNarrativeFuture failed. "), ex);
@@ -473,7 +475,7 @@ public class ReportNarrativeEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 				siteRequest.setSqlConnection(sqlConnection);
 				createReportNarrative(siteRequest).onSuccess(reportNarrative -> {
 					sqlPOSTReportNarrative(reportNarrative, inheritPk).onSuccess(b -> {
-						defineReportNarrative(reportNarrative).onSuccess(c -> {
+						persistReportNarrative(reportNarrative).onSuccess(c -> {
 							relateReportNarrative(reportNarrative).onSuccess(d -> {
 								indexReportNarrative(reportNarrative).onSuccess(e -> {
 									promise1.complete(reportNarrative);
@@ -747,7 +749,7 @@ public class ReportNarrativeEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 					searchReportNarrativeList(siteRequest, false, true, true).onSuccess(listReportNarrative -> {
 						try {
 							List<String> roles2 = Optional.ofNullable(config.getValue(ConfigKeys.AUTH_ROLES_ADMIN)).map(v -> v instanceof JsonArray ? (JsonArray)v : new JsonArray(v.toString())).orElse(new JsonArray()).getList();
-							if(listReportNarrative.getQueryResponse().getResponse().getNumFound() > 1
+							if(listReportNarrative.getResponse().getResponse().getNumFound() > 1
 									&& !CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roles2)
 									&& !CollectionUtils.containsAny(siteRequest.getUserRealmRoles(), roles2)
 									) {
@@ -758,7 +760,7 @@ public class ReportNarrativeEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 
 								ApiRequest apiRequest = new ApiRequest();
 								apiRequest.setRows(listReportNarrative.getRequest().getRows());
-								apiRequest.setNumFound(listReportNarrative.getQueryResponse().getResponse().getNumFound());
+								apiRequest.setNumFound(listReportNarrative.getResponse().getResponse().getNumFound());
 								apiRequest.setNumPATCH(0L);
 								apiRequest.initDeepApiRequest(siteRequest);
 								siteRequest.setApiRequest_(apiRequest);
@@ -814,7 +816,7 @@ public class ReportNarrativeEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 		List<Future> futures = new ArrayList<>();
 		SiteRequestEnUS siteRequest = listReportNarrative.getSiteRequest_(SiteRequestEnUS.class);
 		listReportNarrative.getList().forEach(o -> {
-			SiteRequestEnUS siteRequest2 = generateSiteRequest(siteRequest.getUser(), siteRequest.getServiceRequest(), siteRequest.getJsonObject(), SiteRequestEnUS.class);
+			SiteRequestEnUS siteRequest2 = generateSiteRequest(siteRequest.getUser(), siteRequest.getUserPrincipal(), siteRequest.getServiceRequest(), siteRequest.getJsonObject(), SiteRequestEnUS.class);
 			o.setSiteRequest_(siteRequest2);
 			siteRequest2.setApiRequest_(siteRequest.getApiRequest_());
 			futures.add(Future.future(promise1 -> {
@@ -828,14 +830,19 @@ public class ReportNarrativeEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 		});
 		CompositeFuture.all(futures).onSuccess( a -> {
 			if(apiRequest != null) {
-				apiRequest.setNumPATCH(apiRequest.getNumPATCH() + listReportNarrative.getQueryResponse().getResponse().getDocs().size());
+				apiRequest.setNumPATCH(apiRequest.getNumPATCH() + listReportNarrative.getResponse().getResponse().getDocs().size());
 				if(apiRequest.getNumFound() == 1L)
 					listReportNarrative.first().apiRequestReportNarrative();
 				eventBus.publish("websocketReportNarrative", JsonObject.mapFrom(apiRequest).toString());
 			}
 			listReportNarrative.next().onSuccess(next -> {
 				if(next) {
-					listPATCHReportNarrative(apiRequest, listReportNarrative);
+					listPATCHReportNarrative(apiRequest, listReportNarrative).onSuccess(b -> {
+						promise.complete();
+					}).onFailure(ex -> {
+						LOG.error(String.format("listPATCHReportNarrative failed. "), ex);
+						promise.fail(ex);
+					});
 				} else {
 					promise.complete();
 				}
@@ -859,7 +866,7 @@ public class ReportNarrativeEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 				searchReportNarrativeList(siteRequest, false, true, true).onSuccess(listReportNarrative -> {
 					try {
 						ReportNarrative o = listReportNarrative.first();
-						if(o != null && listReportNarrative.getQueryResponse().getResponse().getNumFound() == 1) {
+						if(o != null && listReportNarrative.getResponse().getResponse().getNumFound() == 1) {
 							ApiRequest apiRequest = new ApiRequest();
 							apiRequest.setRows(1L);
 							apiRequest.setNumFound(1L);
@@ -909,7 +916,7 @@ public class ReportNarrativeEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 				Promise<ReportNarrative> promise1 = Promise.promise();
 				siteRequest.setSqlConnection(sqlConnection);
 				sqlPATCHReportNarrative(o, inheritPk).onSuccess(reportNarrative -> {
-					defineReportNarrative(reportNarrative).onSuccess(c -> {
+					persistReportNarrative(reportNarrative).onSuccess(c -> {
 						relateReportNarrative(reportNarrative).onSuccess(d -> {
 							indexReportNarrative(reportNarrative).onSuccess(e -> {
 								promise1.complete(reportNarrative);
@@ -1243,27 +1250,8 @@ public class ReportNarrativeEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 		Promise<ServiceResponse> promise = Promise.promise();
 		try {
 			SiteRequestEnUS siteRequest = listReportNarrative.getSiteRequest_(SiteRequestEnUS.class);
-			SolrResponse responseSearch = listReportNarrative.getQueryResponse();
-			List<SolrResponse.Doc> solrDocuments = listReportNarrative.getQueryResponse().getResponse().getDocs();
-			Long searchInMillis = Long.valueOf(responseSearch.getResponseHeader().getqTime());
-			Long startNum = listReportNarrative.getRequest().getStart();
-			Long foundNum = responseSearch.getResponse().getNumFound();
-			Integer returnedNum = responseSearch.getResponse().getDocs().size();
-			String searchTime = String.format("%d.%03d sec", TimeUnit.MILLISECONDS.toSeconds(searchInMillis), TimeUnit.MILLISECONDS.toMillis(searchInMillis) - TimeUnit.SECONDS.toMillis(TimeUnit.MILLISECONDS.toSeconds(searchInMillis)));
-			String nextCursorMark = responseSearch.getNextCursorMark();
-			String exceptionSearch = Optional.ofNullable(responseSearch.getError()).map(error -> error.getMsg()).orElse(null);
 			List<String> fls = listReportNarrative.getRequest().getFields();
-
 			JsonObject json = new JsonObject();
-			json.put("startNum", startNum);
-			json.put("foundNum", foundNum);
-			json.put("returnedNum", returnedNum);
-			if(fls.size() == 1 && fls.stream().findFirst().orElse(null).equals("saves")) {
-				json.put("searchTime", searchTime);
-			}
-			if(nextCursorMark != null) {
-				json.put("nextCursorMark", nextCursorMark);
-			}
 			JsonArray l = new JsonArray();
 			listReportNarrative.getList().stream().forEach(o -> {
 				JsonObject json2 = JsonObject.mapFrom(o);
@@ -1290,56 +1278,7 @@ public class ReportNarrativeEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 				l.add(json2);
 			});
 			json.put("list", l);
-
-			SolrResponse.FacetFields facetFields = Optional.ofNullable(responseSearch.getFacetCounts()).map(f -> f.getFacetFields()).orElse(null);
-			if(facetFields != null) {
-				JsonObject facetFieldsJson = new JsonObject();
-				json.put("facet_fields", facetFieldsJson);
-				for(SolrResponse.FacetField facetField : facetFields.getFacets().values()) {
-					String facetFieldVar = StringUtils.substringBefore(facetField.getName(), "_docvalues_");
-					JsonObject facetFieldCounts = new JsonObject();
-					facetFieldsJson.put(facetFieldVar, facetFieldCounts);
-					facetField.getCounts().forEach((name, count) -> {
-						facetFieldCounts.put(name, count);
-					});
-				}
-			}
-
-			SolrResponse.FacetRanges facetRanges = Optional.ofNullable(responseSearch.getFacetCounts()).map(f -> f.getFacetRanges()).orElse(null);
-			if(facetRanges != null) {
-				JsonObject rangeJson = new JsonObject();
-				json.put("facet_ranges", rangeJson);
-				for(SolrResponse.FacetRange rangeFacet : facetRanges.getRanges().values()) {
-					JsonObject rangeFacetJson = new JsonObject();
-					String rangeFacetVar = StringUtils.substringBefore(rangeFacet.getName(), "_docvalues_");
-					rangeJson.put(rangeFacetVar, rangeFacetJson);
-					JsonObject rangeFacetCountsMap = new JsonObject();
-					rangeFacetJson.put("counts", rangeFacetCountsMap);
-					rangeFacet.getCounts().forEach((name, count) -> {
-						rangeFacetCountsMap.put(name, count);
-					});
-				}
-			}
-
-			SolrResponse.FacetPivot facetPivot = Optional.ofNullable(responseSearch.getFacetCounts()).map(f -> f.getFacetPivot()).orElse(null);
-			if(facetPivot != null) {
-				JsonObject facetPivotJson = new JsonObject();
-				json.put("facet_pivot", facetPivotJson);
-				for(SolrResponse.Pivot pivot : facetPivot.getPivot().values()) {
-					String[] varsIndexed = pivot.getName().trim().split(",");
-					String[] entityVars = new String[varsIndexed.length];
-					for(Integer i = 0; i < entityVars.length; i++) {
-						String entityIndexed = varsIndexed[i];
-						entityVars[i] = StringUtils.substringBefore(entityIndexed, "_docvalues_");
-					}
-					JsonArray pivotArray = new JsonArray();
-					facetPivotJson.put(StringUtils.join(entityVars, ","), pivotArray);
-					responsePivotSearchReportNarrative(pivot.getInternalPivot(), pivotArray);
-				}
-			}
-			if(exceptionSearch != null) {
-				json.put("exceptionSearch", exceptionSearch);
-			}
+			response200Search(listReportNarrative.getRequest(), listReportNarrative.getResponse(), json);
 			promise.complete(ServiceResponse.completedWithJson(Buffer.buffer(Optional.ofNullable(json).orElse(new JsonObject()).encodePrettily())));
 		} catch(Exception ex) {
 			LOG.error(String.format("response200SearchReportNarrative failed. "), ex);
@@ -1348,34 +1287,36 @@ public class ReportNarrativeEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 		return promise.future();
 	}
 	public void responsePivotSearchReportNarrative(List<SolrResponse.Pivot> pivots, JsonArray pivotArray) {
-		for(SolrResponse.Pivot pivotField : pivots) {
-			String entityIndexed = pivotField.getField();
-			String entityVar = StringUtils.substringBefore(entityIndexed, "_docvalues_");
-			JsonObject pivotJson = new JsonObject();
-			pivotArray.add(pivotJson);
-			pivotJson.put("field", entityVar);
-			pivotJson.put("value", pivotField.getValue());
-			pivotJson.put("count", pivotField.getCount());
-			Collection<SolrResponse.PivotRange> pivotRanges = pivotField.getRanges().values();
-			List<SolrResponse.Pivot> pivotFields2 = pivotField.getInternalPivot();
-			if(pivotRanges != null) {
-				JsonObject rangeJson = new JsonObject();
-				pivotJson.put("ranges", rangeJson);
-				for(SolrResponse.PivotRange rangeFacet : pivotRanges) {
-					JsonObject rangeFacetJson = new JsonObject();
-					String rangeFacetVar = StringUtils.substringBefore(rangeFacet.getName(), "_docvalues_");
-					rangeJson.put(rangeFacetVar, rangeFacetJson);
-					JsonObject rangeFacetCountsObject = new JsonObject();
-					rangeFacetJson.put("counts", rangeFacetCountsObject);
-					rangeFacet.getCounts().forEach((value, count) -> {
-						rangeFacetCountsObject.put(value, count);
-					});
+		if(pivots != null) {
+			for(SolrResponse.Pivot pivotField : pivots) {
+				String entityIndexed = pivotField.getField();
+				String entityVar = StringUtils.substringBefore(entityIndexed, "_docvalues_");
+				JsonObject pivotJson = new JsonObject();
+				pivotArray.add(pivotJson);
+				pivotJson.put("field", entityVar);
+				pivotJson.put("value", pivotField.getValue());
+				pivotJson.put("count", pivotField.getCount());
+				Collection<SolrResponse.PivotRange> pivotRanges = pivotField.getRanges().values();
+				List<SolrResponse.Pivot> pivotFields2 = pivotField.getPivotList();
+				if(pivotRanges != null) {
+					JsonObject rangeJson = new JsonObject();
+					pivotJson.put("ranges", rangeJson);
+					for(SolrResponse.PivotRange rangeFacet : pivotRanges) {
+						JsonObject rangeFacetJson = new JsonObject();
+						String rangeFacetVar = StringUtils.substringBefore(rangeFacet.getName(), "_docvalues_");
+						rangeJson.put(rangeFacetVar, rangeFacetJson);
+						JsonObject rangeFacetCountsObject = new JsonObject();
+						rangeFacetJson.put("counts", rangeFacetCountsObject);
+						rangeFacet.getCounts().forEach((value, count) -> {
+							rangeFacetCountsObject.put(value, count);
+						});
+					}
 				}
-			}
-			if(pivotFields2 != null) {
-				JsonArray pivotArray2 = new JsonArray();
-				pivotJson.put("pivot", pivotArray2);
-				responsePivotSearchReportNarrative(pivotFields2, pivotArray2);
+				if(pivotFields2 != null) {
+					JsonArray pivotArray2 = new JsonArray();
+					pivotJson.put("pivot", pivotArray2);
+					responsePivotSearchReportNarrative(pivotFields2, pivotArray2);
+				}
 			}
 		}
 	}
@@ -1464,6 +1405,13 @@ public class ReportNarrativeEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 			page.setSiteRequest_(siteRequest);
 			page.promiseDeepReportNarrativePage(siteRequest).onSuccess(a -> {
 				JsonObject json = JsonObject.mapFrom(page);
+				json.put(ConfigKeys.STATIC_BASE_URL, config.getString(ConfigKeys.STATIC_BASE_URL));
+				json.put(ConfigKeys.GITHUB_ORG, config.getString(ConfigKeys.GITHUB_ORG));
+				json.put(ConfigKeys.SITE_NAME, config.getString(ConfigKeys.SITE_NAME));
+				json.put(ConfigKeys.SITE_DISPLAY_NAME, config.getString(ConfigKeys.SITE_DISPLAY_NAME));
+				json.put(ConfigKeys.PROJECT_POWERED_BY_URL, config.getString(ConfigKeys.PROJECT_POWERED_BY_URL));
+				json.put(ConfigKeys.PROJECT_POWERED_BY_NAME, config.getString(ConfigKeys.PROJECT_POWERED_BY_NAME));
+				json.put(ConfigKeys.PROJECT_POWERED_BY_IMAGE_URI, config.getString(ConfigKeys.PROJECT_POWERED_BY_IMAGE_URI));
 				templateEngine.render(json, templateSearchPageReportNarrative()).onSuccess(buffer -> {
 					promise.complete(new ServiceResponse(200, "OK", buffer, requestHeaders));
 				}).onFailure(ex -> {
@@ -1487,7 +1435,7 @@ public class ReportNarrativeEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 			SqlConnection sqlConnection = siteRequest.getSqlConnection();
 			String userId = siteRequest.getUserId();
 			Long userKey = siteRequest.getUserKey();
-			ZonedDateTime created = Optional.ofNullable(siteRequest.getJsonObject()).map(j -> j.getString("created")).map(s -> ZonedDateTime.parse(s, DateTimeFormatter.ISO_DATE_TIME.withZone(ZoneId.of(config.getString(ConfigKeys.SITE_ZONE))))).orElse(ZonedDateTime.now(ZoneId.of(config.getString(ConfigKeys.SITE_ZONE))));
+			ZonedDateTime created = Optional.ofNullable(siteRequest.getJsonObject()).map(j -> j.getString("created")).map(s -> ZonedDateTime.parse(s, ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER.withZone(ZoneId.of(config.getString(ConfigKeys.SITE_ZONE))))).orElse(ZonedDateTime.now(ZoneId.of(config.getString(ConfigKeys.SITE_ZONE))));
 
 			sqlConnection.preparedQuery("INSERT INTO ReportNarrative(created, userKey) VALUES($1, $2) RETURNING pk")
 					.collecting(Collectors.toList())
@@ -1684,6 +1632,15 @@ public class ReportNarrativeEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 									valueRows = paramObject instanceof Long ? (Long)paramObject : Long.parseLong(paramObject.toString());
 									searchReportNarrativeRows(searchList, valueRows);
 									break;
+								case "stats":
+									searchList.stats((Boolean)paramObject);
+									break;
+								case "stats.field":
+									entityVar = (String)paramObject;
+									varIndexed = ReportNarrative.varIndexedReportNarrative(entityVar);
+									if(varIndexed != null)
+										searchList.statsField(varIndexed);
+									break;
 								case "facet":
 									searchList.facet((Boolean)paramObject);
 									break;
@@ -1753,7 +1710,7 @@ public class ReportNarrativeEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 	public void searchReportNarrative2(SiteRequestEnUS siteRequest, Boolean populate, Boolean store, Boolean modify, SearchList<ReportNarrative> searchList) {
 	}
 
-	public Future<Void> defineReportNarrative(ReportNarrative o) {
+	public Future<Void> persistReportNarrative(ReportNarrative o) {
 		Promise<Void> promise = Promise.promise();
 		try {
 			SiteRequestEnUS siteRequest = o.getSiteRequest_();
@@ -1770,25 +1727,25 @@ public class ReportNarrativeEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 							Object columnValue = definition.getValue(i);
 							if(!"pk".equals(columnName)) {
 								try {
-									o.defineForClass(columnName, columnValue);
+									o.persistForClass(columnName, columnValue);
 								} catch(Exception e) {
-									LOG.error(String.format("defineReportNarrative failed. "), e);
+									LOG.error(String.format("persistReportNarrative failed. "), e);
 								}
 							}
 						}
 					}
 					promise.complete();
 				} catch(Exception ex) {
-					LOG.error(String.format("defineReportNarrative failed. "), ex);
+					LOG.error(String.format("persistReportNarrative failed. "), ex);
 					promise.fail(ex);
 				}
 			}).onFailure(ex -> {
 				RuntimeException ex2 = new RuntimeException(ex);
-				LOG.error(String.format("defineReportNarrative failed. "), ex2);
+				LOG.error(String.format("persistReportNarrative failed. "), ex2);
 				promise.fail(ex2);
 			});
 		} catch(Exception ex) {
-			LOG.error(String.format("defineReportNarrative failed. "), ex);
+			LOG.error(String.format("persistReportNarrative failed. "), ex);
 			promise.fail(ex);
 		}
 		return promise.future();

@@ -1,18 +1,14 @@
 package org.choicehumanitarian.reports.enus.model.report;
 
-import java.lang.Long;
-import org.computate.vertx.search.list.SearchList;
-import org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor;
-import java.lang.String;
-import java.math.BigDecimal;
-import org.choicehumanitarian.reports.enus.base.BaseModelPage;
+import org.choicehumanitarian.reports.enus.page.PageLayout;
+import org.choicehumanitarian.reports.enus.model.base.BaseModelPage;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
-import org.choicehumanitarian.reports.enus.user.SiteUser;
+import org.choicehumanitarian.reports.enus.model.user.SiteUser;
 import java.io.IOException;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
+import org.computate.vertx.search.list.SearchList;
 import org.computate.search.wrap.Wrap;
-import org.choicehumanitarian.reports.enus.page.PageLayout;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.LocalDate;
@@ -31,12 +27,17 @@ import java.util.Optional;
 import java.util.stream.Stream;
 import java.util.stream.Collectors;
 import java.util.Arrays;
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.math.MathContext;
 import org.apache.commons.collections.CollectionUtils;
 import java.util.Objects;
 import io.vertx.core.Promise;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
+import org.computate.search.response.solr.SolrResponse;
+import java.util.HashMap;
+import org.computate.search.tool.TimeTool;
+import java.time.ZoneId;
 
 
 /**
@@ -51,11 +52,129 @@ public class ChoiceReportGenPage extends ChoiceReportGenPageGen<BaseModelPage> {
 	protected void _searchListChoiceReport_(Wrap<SearchList<ChoiceReport>> w) {
 	}
 
+	protected void _pageResponse(Wrap<String> w) {
+		if(searchListChoiceReport_ != null)
+			w.o(JsonObject.mapFrom(searchListChoiceReport_.getResponse()).toString());
+	}
+
+	protected void _defaultZoneId(Wrap<String> w) {
+		w.o(Optional.ofNullable(siteRequest_.getRequestVars().get(VAR_defaultZoneId)).orElse(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE)));
+	}
+
+	/**
+	 * Ignore: true
+	 **/
+	protected void _defaultTimeZone(Wrap<ZoneId> w) {
+		w.o(ZoneId.of(defaultZoneId));
+	}
+
+	protected void _defaultLocaleId(Wrap<String> w) {
+		w.o(Optional.ofNullable(siteRequest_.getRequestHeaders().get("Accept-Language")).map(acceptLanguage -> StringUtils.substringBefore(acceptLanguage, ",")).orElse(siteRequest_.getConfig().getString(ConfigKeys.SITE_LOCALE)));
+	}
+
+	/**
+	 * Ignore: true
+	 **/
+	protected void _defaultLocale(Wrap<Locale> w) {
+		w.o(Locale.forLanguageTag(defaultLocaleId));
+	}
+
+	protected void _defaultRangeGap(Wrap<String> w) {
+		w.o(Optional.ofNullable(searchListChoiceReport_.getFacetRangeGap()).orElse("+1DAY"));
+	}
+
+	protected void _defaultRangeEnd(Wrap<ZonedDateTime> w) {
+		w.o(Optional.ofNullable(searchListChoiceReport_.getFacetRangeEnd()).map(s -> TimeTool.parseZonedDateTime(defaultTimeZone, s)).orElse(ZonedDateTime.now(defaultTimeZone).toLocalDate().atStartOfDay(defaultTimeZone).plusDays(1)));
+	}
+
+	protected void _defaultRangeStart(Wrap<ZonedDateTime> w) {
+		w.o(Optional.ofNullable(searchListChoiceReport_.getFacetRangeStart()).map(s -> TimeTool.parseZonedDateTime(defaultTimeZone, s)).orElse(defaultRangeEnd.minusDays(7).toLocalDate().atStartOfDay(defaultTimeZone)));
+	}
+
+	protected void _defaultRangeVar(Wrap<String> w) {
+		w.o(Optional.ofNullable(searchListChoiceReport_.getFacetRanges()).orElse(Arrays.asList()).stream().findFirst().map(v -> { if(v.contains("}")) return StringUtils.substringBefore(StringUtils.substringAfterLast(v, "}"), "_"); else return ChoiceReport.searchVarChoiceReport(v); }).orElse("created"));
+	}
+
+	protected void _defaultFacetSort(Wrap<String> w) {
+		w.o(Optional.ofNullable(searchListChoiceReport_.getFacetSort()).orElse("index"));
+	}
+
+	protected void _defaultFacetLimit(Wrap<Integer> w) {
+		w.o(Optional.ofNullable(searchListChoiceReport_.getFacetLimit()).orElse(1));
+	}
+
+	protected void _defaultFacetMinCount(Wrap<Integer> w) {
+		w.o(Optional.ofNullable(searchListChoiceReport_.getFacetMinCount()).orElse(1));
+	}
+
+	protected void _defaultPivotMinCount(Wrap<Integer> w) {
+		w.o(Optional.ofNullable(searchListChoiceReport_.getFacetPivotMinCount()).orElse(0));
+	}
+
+	@Override
+	protected void _defaultFieldListVars(List<String> l) {
+		Optional.ofNullable(searchListChoiceReport_.getFields()).orElse(Arrays.asList()).forEach(varStored -> {
+			String varStored2 = varStored;
+			if(StringUtils.contains(varStored2, "}"))
+				varStored2 = StringUtils.substringAfterLast(varStored2, "}");
+			String[] parts = varStored2.split(",");
+			for(String part : parts) {
+				if(StringUtils.isNotBlank(part)) {
+					String var = ChoiceReport.searchVarChoiceReport(part);
+					if(StringUtils.isNotBlank(var))
+						l.add(var);
+				}
+			}
+		});
+	}
+
+	@Override
+	protected void _defaultStatsVars(List<String> l) {
+		Optional.ofNullable(searchListChoiceReport_.getStatsFields()).orElse(Arrays.asList()).forEach(varIndexed -> {
+			String varIndexed2 = varIndexed;
+			if(StringUtils.contains(varIndexed2, "}"))
+				varIndexed2 = StringUtils.substringAfterLast(varIndexed2, "}");
+			String[] parts = varIndexed2.split(",");
+			for(String part : parts) {
+				if(StringUtils.isNotBlank(part)) {
+					String var = ChoiceReport.searchVarChoiceReport(part);
+					if(StringUtils.isNotBlank(var))
+						l.add(var);
+				}
+			}
+		});
+	}
+
+	@Override
+	protected void _defaultPivotVars(List<String> l) {
+		Optional.ofNullable(searchListChoiceReport_.getFacetPivots()).orElse(Arrays.asList()).forEach(facetPivot -> {
+			String facetPivot2 = facetPivot;
+			if(StringUtils.contains(facetPivot2, "}"))
+				facetPivot2 = StringUtils.substringAfterLast(facetPivot2, "}");
+			String[] parts = facetPivot2.split(",");
+			for(String part : parts) {
+				if(StringUtils.isNotBlank(part)) {
+					String var = ChoiceReport.searchVarChoiceReport(part);
+					if(StringUtils.isNotBlank(var))
+						l.add(var);
+				}
+			}
+		});
+	}
+
 	/**
 	 * {@inheritDoc}
 	 **/
 	protected void _listChoiceReport(JsonArray l) {
 		Optional.ofNullable(searchListChoiceReport_).map(o -> o.getList()).orElse(Arrays.asList()).stream().map(o -> JsonObject.mapFrom(o)).forEach(o -> l.add(o));
+	}
+
+	protected void _stats(Wrap<SolrResponse.Stats> w) {
+		w.o(searchListChoiceReport_.getResponse().getStats());
+	}
+
+	protected void _facetCounts(Wrap<SolrResponse.FacetCounts> w) {
+		w.o(searchListChoiceReport_.getResponse().getFacetCounts());
 	}
 
 	protected void _choiceReportCount(Wrap<Integer> w) {
@@ -70,6 +189,11 @@ public class ChoiceReportGenPage extends ChoiceReportGenPageGen<BaseModelPage> {
 	protected void _pk(Wrap<Long> w) {
 		if(choiceReportCount == 1)
 			w.o(choiceReport_.getPk());
+	}
+
+	protected void _id(Wrap<String> w) {
+		if(choiceReportCount == 1)
+			w.o(choiceReport_.getId());
 	}
 
 	@Override
@@ -96,6 +220,11 @@ public class ChoiceReportGenPage extends ChoiceReportGenPageGen<BaseModelPage> {
 
 	@Override
 	protected void _pageUri(Wrap<String> c) {
+		c.o("/report");
+	}
+
+	@Override
+	protected void _apiUri(Wrap<String> c) {
 		c.o("/api/report");
 	}
 
@@ -116,11 +245,11 @@ public class ChoiceReportGenPage extends ChoiceReportGenPageGen<BaseModelPage> {
 		JsonArray pages = new JsonArray();
 		Long start = searchListChoiceReport_.getStart().longValue();
 		Long rows = searchListChoiceReport_.getRows().longValue();
-		Long foundNum = searchListChoiceReport_.getQueryResponse().getResponse().getNumFound().longValue();
+		Long foundNum = searchListChoiceReport_.getResponse().getResponse().getNumFound().longValue();
 		Long startNum = start + 1L;
 		Long endNum = start + rows;
-		Long floorMod = Math.floorMod(foundNum, rows);
-		Long last = Math.floorDiv(foundNum, rows) - (floorMod.equals(0L) ? 1L : 0L) * rows;
+		Long floorMod = (rows == 0L ? 0L : Math.floorMod(foundNum, rows));
+		Long last = (rows == 0L ? 0L : Math.floorDiv(foundNum, rows) - (floorMod.equals(0L) ? 1L : 0L) * rows);
 		endNum = endNum < foundNum ? endNum : foundNum;
 		startNum = foundNum == 0L ? 0L : startNum;
 		Long paginationStart = start - 10L * rows;
@@ -157,12 +286,80 @@ public class ChoiceReportGenPage extends ChoiceReportGenPageGen<BaseModelPage> {
 	}
 
 	@Override
+	protected void _varsQ(JsonObject vars) {
+		ChoiceReport.varsQForClass().forEach(var -> {
+			JsonObject json = new JsonObject();
+			json.put("var", var);
+			json.put("displayName", Optional.ofNullable(ChoiceReport.displayNameChoiceReport(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
+			json.put("classSimpleName", Optional.ofNullable(ChoiceReport.classSimpleNameChoiceReport(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
+			json.put("val", Optional.ofNullable(searchListChoiceReport_.getRequest().getQuery()).filter(fq -> fq.startsWith(ChoiceReport.varIndexedChoiceReport(var) + ":")).map(s -> StringUtils.substringAfter(s, ":")).orElse(null));
+			vars.put(var, json);
+		});
+	}
+
+	@Override
+	protected void _varsFq(JsonObject vars) {
+		Map<String, SolrResponse.FacetField> facetFields = Optional.ofNullable(facetCounts).map(c -> c.getFacetFields()).map(f -> f.getFacets()).orElse(new HashMap<String,SolrResponse.FacetField>());
+		ChoiceReport.varsFqForClass().forEach(var -> {
+			String varIndexed = ChoiceReport.varIndexedChoiceReport(var);
+			String varStored = ChoiceReport.varStoredChoiceReport(var);
+			JsonObject json = new JsonObject();
+			json.put("var", var);
+			json.put("varStored", varStored);
+			json.put("varIndexed", varIndexed);
+					String type = StringUtils.substringAfterLast(varIndexed, "_");
+			json.put("displayName", Optional.ofNullable(ChoiceReport.displayNameChoiceReport(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
+			json.put("classSimpleName", Optional.ofNullable(ChoiceReport.classSimpleNameChoiceReport(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
+			json.put("val", searchListChoiceReport_.getRequest().getFilterQueries().stream().filter(fq -> fq.startsWith(ChoiceReport.varIndexedChoiceReport(var) + ":")).findFirst().map(s -> StringUtils.substringAfter(s, ":")).orElse(null));
+			Optional.ofNullable(stats).map(s -> s.get(varIndexed)).ifPresent(stat -> {
+				json.put("stats", JsonObject.mapFrom(stat));
+			});
+			Optional.ofNullable(facetFields.get(varIndexed)).ifPresent(facetField -> {
+				JsonObject facetJson = new JsonObject();
+				JsonObject counts = new JsonObject();
+				facetJson.put("var", var);
+				facetField.getCounts().forEach((val, count) -> {
+					counts.put(val, count);
+				});
+				facetJson.put("counts", counts);
+				json.put("facetField", facetJson);
+			});
+			if(defaultFieldListVars.contains(var)) {
+				json.put("fieldList", true);
+			}
+			json.put("enableStats", !StringUtils.equalsAny(type, "boolean", "location"));
+			if(defaultStatsVars.contains(var)) {
+				SolrResponse.StatsField varStats = stats.get(varIndexed);
+				if(varStats != null)
+					json.put("stats", varStats);
+			}
+			if(defaultPivotVars.contains(var)) {
+				json.put("pivot", true);
+			}
+			vars.put(var, json);
+		});
+	}
+
+	@Override
+	protected void _varsRange(JsonObject vars) {
+		ChoiceReport.varsRangeForClass().forEach(var -> {
+			String varIndexed = ChoiceReport.varIndexedChoiceReport(var);
+			JsonObject json = new JsonObject();
+			json.put("var", var);
+			json.put("displayName", Optional.ofNullable(ChoiceReport.displayNameChoiceReport(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
+			json.put("classSimpleName", Optional.ofNullable(ChoiceReport.classSimpleNameChoiceReport(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
+			json.put("val", searchListChoiceReport_.getRequest().getFilterQueries().stream().filter(fq -> fq.startsWith(ChoiceReport.varIndexedChoiceReport(var) + ":")).findFirst().map(s -> StringUtils.substringAfter(s, ":")).orElse(null));
+			vars.put(var, json);
+		});
+	}
+
+	@Override
 	protected void _query(JsonObject query) {
 		ServiceRequest serviceRequest = siteRequest_.getServiceRequest();
 		JsonObject params = serviceRequest.getParams();
 
 		JsonObject queryParams = Optional.ofNullable(serviceRequest).map(ServiceRequest::getParams).map(or -> or.getJsonObject("query")).orElse(new JsonObject());
-		Long num = searchListChoiceReport_.getQueryResponse().getResponse().getNumFound().longValue();
+		Long num = searchListChoiceReport_.getResponse().getResponse().getNumFound().longValue();
 		String q = "*:*";
 		String q1 = "objectText";
 		String q2 = "";
@@ -197,20 +394,21 @@ public class ChoiceReportGenPage extends ChoiceReportGenPageGen<BaseModelPage> {
 		Long rows2 = rows1 / 2;
 		Long rows3 = rows1 * 2;
 		start2 = start2 < 0 ? 0 : start2;
-		JsonArray fqs = new JsonArray();
+		JsonObject fqs = new JsonObject();
 		for(String fq : Optional.ofNullable(searchListChoiceReport_).map(l -> l.getFilterQueries()).orElse(Arrays.asList())) {
 			if(!StringUtils.contains(fq, "(")) {
-				String fq1 = StringUtils.substringBefore(fq, "_");
+				String fq1 = ChoiceReport.searchVarChoiceReport(StringUtils.substringBefore(fq, ":"));
 				String fq2 = StringUtils.substringAfter(fq, ":");
 				if(!StringUtils.startsWithAny(fq, "classCanonicalNames_", "archived_", "deleted_", "sessionId", "userKeys"))
-					fqs.add(new JsonObject().put("var", fq1).put("val", fq2));
+					fqs.put(fq1, new JsonObject().put("var", fq1).put("val", fq2).put("displayName", ChoiceReport.displayNameForClass(fq1)));
 				}
 			}
 		query.put("fq", fqs);
 
 		JsonArray sorts = new JsonArray();
 		for(String sort : Optional.ofNullable(searchListChoiceReport_).map(l -> l.getSorts()).orElse(Arrays.asList())) {
-			sorts.add(new JsonObject().put("var", StringUtils.substringBefore(sort, "_")).put("order", StringUtils.substringAfter(sort, " ")));
+			String sort1 = ChoiceReport.searchVarChoiceReport(StringUtils.substringBefore(sort, " "));
+			sorts.add(new JsonObject().put("var", sort1).put("order", StringUtils.substringAfter(sort, " ")).put("displayName", ChoiceReport.displayNameForClass(sort1)));
 		}
 		query.put("sort", sorts);
 	}
@@ -222,7 +420,7 @@ public class ChoiceReportGenPage extends ChoiceReportGenPageGen<BaseModelPage> {
 
 	@Override
 	protected void _pageImageUri(Wrap<String> c) {
-			c.o("/png/api/report-999.png");
+			c.o("/png/report-999.png");
 	}
 
 	@Override
@@ -233,5 +431,9 @@ public class ChoiceReportGenPage extends ChoiceReportGenPageGen<BaseModelPage> {
 	@Override
 	protected void _contextIconName(Wrap<String> c) {
 			c.o("file-chart-line");
+	}
+
+	protected void _pageUriChoiceReport(Wrap<String> c) {
+			c.o("/report");
 	}
 }

@@ -1,175 +1,53 @@
 package org.choicehumanitarian.reports.enus.vertx;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.Arrays;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import org.slf4j.LoggerFactory;
-import org.computate.search.serialize.ComputateLocalDateDeserializer;
-import java.util.HashMap;
-import org.apache.commons.lang3.StringUtils;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
-import java.text.NumberFormat;
-import java.util.ArrayList;
+import org.choicehumanitarian.reports.enus.model.base.BaseModel;
 import org.computate.vertx.api.ApiRequest;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import java.util.Map;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.math.RoundingMode;
-import org.slf4j.Logger;
-import java.math.MathContext;
-import io.vertx.core.Promise;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import io.vertx.core.Future;
-import org.computate.search.serialize.ComputateZonedDateTimeDeserializer;
-import org.choicehumanitarian.reports.enus.base.BaseModel;
-import java.util.Objects;
-import org.computate.search.serialize.ComputateLocalDateSerializer;
-import io.vertx.core.json.JsonArray;
-import org.computate.search.wrap.Wrap;
-import io.vertx.core.AbstractVerticle;
-import org.apache.commons.lang3.math.NumberUtils;
-import java.util.Optional;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import org.computate.search.serialize.ComputateZonedDateTimeSerializer;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
+import java.util.Optional;
+import java.util.List;
+import org.apache.commons.lang3.StringUtils;
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.computate.search.serialize.ComputateLocalDateSerializer;
+import org.computate.search.serialize.ComputateLocalDateDeserializer;
+import org.computate.search.serialize.ComputateZonedDateTimeSerializer;
+import org.computate.search.serialize.ComputateZonedDateTimeDeserializer;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import java.math.MathContext;
+import org.apache.commons.lang3.math.NumberUtils;
+import java.text.NumberFormat;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.HashMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.math.RoundingMode;
+import java.util.Map;
+import io.vertx.core.AbstractVerticle;
+import org.computate.search.wrap.Wrap;
+import io.vertx.core.Promise;
+import io.vertx.core.Future;
+import io.vertx.core.json.JsonArray;
 
 /**	
- * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.MainVerticle&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
+ * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.MainVerticle">Find the class MainVerticle in Solr. </a>
+ * <br><br>Delete the class MainVerticle in Solr. 
+ * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.MainVerticle&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
+ * <br>Delete  the package org.choicehumanitarian.reports.enus.vertx in Solr. 
+ * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomEnsemble_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
+ * <br>Delete  the project choice-reports in Solr. 
+ * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;siteNom_indexed_string:choice\-reports&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
  * <br>
  **/
 public abstract class MainVerticleGen<DEV> extends AbstractVerticle {
-
-/*
-CREATE TABLE ChoiceDonor(
-	pk bigserial primary key
-	, inheritPk text
-	, created timestamp with time zone
-	, archived boolean
-	, deleted boolean
-	, sessionId text
-	, userKey bigint
-	, donorFullName text
-	, donorParentName text
-	, donorId bigint
-	, donorAttributeId text
-	, donorInKind bigint
-	, donorTotal decimal
-	, donorYtd decimal
-	, donorQ1 decimal
-	, donorQ2 decimal
-	, donorQ3 decimal
-	, donorQ4 decimal
-	, donorLogoFilename text
-	);
-CREATE TABLE SiteUser(
-	pk bigserial primary key
-	, inheritPk text
-	, created timestamp with time zone
-	, archived boolean
-	, deleted boolean
-	, sessionId text
-	, userKey bigint
-	, userId text
-	, userName text
-	, userEmail text
-	, userFirstName text
-	, userLastName text
-	, userFullName text
-	, seeArchived boolean
-	, seeDeleted boolean
-	);
-CREATE TABLE ChoiceReport(
-	pk bigserial primary key
-	, inheritPk text
-	, created timestamp with time zone
-	, archived boolean
-	, deleted boolean
-	, sessionId text
-	, userKey bigint
-	, donorKey bigint references ChoiceDonor(pk)
-	, donorFullName text
-	, donorParentName text
-	, donorId bigint
-	, donorAttributeId text
-	, donorInKind bigint
-	, donorTotal decimal
-	, donorYtd decimal
-	, donorQ1 decimal
-	, donorQ2 decimal
-	, donorQ3 decimal
-	, donorQ4 decimal
-	, donorLogoFilename text
-	);
-CREATE TABLE ReportType(
-	pk bigserial primary key
-	, inheritPk text
-	, created timestamp with time zone
-	, archived boolean
-	, deleted boolean
-	, sessionId text
-	, userKey bigint
-	, typeName text
-	);
-CREATE TABLE ReportSchedule(
-	pk bigserial primary key
-	, inheritPk text
-	, created timestamp with time zone
-	, archived boolean
-	, deleted boolean
-	, sessionId text
-	, userKey bigint
-	, typeKey bigint references ReportType(pk)
-	, scheduleName text
-	, frequencyOneTime boolean
-	, frequencyTimesPerYear integer
-	, frequencyYearsAfterCompletion integer
-	, firstDueDate date
-	, dataPullDate date
-	, dataSources text
-	);
-CREATE TABLE ReportNarrative(
-	pk bigserial primary key
-	, inheritPk text
-	, created timestamp with time zone
-	, archived boolean
-	, deleted boolean
-	, sessionId text
-	, userKey bigint
-	, scheduleKey bigint references ReportSchedule(pk)
-	, assigneeKey bigint references SiteUser(pk)
-	, narrativeName text
-	);
-CREATE TABLE ReportEvent(
-	pk bigserial primary key
-	, inheritPk text
-	, created timestamp with time zone
-	, archived boolean
-	, deleted boolean
-	, sessionId text
-	, userKey bigint
-	, scheduleKey bigint references ReportSchedule(pk)
-	, assigneeKey bigint references SiteUser(pk)
-	, eventName text
-	, eventDate date
-	);
-
-DROP TABLE ChoiceDonor CASCADE;
-DROP TABLE SiteUser CASCADE;
-DROP TABLE ChoiceReport CASCADE;
-DROP TABLE ReportType CASCADE;
-DROP TABLE ReportSchedule CASCADE;
-DROP TABLE ReportNarrative CASCADE;
-DROP TABLE ReportEvent CASCADE;
-*/
-
 	protected static final Logger LOG = LoggerFactory.getLogger(MainVerticle.class);
-	public static final String configureConfigComplete1 = "The config was configured successfully. ";
-	public static final String configureConfigComplete = configureConfigComplete1;
-	public static final String configureConfigFail1 = "Could not configure the config(). ";
-	public static final String configureConfigFail = configureConfigFail1;
-
 	public static final String configureDataConnectionError1 = "Could not open the database client connection. ";
 	public static final String configureDataConnectionError = configureDataConnectionError1;
 	public static final String configureDataConnectionSuccess1 = "The database client connection was successful. ";
@@ -183,6 +61,11 @@ DROP TABLE ReportEvent CASCADE;
 	public static final String configureOpenApiError = configureOpenApiError1;
 	public static final String configureOpenApiSuccess1 = "The auth server and API was configured successfully. ";
 	public static final String configureOpenApiSuccess = configureOpenApiSuccess1;
+
+	public static final String configureConfigComplete1 = "The config was configured successfully. ";
+	public static final String configureConfigComplete = configureConfigComplete1;
+	public static final String configureConfigFail1 = "Could not configure the config(). ";
+	public static final String configureConfigFail = configureConfigFail1;
 
 	public static final String configureSharedWorkerExecutorFail1 = "Could not configure the shared worker executor. ";
 	public static final String configureSharedWorkerExecutorFail = configureSharedWorkerExecutorFail1;
@@ -212,6 +95,11 @@ DROP TABLE ReportEvent CASCADE;
 	public static final String configureEmailFail1 = "Configure sending email failed. ";
 	public static final String configureEmailFail = configureEmailFail1;
 
+	public static final String configureHandlebarsFail1 = "Handlebars was not configured properly. ";
+	public static final String configureHandlebarsFail = configureHandlebarsFail1;
+	public static final String configureHandlebarsComplete1 = "Handlebars was configured properly. ";
+	public static final String configureHandlebarsComplete = configureHandlebarsComplete1;
+
 	public static final String configureApiFail1 = "The API was not configured properly. ";
 	public static final String configureApiFail = configureApiFail1;
 	public static final String configureApiComplete1 = "The API was configured properly. ";
@@ -221,6 +109,11 @@ DROP TABLE ReportEvent CASCADE;
 	public static final String configureUiFail = configureUiFail1;
 	public static final String configureUiComplete1 = "The UI was configured properly. ";
 	public static final String configureUiComplete = configureUiComplete1;
+
+	public static final String configureCamelFail1 = "The Camel Component was not configured properly. ";
+	public static final String configureCamelFail = configureCamelFail1;
+	public static final String configureCamelComplete1 = "The Camel Component was configured properly. ";
+	public static final String configureCamelComplete = configureCamelComplete1;
 
 	public static final String startServerErrorServer1 = "The server is not configured properly. ";
 	public static final String startServerErrorServer = startServerErrorServer1;
@@ -376,8 +269,9 @@ DROP TABLE ReportEvent CASCADE;
 		return sb.toString();
 	}
 
-	public static final String[] MainVerticleVals = new String[] { configureConfigComplete1, configureConfigFail1, configureDataConnectionError1, configureDataConnectionSuccess1, configureDataInitError1, configureDataInitSuccess1, configureOpenApiError1, configureOpenApiSuccess1, configureSharedWorkerExecutorFail1, configureSharedWorkerExecutorComplete1, configureHealthChecksComplete1, configureHealthChecksFail1, configureHealthChecksErrorDatabase1, configureHealthChecksEmptySolr1, configureHealthChecksErrorSolr1, configureHealthChecksErrorVertx1, configureWebsocketsComplete1, configureWebsocketsFail1, configureEmailComplete1, configureEmailFail1, configureApiFail1, configureApiComplete1, configureUiFail1, configureUiComplete1, startServerErrorServer1, startServerSuccessServer1, startServerBeforeServer1, startServerSsl1, stopFail1, stopComplete1 };
+	public static final String[] MainVerticleVals = new String[] { configureDataConnectionError1, configureDataConnectionSuccess1, configureDataInitError1, configureDataInitSuccess1, configureOpenApiError1, configureOpenApiSuccess1, configureConfigComplete1, configureConfigFail1, configureSharedWorkerExecutorFail1, configureSharedWorkerExecutorComplete1, configureHealthChecksComplete1, configureHealthChecksFail1, configureHealthChecksErrorDatabase1, configureHealthChecksEmptySolr1, configureHealthChecksErrorSolr1, configureHealthChecksErrorVertx1, configureWebsocketsComplete1, configureWebsocketsFail1, configureEmailComplete1, configureEmailFail1, configureHandlebarsFail1, configureHandlebarsComplete1, configureApiFail1, configureApiComplete1, configureUiFail1, configureUiComplete1, configureCamelFail1, configureCamelComplete1, startServerErrorServer1, startServerSuccessServer1, startServerBeforeServer1, startServerSsl1, stopFail1, stopComplete1 };
 
+	public static final String CLASS_SIMPLE_NAME = "MainVerticle";
 
 
 	public static String displayNameForClass(String var) {

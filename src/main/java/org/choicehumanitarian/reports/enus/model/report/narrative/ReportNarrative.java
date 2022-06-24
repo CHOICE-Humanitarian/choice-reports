@@ -1,6 +1,6 @@
 package org.choicehumanitarian.reports.enus.model.report.narrative;
 
-import org.choicehumanitarian.reports.enus.base.BaseModel;
+import org.choicehumanitarian.reports.enus.model.base.BaseModel;
 import org.computate.search.wrap.Wrap;
 
 /**
@@ -47,7 +47,7 @@ public class ReportNarrative extends ReportNarrativeGen<BaseModel> {
 	 * HtmlRow: 3
 	 * HtmlCell: 1
 	 * DisplayName.enUS: schedule
-	 */      
+	 */     
 	protected void _scheduleKey(Wrap<Long> w) {
 	}
 
@@ -65,7 +65,7 @@ public class ReportNarrative extends ReportNarrativeGen<BaseModel> {
 	/**  
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * HtmlRow: 3
 	 * HtmlCell: 1
 	 * DisplayName.enUS: narrative name

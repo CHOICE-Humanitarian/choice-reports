@@ -1,12 +1,16 @@
 ---
-# Label: ansible_project_image_stream
-# Title: create the Ansible template for the project image stream in OpenShift
-# Mission: create the Ansible template for the project image stream in OpenShift
-# Milestone: Automate Project Deployment
-# Column: Automate Project Deployment
-
 apiVersion: image.openshift.io/v1
 kind: ImageStream
 spec:
   lookupPolicy:
     local: false
+  tags:
+    - name: latest
+      annotations: null
+      from:
+        kind: DockerImage
+        name: 'quay.io/computate/choice-reports:latest'
+      importPolicy:
+        scheduled: true
+      referencePolicy:
+        type: Source

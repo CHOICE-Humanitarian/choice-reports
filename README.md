@@ -1,10 +1,11 @@
 
-# Setup choice-reports development environment on MacOSX or Linux (Fedora, RHEL, CentOS)
+# Setup choice-reports development environment on MacOSX or Linux (Fedora, RHEL, CentOS, Ubuntu)
 
 ## Install Ansible dependencies on Linux
 
 ```bash
 pkcon install -y git
+pkcon install -y python3
 pkcon install -y python3-pip
 pkcon install -y python3-virtualenv
 ```
@@ -18,12 +19,14 @@ pip3 install virtualenv
 
 ## Install the latest Python and setup a new Python virtualenv
 
+This step might be virtualenv-3 for you. 
+
 ```bash
-# This step might be virtualenv-3 for you. 
 virtualenv ~/python
 
 source ~/python/bin/activate
-echo "source ~/python/bin/activate" | tee -a ~/.bash_profile
+echo "source ~/python/bin/activate" | tee -a ~/.bashrc
+source ~/.bashrc
 ```
 
 ## Install the latest Ansible
@@ -31,49 +34,16 @@ echo "source ~/python/bin/activate" | tee -a ~/.bash_profile
 ```bash
 pip install setuptools_rust wheel
 pip install --upgrade pip
+pip install ansible
 ```
 
-## Install dependencies on Linux
-
-```bash
-pkcon install -y maven
-pkcon install -y gcc
-pkcon install -y make
-pkcon install -y git
-pkcon install -y bison
-pkcon install -y flex
-pkcon install -y readline-devel
-pkcon install -y zlib-devel
-pkcon install -y systemd-devel
-pkcon install -y libxml2-devel
-pkcon install -y libxslt-devel
-pkcon install -y openssl-devel
-pkcon install -y perl-core
-pkcon install -y libselinux-devel
-pkcon install -y container-selinux
-pkcon install -y java-1.8.0-openjdk
-pkcon install -y java-11-openjdk
-```
-
-## Install dependencies on MacOSX
-
-```bash
-brew install maven
-```
-
-# Setup Ansible
-
-## Install python3 application dependencies
-
-```bash
-pip3 install psycopg2-binary
-```
+# Setup the project
 
 ## Setup the directory for the project and clone the git repository into it 
 
 ```bash
 install -d ~/.local/src/choice-reports
-git clone git@github.com:team19hackathon2021/choice-reports.git ~/.local/src/choice-reports
+git clone git@github.com:CHOICE-Humanitarian/choice-reports.git ~/.local/src/choice-reports
 ```
 
 ## Setup the Ansible Galaxy roles for installing the complete project locally. 
@@ -89,42 +59,112 @@ git clone git@github.com:computate-org/computate_project.git ~/.ansible/roles/co
 ## Run the Ansible Galaxy roles to install the complete project locally. 
 
 ```bash
-
-cd ~/.ansible/roles/computate.computate_postgres
-ansible-playbook install.yml
-
-cd ~/.ansible/roles/computate.computate_zookeeper
-ansible-playbook install.yml
-
-cd ~/.ansible/roles/computate.computate_solr
-ansible-playbook install.yml
-
-cd ~/.ansible/roles/computate.computate_project
-ansible-playbook install.yml -e SITE_NAME=choice-reports -e ENABLE_CODE_GENERATION_SERVICE=true
+ansible-playbook ~/.ansible/roles/computate.computate_postgres/install.yml -K
+ansible-playbook ~/.ansible/roles/computate.computate_zookeeper/install.yml -K
+ansible-playbook ~/.ansible/roles/computate.computate_solr/install.yml -K
+ansible-playbook ~/.ansible/roles/computate.computate_project/install.yml -e SITE_NAME=choice-reports -e ENABLE_CODE_GENERATION_SERVICE=true
 ```
 
-# Configure Eclipse
+## Running the project install to override secret variables
 
-## Install the Maven plugin for Eclipse
+You can also inject your own secret variables with an Ansible Vault into the project install automation if you want to override any values. 
 
-* In Eclipse, go to Help -> Eclipse Marketplace...
-* Install "Maven Integration for Eclipse"
+Here is an example of creating a vault directory and creating a new vault, it will ask for a password. 
+Be sure to not commit your vault to source control, it should be ignored by default in the .gitignore file that is created in the project. 
 
-## Import the choice-reports project into Eclipse
+```bash
+install -d ~/.local/src/choice-reports-ansible/vault
+ansible-vault create ~/.local/src/choice-reports-ansible/vault/$USER-local
+```
 
-* In Eclipse, go to File -> Import...
+You can edit the vault, it will ask for the password. 
+
+```bash
+ansible-vault edit ~/.local/src/choice-reports-ansible/vault/$USER-local
+```
+
+You can then run the project install automation again with the secrets in the vault, it will ask for the password. 
+
+```bash
+ansible-playbook ~/.ansible/roles/computate.computate_project/install.yml -e SITE_NAME=choice-reports -e ENABLE_CODE_GENERATION_SERVICE=true -e @~/.local/src/choice-reports-ansible/vault/$USER-local --vault-id @prompt
+```
+
+# Configure Red Hat CodeReady Studio
+
+You can download Red Hat Code Ready Studio here: 
+
+https://developers.redhat.com/products/codeready-studio/download
+
+You will want to create a Red Hat account if you do not already have one. 
+
+After you download CodeReady Studio, create a directory for it and install it with this command: 
+
+```bash
+install -d ~/.local/opt/codereadystudio
+java -jar ~/Downloads/codereadystudio-*-installer-standalone.jar
+```
+
+You can use the default installation settings. I suggest to install CodeReady Studio in your in $HOME/.local/opt/codereadystudio
+
+When you run CodeReady Studio, I suggest you create your workspace here: ~/.local/src
+
+## Install these update sites: 
+
+In CodeReady Studio, go to Help -> Install New Software...
+
+Add these update sites and install these useful plugins: 
+
+### Vrapper Vim Plugin
+- http://vrapper.sourceforge.net/update-site/stable
+    - Choose the "Vrapper" plugin if you want to be able to edit code with Vim commands
+    - Vrapper keys to unbind in Window -> Preferences -> General -> Keys: 
+        - ctrl+d, ctrl+u, ctrl+r, shift+ctrl+v, alt+v
+    - Vrapper keys to set: 
+        - and search for "Vrapper" and set the keys to alt+v
+
+### DevStyle for dark theme
+
+- http://www.genuitec.com/updates/devstyle/ci/
+    - Choose "DevStyle Features" for themes
+
+### YAML Editor
+
+- http://www.genuitec.com/updates/devstyle/ci/
+    - Choose "DevStyle Features" for themes
+
+## Import the choice-reports project into CodeReady Studio
+
+* In CodeReady Studio, go to File -> Import...
 * Select Maven -> Existing Maven Projects
 * Click [ Next > ]
 * Browse to the directory: ~/.local/src/choice-reports
 * Click [ Finish ]
 
-## Setup an Eclipse Debug/Run configuration to run and debug choice-reports
+## Setup a CodeReady Studio Debug/Run configuration to generate the OpenAPI 3 spec and the SQL create and drop scripts in choice-reports
 
-* In Eclipse, go to File -> Debug Configurations...
+* In CodeReady Studio, go to File -> Debug Configurations...
 * Right click on Java Application -> New Configuration
-* Name: choice-reports QuarkusApp
+* Name: choice-reports-OpenAPIGenerator
 * Project: choice-reports
-* Main class: org.choicehumanitarian.reports.enus.quarkus.QuarkusApp
+* Main class: org.choicehumanitarian.reports.enus.vertx.MainVerticle
+
+### In the Environment tab
+
+Setup the following variables to setup the Vert.x verticle. 
+
+* CONFIG_PATH: ~/.local/src/choice-reports/config/choice-reports.yml
+* RUN_OPENAPI3_GENERATOR: true
+* RUN_SQL_GENERATOR: true
+
+Click [ Apply ] and [ Debug ] to debug the generation of the OpenAPI Spec src/main/resources/webroot and the SQL create and drop scripts in src/main/resources/sql. 
+
+## Setup a CodeReady Studio Debug/Run configuration to run and debug choice-reports
+
+* In CodeReady Studio, go to File -> Debug Configurations...
+* Right click on Java Application -> New Configuration
+* Name: choice-reports
+* Project: choice-reports
+* Main class: org.choicehumanitarian.reports.enus.vertx.MainVerticle
 
 ### In the "Arguments" tab
 
@@ -138,13 +178,8 @@ Setup the following VM arguments to disable caching for easier web development:
 
 Setup the following variables to setup the Vert.x verticle. 
 
-* CLUSTER_PORT: 10991
 * CONFIG_PATH: ~/.local/src/choice-reports/config/choice-reports.yml
-* SITE_INSTANCES: 5
 * VERTXWEB_ENVIRONMENT: dev
-* WORKER_POOL_SIZE: 2
-* ZOOKEEPER_HOST_NAME: localhost
-* ZOOKEEPER_PORT: 2181
 
 Click [ Apply ] and [ Debug ] to debug the application. 
 
@@ -176,14 +211,10 @@ It will have you create a password when you save the file for the first time, li
 
 ```bash
 install -d ~/.local/src/choice-reports-ansible
-install -d ~/.local/src/choice-reports-ansible/vaults/$USER-staging/vault
-ansible-vault create ~/.local/src/choice-reports-ansible/vaults/$USER-staging/vault
-ansible-vault edit ~/.local/src/choice-reports-ansible/vaults/$USER-staging/vault
+install -d ~/.local/src/choice-reports-ansible/vault/$USER-staging/vault
+ansible-vault create ~/.local/src/choice-reports-ansible/vault/$USER-staging/vault
+ansible-vault edit ~/.local/src/choice-reports-ansible/vault/$USER-staging/vault
 ```
-
-The contents of the vault will contain the secrets needed to override any default values you want to change in the app defaults defined here.
-
-https://github.com/team19hackathon2021/choice-reports/blob/main/openshift/defaults.yml
 
 Here is an example of a vault that I have used to deploy the choice-reports application. 
 You will want to update these values to reflect your OpenShift environment, like the REDHAT_OPENSHIFT_TOKEN which you will need to obtain after logging into OpenShift. 
@@ -191,7 +222,7 @@ Or the REDHAT_OPENSHIFT_STORAGE_CLASS_NAME which might be different than gp2 for
 If so, try creating a persistent volume in the UI to figure out a good storage class for your environment: 
 
 ```yaml
-SITE_NAME: choice-reports
+PROJECT_NAME: choice-reports
 
 REDHAT_OPENSHIFT_HOST: https://api.rh-us-east-1.openshift.com
 REDHAT_OPENSHIFT_TOKEN: OcrtrXzKNKVj0riR2FvfqORgGfnURx98G8zRPd2MUvs
@@ -202,13 +233,13 @@ POSTGRES_DB_NAME: sampledb
 POSTGRES_DB_USER: computate
 POSTGRES_DB_PASSWORD: qVTaaa23aIkLmw
 POSTGRES_VOLUME_SIZE: 1Gi
-POSTGRES_STORAGE_CLASS_NAME: gp2
+POSTGRES_STORAGE_CLASS_NAME: "{{ REDHAT_OPENSHIFT_STORAGE_CLASS_NAME }}"
 
 ZOOKEEPER_VOLUME_SIZE: 1Gi
-ZOOKEEPER_STORAGE_CLASS_NAME: gp2
+ZOOKEEPER_STORAGE_CLASS_NAME: "{{ REDHAT_OPENSHIFT_STORAGE_CLASS_NAME }}"
 
 SOLR_VOLUME_SIZE: 2Gi
-SOLR_STORAGE_CLASS_NAME: gp2
+SOLR_STORAGE_CLASS_NAME: "{{ REDHAT_OPENSHIFT_STORAGE_CLASS_NAME }}"
 
 AUTH_REALM: TEAM19
 AUTH_RESOURCE: team19
@@ -216,22 +247,57 @@ AUTH_SECRET: 0518f65a-f86d-42e8-ad65-00f46920443d
 AUTH_HOST_NAME: sso.computate.org
 AUTH_PORT: 443
 AUTH_SSL: true
-AUTH_TOKEN_URI: "/auth/realms/{{ AUTH_REALM }}/protocol/openid-connect/token"
+AUTH_TOKEN_URI: "/auth/realms/RH-IMPACT/protocol/openid-connect/token"
 ```
 
 ## Run the Ansible automation to deploy the applications to OpenShift
 
 ```bash
 
-ansible-playbook --vault-id @prompt -e @~/.local/src/choice-reports-ansible/vaults/$USER-staging/vault ~/.ansible/roles/computate.computate_postgres_openshift/install.yml
+ansible-playbook --vault-id @prompt -e @~/.local/src/choice-reports-ansible/vault/$USER-staging/vault ~/.ansible/roles/computate.computate_postgres_openshift/install.yml -e SITE_NAME=choice-reports
 
-ansible-playbook --vault-id @prompt -e @~/.local/src/choice-reports-ansible/vaults/$USER-staging/vault ~/.ansible/roles/computate.computate_zookeeper_openshift/install.yml
+ansible-playbook --vault-id @prompt -e @~/.local/src/choice-reports-ansible/vault/$USER-staging/vault ~/.ansible/roles/computate.computate_zookeeper_openshift/install.yml -e SITE_NAME=choice-reports
 
-ansible-playbook --vault-id @prompt -e @~/.local/src/choice-reports-ansible/vaults/$USER-staging/vault ~/.ansible/roles/computate.computate_solr_openshift/install.yml
+ansible-playbook --vault-id @prompt -e @~/.local/src/choice-reports-ansible/vault/$USER-staging/vault ~/.ansible/roles/computate.computate_solr_openshift/install.yml -e SITE_NAME=choice-reports
 
-ansible-playbook --vault-id @prompt -e @~/.local/src/choice-reports-ansible/vaults/$USER-staging/vault ~/.ansible/roles/computate.computate_project_openshift/install.yml
+ansible-playbook --vault-id @prompt -e @~/.local/src/choice-reports-ansible/vault/$USER-staging/vault ~/.ansible/roles/computate.computate_project_openshift/install.yml -e SITE_NAME=choice-reports
 ```
 
-## See the choice-reports application staged here in OpenShift
+## How the base classes for this project were created
 
-https://choice-reports.computate.org/
+```bash
+ansible-playbook -e @~/.local/src/choice-reports/local/ansible_install_vars.yml ~/.local/src/computate-org/vertx_project.yml
+```
+
+# Load a new map traffic data into SUMO
+
+```bash
+cd ~/.local/share/sumo/data
+env LD_LIBRARY_PATH=~/.local/lib "SUMO_HOME=$HOME/.local/share/sumo" python ~/.local/share/sumo/tools/osmWebWizard.py
+```
+
+# Export SUMO vehicle coordinate data
+
+```bash
+env LD_LIBRARY_PATH=~/.local/lib "SUMO_HOME=$HOME/.local/share/sumo" SUMO_HOME=~/.local/share/sumo sumo --fcd-output ~/.local/share/sumo/data/veberod/veberod-fcd.xml -c ~/.local/share/sumo/data/veberod/veberod.sumocfg --fcd-output.geo -b 10 -e 360 --step-length 0.1
+```
+
+# Run SUMO with Traci TCP server
+
+```bash
+env SUMO_HOME=/home/ctate/.local/share/sumo LD_LIBRARY_PATH=/home/ctate/.local/lib /home/ctate/.local/bin/sumo-gui --remote-port 8813 --num-clients 1 --start
+```
+
+## Python interact with the Traci TCP server
+
+```bash
+cd ~/.local/share/sumo/tools
+```
+
+```python
+import traci
+conn = traci.connect()
+conn.simulationStep()
+conn.simulationStep()
+conn.simulationStep()
+```

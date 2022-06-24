@@ -3,7 +3,7 @@ package org.choicehumanitarian.reports.enus.model.report.schedule;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.choicehumanitarian.reports.enus.base.BaseModel;
+import org.choicehumanitarian.reports.enus.model.base.BaseModel;
 import org.choicehumanitarian.reports.enus.model.report.type.ReportType;
 import org.computate.search.wrap.Wrap;
 import org.computate.vertx.search.list.SearchList;
@@ -114,7 +114,7 @@ public class ReportSchedule extends ReportScheduleGen<BaseModel> {
 	/**  
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * HtmlRow: 4
 	 * HtmlCell: 2
 	 * DisplayName.enUS: schedule name
@@ -125,7 +125,7 @@ public class ReportSchedule extends ReportScheduleGen<BaseModel> {
 	/**  
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * HtmlRow: 4
 	 * HtmlCell: 1
 	 * DisplayName.enUS: one time
@@ -137,7 +137,7 @@ public class ReportSchedule extends ReportScheduleGen<BaseModel> {
 	/**  
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * HtmlRow: 4
 	 * HtmlCell: 2
 	 * DisplayName.enUS: times per year
@@ -148,7 +148,7 @@ public class ReportSchedule extends ReportScheduleGen<BaseModel> {
 	/**  
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * HtmlRow: 4
 	 * HtmlCell: 3
 	 * DisplayName.enUS: years after completion
@@ -159,7 +159,7 @@ public class ReportSchedule extends ReportScheduleGen<BaseModel> {
 	/**  
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * HtmlRow: 5
 	 * HtmlCell: 1
 	 * DisplayName.enUS: first due date
@@ -170,7 +170,7 @@ public class ReportSchedule extends ReportScheduleGen<BaseModel> {
 	/**  
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * HtmlRow: 5
 	 * HtmlCell: 1
 	 * DisplayName.enUS: data pull date
@@ -181,7 +181,7 @@ public class ReportSchedule extends ReportScheduleGen<BaseModel> {
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * HtmlRow: 5
 	 * HtmlCell: 2
 	 * Multiline: true

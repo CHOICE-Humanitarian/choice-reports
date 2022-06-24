@@ -32,16 +32,234 @@
 		{{/ifContainsAnyRoles}}
 				}
 				websocketReportType(websocketReportTypeInner);
+				window.varsFq = JSON.parse('{{{toJsonObjectStringInApostrophes varsFq}}}');
+				pageGraph();
 			});
 		</script>
 {{/inline}}
 {{#*inline "htmUrlReportType"}}{{pageUri}}?q={{query.q}}&amp;rows={{#if rows}}{{rows}}{{else}}{{pagination.rows}}{{/if}}&amp;rows={{#if start}}{{start}}{{else}}{{pagination.start}}{{/if}}{{#each query.fq}}{{#eq fq this}}{{else}}&fq={{fq}}:{{val}}{{/eq}}{{/each}}{{#each query.sort}}{{#eq sort this}}{{else}}&sort={{var}} {{order}}{{/eq}}{{/each}}{{/inline}}
 {{#*inline "htmHeadReportTypePage"}}{{> "htmTitleReportTypePage"}}{{> "htmMetaReportTypePage"}}{{> "htmStyleReportTypePage"}}{{> "htmScriptsReportTypePage"}}{{> "htmScriptReportTypePage"}}{{/inline}}
+{{#*inline "htmBodySearchReportTypePage"}}								<!-- #*inline "htmBodySearchReportTypePage" -->
+								<div>
+{{#each varsQ}}
+									<div class="w3-cell-row ">
+										<div class="w3-cell w3-cell-top ">
+											<label for="qReportType_{{ @key }}">{{ displayName }}<sup class="w3-tiny "> ({{ classSimpleName }})</sup></label>
+										</div>
+									</div>
+									<div class="w3-cell-row ">
+										<div class="w3-cell w3-cell-top ">
+											<input id="qReportType_{{ @key }}" placeholder="{{ displayName }}" class="" {{#eq ../var 'objectSuggest' }}onkeyup{{else}}onchange{{/eq}}="qChange(this); " data-var="{{ var }}" autocomplete="off="/>
+											<div class="pageSearchVal w3-tiny "></div>
+										</div>
+									</div>
+{{/each}}
+									<div class="w3-cell-row ">
+										<div class="w3-cell w3-cell-top ">
+											<label for="qReportType_Start">start<sup class="w3-tiny "> (Long)</sup></label>
+										</div>
+									</div>
+									<div class="w3-cell-row ">
+										<div class="w3-cell w3-cell-top ">
+											<input id="qReportType_start" placeholder="{{ displayName }}" class="" onchange="paramChange(this); " data-var="start" autocomplete="off="/>
+											<div class="pageSearchVal w3-tiny "></div>
+										</div>
+									</div>
+									<div class="w3-cell-row ">
+										<div class="w3-cell w3-cell-top ">
+											<label for="qReportType_Rows">rows<sup class="w3-tiny "> (Long)</sup></label>
+										</div>
+									</div>
+									<div class="w3-cell-row ">
+										<div class="w3-cell w3-cell-top ">
+											<input id="qReportType_rows" placeholder="{{ displayName }}" class="" onchange="paramChange(this); " data-var="rows" autocomplete="off="/>
+											<div class="pageSearchVal w3-tiny "></div>
+										</div>
+									</div>
+								</div>
+{{/inline}}
+{{#*inline "htmBodyFiltersReportTypePage"}}								<!-- #*inline "htmBodyFiltersReportTypePage" -->
+								<div>
+{{#each varsFq }}
+									<div class="">
+										<label for="fqReportType_{{ @key }}">{{ displayName }}<sup class="w3-tiny "> ({{ classSimpleName }})</sup></label>
+										<div class="w3-cell-row ">
+											<div class="w3-cell w3-cell-top ">
+												<button id="buttonFacetReportType_{{ @key }}" class="" onclick="facetFieldChange(this); " title="see values " data-var="{{ var }}" data-clear="{{#if facetField }}true{{else}}false{{/if}}"><i class="fas fa-list "></i></button>
+											</div>
+											<div class="w3-cell w3-cell-top ">
+												<input id="fqReportType_{{ @key }}" placeholder="{{ displayName }}" class="" onchange="fqChange(this); " data-var="{{ var }}" autocomplete="off=" value="{{ val }}"/>
+											</div>
+										</div>
+									</div>
+									<div class="w3-tiny ">
+										<div class="pageSearchVal " id="pageSearchVal-fqReportType_{{ @key }}">{{#if val }}fq={{ var }}:{{encodeURIComponent val }}{{/if}}</div>
+										<div class="pageSearchVal " id="pageSearchVal-buttonFacetReportType_{{ @key }}">{{#if facetField.var }}facet.field={{ facetField.var }}{{/if}}</div>
+										<ol class="pageFacetField w3-small pageFacetFieldReportType_{{ @key }} " id="pageFacetFieldReportType_{{ @key }}">
+{{#each facetField.counts }}
+											<li class="cursor-pointer " data-class="ReportType" data-var="{{ ../var }}" data-val="{{ @key }}" onclick="fqReplace(this); ">{{ @key }}: {{ this }}</li>
+{{/each}}
+										</ol>
+									</div>
+{{/each}}
+								</div>
+{{/inline}}
+{{#*inline "htmBodyRangeReportTypePage"}}								<!-- #*inline "htmBodyRangeReportTypePage" -->
+								<table class="w3-padding ">
+									<tr>
+										<td class="w3-padding w3-tiny " colspan="2">
+											<div class="pageSearchVal " id="pageSearchVal-pageFacetRangeGap-ReportType">{{#if defaultRangeGap }}facet.range.gap={{encodeURIComponent defaultRangeGap }}{{/if}}</div>
+											<div class="pageSearchVal " id="pageSearchVal-pageFacetRangeStart-ReportType">{{#if defaultRangeStart }}facet.range.start={{encodeURIComponent defaultRangeStart }}{{/if}}</div>
+											<div class="pageSearchVal " id="pageSearchVal-pageFacetRangeEnd-ReportType">{{#if defaultRangeEnd }}facet.range.end={{encodeURIComponent defaultRangeEnd }}{{/if}}</div>
+											<div class="pageSearchVal " id="pageSearchVal-pageFacetRangeVar-ReportType">{{#if defaultRangeVar }}facet.range={!tag=r1}{{encodeURIComponent defaultRangeVar }}{{/if}}</div>
+										</td>
+									</tr>
+								</table>
+								<table class="w3-padding ">
+									<tr class="">
+										<td class="">
+											<span>Range Gap</span>
+										</td>
+										<td class="">
+											<select name="facet.range.gap" id="pageFacetRangeGap-ReportType" onchange="facetRangeChange(this, 'ReportType'); ">
+												<option value="+1YEAR"{{#eq defaultRangeGap '+1YEAR'}} selected="selected"{{else}}{{/eq}}>Year</option>
+												<option value="+1MONTH"{{#eq defaultRangeGap '+1MONTH'}} selected="selected"{{else}}{{/eq}}>Month</option>
+												<option value="+1WEEK"{{#eq defaultRangeGap '+1WEEK'}} selected="selected"{{else}}{{/eq}}>Week</option>
+												<option value="+1DAY"{{#eq defaultRangeGap '+1DAY'}} selected="selected"{{else}}{{#if defaultRangeGap}}{{else}} selected="selected"{{/if}}{{/eq}}>Day</option>
+												<option value="+1HOUR"{{#eq defaultRangeGap '+1HOUR'}} selected="selected"{{else}}{{/eq}}>Hour</option>
+												<option value="+1MINUTE"{{#eq defaultRangeGap '+1MINUTE'}} selected="selected"{{else}}{{/eq}}>Minute</option>
+												<option value="+1SECOND"{{#eq defaultRangeGap '+1SECOND'}} selected="selected"{{else}}{{/eq}}>Second</option>
+											</select>
+										</td>
+									</tr>
+									<tr class="">
+										<td class="" colspan="2">
+											<span>Range Start</span>
+										</td>
+									</tr>
+									<tr class="">
+										<td class="" colspan="2">
+											<span><input type="datetime-local" name="facetRangeStart" id="pageFacetRangeStart-ReportType" value="{{formatZonedDateTime defaultRangeStart "yyyy-MM-dd'T'HH:mm" defaultLocaleId defaultZoneId}}" onclick="facetRangeChange(this, 'ReportType'); "/></span>
+										</td>
+									</tr>
+									<tr class="">
+										<td class="" colspan="2">
+											<span>Range End</span>
+										</td>
+									</tr>
+									<tr class="">
+										<td class="" colspan="2">
+											<span><input type="datetime-local" name="facetRangeEnd" id="pageFacetRangeEnd-ReportType" value="{{formatZonedDateTime defaultRangeEnd "yyyy-MM-dd'T'HH:mm" defaultLocaleId defaultZoneId}}" onclick="facetRangeChange(this, 'ReportType'); "/></span>
+										</td>
+									</tr>
+								</table>
+								<table class="w3-padding ">
+{{#each varsRange }}
+									<tr class="">
+										<td class="">
+											<span><input type="radio" name="pageFacetRange" class="pageFacetRange " id="pageFacetRangeReportType_{{ @key }}" value="{{ var }}"{{#eq defaultRangeVar var }} checked="checked"{{/eq}} onclick="facetRangeChange(this, 'ReportType'); "/></span>
+										</td>
+										<td class="">
+											<label for="pageFacetRangeReportType_{{ @key }}">{{ displayName }}</label>
+										</td>
+									</tr>
+{{/each}}
+								</table>
+{{/inline}}
+{{#*inline "htmBodyPivotReportTypePage"}}								<!-- #*inline "htmBodyPivotReportTypePage" -->
+								<div style="display: none; " class="w3-padding w3-tiny " id="pageSearchVal-PivotReportTypeHidden">
+{{#each defaultPivotVars }}
+									<div class="pageSearchVal-PivotReportTypeHidden " id="pageSearchVal-PivotReportTypeHidden_{{ this }}">{{ this }}</div>
+{{/each}}
+								</div>
+								<div class="w3-padding w3-tiny " id="pageSearchVal-PivotReportType">
+{{#if defaultPivotVars }}
+									<div class="pageSearchVal pageSearchVal-PivotReportType " id="pageSearchVal-PivotReportType_1">facet.pivot={{#each defaultPivotVars }}{{#if @index }},{{/if}}{{ this }}{{/each}}</div>
+{{/if}}
+								</div>
+								<table class="w3-table ">
+{{#each varsFq }}
+									<tr class="">
+										<td class="">
+											<span><input type="checkbox" name="pageFacetPivot" class="pageFacetPivot " id="pageFacetPivotReportType_{{ @key }}" value="{{ var }}"{{#if pivot }} checked="checked"{{/if}} onclick="facetPivotChange(this, 'ReportType'); "/></span>
+										</td>
+										<td class="w3-cell ">
+											<label for="pageFacetPivotReportType_{{ @key }}">{{ displayName }}</label>
+										</td>
+									</tr>
+{{/each}}
+								</table>
+{{/inline}}
+{{#*inline "htmBodyFieldListReportTypePage"}}								<!-- #*inline "htmBodyFieldListReportTypePage" -->
+								<div style="display: none; " class="w3-padding w3-tiny " id="pageSearchVal-FieldListReportTypeHidden">
+{{#each defaultFieldListVars }}
+									<div class="pageSearchVal-FieldListReportTypeHidden " id="pageSearchVal-FieldListReportTypeHidden_{{ this }}">{{ this }}</div>
+{{/each}}
+								</div>
+								<div class="w3-padding w3-tiny " id="pageSearchVal-FieldListReportType">
+{{#if defaultFieldListVars }}
+									<div class="pageSearchVal pageSearchVal-FieldListReportType " id="pageSearchVal-FieldListReportType_1">fl={{#each defaultFieldListVars }}{{#if @index }},{{/if}}{{ this }}{{/each}}</div>
+{{/if}}
+								</div>
+								<table class="w3-table ">
+{{#each varsFq }}
+									<tr class="">
+										<td class="">
+											<span><input type="checkbox" name="pageFieldList" class="pageFieldList " id="pageFieldListReportType_{{ @key }}" value="{{ var }}"{{#if fieldList }} checked="checked"{{/if}} onclick="facetFieldListChange(this, 'ReportType'); "/></span>
+										</td>
+										<td class="w3-cell ">
+											<label for="pageFieldListReportType_{{ @key }}">{{ displayName }}</label>
+										</td>
+									</tr>
+{{/each}}
+								</table>
+{{/inline}}
+{{#*inline "htmBodyStatsReportTypePage"}}								<!-- #*inline "htmBodyStatsReportTypePage" -->
+								<div style="display: none; " class="w3-padding w3-tiny " id="pageSearchVal-StatsReportTypeHidden">
+{{#each defaultStatsVars }}
+									<div class="pageSearchVal-StatsReportTypeHidden " id="pageSearchVal-StatsReportTypeHidden_{{ this }}">{{ this }}</div>
+{{/each}}
+								</div>
+								<div class="w3-padding w3-tiny " id="pageSearchVal-StatsReportType">
+{{#if defaultStatsVars }}
+{{#each defaultStatsVars }}									<div class="pageSearchVal pageSearchVal-StatsReportType_{{ this }} " id="pageSearchVal-StatsReportType_{{ this }}">stats.field={{ this }}</div>
+{{/each}}{{/if}}
+								</div>
+								<table class="w3-table ">
+{{#each varsFq }}
+{{#if enableStats }}
+									<tr class="">
+										<td class="">
+											<span><input type="checkbox" name="pageStats" class="pageStats " id="pageStatsReportType_{{ @key }}" value="{{ var }}"{{#if ./stats }} checked="checked"{{/if}} onclick="facetStatsChange(this, 'ReportType'); "/></span>
+										</td>
+										<td class="w3-cell ">
+											<div>
+												<label for="pageStatsReportType_{{ @key }}">{{ displayName }}</label>
+											</div>
+											<div class="pageStatsField w3-small pageStatsFieldReportType_{{ @key }} " id="pageStatsFieldReportType_{{ @key }}">
+{{#if ./stats }}
+{{#each ./stats }}
+{{#eq @key 'name' }}{{else}}
+												<div data-class="ReportType" data-var="{{ ../var }}" data-val="{{ @key }}">{{ @key }}: {{ this }}</div>
+{{/eq}}
+{{/each}}
+{{/if}}
+											</div>
+										</td>
+									</tr>
+{{/if}}
+{{/each}}
+								</table>
+{{/inline}}
+{{#*inline "htmBodyMenuReportTypePage"}}		<!-- #*inline "htmBodyMenuReportTypePage" -->
+{{> "htmBodyMenuBaseModelPage"}}{{/inline}}
+{{#*inline "htmBodyGraphReportTypePage"}}		<!-- #*inline "htmBodyGraphReportTypePage" -->
+<div id="htmBodyGraphBaseModelPage" class="htmBodyGraph "></div>{{/inline}}
 {{#*inline "htmBodyCount0ReportTypePage"}}		<!-- #*inline "htmBodyCount0ReportTypePage" -->
 		<h1>
 			<a href="{{pageUri}}" class="w3-bar-item w3-btn w3-center w3-block w3-light-green w3-hover-light-green">
 				{{#if contextIconCssClasses}}
-					<i class="contextIconCssClasses site-menu-icon "></i>
+					<i class="{{ contextIconCssClasses }} site-menu-icon "></i>
 				{{/if}}
 				<span class="">report types</span>
 			</a>
@@ -49,7 +267,7 @@
 		<h2>
 			<span class="w3-bar-item w3-padding w3-center w3-block w3-light-green">
 				{{#if contextIconCssClasses}}
-					<i class="contextIconCssClasses + " site-menu-icon "></i>
+					<i class="{{ contextIconCssClasses }}  site-menu-icon "></i>
 				{{/if}}
 				<span class="">no report type found</span>
 			</span>
@@ -59,7 +277,7 @@
 		<h1 class="w3-center ">
 			<a href="{{pageUri}}" class="w3-bar-item w3-btn w3-block w3-light-green w3-hover-light-green">
 			{{#if contextIconCssClasses}}
-				<i class="contextIconCssClasses site-menu-icon "></i>
+				<i class="{{ contextIconCssClasses }} site-menu-icon "></i>
 			{{/if}}
 				<span class="">report type</span>
 			</a>
@@ -69,13 +287,12 @@
 				<span class="">{{reportType_.objectTitle}}</span>
 			</span>
 		</h2>
-{{#block "htmForm"}}{{/block}}
 {{/inline}}
 {{#*inline "htmBodyCount1ReportTypePage"}}		<!-- #*inline "htmBodyCount1ReportTypePage" -->
 		<h1>
 			<a href="{{pageUri}}" class="w3-bar-item w3-btn w3-center w3-block w3-light-green w3-hover-light-green">
 	{{#if contextIconCssClasses}}
-				<i class="contextIconCssClasses + " site-menu-icon "></i>
+				<i class="{{ contextIconCssClasses }} site-menu-icon "></i>
 	{{/if}}
 				<span class="">report types</span>
 			</a>
@@ -113,7 +330,7 @@
 		<h1>
 			<a href="{{pageUri}}" class="w3-bar-item w3-btn w3-center w3-block w3-light-green w3-hover-light-green">
 	{{#if contextIconCssClasses}}
-				<i class="contextIconCssClasses + " site-menu-icon "></i>
+				<i class="{{ contextIconCssClasses }} site-menu-icon "></i>
 	{{/if}}
 				<span class="">report types</span>
 			</a>
@@ -149,14 +366,18 @@
 {{> "table1ReportTypePage"}}
 		</div>
 {{/inline}}
-{{#*inline "htmFormReportTypePage"}}	{{#if pk}}
+{{#*inline "htmFormReportTypePage"}}
 		<!-- #*inline "htmForm" -->
-		<form action="" id="ReportTypeForm" style="display: inline-block; width: 100%; " onsubmit="event.preventDefault(); return false; ">
+		<form action="/api/report-type" id="ReportTypeForm" class="pageForm " style="" onsubmit="event.preventDefault(); return false; ">
+{{#if pk}}
 			<input name="pk" class="valuePk" type="hidden" value="{{pk}}"/>
+{{/if}}
 			<input name="focusId" type="hidden"/>
+			<input name="pageResponse" id="pageResponse" class="pageResponse"  value='{{{toJsonObjectStringInApostrophes pageResponse }}}' type="hidden"/>
 		</form>
+{{#if id}}
 {{#block "htmForm_searchpageReportType"}}{{/block}}
-	{{/if}}
+{{/if}}
 {{/inline}}
 {{#*inline "htmFormReportTypePage_putimportReportType"}}
 		<button
@@ -166,7 +387,7 @@
 			<i class="fas fa-file-import "></i>
 			Import report types
 		</button>
-		<div id="putimportReportTypeModal" class="w3-modal w3-padding-32 ">
+		<div id="putimportReportTypeModal" class="w3-modal ">
 			<div class="w3-modal-content ">
 				<div class="w3-card-4 ">
 					<header class="w3-container w3-light-green">
@@ -179,7 +400,7 @@
 						<div class="w3-cell-row ">
 							<textarea
 								class="PUTImport_searchList w3-input w3-border "
-								style="height: 400px; "
+								style="height: 300px; "
 								placeholder="{ 'searchList': [ { 'pk': ... , 'saves': [ ... ] }, ... ] }"
 								></textarea>
 						</div>
@@ -200,7 +421,7 @@
 			<i class="fas fa-file-plus "></i>
 			Create a report type
 		</button>
-		<div id="postReportTypeModal" class="w3-modal w3-padding-32 ">
+		<div id="postReportTypeModal" class="w3-modal ">
 			<div class="w3-modal-content ">
 				<div class="w3-card-4 ">
 					<header class="w3-container w3-light-green">
@@ -240,7 +461,7 @@
 			<i class="fas fa-edit "></i>
 			Modify report types
 		</button>
-		<div id="patchReportTypeModal" class="w3-modal w3-padding-32 ">
+		<div id="patchReportTypeModal" class="w3-modal ">
 			<div class="w3-modal-content ">
 				<div class="w3-card-4 ">
 					<header class="w3-container w3-light-green">
@@ -271,15 +492,9 @@
 		</div>
 {{/inline}}
 {{#*inline "htmFormReportTypePage_searchpageReportType"}}
-		<div id="searchpageReportTypeModal" class="w3-padding-32 ">
+		<div id="searchpageReportTypeModal" class="">
 			<div class="">
 				<div class="w3-card-4 ">
-					<header class="w3-container w3-light-green">
-	{{#eq "Page" classApiMethodMethod}}
-						<span class="w3-button w3-display-topright " onclick="$('#searchpageReportTypeModal').hide(); ">×</span>
-	{{/eq}}
-						<h2 class="w3-padding ">Delete report types</h2>
-					</header>
 					<div class="" id="searchpageReportTypeFormValues">
 						<div id="searchpageReportTypeForm">
 							<div class="w3-cell-row ">
@@ -297,23 +512,100 @@
 {{> "htmTypeName" classApiMethodMethod="Page"}}
 							</div>
 						</div>
-						<button
-							class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-margin w3-light-green "
-							onclick="searchpageReportType(); "
-							>Delete report types</button>
 					</div>
 				</div>
 			</div>
 		</div>
 {{/inline}}
+{{#*inline "htmBodySidebarReportTypePage"}}
+				<div class="w3-dropdown-click w3-bar-block min-width-300px ">
+					<div class="min-width-300px ">
+						<span title="Search" class="siteSidebarToggle w3-padding-small w3-hover-black w3-light-green " onclick="$('.siteSidebarToggleStats').hide(); $('.siteSidebarToggleFieldList').hide(); $('.siteSidebarToggleFilters').hide(); $('.siteSidebarToggleRange').hide(); $('.siteSidebarTogglePivot').hide(); $('.siteSidebarToggleSearch').toggle(); $('.siteSidebarToggle').removeClass('w3-black'); $('.siteSidebarToggle').addClass('w3-light-green'); $(this).addClass('w3-black'); $(this).removeClass('w3-light-green'); "><i class="fad fa-magnifying-glass hover-box-shadow w3-xlarge "></i> Search</span>
+						<span title="Filters" class="siteSidebarToggle w3-padding-small w3-hover-black w3-light-green " onclick="$('.siteSidebarToggleStats').hide(); $('.siteSidebarToggleFieldList').hide(); $('.siteSidebarToggleSearch').hide(); $('.siteSidebarToggleRange').hide(); $('.siteSidebarTogglePivot').hide(); $('.siteSidebarToggleFilters').toggle(); $('.siteSidebarToggle').removeClass('w3-black'); $('.siteSidebarToggle').addClass('w3-light-green'); $(this).addClass('w3-black'); $(this).removeClass('w3-light-green'); "><i class="fad fa-filters hover-box-shadow w3-xlarge "></i> Filters</span>
+						<span title="Range" class="siteSidebarToggle w3-padding-small w3-hover-black w3-light-green " onclick="$('.siteSidebarToggleStats').hide(); $('.siteSidebarToggleFieldList').hide(); $('.siteSidebarToggleSearch').hide(); $('.siteSidebarToggleFilters').hide(); $('.siteSidebarTogglePivot').hide(); $('.siteSidebarToggleRange').toggle(); $('.siteSidebarToggle').removeClass('w3-black'); $('.siteSidebarToggle').addClass('w3-light-green'); $(this).addClass('w3-black'); $(this).removeClass('w3-light-green'); "><i class="fad fa-calendar-range hover-box-shadow w3-xlarge "></i> Range</span>
+						<span title="Pivot" class="siteSidebarToggle w3-padding-small w3-hover-black w3-light-green " onclick="$('.siteSidebarToggleStats').hide(); $('.siteSidebarToggleFieldList').hide(); $('.siteSidebarToggleSearch').hide(); $('.siteSidebarToggleFilters').hide(); $('.siteSidebarToggleRange').hide(); $('.siteSidebarTogglePivot').toggle(); $('.siteSidebarToggle').removeClass('w3-black'); $('.siteSidebarToggle').addClass('w3-light-green'); $(this).addClass('w3-black'); $(this).removeClass('w3-light-green'); "><i class="fad fa-table-pivot hover-box-shadow w3-xlarge "></i> Pivot</span>
+						<span title="FieldList" class="siteSidebarToggle w3-padding-small w3-hover-black w3-light-green " onclick="$('.siteSidebarToggleStats').hide(); $('.siteSidebarTogglePivot').hide(); $('.siteSidebarToggleSearch').hide(); $('.siteSidebarToggleFilters').hide(); $('.siteSidebarToggleRange').hide(); $('.siteSidebarToggleFieldList').toggle(); $('.siteSidebarToggle').removeClass('w3-black'); $('.siteSidebarToggle').addClass('w3-light-green'); $(this).addClass('w3-black'); $(this).removeClass('w3-light-green'); "><i class="fad fa-list-ul hover-box-shadow w3-xlarge "></i> FieldList</span>
+						<span title="Stats" class="siteSidebarToggle w3-padding-small w3-hover-black w3-light-green " onclick="$('.siteSidebarToggleFieldList').hide(); $('.siteSidebarTogglePivot').hide(); $('.siteSidebarToggleSearch').hide(); $('.siteSidebarToggleFilters').hide(); $('.siteSidebarToggleRange').hide(); $('.siteSidebarToggleStats').toggle(); $('.siteSidebarToggle').removeClass('w3-black'); $('.siteSidebarToggle').addClass('w3-light-green'); $(this).addClass('w3-black'); $(this).removeClass('w3-light-green'); "><i class="fad fa-chart-candlestick hover-box-shadow w3-xlarge "></i> Stats</span>
+						<a title="API" class="siteSidebarToggle w3-padding-small w3-hover-black w3-light-green " href="{{ apiUri }}{{ queryStr }}"><i class="fad fa-brackets-curly hover-box-shadow w3-xlarge "></i> API</a>
+					</div>
+					<div class=" ">
+						<div class="siteSidebarToggle siteSidebarToggleSearch w3-dropdown-content min-width-300px w3-white w3-border w3-border-light-green " style="display: none; ">
+							<div class="w3-bar w3-light-green ">
+								<span class="w3-bar-item ">
+								<i class="fad fa-magnifying-glass "></i> Search</span>
+							</div>
+							<div class="w3-bar-block ">
+{{#block "htmBodySearch"}}{{/block}}
+							</div>
+						</div>
+						<div  class="siteSidebarToggle siteSidebarToggleFilters w3-dropdown-content min-width-300px w3-white w3-border w3-border-light-green " style="display: none; ">
+							<div class="w3-bar w3-light-green ">
+								<span class="w3-bar-item ">
+								<i class="fad fa-filters "></i> Filters</span>
+							</div>
+							<div class="w3-bar-block ">
+{{#block "htmBodyFilters"}}{{/block}}
+							</div>
+						</div>
+						<div  class="siteSidebarToggle siteSidebarToggleRange w3-dropdown-content min-width-300px w3-white w3-border w3-border-light-green " style="display: none; ">
+							<div class="w3-bar w3-light-green  ">
+								<span class="w3-bar-item ">
+								<i class="fad fa-calendar-range "></i> Range</span>
+							</div>
+							<div class="w3-bar-block ">
+{{#block "htmBodyRange"}}{{/block}}
+							</div>
+						</div>
+						<div  class="siteSidebarToggle siteSidebarTogglePivot w3-dropdown-content min-width-300px w3-white w3-border w3-border-light-green " style="display: none; ">
+							<div class="w3-bar w3-light-green ">
+								<span class="w3-bar-item ">
+								<i class="fad fa-table-pivot "></i> Pivot</span>
+							</div>
+							<div class="w3-bar-block ">
+{{#block "htmBodyPivot"}}{{/block}}
+							</div>
+						</div>
+						<div  class="siteSidebarToggle siteSidebarToggleFieldList w3-dropdown-content min-width-300px w3-white w3-border w3-border-light-green " style="display: none; ">
+							<div class="w3-bar w3-light-green ">
+								<span class="w3-bar-item ">
+								<i class="fad fa-list-ul "></i> Field List</span>
+							</div>
+							<div class="w3-bar-block ">
+{{#block "htmBodyFieldList"}}{{/block}}
+							</div>
+						</div>
+						<div  class="siteSidebarToggle siteSidebarToggleStats w3-dropdown-content min-width-300px w3-white w3-border w3-border-light-green " style="display: none; ">
+							<div class="w3-bar w3-light-green ">
+								<span class="w3-bar-item ">
+								<i class="fad fa-chart-candlestick "></i> Stats</span>
+							</div>
+							<div class="w3-bar-block ">
+{{#block "htmBodyStats"}}{{/block}}
+							</div>
+						</div>
+					</div>
+				</div>
+{{/inline}}
 {{#*inline "htmBodyStartReportTypePage"}}
 {{> "htmBodyStartBaseModelPage"}}
+{{/inline}}
+{{#*inline "htmBodyMiddleReportTypePage"}}
+{{> "htmBodyMiddleBaseModelPage"}}
 {{/inline}}
 {{#*inline "htmBodyEndReportTypePage"}}
 {{> "htmBodyEndBaseModelPage"}}
 {{/inline}}
 {{#*inline "htmBodyReportTypePage"}}
 {{#block "htmBodyStart"}}{{/block}}
+{{#block "htmBodyMiddle"}}{{/block}}
+{{#block "htmBodyEnd"}}{{/block}}
+{{/inline}}
+{{#*inline "htmBodyMiddleReportTypePage"}}
+		<div class="w3-bar w3-content ">
+{{#block "htmBodySidebar"}}{{/block}}
+		</div>
+	<div class="pageContent w3-content ">
+{{#block "htmBodyGraph"}}{{/block}}
 	{{#eq reportTypeCount int0}}
 {{#block "htmBodyCount0"}}{{/block}}
 	{{else}}
@@ -327,59 +619,62 @@
 {{#block "htmBodyAll"}}{{/block}}
 		{{/eq}}
 	{{/eq}}
+{{#block "htmForm"}}{{/block}}
 {{#block "htmForms"}}{{/block}}
-{{#block "htmBodyEnd"}}{{/block}}
+	</div>
 {{/inline}}
 {{#*inline "table1ReportTypePage"}}
-		<table class="w3-table w3-bordered w3-striped w3-border w3-hoverable ">
-			{{> table2ReportTypePage}}
-		</table>
+		<div class="w3-responsive ">
+			<table class="w3-table w3-bordered w3-striped w3-border w3-hoverable ">
+{{> table2ReportTypePage}}
+			</table>
+		</div>
 {{/inline}}
 {{#*inline "table2ReportTypePage"}}
-		{{> "thead1ReportTypePage"}}
-		{{> "tbody1ReportTypePage"}}
-		{{> "tfoot1ReportTypePage"}}
-	{{/inline}}
+{{> "thead1ReportTypePage"}}
+{{> "tbody1ReportTypePage"}}
+{{> "tfoot1ReportTypePage"}}
+{{/inline}}
 {{#*inline "thead1ReportTypePage"}}
-		<thead class="w3-light-green w3-hover-light-green">
-			{{> thead2ReportTypePage}}
-		</thead>
-	{{/inline}}
+				<thead class="w3-light-green w3-hover-light-green">
+{{> thead2ReportTypePage}}
+				</thead>
+{{/inline}}
 {{#*inline "thead2ReportTypePage"}}
 			<tr>
-				<th>created</th>
-				<th></th>
+						<th>created</th>
+						<th></th>
 			</tr>
 {{/inline}}
 {{#*inline "tbody1ReportTypePage"}}
-		<tbody>
-			{{> tbody2ReportTypePage}}
-		</tbody>
+				<tbody>
+{{> tbody2ReportTypePage}}
+				</tbody>
 {{/inline}}
 {{#*inline "tbody2ReportTypePage"}}
 		{{#each listReportType}}
-			<tr>
-					<td>
-						<a href="{{pageUrlPk}}">
-							<span class="white-space-pre-wrap ">{{siteZonedDateTimeFormat created "MMM d, yyyy h:mm:ss a" siteLocale}}</span>
-						</a>
-					</td>
-					<td>
-						<a href="{{pageUrlPk}}">
-							<i class="fad fa-list-dropdown "></i>
-							<span class="white-space-pre-wrap ">{{objectTitle}}</span>
-						</a>
-					</td>
-			</tr>
+					<tr>
+						<td>
+							<a href="{{pageUrlPk}}">
+								<span class="white-space-pre-wrap ">{{siteZonedDateTimeFormat created "MMM d, yyyy h:mm:ss a" siteLocale}}</span>
+							</a>
+						</td>
+						<td>
+							<a href="{{pageUrlPk}}">
+								<i class="fad fa-list-dropdown "></i>
+								<span class="white-space-pre-wrap ">{{objectTitle}}</span>
+							</a>
+						</td>
+					</tr>
 		{{/each}}
 {{/inline}}
 {{#*inline "tfoot1ReportTypePage"}}
-		<tfoot class="w3-light-green w3-hover-light-green">
-			{{> tfoot2ReportTypePage}}
-		</tfoot>
+				<tfoot class="w3-light-green w3-hover-light-green">
+{{> tfoot2ReportTypePage}}
+				</tfoot>
 {{/inline}}
 {{#*inline "tfoot2ReportTypePage"}}
-		<tr>
+			<tr>
 			{{#if getColumnCreated}}
 				<td>
 				</td>
@@ -388,7 +683,7 @@
 				<td>
 				</td>
 			{{/if}}
-		</tr>
+			</tr>
 	{{/inline}}
 {{#*inline "htmFormsReportTypePage"}}
 	{{#ifContainsAnyRoles roles rolesRequired}}
@@ -435,14 +730,14 @@
 					id="suggestReportType{{id}}"
 					autocomplete="off"
 					oninput="suggestReportTypeObjectSuggest( [ { 'name': 'q', 'value': 'objectSuggest:' + $(this).val() }, { 'name': 'rows', 'value': '10' }, { 'name': 'fl', 'value': 'classCanonicalName,pk,pageUrlPk,objectTitle' } ], $('#suggestListReportType{{id}}'), {{pk}}; "
-					onkeyup="if (event.keyCode === 13) { event.preventDefault(); window.location.href = '/api/report-type?q={{query1}}:' + encodeURIComponent(this.value) + '{{fqs}}{{sorts}}&amp;rows={{start2}}&amp;rows={{rows1}}"
+					onkeyup="if (event.keyCode === 13) { event.preventDefault(); window.location.href = '/report-type?q={{query1}}:' + encodeURIComponent(this.value) + '{{fqs}}{{sorts}}&amp;rows={{start2}}&amp;rows={{rows1}}"
 				{{#if listReportType}}
 					value="{{query2}}"
 				{{/if}}
 				/>
 				<button
 					class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-bar-item w3-light-green "
-					onclick="window.location.href = '/api/report-type?q=&quot;, query1, &quot;:' + encodeURIComponent(this.previousElementSibling.value) + '&quot;, fqs, sorts, &quot;&amp;rows=&quot;, start2, &quot;&amp;rows=&quot;, rows1, &quot;'; "
+					onclick="window.location.href = '/report-type?q=&quot;, query1, &quot;:' + encodeURIComponent(this.previousElementSibling.value) + '&quot;, fqs, sorts, &quot;&amp;rows=&quot;, start2, &quot;&amp;rows=&quot;, rows1, &quot;'; "
 					>
 					<i class="fas fa-search "></i>
 				</button>
@@ -454,7 +749,7 @@
 				</div>
 			</div>
 			<div class="">
-				<a href="/api/report-type" class="">
+				<a href="/report-type" class="">
 					<i class="fad fa-list-dropdown"></i>
 					see all the report types
 				</a>

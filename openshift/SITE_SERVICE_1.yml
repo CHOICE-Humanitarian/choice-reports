@@ -1,10 +1,4 @@
 ---
-# Label: ansible_project_service
-# Title: create the Ansible template for the project service in OpenShift
-# Mission: create the Ansible template for the project service in OpenShift
-# Milestone: Automate Project Deployment
-# Column: Automate Project Deployment
-
 apiVersion: v1
 kind: Service
 spec:

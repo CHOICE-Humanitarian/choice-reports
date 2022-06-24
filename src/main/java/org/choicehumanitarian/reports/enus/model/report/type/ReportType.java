@@ -2,7 +2,7 @@ package org.choicehumanitarian.reports.enus.model.report.type;
 
 import java.util.List;
 
-import org.choicehumanitarian.reports.enus.base.BaseModel;
+import org.choicehumanitarian.reports.enus.model.base.BaseModel;
 import org.computate.search.wrap.Wrap;
 
 /**
@@ -56,7 +56,7 @@ public class ReportType extends ReportTypeGen<BaseModel> {
 	/**  
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * HtmlRow: 3
 	 * HtmlCell: 1
 	 * DisplayName.enUS: type name

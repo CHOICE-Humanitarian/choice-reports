@@ -2,7 +2,7 @@ package org.choicehumanitarian.reports.enus.model.report.event;
 
 import java.time.LocalDate;
 
-import org.choicehumanitarian.reports.enus.base.BaseModel;
+import org.choicehumanitarian.reports.enus.model.base.BaseModel;
 import org.computate.search.wrap.Wrap;
 
 /**
@@ -15,8 +15,8 @@ import org.computate.search.wrap.Wrap;
  * Map.Integer.sqlSort: 7
  * Sort.asc: objectId
  * 
- * ApiTag.enUS: Report Event
- * ApiUri.enUS: /api/report-event
+ * ApiTag.enUS: Calendar Item
+ * ApiUri.enUS: /api/calendar-item
  * 
  * ApiMethod.enUS: PUTImport
 
@@ -28,9 +28,9 @@ import org.computate.search.wrap.Wrap;
  * ApiMethod.enUS: SearchPage
  * PageSearchPage.enUS: ReportEventPage
  * PageSuperSearchPage.enUS: BaseModelPage
- * ApiUriSearchPage.enUS: /report-event
+ * ApiUriSearchPage.enUS: /calendar-item
  * 
- * AName.enUS: a report event
+ * AName.enUS: a calendar item
  * Color: light-green
  * IconGroup: duotone
  * IconName: calendar-star
@@ -67,7 +67,7 @@ public class ReportEvent extends ReportEventGen<BaseModel> {
 	/**  
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * HtmlRow: 3
 	 * HtmlCell: 3
 	 * DisplayName.enUS: event name
@@ -78,7 +78,7 @@ public class ReportEvent extends ReportEventGen<BaseModel> {
 	/**  
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * HtmlRow: 4
 	 * HtmlCell: 1
 	 * DisplayName.enUS: event date

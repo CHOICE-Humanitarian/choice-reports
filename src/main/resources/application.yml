@@ -1,26 +1,35 @@
+---
 
+SITE_NAME: choice-reports
+SITE_DISPLAY_NAME: CHOICE Reports
 SITE_HOST_NAME: localhost
-SITE_PORT: 10781
-SITE_BASE_URL: http://localhost:10781
+SITE_PORT: 12280
+SITE_BASE_URL: "http://localhost:12280"
 SITE_ZONE: America/Denver
 SITE_LOCALE: en-US
 SITE_INSTANCES: 5
 WORKER_POOL_SIZE: 2
 VERTX_WARNING_EXCEPTION_SECONDS: 10
 CLUSTER_HOST_NAME: localhost
-CLUSTER_PORT: 10881
+CLUSTER_PORT: 12281
+GITHUB_ORG: "CHOICE-Humanitarian"
+QUAYIO_ORG: "computate"
+PROJECT_POWERED_BY_URL: "https://access.redhat.com/products/openshift-online-red-hat"
+PROJECT_POWERED_BY_NAME: "OpenShift Online"
+PROJECT_POWERED_BY_IMAGE_URI: "/svg/openshift.svg"
 
-STATIC_BASE_URL: http://localhost:10781/static
-STATIC_PATH: /usr/local/src/choice-reports-static
+STATIC_BASE_URL: "http://localhost:12280/static"
+STATIC_PATH: "/usr/local/src/choice-reports-static"
 
 API_CONTACT_EMAIL: 
 API_COUNTER_PAUSE: 10
 API_COUNTER_RESUME: 5
+API_COUNTER_FETCH: 10
 
 JDBC_HOST: localhost
 JDBC_PORT: 5432
-JDBC_DATABASE: choice
-JDBC_USERNAME: choice
+JDBC_DATABASE: choice-reports
+JDBC_USERNAME: choice-reports
 JDBC_PASSWORD: 
 JDBC_MAX_POOL_SIZE: 10
 JDBC_MAX_WAIT_QUEUE_SIZE: 1000
@@ -42,6 +51,7 @@ SOLR_HOST_NAME: localhost
 SOLR_PORT: 8983
 SOLR_COLLECTION: choice-reports
 SOLR_COLLECTION_COMPUTATE: computate
+SOLR_WORKER_COMMIT_WITHIN_MILLIS: 10000
 
 EMAIL_HOST: 
 EMAIL_PORT: 
@@ -52,49 +62,44 @@ EMAIL_PASSWORD:
 EMAIL_FROM: 
 EMAIL_ADMIN: 
 
-TIMER_DB_SOLR_SYNC_IN_SECONDS: 1
-ENABLE_DB_SOLR_SYNC: false
-ENABLE_DB_SOLR_SYNC_TrafficContraband: true
-ENABLE_DB_SOLR_SYNC_SearchBasis: true
-ENABLE_DB_SOLR_SYNC_TrafficSearch: true
-ENABLE_DB_SOLR_SYNC_TrafficPerson: true
-ENABLE_DB_SOLR_SYNC_TrafficStop: true
-
+REFRESH_DATA_PAUSE_IN_SECONDS: 10
 ENABLE_REFRESH_DATA: false
-ENABLE_REFRESH_DATA_TrafficContraband: true
-ENABLE_REFRESH_DATA_SearchBasis: true
-ENABLE_REFRESH_DATA_TrafficSearch: true
-ENABLE_REFRESH_DATA_TrafficPerson: true
-ENABLE_REFRESH_DATA_TrafficStop: true
+ENABLE_REFRESH_DATA_ChoiceDonor: true
+ENABLE_REFRESH_DATA_ChoiceReport: true
+ENABLE_REFRESH_DATA_SitePage: true
+ENABLE_REFRESH_DATA_ReportEvent: true
+ENABLE_REFRESH_DATA_ReportNarrative: true
+ENABLE_REFRESH_DATA_ReportSchedule: true
+ENABLE_REFRESH_DATA_ReportType: true
+ENABLE_REFRESH_DATA_SiteHtm: true
 
 ENABLE_IMPORT_DATA: true
-
 ENABLE_IMPORT_DATA_ChoiceDonor: true
-#IMPORT_DATA_START_TIME_ChoiceDonor: 00:00 America/Denver
-#IMPORT_DATA_PERIOD_ChoiceDonor: 1 hour
+ENABLE_IMPORT_DATA_ChoiceReport: true
+ENABLE_IMPORT_DATA_SitePage: true
+ENABLE_IMPORT_DATA_ReportEvent: true
+ENABLE_IMPORT_DATA_ReportNarrative: true
+ENABLE_IMPORT_DATA_ReportSchedule: true
+ENABLE_IMPORT_DATA_ReportType: true
+ENABLE_IMPORT_DATA_SiteHtm: true
 
-ENABLE_IMPORT_DATA_ChoiceImage: true
-#IMPORT_DATA_START_TIME_ChoiceImage: 00:01 America/Denver
-#IMPORT_DATA_PERIOD_ChoiceImage: 1 hour
-IMPORT_DATA_ReportType:
-  - typeName: Employee Giving - Bronze
-  - typeName: Employee Giving - Gold
-  - typeName: Expeditions
-  - typeName: Village Members
-  - typeName: Grantors
-  - typeName: Projects (regular)
-  - typeName: Programs - Parent
-  - typeName: Projects - Child
-  - typeName: Events
-  - typeName: Annual Report
-
-ACS_API_YEAR: 2019
-
-NEOCITIES_HOST_NAME: neocities.org
-NEOCITIES_PORT: 443
-NEOCITIES_SSL: true
-NEOCITIES_API_UPLOAD: /api/upload
-NEOCITIES_API_DELETE: /api/delete
-NEOCITIES_API_LIST: /api/list
-NEOCITIES_API_INFO: /api/info
-NEOCITIES_API_RENAME: /api/rename
+# The Auth roles required to be an admin in the site. 
+AUTH_ROLES_ADMIN: ['SiteAdmin']
+# The Auth roles required to add and modify site user records. 
+AUTH_ROLES_REQUIRED_SiteUser: ['SiteAdmin']
+# The Auth roles required to add and modify donor records. 
+AUTH_ROLES_REQUIRED_ChoiceDonor: ['SiteAdmin']
+# The Auth roles required to add and modify report records. 
+AUTH_ROLES_REQUIRED_ChoiceReport: ['SiteAdmin']
+# The Auth roles required to add and modify article records. 
+AUTH_ROLES_REQUIRED_SitePage: ['SiteAdmin']
+# The Auth roles required to add and modify report event records. 
+AUTH_ROLES_REQUIRED_ReportEvent: ['SiteAdmin']
+# The Auth roles required to add and modify report narrative records. 
+AUTH_ROLES_REQUIRED_ReportNarrative: ['SiteAdmin']
+# The Auth roles required to add and modify report schedule records. 
+AUTH_ROLES_REQUIRED_ReportSchedule: ['SiteAdmin']
+# The Auth roles required to add and modify report type records. 
+AUTH_ROLES_REQUIRED_ReportType: ['SiteAdmin']
+# The Auth roles required to add and modify HTML records. 
+AUTH_ROLES_REQUIRED_SiteHtm: ['SiteAdmin']

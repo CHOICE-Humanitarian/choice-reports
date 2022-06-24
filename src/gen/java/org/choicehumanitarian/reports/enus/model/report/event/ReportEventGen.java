@@ -1,81 +1,100 @@
 package org.choicehumanitarian.reports.enus.model.report.event;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.Arrays;
-import java.util.Date;
-import org.slf4j.LoggerFactory;
-import org.computate.search.serialize.ComputateLocalDateDeserializer;
-import org.apache.commons.lang3.StringUtils;
-import org.computate.search.response.solr.SolrResponse;
-import java.lang.Long;
-import java.util.Locale;
-import java.util.Map;
-import io.vertx.core.json.JsonObject;
-import java.time.ZoneOffset;
-import java.math.RoundingMode;
-import java.math.MathContext;
-import java.util.Set;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import java.time.Instant;
-import io.vertx.core.Future;
-import org.computate.search.serialize.ComputateZonedDateTimeDeserializer;
-import java.time.ZoneId;
-import org.choicehumanitarian.reports.enus.base.BaseModel;
-import java.util.Objects;
-import org.computate.search.serialize.ComputateLocalDateSerializer;
-import java.util.List;
-import org.computate.search.wrap.Wrap;
-import java.time.LocalDate;
-import java.util.Optional;
-import org.computate.search.serialize.ComputateZonedDateTimeSerializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import java.util.HashMap;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import org.choicehumanitarian.reports.enus.user.SiteUser;
+import org.choicehumanitarian.reports.enus.model.base.BaseModel;
+import io.vertx.core.json.JsonObject;
+import java.util.Date;
+import java.util.Set;
 import org.computate.vertx.api.ApiRequest;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.choicehumanitarian.reports.enus.config.ConfigKeys;
+import java.util.Optional;
+import java.util.List;
+import org.apache.commons.lang3.StringUtils;
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.lang.String;
-import org.choicehumanitarian.reports.enus.model.report.schedule.ReportSchedule;
-import org.slf4j.Logger;
-import io.vertx.core.Promise;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.computate.search.serialize.ComputateLocalDateSerializer;
+import org.computate.search.serialize.ComputateLocalDateDeserializer;
+import org.computate.search.serialize.ComputateZonedDateTimeSerializer;
+import org.computate.search.serialize.ComputateZonedDateTimeDeserializer;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import io.vertx.core.json.JsonArray;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import java.math.MathContext;
+import org.apache.commons.lang3.math.NumberUtils;
+import java.text.NumberFormat;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.HashMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.math.RoundingMode;
+import java.util.Map;
+import java.lang.Long;
+import org.choicehumanitarian.reports.enus.model.report.schedule.ReportSchedule;
+import java.lang.String;
+import org.choicehumanitarian.reports.enus.model.user.SiteUser;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.time.format.DateTimeFormatter;
-import org.apache.commons.lang3.math.NumberUtils;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import org.choicehumanitarian.reports.enus.config.ConfigKeys;
+import java.time.Instant;
+import java.util.Locale;
+import org.computate.search.wrap.Wrap;
+import io.vertx.core.Promise;
+import io.vertx.core.Future;
+import io.vertx.core.json.JsonArray;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.computate.search.response.solr.SolrResponse;
 
 /**	
- * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.event.ReportEvent&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
+ * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.event.ReportEvent">Find the class ReportEvent in Solr. </a>
+ * <br><br>Delete the class ReportEvent in Solr. 
+ * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.event.ReportEvent&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
+ * <br>Delete  the package org.choicehumanitarian.reports.enus.model.report.event in Solr. 
+ * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomEnsemble_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.event&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
+ * <br>Delete  the project choice-reports in Solr. 
+ * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;siteNom_indexed_string:choice\-reports&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
  * <br>
  **/
 public abstract class ReportEventGen<DEV> extends BaseModel {
 	protected static final Logger LOG = LoggerFactory.getLogger(ReportEvent.class);
 
-	public static final String ReportEvent_AName = "a report event";
-	public static final String ReportEvent_This = "this ";
-	public static final String ReportEvent_ThisName = "this report event";
-	public static final String ReportEvent_A = "a ";
-	public static final String ReportEvent_TheName = "the report event";
-	public static final String ReportEvent_NameSingular = "report event";
-	public static final String ReportEvent_NamePlural = "report events";
-	public static final String ReportEvent_NameActual = "current report event";
-	public static final String ReportEvent_AllName = "all the report events";
-	public static final String ReportEvent_SearchAllNameBy = "search report events by ";
-	public static final String ReportEvent_Title = "report events";
-	public static final String ReportEvent_ThePluralName = "the report events";
-	public static final String ReportEvent_NoNameFound = "no report event found";
-	public static final String ReportEvent_NameVar = "reportEvent";
-	public static final String ReportEvent_OfName = "of report event";
-	public static final String ReportEvent_ANameAdjective = "a report event";
-	public static final String ReportEvent_NameAdjectiveSingular = "report event";
-	public static final String ReportEvent_NameAdjectivePlural = "report events";
+	public static final String ReportEvent_AName_enUS = "a calendar item";
+	public static final String ReportEvent_This_enUS = "this ";
+	public static final String ReportEvent_ThisName_enUS = "this calendar item";
+	public static final String ReportEvent_A_enUS = "a ";
+	public static final String ReportEvent_TheName_enUS = "the calendar item";
+	public static final String ReportEvent_NameSingular_enUS = "calendar item";
+	public static final String ReportEvent_NamePlural_enUS = "calendar items";
+	public static final String ReportEvent_NameActual_enUS = "current calendar item";
+	public static final String ReportEvent_AllName_enUS = "all the calendar items";
+	public static final String ReportEvent_SearchAllNameBy_enUS = "search calendar items by ";
+	public static final String ReportEvent_Title_enUS = "calendar items";
+	public static final String ReportEvent_ThePluralName_enUS = "the calendar items";
+	public static final String ReportEvent_NoNameFound_enUS = "no calendar item found";
+	public static final String ReportEvent_NameVar_enUS = "reportEvent";
+	public static final String ReportEvent_OfName_enUS = "of calendar item";
+	public static final String ReportEvent_ANameAdjective_enUS = "a calendar item";
+	public static final String ReportEvent_NameAdjectiveSingular_enUS = "calendar item";
+	public static final String ReportEvent_NameAdjectivePlural_enUS = "calendar items";
+	public static final String PUTImport_enUS_Uri = "/api/calendar-item-import";
+	public static final String PUTImport_enUS_ImageUri = "/png/api/calendar-item-import-999.png";
+	public static final String POST_enUS_Uri = "/api/calendar-item";
+	public static final String POST_enUS_ImageUri = "/png/api/calendar-item-999.png";
+	public static final String PATCH_enUS_Uri = "/api/calendar-item";
+	public static final String PATCH_enUS_ImageUri = "/png/api/calendar-item-999.png";
+	public static final String GET_enUS_Uri = "/api/calendar-item/{id}";
+	public static final String GET_enUS_ImageUri = "/png/api/calendar-item/{id}-999.png";
+	public static final String Search_enUS_Uri = "/api/calendar-item";
+	public static final String Search_enUS_ImageUri = "/png/api/calendar-item-999.png";
+	public static final String SearchPage_enUS_Uri = "/calendar-item";
+	public static final String SearchPage_enUS_ImageUri = "/png/calendar-item-999.png";
+
 	public static final String ReportEvent_Color = "light-green";
 	public static final String ReportEvent_IconGroup = "duotone";
 	public static final String ReportEvent_IconName = "calendar-star";
@@ -95,7 +114,7 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 
 	/**	<br> The entity scheduleKey
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.event.ReportEvent&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:scheduleKey">Find the entity scheduleKey in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.event.ReportEvent&fq=entiteVar_enUS_indexed_string:scheduleKey">Find the entity scheduleKey in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -156,7 +175,7 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 
 	/**	<br> The entity assigneeKey
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.event.ReportEvent&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:assigneeKey">Find the entity assigneeKey in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.event.ReportEvent&fq=entiteVar_enUS_indexed_string:assigneeKey">Find the entity assigneeKey in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -216,7 +235,7 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 
 	/**	<br> The entity eventName
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.event.ReportEvent&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:eventName">Find the entity eventName in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.event.ReportEvent&fq=entiteVar_enUS_indexed_string:eventName">Find the entity eventName in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -272,7 +291,7 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 
 	/**	<br> The entity eventDate
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.event.ReportEvent&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:eventDate">Find the entity eventDate in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.event.ReportEvent&fq=entiteVar_enUS_indexed_string:eventDate">Find the entity eventDate in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -454,13 +473,13 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 		switch(var) {
 			case "scheduleKey":
 				if(oReportEvent.getScheduleKey() == null)
-					oReportEvent.setScheduleKey(val == null ? null : (NumberUtils.isCreatable(val.toString()) ? Long.parseLong(val.toString()) : null));
+					oReportEvent.setScheduleKey(val == null ? null : (NumberUtils.isCreatable(val.toString()) ? Long.parseLong(val.toString()) : -1));
 				if(!saves.contains("scheduleKey"))
 					saves.add("scheduleKey");
 				return val;
 			case "assigneeKey":
 				if(oReportEvent.getAssigneeKey() == null)
-					oReportEvent.setAssigneeKey(val == null ? null : (NumberUtils.isCreatable(val.toString()) ? Long.parseLong(val.toString()) : null));
+					oReportEvent.setAssigneeKey(val == null ? null : (NumberUtils.isCreatable(val.toString()) ? Long.parseLong(val.toString()) : -1));
 				if(!saves.contains("assigneeKey"))
 					saves.add("assigneeKey");
 				return val;
@@ -558,25 +577,25 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 	}
 
 	/////////////
-	// define //
+	// persist //
 	/////////////
 
-	@Override public boolean defineForClass(String var, Object val) {
+	@Override public boolean persistForClass(String var, Object val) {
 		String[] vars = StringUtils.split(var, ".");
 		Object o = null;
 		if(val != null) {
 			for(String v : vars) {
 				if(o == null)
-					o = defineReportEvent(v, val);
+					o = persistReportEvent(v, val);
 				else if(o instanceof BaseModel) {
 					BaseModel oBaseModel = (BaseModel)o;
-					o = oBaseModel.defineForClass(v, val);
+					o = oBaseModel.persistForClass(v, val);
 				}
 			}
 		}
 		return o != null;
 	}
-	public Object defineReportEvent(String var, Object val) {
+	public Object persistReportEvent(String var, Object val) {
 		switch(var.toLowerCase()) {
 			case "schedulekey":
 				if(val instanceof Long)
@@ -605,7 +624,7 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 				saves.add("eventDate");
 				return val;
 			default:
-				return super.defineBaseModel(var, val);
+				return super.persistBaseModel(var, val);
 		}
 	}
 
@@ -642,6 +661,21 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 
 	}
 
+	public static String varStoredReportEvent(String entityVar) {
+		switch(entityVar) {
+			case "scheduleKey":
+				return "scheduleKey_docvalues_long";
+			case "assigneeKey":
+				return "assigneeKey_docvalues_long";
+			case "eventName":
+				return "eventName_docvalues_string";
+			case "eventDate":
+				return "eventDate_docvalues_date";
+			default:
+				return BaseModel.varStoredBaseModel(entityVar);
+		}
+	}
+
 	public static String varIndexedReportEvent(String entityVar) {
 		switch(entityVar) {
 			case "scheduleKey":
@@ -654,6 +688,21 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 				return "eventDate_docvalues_date";
 			default:
 				return BaseModel.varIndexedBaseModel(entityVar);
+		}
+	}
+
+	public static String searchVarReportEvent(String searchVar) {
+		switch(searchVar) {
+			case "scheduleKey_docvalues_long":
+				return "scheduleKey";
+			case "assigneeKey_docvalues_long":
+				return "assigneeKey";
+			case "eventName_docvalues_string":
+				return "eventName";
+			case "eventDate_docvalues_date":
+				return "eventDate";
+			default:
+				return BaseModel.searchVarBaseModel(searchVar);
 		}
 	}
 
@@ -724,10 +773,35 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 		return sb.toString();
 	}
 
+	public static final String CLASS_SIMPLE_NAME = "ReportEvent";
 	public static final String VAR_scheduleKey = "scheduleKey";
 	public static final String VAR_assigneeKey = "assigneeKey";
 	public static final String VAR_eventName = "eventName";
 	public static final String VAR_eventDate = "eventDate";
+
+	public static List<String> varsQForClass() {
+		return ReportEvent.varsQReportEvent(new ArrayList<String>());
+	}
+	public static List<String> varsQReportEvent(List<String> vars) {
+		BaseModel.varsQBaseModel(vars);
+		return vars;
+	}
+
+	public static List<String> varsFqForClass() {
+		return ReportEvent.varsFqReportEvent(new ArrayList<String>());
+	}
+	public static List<String> varsFqReportEvent(List<String> vars) {
+		BaseModel.varsFqBaseModel(vars);
+		return vars;
+	}
+
+	public static List<String> varsRangeForClass() {
+		return ReportEvent.varsRangeReportEvent(new ArrayList<String>());
+	}
+	public static List<String> varsRangeReportEvent(List<String> vars) {
+		BaseModel.varsRangeBaseModel(vars);
+		return vars;
+	}
 
 	public static final String DISPLAY_NAME_scheduleKey = "schedule";
 	public static final String DISPLAY_NAME_assigneeKey = "assignee";
@@ -749,6 +823,93 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 			return DISPLAY_NAME_eventDate;
 		default:
 			return BaseModel.displayNameBaseModel(var);
+		}
+	}
+
+	public static String descriptionReportEvent(String var) {
+		switch(var) {
+			default:
+				return BaseModel.descriptionBaseModel(var);
+		}
+	}
+
+	public static String classSimpleNameReportEvent(String var) {
+		switch(var) {
+		case VAR_scheduleKey:
+			return "Long";
+		case VAR_assigneeKey:
+			return "Long";
+		case VAR_eventName:
+			return "String";
+		case VAR_eventDate:
+			return "LocalDate";
+			default:
+				return BaseModel.classSimpleNameBaseModel(var);
+		}
+	}
+
+	public static Integer htmlColumnReportEvent(String var) {
+		switch(var) {
+			default:
+				return BaseModel.htmlColumnBaseModel(var);
+		}
+	}
+
+	public static Integer htmlRowReportEvent(String var) {
+		switch(var) {
+		case VAR_scheduleKey:
+			return 3;
+		case VAR_assigneeKey:
+			return 3;
+		case VAR_eventName:
+			return 3;
+		case VAR_eventDate:
+			return 4;
+			default:
+				return BaseModel.htmlRowBaseModel(var);
+		}
+	}
+
+	public static Integer htmlCellReportEvent(String var) {
+		switch(var) {
+		case VAR_scheduleKey:
+			return 1;
+		case VAR_assigneeKey:
+			return 2;
+		case VAR_eventName:
+			return 3;
+		case VAR_eventDate:
+			return 1;
+			default:
+				return BaseModel.htmlCellBaseModel(var);
+		}
+	}
+
+	public static Integer lengthMinReportEvent(String var) {
+		switch(var) {
+			default:
+				return BaseModel.lengthMinBaseModel(var);
+		}
+	}
+
+	public static Integer lengthMaxReportEvent(String var) {
+		switch(var) {
+			default:
+				return BaseModel.lengthMaxBaseModel(var);
+		}
+	}
+
+	public static Integer maxReportEvent(String var) {
+		switch(var) {
+			default:
+				return BaseModel.maxBaseModel(var);
+		}
+	}
+
+	public static Integer minReportEvent(String var) {
+		switch(var) {
+			default:
+				return BaseModel.minBaseModel(var);
 		}
 	}
 }

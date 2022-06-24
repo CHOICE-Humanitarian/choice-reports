@@ -2,7 +2,7 @@ package org.choicehumanitarian.reports.enus.model.report;
 
 import java.math.BigDecimal;
 
-import org.choicehumanitarian.reports.enus.base.BaseModel;
+import org.choicehumanitarian.reports.enus.model.base.BaseModel;
 import org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor;
 import org.computate.search.wrap.Wrap;
 import org.computate.vertx.search.list.SearchList;
@@ -88,7 +88,7 @@ public class ChoiceReport extends ChoiceReportGen<BaseModel> {
 	/**  
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * HtmlRow: 3
 	 * HtmlCell: 1
 	 * DisplayName.enUS: donor full name
@@ -101,7 +101,7 @@ public class ChoiceReport extends ChoiceReportGen<BaseModel> {
 	/**   
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * HtmlRow: 3
 	 * HtmlCell: 2
 	 * DisplayName.enUS: donor parent name
@@ -114,7 +114,7 @@ public class ChoiceReport extends ChoiceReportGen<BaseModel> {
 	/**   
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * HtmlRow: 4
 	 * HtmlCell: 1
 	 * DisplayName.enUS: donor ID
@@ -127,7 +127,7 @@ public class ChoiceReport extends ChoiceReportGen<BaseModel> {
 	/**   
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * HtmlRow: 4
 	 * HtmlCell: 2
 	 * DisplayName.enUS: donor attribute ID
@@ -140,7 +140,7 @@ public class ChoiceReport extends ChoiceReportGen<BaseModel> {
 	/**   
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * HtmlRow: 4
 	 * HtmlCell: 3
 	 * DisplayName.enUS: in kind?
@@ -153,7 +153,7 @@ public class ChoiceReport extends ChoiceReportGen<BaseModel> {
 	/**   
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * HtmlRow: 5
 	 * HtmlCell: 1
 	 * DisplayName.enUS: total
@@ -166,7 +166,7 @@ public class ChoiceReport extends ChoiceReportGen<BaseModel> {
 	/**   
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * HtmlRow: 5
 	 * HtmlCell: 2
 	 * DisplayName.enUS: YTD
@@ -179,7 +179,7 @@ public class ChoiceReport extends ChoiceReportGen<BaseModel> {
 	/**   
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * HtmlRow: 6
 	 * HtmlCell: 1
 	 * DisplayName.enUS: Q1
@@ -192,7 +192,7 @@ public class ChoiceReport extends ChoiceReportGen<BaseModel> {
 	/**   
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * HtmlRow: 6
 	 * HtmlCell: 2
 	 * DisplayName.enUS: Q2
@@ -205,7 +205,7 @@ public class ChoiceReport extends ChoiceReportGen<BaseModel> {
 	/**   
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * HtmlRow: 6
 	 * HtmlCell: 3
 	 * DisplayName.enUS: Q3
@@ -218,7 +218,7 @@ public class ChoiceReport extends ChoiceReportGen<BaseModel> {
 	/**   
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * HtmlRow: 6
 	 * HtmlCell: 4
 	 * DisplayName.enUS: Q4
@@ -231,7 +231,7 @@ public class ChoiceReport extends ChoiceReportGen<BaseModel> {
 	/**   
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Define: true
+	 * Persist: true
 	 * HtmlRow: 7
 	 * HtmlCell: 1
 	 * DisplayName.enUS: Logo Filename

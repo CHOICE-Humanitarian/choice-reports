@@ -1,10 +1,4 @@
 ---
-# Label: ansible_project_build_config
-# Title: create the Ansible template for the project build config in OpenShift
-# Mission: create the Ansible template for the project build config in OpenShift
-# Milestone: Automate Project Deployment
-# Column: Automate Project Deployment
-
 apiVersion: build.openshift.io/v1
 kind: BuildConfig
 spec:
@@ -17,17 +11,13 @@ spec:
   postCommit: {}
   resources:
     limits:
-      memory: 2Gi
+      memory: 1.5Gi
     requests:
-      memory: 2Gi
+      memory: 1.5Gi
   runPolicy: Serial
   source:
     git:
-      uri: 'https://github.com/{{ GITHUB_ORG_NAME }}/{{ GITHUB_REPO_NAME }}.git'
-    secrets:
-      - destinationDir: /opt/keystore
-        secret:
-          name: "{{ SITE_NAME }}-keystore"
+      uri: '{{ SITE_REPO_HTTPS }}'
     type: Git
   strategy:
     sourceStrategy:

@@ -1,0 +1,91 @@
+---
+GITHUB_ORG: "CHOICE-Humanitarian"
+QUAYIO_ORG: "computate"
+PROJECT_POWERED_BY_URL: "https://access.redhat.com/products/openshift-online-red-hat"
+PROJECT_POWERED_BY_NAME: "OpenShift Online"
+PROJECT_POWERED_BY_IMAGE_URI: "/svg/openshift.svg"
+SITE_NAME: "choice-reports"
+SITE_DISPLAY_NAME: "CHOICE Reports"
+SITE_SERVICES:
+  - SITE_NAME: "choice-reports"
+    SITE_SRC: "/home/ctate/.local/src/choice-reports"
+RELATIVE_PACKAGE_MainVerticle: "vertx"
+CLASS_SIMPLE_NAME_MainVerticle: "MainVerticle"
+RUN_OPENAPI3_GENERATOR: true
+RUN_SQL_GENERATOR: true
+RUN_ARTICLE_GENERATOR: false
+
+LANGUAGE_NAME: "enUS"
+SITE_PATH_enUS: "/home/ctate/.local/src/choice-reports"
+DOMAIN_NAME: "example.com"
+DOMAIN_PACKAGE_NAME: "org.choicehumanitarian.reports.enus"
+SITE_JAVA_PACKAGE: "org.choicehumanitarian.reports.enus"
+SUFFIX_SRC_MAIN_JAVA: "/src/main/java"
+SUFFIX_SRC_GEN_JAVA: "/src/gen/java"
+RELATIVE_PATHS_TO_WATCH: "src/main/java/org/choicehumanitarian/reports/enus"
+API_COUNTER_FETCH: 50
+API_COUNTER_RESUME: 10
+
+SITE_HOST_NAME: "localhost"
+SITE_BASE_URL: "http://localhost:12280"
+SITE_PORT: 12280
+SITE_ZONE: "America/Denver"
+SITE_LOCALE: "en-US"
+STATIC_BASE_URL: "http://localhost:12280/static"
+STATIC_PATH: "/home/ctate/.local/src/choice-reports-static"
+TEMPLATE_PATH: "/home/ctate/.local/src/choice-reports/src/main/resources/templates"
+API_CONTACT_EMAIL: ""
+FONTAWESOME_KIT: ""
+
+JDBC_HOST: "localhost"
+JDBC_PORT: 5432
+JDBC_DATABASE: "choice-reports"
+JDBC_USERNAME: "choice-reports"
+
+AUTH_HOST_NAME: "sso.computate.org"
+AUTH_PORT: 443
+AUTH_SSL: true
+AUTH_SSL_REQUIRED: all
+AUTH_REALM: "RH-IMPACT"
+AUTH_RESOURCE: "rh-impact"
+AUTH_SECRET: "0518f65a-f86d-42e8-ad65-00f46920443d"
+AUTH_URL: "https://sso.computate.org/auth"
+AUTH_TOKEN_URI: "/auth/realms/RH-IMPACT/protocol/openid-connect/token"
+
+SOLR_COLLECTION: "choice-reports"
+SOLR_URL: "http://localhost:8983/solr/choice-reports"
+SOLR_HOST_NAME: localhost
+SOLR_PORT: 8983
+SOLR_URL_COMPUTATE: "http://localhost:8983/solr/computate"
+
+EMAIL_HOST: 
+EMAIL_PORT: 465
+EMAIL_SSL: True
+EMAIL_AUTH: True
+EMAIL_USERNAME: 
+EMAIL_PASSWORD: 
+EMAIL_FROM: 
+EMAIL_ADMIN: 
+
+# Enable the code generation service for the project
+ENABLE_CODE_GENERATION_SERVICE: true
+# Set the sessionId of the user session creating an object in the database. 
+ENABLE_SESSION_ID: true
+# Enable an object in the database to be deleted. 
+ENABLE_DELETED: true
+# Enable an object in the database to be archived. 
+ENABLE_ARCHIVED: true
+# Enable an admin role. 
+ENABLE_ROLE_ADMIN: true
+# Enable an OpenID Connect Authentication. 
+ENABLE_OPENID_CONNECT: true
+# Write API code into the project. 
+WRITE_API: true
+# Write code comments into generated code. 
+WRITE_COMMENTS: true
+
+# The Auth roles required to be an admin in the site. 
+AUTH_ROLES_ADMIN: ['SiteAdmin']
+
+# Enable data import in the site. 
+ENABLE_IMPORT_DATA: true

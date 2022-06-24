@@ -38,16 +38,234 @@
 		{{/ifContainsAnyRoles}}
 				}
 				websocketReportNarrative(websocketReportNarrativeInner);
+				window.varsFq = JSON.parse('{{{toJsonObjectStringInApostrophes varsFq}}}');
+				pageGraph();
 			});
 		</script>
 {{/inline}}
 {{#*inline "htmUrlReportNarrative"}}{{pageUri}}?q={{query.q}}&amp;rows={{#if rows}}{{rows}}{{else}}{{pagination.rows}}{{/if}}&amp;rows={{#if start}}{{start}}{{else}}{{pagination.start}}{{/if}}{{#each query.fq}}{{#eq fq this}}{{else}}&fq={{fq}}:{{val}}{{/eq}}{{/each}}{{#each query.sort}}{{#eq sort this}}{{else}}&sort={{var}} {{order}}{{/eq}}{{/each}}{{/inline}}
 {{#*inline "htmHeadReportNarrativePage"}}{{> "htmTitleReportNarrativePage"}}{{> "htmMetaReportNarrativePage"}}{{> "htmStyleReportNarrativePage"}}{{> "htmScriptsReportNarrativePage"}}{{> "htmScriptReportNarrativePage"}}{{/inline}}
+{{#*inline "htmBodySearchReportNarrativePage"}}								<!-- #*inline "htmBodySearchReportNarrativePage" -->
+								<div>
+{{#each varsQ}}
+									<div class="w3-cell-row ">
+										<div class="w3-cell w3-cell-top ">
+											<label for="qReportNarrative_{{ @key }}">{{ displayName }}<sup class="w3-tiny "> ({{ classSimpleName }})</sup></label>
+										</div>
+									</div>
+									<div class="w3-cell-row ">
+										<div class="w3-cell w3-cell-top ">
+											<input id="qReportNarrative_{{ @key }}" placeholder="{{ displayName }}" class="" {{#eq ../var 'objectSuggest' }}onkeyup{{else}}onchange{{/eq}}="qChange(this); " data-var="{{ var }}" autocomplete="off="/>
+											<div class="pageSearchVal w3-tiny "></div>
+										</div>
+									</div>
+{{/each}}
+									<div class="w3-cell-row ">
+										<div class="w3-cell w3-cell-top ">
+											<label for="qReportNarrative_Start">start<sup class="w3-tiny "> (Long)</sup></label>
+										</div>
+									</div>
+									<div class="w3-cell-row ">
+										<div class="w3-cell w3-cell-top ">
+											<input id="qReportNarrative_start" placeholder="{{ displayName }}" class="" onchange="paramChange(this); " data-var="start" autocomplete="off="/>
+											<div class="pageSearchVal w3-tiny "></div>
+										</div>
+									</div>
+									<div class="w3-cell-row ">
+										<div class="w3-cell w3-cell-top ">
+											<label for="qReportNarrative_Rows">rows<sup class="w3-tiny "> (Long)</sup></label>
+										</div>
+									</div>
+									<div class="w3-cell-row ">
+										<div class="w3-cell w3-cell-top ">
+											<input id="qReportNarrative_rows" placeholder="{{ displayName }}" class="" onchange="paramChange(this); " data-var="rows" autocomplete="off="/>
+											<div class="pageSearchVal w3-tiny "></div>
+										</div>
+									</div>
+								</div>
+{{/inline}}
+{{#*inline "htmBodyFiltersReportNarrativePage"}}								<!-- #*inline "htmBodyFiltersReportNarrativePage" -->
+								<div>
+{{#each varsFq }}
+									<div class="">
+										<label for="fqReportNarrative_{{ @key }}">{{ displayName }}<sup class="w3-tiny "> ({{ classSimpleName }})</sup></label>
+										<div class="w3-cell-row ">
+											<div class="w3-cell w3-cell-top ">
+												<button id="buttonFacetReportNarrative_{{ @key }}" class="" onclick="facetFieldChange(this); " title="see values " data-var="{{ var }}" data-clear="{{#if facetField }}true{{else}}false{{/if}}"><i class="fas fa-list "></i></button>
+											</div>
+											<div class="w3-cell w3-cell-top ">
+												<input id="fqReportNarrative_{{ @key }}" placeholder="{{ displayName }}" class="" onchange="fqChange(this); " data-var="{{ var }}" autocomplete="off=" value="{{ val }}"/>
+											</div>
+										</div>
+									</div>
+									<div class="w3-tiny ">
+										<div class="pageSearchVal " id="pageSearchVal-fqReportNarrative_{{ @key }}">{{#if val }}fq={{ var }}:{{encodeURIComponent val }}{{/if}}</div>
+										<div class="pageSearchVal " id="pageSearchVal-buttonFacetReportNarrative_{{ @key }}">{{#if facetField.var }}facet.field={{ facetField.var }}{{/if}}</div>
+										<ol class="pageFacetField w3-small pageFacetFieldReportNarrative_{{ @key }} " id="pageFacetFieldReportNarrative_{{ @key }}">
+{{#each facetField.counts }}
+											<li class="cursor-pointer " data-class="ReportNarrative" data-var="{{ ../var }}" data-val="{{ @key }}" onclick="fqReplace(this); ">{{ @key }}: {{ this }}</li>
+{{/each}}
+										</ol>
+									</div>
+{{/each}}
+								</div>
+{{/inline}}
+{{#*inline "htmBodyRangeReportNarrativePage"}}								<!-- #*inline "htmBodyRangeReportNarrativePage" -->
+								<table class="w3-padding ">
+									<tr>
+										<td class="w3-padding w3-tiny " colspan="2">
+											<div class="pageSearchVal " id="pageSearchVal-pageFacetRangeGap-ReportNarrative">{{#if defaultRangeGap }}facet.range.gap={{encodeURIComponent defaultRangeGap }}{{/if}}</div>
+											<div class="pageSearchVal " id="pageSearchVal-pageFacetRangeStart-ReportNarrative">{{#if defaultRangeStart }}facet.range.start={{encodeURIComponent defaultRangeStart }}{{/if}}</div>
+											<div class="pageSearchVal " id="pageSearchVal-pageFacetRangeEnd-ReportNarrative">{{#if defaultRangeEnd }}facet.range.end={{encodeURIComponent defaultRangeEnd }}{{/if}}</div>
+											<div class="pageSearchVal " id="pageSearchVal-pageFacetRangeVar-ReportNarrative">{{#if defaultRangeVar }}facet.range={!tag=r1}{{encodeURIComponent defaultRangeVar }}{{/if}}</div>
+										</td>
+									</tr>
+								</table>
+								<table class="w3-padding ">
+									<tr class="">
+										<td class="">
+											<span>Range Gap</span>
+										</td>
+										<td class="">
+											<select name="facet.range.gap" id="pageFacetRangeGap-ReportNarrative" onchange="facetRangeChange(this, 'ReportNarrative'); ">
+												<option value="+1YEAR"{{#eq defaultRangeGap '+1YEAR'}} selected="selected"{{else}}{{/eq}}>Year</option>
+												<option value="+1MONTH"{{#eq defaultRangeGap '+1MONTH'}} selected="selected"{{else}}{{/eq}}>Month</option>
+												<option value="+1WEEK"{{#eq defaultRangeGap '+1WEEK'}} selected="selected"{{else}}{{/eq}}>Week</option>
+												<option value="+1DAY"{{#eq defaultRangeGap '+1DAY'}} selected="selected"{{else}}{{#if defaultRangeGap}}{{else}} selected="selected"{{/if}}{{/eq}}>Day</option>
+												<option value="+1HOUR"{{#eq defaultRangeGap '+1HOUR'}} selected="selected"{{else}}{{/eq}}>Hour</option>
+												<option value="+1MINUTE"{{#eq defaultRangeGap '+1MINUTE'}} selected="selected"{{else}}{{/eq}}>Minute</option>
+												<option value="+1SECOND"{{#eq defaultRangeGap '+1SECOND'}} selected="selected"{{else}}{{/eq}}>Second</option>
+											</select>
+										</td>
+									</tr>
+									<tr class="">
+										<td class="" colspan="2">
+											<span>Range Start</span>
+										</td>
+									</tr>
+									<tr class="">
+										<td class="" colspan="2">
+											<span><input type="datetime-local" name="facetRangeStart" id="pageFacetRangeStart-ReportNarrative" value="{{formatZonedDateTime defaultRangeStart "yyyy-MM-dd'T'HH:mm" defaultLocaleId defaultZoneId}}" onclick="facetRangeChange(this, 'ReportNarrative'); "/></span>
+										</td>
+									</tr>
+									<tr class="">
+										<td class="" colspan="2">
+											<span>Range End</span>
+										</td>
+									</tr>
+									<tr class="">
+										<td class="" colspan="2">
+											<span><input type="datetime-local" name="facetRangeEnd" id="pageFacetRangeEnd-ReportNarrative" value="{{formatZonedDateTime defaultRangeEnd "yyyy-MM-dd'T'HH:mm" defaultLocaleId defaultZoneId}}" onclick="facetRangeChange(this, 'ReportNarrative'); "/></span>
+										</td>
+									</tr>
+								</table>
+								<table class="w3-padding ">
+{{#each varsRange }}
+									<tr class="">
+										<td class="">
+											<span><input type="radio" name="pageFacetRange" class="pageFacetRange " id="pageFacetRangeReportNarrative_{{ @key }}" value="{{ var }}"{{#eq defaultRangeVar var }} checked="checked"{{/eq}} onclick="facetRangeChange(this, 'ReportNarrative'); "/></span>
+										</td>
+										<td class="">
+											<label for="pageFacetRangeReportNarrative_{{ @key }}">{{ displayName }}</label>
+										</td>
+									</tr>
+{{/each}}
+								</table>
+{{/inline}}
+{{#*inline "htmBodyPivotReportNarrativePage"}}								<!-- #*inline "htmBodyPivotReportNarrativePage" -->
+								<div style="display: none; " class="w3-padding w3-tiny " id="pageSearchVal-PivotReportNarrativeHidden">
+{{#each defaultPivotVars }}
+									<div class="pageSearchVal-PivotReportNarrativeHidden " id="pageSearchVal-PivotReportNarrativeHidden_{{ this }}">{{ this }}</div>
+{{/each}}
+								</div>
+								<div class="w3-padding w3-tiny " id="pageSearchVal-PivotReportNarrative">
+{{#if defaultPivotVars }}
+									<div class="pageSearchVal pageSearchVal-PivotReportNarrative " id="pageSearchVal-PivotReportNarrative_1">facet.pivot={{#each defaultPivotVars }}{{#if @index }},{{/if}}{{ this }}{{/each}}</div>
+{{/if}}
+								</div>
+								<table class="w3-table ">
+{{#each varsFq }}
+									<tr class="">
+										<td class="">
+											<span><input type="checkbox" name="pageFacetPivot" class="pageFacetPivot " id="pageFacetPivotReportNarrative_{{ @key }}" value="{{ var }}"{{#if pivot }} checked="checked"{{/if}} onclick="facetPivotChange(this, 'ReportNarrative'); "/></span>
+										</td>
+										<td class="w3-cell ">
+											<label for="pageFacetPivotReportNarrative_{{ @key }}">{{ displayName }}</label>
+										</td>
+									</tr>
+{{/each}}
+								</table>
+{{/inline}}
+{{#*inline "htmBodyFieldListReportNarrativePage"}}								<!-- #*inline "htmBodyFieldListReportNarrativePage" -->
+								<div style="display: none; " class="w3-padding w3-tiny " id="pageSearchVal-FieldListReportNarrativeHidden">
+{{#each defaultFieldListVars }}
+									<div class="pageSearchVal-FieldListReportNarrativeHidden " id="pageSearchVal-FieldListReportNarrativeHidden_{{ this }}">{{ this }}</div>
+{{/each}}
+								</div>
+								<div class="w3-padding w3-tiny " id="pageSearchVal-FieldListReportNarrative">
+{{#if defaultFieldListVars }}
+									<div class="pageSearchVal pageSearchVal-FieldListReportNarrative " id="pageSearchVal-FieldListReportNarrative_1">fl={{#each defaultFieldListVars }}{{#if @index }},{{/if}}{{ this }}{{/each}}</div>
+{{/if}}
+								</div>
+								<table class="w3-table ">
+{{#each varsFq }}
+									<tr class="">
+										<td class="">
+											<span><input type="checkbox" name="pageFieldList" class="pageFieldList " id="pageFieldListReportNarrative_{{ @key }}" value="{{ var }}"{{#if fieldList }} checked="checked"{{/if}} onclick="facetFieldListChange(this, 'ReportNarrative'); "/></span>
+										</td>
+										<td class="w3-cell ">
+											<label for="pageFieldListReportNarrative_{{ @key }}">{{ displayName }}</label>
+										</td>
+									</tr>
+{{/each}}
+								</table>
+{{/inline}}
+{{#*inline "htmBodyStatsReportNarrativePage"}}								<!-- #*inline "htmBodyStatsReportNarrativePage" -->
+								<div style="display: none; " class="w3-padding w3-tiny " id="pageSearchVal-StatsReportNarrativeHidden">
+{{#each defaultStatsVars }}
+									<div class="pageSearchVal-StatsReportNarrativeHidden " id="pageSearchVal-StatsReportNarrativeHidden_{{ this }}">{{ this }}</div>
+{{/each}}
+								</div>
+								<div class="w3-padding w3-tiny " id="pageSearchVal-StatsReportNarrative">
+{{#if defaultStatsVars }}
+{{#each defaultStatsVars }}									<div class="pageSearchVal pageSearchVal-StatsReportNarrative_{{ this }} " id="pageSearchVal-StatsReportNarrative_{{ this }}">stats.field={{ this }}</div>
+{{/each}}{{/if}}
+								</div>
+								<table class="w3-table ">
+{{#each varsFq }}
+{{#if enableStats }}
+									<tr class="">
+										<td class="">
+											<span><input type="checkbox" name="pageStats" class="pageStats " id="pageStatsReportNarrative_{{ @key }}" value="{{ var }}"{{#if ./stats }} checked="checked"{{/if}} onclick="facetStatsChange(this, 'ReportNarrative'); "/></span>
+										</td>
+										<td class="w3-cell ">
+											<div>
+												<label for="pageStatsReportNarrative_{{ @key }}">{{ displayName }}</label>
+											</div>
+											<div class="pageStatsField w3-small pageStatsFieldReportNarrative_{{ @key }} " id="pageStatsFieldReportNarrative_{{ @key }}">
+{{#if ./stats }}
+{{#each ./stats }}
+{{#eq @key 'name' }}{{else}}
+												<div data-class="ReportNarrative" data-var="{{ ../var }}" data-val="{{ @key }}">{{ @key }}: {{ this }}</div>
+{{/eq}}
+{{/each}}
+{{/if}}
+											</div>
+										</td>
+									</tr>
+{{/if}}
+{{/each}}
+								</table>
+{{/inline}}
+{{#*inline "htmBodyMenuReportNarrativePage"}}		<!-- #*inline "htmBodyMenuReportNarrativePage" -->
+{{> "htmBodyMenuBaseModelPage"}}{{/inline}}
+{{#*inline "htmBodyGraphReportNarrativePage"}}		<!-- #*inline "htmBodyGraphReportNarrativePage" -->
+<div id="htmBodyGraphBaseModelPage" class="htmBodyGraph "></div>{{/inline}}
 {{#*inline "htmBodyCount0ReportNarrativePage"}}		<!-- #*inline "htmBodyCount0ReportNarrativePage" -->
 		<h1>
 			<a href="{{pageUri}}" class="w3-bar-item w3-btn w3-center w3-block w3-light-green w3-hover-light-green">
 				{{#if contextIconCssClasses}}
-					<i class="contextIconCssClasses site-menu-icon "></i>
+					<i class="{{ contextIconCssClasses }} site-menu-icon "></i>
 				{{/if}}
 				<span class="">report narratives</span>
 			</a>
@@ -55,7 +273,7 @@
 		<h2>
 			<span class="w3-bar-item w3-padding w3-center w3-block w3-light-green">
 				{{#if contextIconCssClasses}}
-					<i class="contextIconCssClasses + " site-menu-icon "></i>
+					<i class="{{ contextIconCssClasses }}  site-menu-icon "></i>
 				{{/if}}
 				<span class="">no report narrative found</span>
 			</span>
@@ -65,7 +283,7 @@
 		<h1 class="w3-center ">
 			<a href="{{pageUri}}" class="w3-bar-item w3-btn w3-block w3-light-green w3-hover-light-green">
 			{{#if contextIconCssClasses}}
-				<i class="contextIconCssClasses site-menu-icon "></i>
+				<i class="{{ contextIconCssClasses }} site-menu-icon "></i>
 			{{/if}}
 				<span class="">report narrative</span>
 			</a>
@@ -75,13 +293,12 @@
 				<span class="">{{reportNarrative_.objectTitle}}</span>
 			</span>
 		</h2>
-{{#block "htmForm"}}{{/block}}
 {{/inline}}
 {{#*inline "htmBodyCount1ReportNarrativePage"}}		<!-- #*inline "htmBodyCount1ReportNarrativePage" -->
 		<h1>
 			<a href="{{pageUri}}" class="w3-bar-item w3-btn w3-center w3-block w3-light-green w3-hover-light-green">
 	{{#if contextIconCssClasses}}
-				<i class="contextIconCssClasses + " site-menu-icon "></i>
+				<i class="{{ contextIconCssClasses }} site-menu-icon "></i>
 	{{/if}}
 				<span class="">report narratives</span>
 			</a>
@@ -119,7 +336,7 @@
 		<h1>
 			<a href="{{pageUri}}" class="w3-bar-item w3-btn w3-center w3-block w3-light-green w3-hover-light-green">
 	{{#if contextIconCssClasses}}
-				<i class="contextIconCssClasses + " site-menu-icon "></i>
+				<i class="{{ contextIconCssClasses }} site-menu-icon "></i>
 	{{/if}}
 				<span class="">report narratives</span>
 			</a>
@@ -155,14 +372,18 @@
 {{> "table1ReportNarrativePage"}}
 		</div>
 {{/inline}}
-{{#*inline "htmFormReportNarrativePage"}}	{{#if pk}}
+{{#*inline "htmFormReportNarrativePage"}}
 		<!-- #*inline "htmForm" -->
-		<form action="" id="ReportNarrativeForm" style="display: inline-block; width: 100%; " onsubmit="event.preventDefault(); return false; ">
+		<form action="/api/report-narrative" id="ReportNarrativeForm" class="pageForm " style="" onsubmit="event.preventDefault(); return false; ">
+{{#if pk}}
 			<input name="pk" class="valuePk" type="hidden" value="{{pk}}"/>
+{{/if}}
 			<input name="focusId" type="hidden"/>
+			<input name="pageResponse" id="pageResponse" class="pageResponse"  value='{{{toJsonObjectStringInApostrophes pageResponse }}}' type="hidden"/>
 		</form>
+{{#if id}}
 {{#block "htmForm_searchpageReportNarrative"}}{{/block}}
-	{{/if}}
+{{/if}}
 {{/inline}}
 {{#*inline "htmFormReportNarrativePage_putimportReportNarrative"}}
 		<button
@@ -172,7 +393,7 @@
 			<i class="fas fa-file-import "></i>
 			Import report narratives
 		</button>
-		<div id="putimportReportNarrativeModal" class="w3-modal w3-padding-32 ">
+		<div id="putimportReportNarrativeModal" class="w3-modal ">
 			<div class="w3-modal-content ">
 				<div class="w3-card-4 ">
 					<header class="w3-container w3-light-green">
@@ -185,7 +406,7 @@
 						<div class="w3-cell-row ">
 							<textarea
 								class="PUTImport_searchList w3-input w3-border "
-								style="height: 400px; "
+								style="height: 300px; "
 								placeholder="{ 'searchList': [ { 'pk': ... , 'saves': [ ... ] }, ... ] }"
 								></textarea>
 						</div>
@@ -206,7 +427,7 @@
 			<i class="fas fa-file-plus "></i>
 			Create a report narrative
 		</button>
-		<div id="postReportNarrativeModal" class="w3-modal w3-padding-32 ">
+		<div id="postReportNarrativeModal" class="w3-modal ">
 			<div class="w3-modal-content ">
 				<div class="w3-card-4 ">
 					<header class="w3-container w3-light-green">
@@ -247,7 +468,7 @@
 			<i class="fas fa-edit "></i>
 			Modify report narratives
 		</button>
-		<div id="patchReportNarrativeModal" class="w3-modal w3-padding-32 ">
+		<div id="patchReportNarrativeModal" class="w3-modal ">
 			<div class="w3-modal-content ">
 				<div class="w3-card-4 ">
 					<header class="w3-container w3-light-green">
@@ -279,15 +500,9 @@
 		</div>
 {{/inline}}
 {{#*inline "htmFormReportNarrativePage_searchpageReportNarrative"}}
-		<div id="searchpageReportNarrativeModal" class="w3-padding-32 ">
+		<div id="searchpageReportNarrativeModal" class="">
 			<div class="">
 				<div class="w3-card-4 ">
-					<header class="w3-container w3-light-green">
-	{{#eq "Page" classApiMethodMethod}}
-						<span class="w3-button w3-display-topright " onclick="$('#searchpageReportNarrativeModal').hide(); ">×</span>
-	{{/eq}}
-						<h2 class="w3-padding ">Delete report narratives</h2>
-					</header>
 					<div class="" id="searchpageReportNarrativeFormValues">
 						<div id="searchpageReportNarrativeForm">
 							<div class="w3-cell-row ">
@@ -306,23 +521,100 @@
 {{> "htmNarrativeName" classApiMethodMethod="Page"}}
 							</div>
 						</div>
-						<button
-							class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-margin w3-light-green "
-							onclick="searchpageReportNarrative(); "
-							>Delete report narratives</button>
 					</div>
 				</div>
 			</div>
 		</div>
 {{/inline}}
+{{#*inline "htmBodySidebarReportNarrativePage"}}
+				<div class="w3-dropdown-click w3-bar-block min-width-300px ">
+					<div class="min-width-300px ">
+						<span title="Search" class="siteSidebarToggle w3-padding-small w3-hover-black w3-light-green " onclick="$('.siteSidebarToggleStats').hide(); $('.siteSidebarToggleFieldList').hide(); $('.siteSidebarToggleFilters').hide(); $('.siteSidebarToggleRange').hide(); $('.siteSidebarTogglePivot').hide(); $('.siteSidebarToggleSearch').toggle(); $('.siteSidebarToggle').removeClass('w3-black'); $('.siteSidebarToggle').addClass('w3-light-green'); $(this).addClass('w3-black'); $(this).removeClass('w3-light-green'); "><i class="fad fa-magnifying-glass hover-box-shadow w3-xlarge "></i> Search</span>
+						<span title="Filters" class="siteSidebarToggle w3-padding-small w3-hover-black w3-light-green " onclick="$('.siteSidebarToggleStats').hide(); $('.siteSidebarToggleFieldList').hide(); $('.siteSidebarToggleSearch').hide(); $('.siteSidebarToggleRange').hide(); $('.siteSidebarTogglePivot').hide(); $('.siteSidebarToggleFilters').toggle(); $('.siteSidebarToggle').removeClass('w3-black'); $('.siteSidebarToggle').addClass('w3-light-green'); $(this).addClass('w3-black'); $(this).removeClass('w3-light-green'); "><i class="fad fa-filters hover-box-shadow w3-xlarge "></i> Filters</span>
+						<span title="Range" class="siteSidebarToggle w3-padding-small w3-hover-black w3-light-green " onclick="$('.siteSidebarToggleStats').hide(); $('.siteSidebarToggleFieldList').hide(); $('.siteSidebarToggleSearch').hide(); $('.siteSidebarToggleFilters').hide(); $('.siteSidebarTogglePivot').hide(); $('.siteSidebarToggleRange').toggle(); $('.siteSidebarToggle').removeClass('w3-black'); $('.siteSidebarToggle').addClass('w3-light-green'); $(this).addClass('w3-black'); $(this).removeClass('w3-light-green'); "><i class="fad fa-calendar-range hover-box-shadow w3-xlarge "></i> Range</span>
+						<span title="Pivot" class="siteSidebarToggle w3-padding-small w3-hover-black w3-light-green " onclick="$('.siteSidebarToggleStats').hide(); $('.siteSidebarToggleFieldList').hide(); $('.siteSidebarToggleSearch').hide(); $('.siteSidebarToggleFilters').hide(); $('.siteSidebarToggleRange').hide(); $('.siteSidebarTogglePivot').toggle(); $('.siteSidebarToggle').removeClass('w3-black'); $('.siteSidebarToggle').addClass('w3-light-green'); $(this).addClass('w3-black'); $(this).removeClass('w3-light-green'); "><i class="fad fa-table-pivot hover-box-shadow w3-xlarge "></i> Pivot</span>
+						<span title="FieldList" class="siteSidebarToggle w3-padding-small w3-hover-black w3-light-green " onclick="$('.siteSidebarToggleStats').hide(); $('.siteSidebarTogglePivot').hide(); $('.siteSidebarToggleSearch').hide(); $('.siteSidebarToggleFilters').hide(); $('.siteSidebarToggleRange').hide(); $('.siteSidebarToggleFieldList').toggle(); $('.siteSidebarToggle').removeClass('w3-black'); $('.siteSidebarToggle').addClass('w3-light-green'); $(this).addClass('w3-black'); $(this).removeClass('w3-light-green'); "><i class="fad fa-list-ul hover-box-shadow w3-xlarge "></i> FieldList</span>
+						<span title="Stats" class="siteSidebarToggle w3-padding-small w3-hover-black w3-light-green " onclick="$('.siteSidebarToggleFieldList').hide(); $('.siteSidebarTogglePivot').hide(); $('.siteSidebarToggleSearch').hide(); $('.siteSidebarToggleFilters').hide(); $('.siteSidebarToggleRange').hide(); $('.siteSidebarToggleStats').toggle(); $('.siteSidebarToggle').removeClass('w3-black'); $('.siteSidebarToggle').addClass('w3-light-green'); $(this).addClass('w3-black'); $(this).removeClass('w3-light-green'); "><i class="fad fa-chart-candlestick hover-box-shadow w3-xlarge "></i> Stats</span>
+						<a title="API" class="siteSidebarToggle w3-padding-small w3-hover-black w3-light-green " href="{{ apiUri }}{{ queryStr }}"><i class="fad fa-brackets-curly hover-box-shadow w3-xlarge "></i> API</a>
+					</div>
+					<div class=" ">
+						<div class="siteSidebarToggle siteSidebarToggleSearch w3-dropdown-content min-width-300px w3-white w3-border w3-border-light-green " style="display: none; ">
+							<div class="w3-bar w3-light-green ">
+								<span class="w3-bar-item ">
+								<i class="fad fa-magnifying-glass "></i> Search</span>
+							</div>
+							<div class="w3-bar-block ">
+{{#block "htmBodySearch"}}{{/block}}
+							</div>
+						</div>
+						<div  class="siteSidebarToggle siteSidebarToggleFilters w3-dropdown-content min-width-300px w3-white w3-border w3-border-light-green " style="display: none; ">
+							<div class="w3-bar w3-light-green ">
+								<span class="w3-bar-item ">
+								<i class="fad fa-filters "></i> Filters</span>
+							</div>
+							<div class="w3-bar-block ">
+{{#block "htmBodyFilters"}}{{/block}}
+							</div>
+						</div>
+						<div  class="siteSidebarToggle siteSidebarToggleRange w3-dropdown-content min-width-300px w3-white w3-border w3-border-light-green " style="display: none; ">
+							<div class="w3-bar w3-light-green  ">
+								<span class="w3-bar-item ">
+								<i class="fad fa-calendar-range "></i> Range</span>
+							</div>
+							<div class="w3-bar-block ">
+{{#block "htmBodyRange"}}{{/block}}
+							</div>
+						</div>
+						<div  class="siteSidebarToggle siteSidebarTogglePivot w3-dropdown-content min-width-300px w3-white w3-border w3-border-light-green " style="display: none; ">
+							<div class="w3-bar w3-light-green ">
+								<span class="w3-bar-item ">
+								<i class="fad fa-table-pivot "></i> Pivot</span>
+							</div>
+							<div class="w3-bar-block ">
+{{#block "htmBodyPivot"}}{{/block}}
+							</div>
+						</div>
+						<div  class="siteSidebarToggle siteSidebarToggleFieldList w3-dropdown-content min-width-300px w3-white w3-border w3-border-light-green " style="display: none; ">
+							<div class="w3-bar w3-light-green ">
+								<span class="w3-bar-item ">
+								<i class="fad fa-list-ul "></i> Field List</span>
+							</div>
+							<div class="w3-bar-block ">
+{{#block "htmBodyFieldList"}}{{/block}}
+							</div>
+						</div>
+						<div  class="siteSidebarToggle siteSidebarToggleStats w3-dropdown-content min-width-300px w3-white w3-border w3-border-light-green " style="display: none; ">
+							<div class="w3-bar w3-light-green ">
+								<span class="w3-bar-item ">
+								<i class="fad fa-chart-candlestick "></i> Stats</span>
+							</div>
+							<div class="w3-bar-block ">
+{{#block "htmBodyStats"}}{{/block}}
+							</div>
+						</div>
+					</div>
+				</div>
+{{/inline}}
 {{#*inline "htmBodyStartReportNarrativePage"}}
 {{> "htmBodyStartBaseModelPage"}}
+{{/inline}}
+{{#*inline "htmBodyMiddleReportNarrativePage"}}
+{{> "htmBodyMiddleBaseModelPage"}}
 {{/inline}}
 {{#*inline "htmBodyEndReportNarrativePage"}}
 {{> "htmBodyEndBaseModelPage"}}
 {{/inline}}
 {{#*inline "htmBodyReportNarrativePage"}}
 {{#block "htmBodyStart"}}{{/block}}
+{{#block "htmBodyMiddle"}}{{/block}}
+{{#block "htmBodyEnd"}}{{/block}}
+{{/inline}}
+{{#*inline "htmBodyMiddleReportNarrativePage"}}
+		<div class="w3-bar w3-content ">
+{{#block "htmBodySidebar"}}{{/block}}
+		</div>
+	<div class="pageContent w3-content ">
+{{#block "htmBodyGraph"}}{{/block}}
 	{{#eq reportNarrativeCount int0}}
 {{#block "htmBodyCount0"}}{{/block}}
 	{{else}}
@@ -336,59 +628,62 @@
 {{#block "htmBodyAll"}}{{/block}}
 		{{/eq}}
 	{{/eq}}
+{{#block "htmForm"}}{{/block}}
 {{#block "htmForms"}}{{/block}}
-{{#block "htmBodyEnd"}}{{/block}}
+	</div>
 {{/inline}}
 {{#*inline "table1ReportNarrativePage"}}
-		<table class="w3-table w3-bordered w3-striped w3-border w3-hoverable ">
-			{{> table2ReportNarrativePage}}
-		</table>
+		<div class="w3-responsive ">
+			<table class="w3-table w3-bordered w3-striped w3-border w3-hoverable ">
+{{> table2ReportNarrativePage}}
+			</table>
+		</div>
 {{/inline}}
 {{#*inline "table2ReportNarrativePage"}}
-		{{> "thead1ReportNarrativePage"}}
-		{{> "tbody1ReportNarrativePage"}}
-		{{> "tfoot1ReportNarrativePage"}}
-	{{/inline}}
+{{> "thead1ReportNarrativePage"}}
+{{> "tbody1ReportNarrativePage"}}
+{{> "tfoot1ReportNarrativePage"}}
+{{/inline}}
 {{#*inline "thead1ReportNarrativePage"}}
-		<thead class="w3-light-green w3-hover-light-green">
-			{{> thead2ReportNarrativePage}}
-		</thead>
-	{{/inline}}
+				<thead class="w3-light-green w3-hover-light-green">
+{{> thead2ReportNarrativePage}}
+				</thead>
+{{/inline}}
 {{#*inline "thead2ReportNarrativePage"}}
 			<tr>
-				<th>created</th>
-				<th></th>
+						<th>created</th>
+						<th></th>
 			</tr>
 {{/inline}}
 {{#*inline "tbody1ReportNarrativePage"}}
-		<tbody>
-			{{> tbody2ReportNarrativePage}}
-		</tbody>
+				<tbody>
+{{> tbody2ReportNarrativePage}}
+				</tbody>
 {{/inline}}
 {{#*inline "tbody2ReportNarrativePage"}}
 		{{#each listReportNarrative}}
-			<tr>
-					<td>
-						<a href="{{pageUrlPk}}">
-							<span class="white-space-pre-wrap ">{{siteZonedDateTimeFormat created "MMM d, yyyy h:mm:ss a" siteLocale}}</span>
-						</a>
-					</td>
-					<td>
-						<a href="{{pageUrlPk}}">
-							<i class="fad fa-calendar-pen "></i>
-							<span class="white-space-pre-wrap ">{{objectTitle}}</span>
-						</a>
-					</td>
-			</tr>
+					<tr>
+						<td>
+							<a href="{{pageUrlPk}}">
+								<span class="white-space-pre-wrap ">{{siteZonedDateTimeFormat created "MMM d, yyyy h:mm:ss a" siteLocale}}</span>
+							</a>
+						</td>
+						<td>
+							<a href="{{pageUrlPk}}">
+								<i class="fad fa-calendar-pen "></i>
+								<span class="white-space-pre-wrap ">{{objectTitle}}</span>
+							</a>
+						</td>
+					</tr>
 		{{/each}}
 {{/inline}}
 {{#*inline "tfoot1ReportNarrativePage"}}
-		<tfoot class="w3-light-green w3-hover-light-green">
-			{{> tfoot2ReportNarrativePage}}
-		</tfoot>
+				<tfoot class="w3-light-green w3-hover-light-green">
+{{> tfoot2ReportNarrativePage}}
+				</tfoot>
 {{/inline}}
 {{#*inline "tfoot2ReportNarrativePage"}}
-		<tr>
+			<tr>
 			{{#if getColumnCreated}}
 				<td>
 				</td>
@@ -397,7 +692,7 @@
 				<td>
 				</td>
 			{{/if}}
-		</tr>
+			</tr>
 	{{/inline}}
 {{#*inline "htmFormsReportNarrativePage"}}
 	{{#ifContainsAnyRoles roles rolesRequired}}
@@ -444,14 +739,14 @@
 					id="suggestReportNarrative{{id}}"
 					autocomplete="off"
 					oninput="suggestReportNarrativeObjectSuggest( [ { 'name': 'q', 'value': 'objectSuggest:' + $(this).val() }, { 'name': 'rows', 'value': '10' }, { 'name': 'fl', 'value': 'classCanonicalName,pk,pageUrlPk,objectTitle' } ], $('#suggestListReportNarrative{{id}}'), {{pk}}; "
-					onkeyup="if (event.keyCode === 13) { event.preventDefault(); window.location.href = '/api/report-narrative?q={{query1}}:' + encodeURIComponent(this.value) + '{{fqs}}{{sorts}}&amp;rows={{start2}}&amp;rows={{rows1}}"
+					onkeyup="if (event.keyCode === 13) { event.preventDefault(); window.location.href = '/report-narrative?q={{query1}}:' + encodeURIComponent(this.value) + '{{fqs}}{{sorts}}&amp;rows={{start2}}&amp;rows={{rows1}}"
 				{{#if listReportNarrative}}
 					value="{{query2}}"
 				{{/if}}
 				/>
 				<button
 					class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-bar-item w3-light-green "
-					onclick="window.location.href = '/api/report-narrative?q=&quot;, query1, &quot;:' + encodeURIComponent(this.previousElementSibling.value) + '&quot;, fqs, sorts, &quot;&amp;rows=&quot;, start2, &quot;&amp;rows=&quot;, rows1, &quot;'; "
+					onclick="window.location.href = '/report-narrative?q=&quot;, query1, &quot;:' + encodeURIComponent(this.previousElementSibling.value) + '&quot;, fqs, sorts, &quot;&amp;rows=&quot;, start2, &quot;&amp;rows=&quot;, rows1, &quot;'; "
 					>
 					<i class="fas fa-search "></i>
 				</button>
@@ -463,7 +758,7 @@
 				</div>
 			</div>
 			<div class="">
-				<a href="/api/report-narrative" class="">
+				<a href="/report-narrative" class="">
 					<i class="fad fa-calendar-pen"></i>
 					see all the report narratives
 				</a>
@@ -551,7 +846,7 @@
 										<div id="suggest{{classApiMethodMethod}}ReportNarrativeAssigneeKey">
 											<div class="w3-card ">
 												<div class="w3-cell-row ">
-													<a href="/user?fq=narrativeKeys:{{reportNarrative_.pk}}" class="w3-cell w3-btn w3-center h4 w3-block h4 w3-teal w3-hover-teal ">
+													<a href="/user?fq=narrativeKeys:{{reportNarrative_.pk}}" class="w3-cell w3-btn w3-center h4 w3-block h4 w3-gray w3-hover-gray ">
 														<i class="far fa-user-cog "></i>
 														assignee
 													</a>
@@ -577,7 +872,7 @@
 	{{#eq 'Page' classApiMethodMethod}}
 																<div class="w3-cell-row ">
 																	<button
-																		 class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-teal "
+																		 class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-gray "
 																		 id="{{classApiMethodMethod}}_assigneeKey_add"
 																		 onclick="$(this).addClass('w3-disabled'); this.disabled = true; this.innerHTML = 'Sending…'; postSiteUserVals({ narrativeKeys: [ '{{pk}}' ] }, function() { $('#{{classApiMethodMethod}}_assigneeKey_add').disabled = false; $('#{{classApiMethodMethod}}_assigneeKey_add').innerHTML = 'add a site user'; }, function() { addError($('#{{classApiMethodMethod}}assigneeKey')); });"
 																		>add a site user</button>

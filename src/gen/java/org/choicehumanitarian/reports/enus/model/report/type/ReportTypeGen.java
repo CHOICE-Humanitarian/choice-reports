@@ -1,73 +1,92 @@
 package org.choicehumanitarian.reports.enus.model.report.type;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.Arrays;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import java.util.Date;
-import org.slf4j.LoggerFactory;
-import org.computate.search.serialize.ComputateLocalDateDeserializer;
-import java.util.HashMap;
-import org.apache.commons.lang3.StringUtils;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import org.computate.vertx.api.ApiRequest;
-import org.computate.search.response.solr.SolrResponse;
-import java.lang.Long;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import java.util.Map;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.choicehumanitarian.reports.enus.model.base.BaseModel;
 import io.vertx.core.json.JsonObject;
-import java.lang.String;
-import java.math.RoundingMode;
-import org.choicehumanitarian.reports.enus.model.report.schedule.ReportSchedule;
-import org.slf4j.Logger;
-import java.math.MathContext;
-import io.vertx.core.Promise;
+import java.util.Date;
 import java.util.Set;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import io.vertx.core.Future;
-import org.computate.search.serialize.ComputateZonedDateTimeDeserializer;
-import org.choicehumanitarian.reports.enus.base.BaseModel;
-import java.util.Objects;
-import org.computate.search.serialize.ComputateLocalDateSerializer;
-import io.vertx.core.json.JsonArray;
-import java.util.List;
-import org.computate.search.wrap.Wrap;
-import org.apache.commons.lang3.math.NumberUtils;
-import java.util.Optional;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import org.computate.search.serialize.ComputateZonedDateTimeSerializer;
+import org.computate.vertx.api.ApiRequest;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
+import java.util.Optional;
+import java.util.List;
+import org.apache.commons.lang3.StringUtils;
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.computate.search.serialize.ComputateLocalDateSerializer;
+import org.computate.search.serialize.ComputateLocalDateDeserializer;
+import org.computate.search.serialize.ComputateZonedDateTimeSerializer;
+import org.computate.search.serialize.ComputateZonedDateTimeDeserializer;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import java.math.MathContext;
+import org.apache.commons.lang3.math.NumberUtils;
+import java.text.NumberFormat;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.HashMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.math.RoundingMode;
+import java.util.Map;
+import java.lang.Long;
+import org.choicehumanitarian.reports.enus.model.report.schedule.ReportSchedule;
+import java.lang.String;
+import io.vertx.core.json.JsonArray;
+import org.computate.search.wrap.Wrap;
+import io.vertx.core.Promise;
+import io.vertx.core.Future;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.computate.search.response.solr.SolrResponse;
 
 /**	
- * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.type.ReportType&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
+ * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.type.ReportType">Find the class ReportType in Solr. </a>
+ * <br><br>Delete the class ReportType in Solr. 
+ * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.type.ReportType&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
+ * <br>Delete  the package org.choicehumanitarian.reports.enus.model.report.type in Solr. 
+ * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomEnsemble_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.type&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
+ * <br>Delete  the project choice-reports in Solr. 
+ * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;siteNom_indexed_string:choice\-reports&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
  * <br>
  **/
 public abstract class ReportTypeGen<DEV> extends BaseModel {
 	protected static final Logger LOG = LoggerFactory.getLogger(ReportType.class);
 
-	public static final String ReportType_AName = "a report type";
-	public static final String ReportType_This = "this ";
-	public static final String ReportType_ThisName = "this report type";
-	public static final String ReportType_A = "a ";
-	public static final String ReportType_TheName = "the report type";
-	public static final String ReportType_NameSingular = "report type";
-	public static final String ReportType_NamePlural = "report types";
-	public static final String ReportType_NameActual = "current report type";
-	public static final String ReportType_AllName = "all the report types";
-	public static final String ReportType_SearchAllNameBy = "search report types by ";
-	public static final String ReportType_Title = "report types";
-	public static final String ReportType_ThePluralName = "the report types";
-	public static final String ReportType_NoNameFound = "no report type found";
-	public static final String ReportType_NameVar = "reportType";
-	public static final String ReportType_OfName = "of report type";
-	public static final String ReportType_ANameAdjective = "a report type";
-	public static final String ReportType_NameAdjectiveSingular = "report type";
-	public static final String ReportType_NameAdjectivePlural = "report types";
+	public static final String ReportType_AName_enUS = "a report type";
+	public static final String ReportType_This_enUS = "this ";
+	public static final String ReportType_ThisName_enUS = "this report type";
+	public static final String ReportType_A_enUS = "a ";
+	public static final String ReportType_TheName_enUS = "the report type";
+	public static final String ReportType_NameSingular_enUS = "report type";
+	public static final String ReportType_NamePlural_enUS = "report types";
+	public static final String ReportType_NameActual_enUS = "current report type";
+	public static final String ReportType_AllName_enUS = "all the report types";
+	public static final String ReportType_SearchAllNameBy_enUS = "search report types by ";
+	public static final String ReportType_Title_enUS = "report types";
+	public static final String ReportType_ThePluralName_enUS = "the report types";
+	public static final String ReportType_NoNameFound_enUS = "no report type found";
+	public static final String ReportType_NameVar_enUS = "reportType";
+	public static final String ReportType_OfName_enUS = "of report type";
+	public static final String ReportType_ANameAdjective_enUS = "a report type";
+	public static final String ReportType_NameAdjectiveSingular_enUS = "report type";
+	public static final String ReportType_NameAdjectivePlural_enUS = "report types";
+	public static final String PUTImport_enUS_Uri = "/api/report-type-import";
+	public static final String PUTImport_enUS_ImageUri = "/png/api/report-type-import-999.png";
+	public static final String POST_enUS_Uri = "/api/report-type";
+	public static final String POST_enUS_ImageUri = "/png/api/report-type-999.png";
+	public static final String PATCH_enUS_Uri = "/api/report-type";
+	public static final String PATCH_enUS_ImageUri = "/png/api/report-type-999.png";
+	public static final String GET_enUS_Uri = "/api/report-type/{id}";
+	public static final String GET_enUS_ImageUri = "/png/api/report-type/{id}-999.png";
+	public static final String Search_enUS_Uri = "/api/report-type";
+	public static final String Search_enUS_ImageUri = "/png/api/report-type-999.png";
+	public static final String SearchPage_enUS_Uri = "/report-type";
+	public static final String SearchPage_enUS_ImageUri = "/png/report-type-999.png";
+
 	public static final String ReportType_Color = "light-green";
 	public static final String ReportType_IconGroup = "duotone";
 	public static final String ReportType_IconName = "list-dropdown";
@@ -88,7 +107,7 @@ public abstract class ReportTypeGen<DEV> extends BaseModel {
 
 	/**	<br> The entity scheduleKeys
 	 *  It is constructed before being initialized with the constructor by default. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.type.ReportType&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:scheduleKeys">Find the entity scheduleKeys in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.type.ReportType&fq=entiteVar_enUS_indexed_string:scheduleKeys">Find the entity scheduleKeys in Solr</a>
 	 * <br>
 	 * @param l is the entity already constructed. 
 	 **/
@@ -112,8 +131,8 @@ public abstract class ReportTypeGen<DEV> extends BaseModel {
 			return Long.parseLong(o);
 		return null;
 	}
-	public ReportType addScheduleKeys(Long...objets) {
-		for(Long o : objets) {
+	public ReportType addScheduleKeys(Long...objects) {
+		for(Long o : objects) {
 			addScheduleKeys(o);
 		}
 		return (ReportType)this;
@@ -124,10 +143,10 @@ public abstract class ReportTypeGen<DEV> extends BaseModel {
 		return (ReportType)this;
 	}
 	@JsonIgnore
-	public void setScheduleKeys(JsonArray objets) {
+	public void setScheduleKeys(JsonArray objects) {
 		scheduleKeys.clear();
-		for(int i = 0; i < objets.size(); i++) {
-			Long o = objets.getLong(i);
+		for(int i = 0; i < objects.size(); i++) {
+			Long o = objects.getLong(i);
 			addScheduleKeys(o);
 		}
 	}
@@ -172,7 +191,7 @@ public abstract class ReportTypeGen<DEV> extends BaseModel {
 
 	/**	<br> The entity typeName
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.type.ReportType&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:typeName">Find the entity typeName in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.type.ReportType&fq=entiteVar_enUS_indexed_string:typeName">Find the entity typeName in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -408,25 +427,25 @@ public abstract class ReportTypeGen<DEV> extends BaseModel {
 	}
 
 	/////////////
-	// define //
+	// persist //
 	/////////////
 
-	@Override public boolean defineForClass(String var, Object val) {
+	@Override public boolean persistForClass(String var, Object val) {
 		String[] vars = StringUtils.split(var, ".");
 		Object o = null;
 		if(val != null) {
 			for(String v : vars) {
 				if(o == null)
-					o = defineReportType(v, val);
+					o = persistReportType(v, val);
 				else if(o instanceof BaseModel) {
 					BaseModel oBaseModel = (BaseModel)o;
-					o = oBaseModel.defineForClass(v, val);
+					o = oBaseModel.persistForClass(v, val);
 				}
 			}
 		}
 		return o != null;
 	}
-	public Object defineReportType(String var, Object val) {
+	public Object persistReportType(String var, Object val) {
 		switch(var.toLowerCase()) {
 			case "typename":
 				if(val instanceof String)
@@ -434,7 +453,7 @@ public abstract class ReportTypeGen<DEV> extends BaseModel {
 				saves.add("typeName");
 				return val;
 			default:
-				return super.defineBaseModel(var, val);
+				return super.persistBaseModel(var, val);
 		}
 	}
 
@@ -469,6 +488,17 @@ public abstract class ReportTypeGen<DEV> extends BaseModel {
 
 	}
 
+	public static String varStoredReportType(String entityVar) {
+		switch(entityVar) {
+			case "scheduleKeys":
+				return "scheduleKeys_docvalues_longs";
+			case "typeName":
+				return "typeName_docvalues_string";
+			default:
+				return BaseModel.varStoredBaseModel(entityVar);
+		}
+	}
+
 	public static String varIndexedReportType(String entityVar) {
 		switch(entityVar) {
 			case "scheduleKeys":
@@ -477,6 +507,17 @@ public abstract class ReportTypeGen<DEV> extends BaseModel {
 				return "typeName_docvalues_string";
 			default:
 				return BaseModel.varIndexedBaseModel(entityVar);
+		}
+	}
+
+	public static String searchVarReportType(String searchVar) {
+		switch(searchVar) {
+			case "scheduleKeys_docvalues_longs":
+				return "scheduleKeys";
+			case "typeName_docvalues_string":
+				return "typeName";
+			default:
+				return BaseModel.searchVarBaseModel(searchVar);
 		}
 	}
 
@@ -541,8 +582,33 @@ public abstract class ReportTypeGen<DEV> extends BaseModel {
 		return sb.toString();
 	}
 
+	public static final String CLASS_SIMPLE_NAME = "ReportType";
 	public static final String VAR_scheduleKeys = "scheduleKeys";
 	public static final String VAR_typeName = "typeName";
+
+	public static List<String> varsQForClass() {
+		return ReportType.varsQReportType(new ArrayList<String>());
+	}
+	public static List<String> varsQReportType(List<String> vars) {
+		BaseModel.varsQBaseModel(vars);
+		return vars;
+	}
+
+	public static List<String> varsFqForClass() {
+		return ReportType.varsFqReportType(new ArrayList<String>());
+	}
+	public static List<String> varsFqReportType(List<String> vars) {
+		BaseModel.varsFqBaseModel(vars);
+		return vars;
+	}
+
+	public static List<String> varsRangeForClass() {
+		return ReportType.varsRangeReportType(new ArrayList<String>());
+	}
+	public static List<String> varsRangeReportType(List<String> vars) {
+		BaseModel.varsRangeBaseModel(vars);
+		return vars;
+	}
 
 	public static final String DISPLAY_NAME_scheduleKeys = "report schedules";
 	public static final String DISPLAY_NAME_typeName = "type name";
@@ -558,6 +624,81 @@ public abstract class ReportTypeGen<DEV> extends BaseModel {
 			return DISPLAY_NAME_typeName;
 		default:
 			return BaseModel.displayNameBaseModel(var);
+		}
+	}
+
+	public static String descriptionReportType(String var) {
+		switch(var) {
+			default:
+				return BaseModel.descriptionBaseModel(var);
+		}
+	}
+
+	public static String classSimpleNameReportType(String var) {
+		switch(var) {
+		case VAR_scheduleKeys:
+			return "List";
+		case VAR_typeName:
+			return "String";
+			default:
+				return BaseModel.classSimpleNameBaseModel(var);
+		}
+	}
+
+	public static Integer htmlColumnReportType(String var) {
+		switch(var) {
+			default:
+				return BaseModel.htmlColumnBaseModel(var);
+		}
+	}
+
+	public static Integer htmlRowReportType(String var) {
+		switch(var) {
+		case VAR_scheduleKeys:
+			return 3;
+		case VAR_typeName:
+			return 3;
+			default:
+				return BaseModel.htmlRowBaseModel(var);
+		}
+	}
+
+	public static Integer htmlCellReportType(String var) {
+		switch(var) {
+		case VAR_scheduleKeys:
+			return 1;
+		case VAR_typeName:
+			return 1;
+			default:
+				return BaseModel.htmlCellBaseModel(var);
+		}
+	}
+
+	public static Integer lengthMinReportType(String var) {
+		switch(var) {
+			default:
+				return BaseModel.lengthMinBaseModel(var);
+		}
+	}
+
+	public static Integer lengthMaxReportType(String var) {
+		switch(var) {
+			default:
+				return BaseModel.lengthMaxBaseModel(var);
+		}
+	}
+
+	public static Integer maxReportType(String var) {
+		switch(var) {
+			default:
+				return BaseModel.maxBaseModel(var);
+		}
+	}
+
+	public static Integer minReportType(String var) {
+		switch(var) {
+			default:
+				return BaseModel.minBaseModel(var);
 		}
 	}
 }

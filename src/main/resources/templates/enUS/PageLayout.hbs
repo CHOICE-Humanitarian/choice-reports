@@ -1,64 +1,118 @@
 {{> "htmPageLayout"}}
 {{#*inline "htmHeadPageLayout"}}{{> "htmTitlePageLayout"}}{{> "htmMetaPageLayout"}}{{> "htmStylePageLayout"}}{{> "htmScriptsPageLayout"}}{{> "htmScriptPageLayout"}}{{/inline}}
-{{#*inline "htmScriptsPageLayout"}}		<!-- inline "htmScriptsPageLayout" -->
+{{#*inline "htmScriptsPageLayout"}}		<!-- #*inline "htmScriptsPageLayout" -->
 		<script src="{{staticBaseUrl}}/js/jquery-1.12.4.min.js"></script>
-		<script src="https://kit.fontawesome.com/59d19567d5.js"></script>
+{{#if FONTAWESOME_KIT }}
+		<script src="{{ FONTAWESOME_KIT }}"></script>
+{{/if}}
 		<script src="{{staticBaseUrl}}/js/site-enUS.js"></script>
-		<script src="{{staticBaseUrl}}/js/moment.min.js"></script>
-		<script src="{{staticBaseUrl}}/js/jqDatePicker.js"></script>
+		<script src="{{staticBaseUrl}}/js/moment.js"></script>
 		<script src="{{staticBaseUrl}}/js/sockjs.js"></script>
 		<script src="{{staticBaseUrl}}/js/vertx-eventbus.js"></script>
+		<script src="{{staticBaseUrl}}/js/plotly-2.9.0.min.js"></script>
 {{/inline}}
-{{#*inline "htmScriptPageLayout"}}		<!-- inline "htmScriptPageLayout" -->
+{{#*inline "htmScriptPageLayout"}}		<!-- #*inline "htmScriptPageLayout" -->
 {{/inline}}
-{{#*inline "htmStylePageLayout"}}		<!-- inline "htmStylePageLayout" -->
+{{#*inline "htmStylePageLayout"}}		<!-- #*inline "htmStylePageLayout" -->
 		<link rel="icon" href="{{staticBaseUrl}}/favicon.ico" />
 		<link rel="stylesheet" href="{{staticBaseUrl}}/css/w3.css" />
 		<link rel="stylesheet" href="{{staticBaseUrl}}/css/site-enUS.css" />
 {{/inline}}
-{{#*inline "htmMetaPageLayout"}}		<!-- inline "htmMetaPageLayout" -->
+{{#*inline "htmMetaPageLayout"}}		<!-- #*inline "htmMetaPageLayout" -->
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 {{/inline}}
-{{#*inline "htmTitlePageLayout"}}		<!-- inline "htmTitlePageLayout" -->
-		<title>CHOICE Reports</title>
+{{#*inline "htmTitlePageLayout"}}		<!-- #*inline "htmTitlePageLayout" -->
+		<title>choice-reports</title>
 {{/inline}}
-{{#*inline "htmBodyStartPageLayout"}}		<!-- inline "htmBodyStartPageLayout" -->
+{{#*inline "htmBodyMenuPageLayout"}}
 		<div class="w3-bar ">
-			<a href="https://choicehumanitarian.org/">
-				<img class="w3-mobile w3-bar-item " style="height: 75px" src="https://choicehumanitarian.org/wp-content/uploads/2021/05/logo-07.png"/>
-			</a>
-			<div class="w3-bar-item w3-padding-16 w3-right ">
-{{#if userKey}}
-				<a href="/user/{{ userKey }}" class="w3-mobile w3-padding w3-text-teal "><i class="fad fa-house-user w3-text-teal "></i> {{userName}}</a>
-				<a href="{{ logoutUrl }}" class="w3-mobile w3-padding w3-text-teal "><i class="fad fa-house-user w3-text-teal "></i> Logout</a>
-{{else}}
-				<a href="/user" class="w3-mobile w3-padding w3-text-teal "><i class="fad fa-house-user w3-text-teal "></i> Login</a>
-{{/if}}
-				<a href="{{siteBaseUrl}}/donor" class="w3-mobile w3-padding w3-text-light-green "><i class="fad fa-hands-heart w3-textlight-green "></i> Donors</a>
-				<a href="{{siteBaseUrl}}/report" class="w3-mobile w3-padding w3-text-cyan "><i class="fad fa-file-chart-line w3-text-cyan "></i> Reports</a>
-				<a href="{{siteBaseUrl}}/report-type" class="w3-mobile w3-padding w3-text-cyan "><i class="fad fa-list-dropdown w3-text-cyan "></i> Report Types</a>
-				<a href="{{siteBaseUrl}}/report-schedule" class="w3-mobile w3-padding w3-text-cyan "><i class="fad fa-calendar-days w3-text-cyan "></i> Schedules</a>
-				<a href="{{siteBaseUrl}}/report-narrative" class="w3-mobile w3-padding w3-text-cyan "><i class="fad fa-calendar-pen w3-text-cyan "></i> Narratives</a>
-				<a href="{{siteBaseUrl}}/report-event" class="w3-mobile w3-padding w3-text-cyan "><i class="fad fa-calendar-star w3-text-cyan "></i> Event</a>
-				<a href="{{siteBaseUrl}}/" class="w3-mobile w3-padding w3-text-indigo "><i class="fad fa-home w3-text-indigo "></i> CHOICE Reports</a>
+			<div class="w3-bar w3-hide-small ">
+				<div class="site-bar-item w3-bar-item ">
+					<a class="w3-bar-item " href="{{ SITE_BASE_URL }}"><i class="fad fa-house "></i> choice-reports</a>
+				</div>
+{{> "htmMenuItems"}}
+			</div>
+			<div class="w3-bar w3-hide-medium w3-hide-large ">
+				<div class="site-bar-item w3-bar-item ">
+					<a class="w3-bar-item " href="{{ SITE_BASE_URL }}"><i class="fad fa-house "></i> choice-reports</a>
+				</div>
+				<div class="w3-dropdown-hover ">
+					<button class="w3-button w3-text-black "><i class="fad fa-bars w3-text-black "></i> Menu</button>
+					<div class="w3-dropdown-content w3-bar-block w3-card-4 ">
+{{> "htmMenuItems"}}
+					</div>
+				</div>
 			</div>
 		</div>
 {{/inline}}
-{{#*inline "htmBodyEndPageLayout"}}		<!-- inline "htmBodyEndPageLayout" -->
+{{#*inline "htmMenuItems"}}
+{{#if userKey}}
+				<div class="site-bar-item w3-bar-item ">
+					<a href="/user/{{ userKey }}" class="header-icon-a w3-hover-opacity w3-center "><i class="fad fa-house-user w3-text-teal "></i> {{userName}}</a>
+					<a href="{{ logoutUrl }}" class="header-icon-a w3-hover-opacity w3-center "><i class="fad fa-house-user w3-text-teal "></i> Logout</a>
+				</div>
+{{else}}
+				<div class="site-bar-item w3-bar-item ">
+					<a href="/user" class="header-icon-a w3-hover-opacity w3-center "><i class="fad fa-house-user w3-text-teal "></i> Login</a>
+				</div>
+{{/if}}
+				<div class="site-bar-item w3-bar-item ">
+					<a href="/donor" class="header-icon-a w3-hover-opacity w3-center w3-text-light-green "><i class="fad fa-hands-heart w3-text-light-green "></i> donors</a>
+				</div>
+				<div class="site-bar-item w3-bar-item ">
+					<a href="/report" class="header-icon-a w3-hover-opacity w3-center w3-text-cyan "><i class="fad fa-file-chart-line w3-text-cyan "></i> reports</a>
+				</div>
+				<div class="site-bar-item w3-bar-item ">
+					<a href="/page" class="header-icon-a w3-hover-opacity w3-center w3-text-2017-navy-peony "><i class="fad fa-newspaper w3-text-2017-navy-peony "></i> articles</a>
+				</div>
+				<div class="site-bar-item w3-bar-item ">
+					<a href="/report-event" class="header-icon-a w3-hover-opacity w3-center w3-text-light-green "><i class="fad fa-calendar-star w3-text-light-green "></i> report events</a>
+				</div>
+				<div class="site-bar-item w3-bar-item ">
+					<a href="/report-narrative" class="header-icon-a w3-hover-opacity w3-center w3-text-light-green "><i class="fad fa-calendar-pen w3-text-light-green "></i> report narratives</a>
+				</div>
+				<div class="site-bar-item w3-bar-item ">
+					<a href="/report-schedule" class="header-icon-a w3-hover-opacity w3-center w3-text-light-green "><i class="fad fa-calendar-days w3-text-light-green "></i> report schedules</a>
+				</div>
+				<div class="site-bar-item w3-bar-item ">
+					<a href="/report-type" class="header-icon-a w3-hover-opacity w3-center w3-text-light-green "><i class="fad fa-list-dropdown w3-text-light-green "></i> report types</a>
+				</div>
+				<div class="site-bar-item w3-bar-item ">
+					<a href="/htm" class="header-icon-a w3-hover-opacity w3-center w3-text-2017-navy-peony "><i class="fad fa-code w3-text-2017-navy-peony "></i> HTMLs</a>
+				</div>
 {{/inline}}
-{{#*inline "htmBodyPageLayout"}}		<!-- inline "htmBodyPageLayout" -->
-{{#block "htmBodyStart"}}{{/block}}
-{{#block "htmBodyEnd"}}{{/block}}
+{{#*inline "htmBodyStartPageLayout"}}		<!-- #*inline "htmBodyStartPageLayout" -->
+		<div class="w3-bar ">
+			<div class="w3-center ">
+{{#block "htmBodyMenu"}}{{/block}}
+			</div>
+		</div>
+{{/inline}}
+{{#*inline "htmBodyMiddlePageLayout"}}		<!-- #*inline "htmBodyMiddlePageLayout" -->
+	<div class="pageContent w3-content ">
+{{#each htmBody}}{{#if htmBefore}}{{{htmBefore}}}{{/if}}{{#if text}}{{#each text}}{{.}}{{/each}}{{/if}}{{#if htmAfter}}{{{htmAfter}}}{{/if}}{{/each}}
+	</div>
+{{/inline}}
+{{#*inline "htmBodyEndPageLayout"}}		<!-- #*inline "htmBodyEndPageLayout" -->
 		<footer class="w3-center w3-black w3-text-white w3-padding-24 ">
 			<div class="w3-bar ">
-				<a class="w3-bar-item grow-50 w3-small " href="https://github.com/CHOICE-Humanitarian/choice-reports">This site is open source.</a>
-				<a class="w3-bar-item grow-50" href="https://www.openshift.com/products/online/"><span class="w3-small ">Powered by </span><img alt="" class="w3-image " style="display: inline-block; width: 100px; margin: 0 10px;" src="{{staticBaseUrl}}/svg/openshift.svg"/></a>
+{{#if GITHUB_ORG }}
+				<a class="w3-bar-item grow-20 w3-margin w3-text-white w3-small " href="https://github.com/{{ GITHUB_ORG }}/{{ SITE_NAME }}/" target="_blank">This site is open source <i class="fa-brands fa-github w3-large "></i></a>
+{{/if }}
+{{#if PROJECT_POWERED_BY_URL }}
+				<a class="w3-bar-item grow-20 w3-margin w3-text-white w3-small " href="{{ PROJECT_POWERED_BY_URL }}" target="_blank"><span class="w3-small ">Powered by </span>{{#if PROJECT_POWERED_BY_IMAGE_URI }}<img alt="" class="w3-image " style="display: inline-block; width: 100px; margin: 0 10px;" src="{{ STATIC_BASE_URL }}{{ PROJECT_POWERED_BY_IMAGE_URI }}"/>{{else}}{{#if PROJECT_POWERED_BY_NAME}}{{ PROJECT_POWERED_BY_NAME }}{{/if}}{{/if}}</a>
+{{/if }}
 			</div>
 		</footer>
 {{/inline}}
+{{#*inline "htmBodyPageLayout"}}		<!-- #*inline "htmBodyPageLayout" -->
+{{#block "htmBodyStart"}}{{/block}}
+{{#block "htmBodyMiddle"}}{{/block}}
+{{#block "htmBodyEnd"}}{{/block}}
+{{/inline}}
 {{#*inline "htmPageLayout"}}<!DOCTYPE html>
-<!-- inline "htmPageLayout" -->
+<!-- #*inline "htmPageLayout" -->
 <html lang="en" style="height: 100%;">
 	<head>
 {{#block "htmHead"}}{{/block}}

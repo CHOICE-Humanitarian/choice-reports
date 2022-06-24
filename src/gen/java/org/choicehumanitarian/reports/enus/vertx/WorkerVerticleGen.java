@@ -1,46 +1,58 @@
 package org.choicehumanitarian.reports.enus.vertx;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.Arrays;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import org.slf4j.LoggerFactory;
-import org.computate.search.serialize.ComputateLocalDateDeserializer;
-import java.util.HashMap;
-import org.apache.commons.lang3.StringUtils;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
-import java.text.NumberFormat;
-import java.util.ArrayList;
+import org.choicehumanitarian.reports.enus.model.base.BaseModel;
 import org.computate.vertx.api.ApiRequest;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import java.util.Map;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.math.RoundingMode;
-import org.slf4j.Logger;
-import java.math.MathContext;
-import io.vertx.core.Promise;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import io.vertx.core.Future;
-import org.computate.search.serialize.ComputateZonedDateTimeDeserializer;
-import org.choicehumanitarian.reports.enus.base.BaseModel;
-import java.util.Objects;
-import org.computate.search.serialize.ComputateLocalDateSerializer;
-import io.vertx.core.json.JsonArray;
-import org.computate.search.wrap.Wrap;
-import io.vertx.core.AbstractVerticle;
-import org.apache.commons.lang3.math.NumberUtils;
-import java.util.Optional;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import org.computate.search.serialize.ComputateZonedDateTimeSerializer;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
+import java.util.Optional;
+import java.util.List;
+import org.apache.commons.lang3.StringUtils;
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.computate.search.serialize.ComputateLocalDateSerializer;
+import org.computate.search.serialize.ComputateLocalDateDeserializer;
+import org.computate.search.serialize.ComputateZonedDateTimeSerializer;
+import org.computate.search.serialize.ComputateZonedDateTimeDeserializer;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import java.math.MathContext;
+import org.apache.commons.lang3.math.NumberUtils;
+import java.text.NumberFormat;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.HashMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.math.RoundingMode;
+import java.util.Map;
+import io.vertx.core.AbstractVerticle;
+import org.computate.search.wrap.Wrap;
+import io.vertx.core.Promise;
+import io.vertx.core.Future;
+import io.vertx.core.json.JsonArray;
 
 /**	
- * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.WorkerVerticle&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
+ * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.WorkerVerticle">Find the class WorkerVerticle in Solr. </a>
+ * <br><br>Delete the class WorkerVerticle in Solr. 
+ * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.WorkerVerticle&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
+ * <br>Delete  the package org.choicehumanitarian.reports.enus.vertx in Solr. 
+ * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomEnsemble_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
+ * <br>Delete  the project choice-reports in Solr. 
+ * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;siteNom_indexed_string:choice\-reports&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
  * <br>
  **/
 public abstract class WorkerVerticleGen<DEV> extends AbstractVerticle {
 	protected static final Logger LOG = LoggerFactory.getLogger(WorkerVerticle.class);
+	public static final String configureHandlebarsFail1 = "Handlebars was not configured properly. ";
+	public static final String configureHandlebarsFail = configureHandlebarsFail1;
+	public static final String configureHandlebarsComplete1 = "Handlebars was configured properly. ";
+	public static final String configureHandlebarsComplete = configureHandlebarsComplete1;
+
 	public static final String configureDataConnectionError1 = "Could not open the database client connection. ";
 	public static final String configureDataConnectionError = configureDataConnectionError1;
 	public static final String configureDataConnectionSuccess1 = "The database client connection was successful. ";
@@ -64,34 +76,45 @@ public abstract class WorkerVerticleGen<DEV> extends AbstractVerticle {
 	public static final String importTimerScheduling = importTimerScheduling1;
 	public static final String importTimerSkip1 = "Skip importing %s data. ";
 	public static final String importTimerSkip = importTimerSkip1;
+	public static final String importTimerFail1 = "Scheduling the import of %s data failed. ";
+	public static final String importTimerFail = importTimerFail1;
 
-	public static final String importDataComplete1 = "Importing initial data completed. ";
-	public static final String importDataComplete = importDataComplete1;
-	public static final String importDataFail1 = "Importing initial data failed. ";
-	public static final String importDataFail = importDataFail1;
-	public static final String importDataSkip1 = "Skip importing data. ";
+	public static final String importDataSkip1 = "The data import is disabled. ";
 	public static final String importDataSkip = importDataSkip1;
 
-	public static final String syncDbToSolrComplete1 = "Syncing database to Solr completed. ";
-	public static final String syncDbToSolrComplete = syncDbToSolrComplete1;
-	public static final String syncDbToSolrFail1 = "Syncing database to Solr failed. ";
-	public static final String syncDbToSolrFail = syncDbToSolrFail1;
-	public static final String syncDbToSolrSkip1 = "Skip syncing database to Solr. ";
-	public static final String syncDbToSolrSkip = syncDbToSolrSkip1;
+	public static final String importDataClassComplete1 = "Configuring the import of %s data completed. ";
+	public static final String importDataClassComplete = importDataClassComplete1;
+	public static final String importDataClassFail1 = "Configuring the import of %s data failed. ";
+	public static final String importDataClassFail = importDataClassFail1;
 
-	public static final String syncDataComplete1 = "%s data sync completed. ";
-	public static final String syncDataComplete = syncDataComplete1;
-	public static final String syncDataFail1 = "%s data sync failed. ";
-	public static final String syncDataFail = syncDataFail1;
-	public static final String syncDataCounterResetFail1 = "%s data sync failed to reset counter. ";
-	public static final String syncDataCounterResetFail = syncDataCounterResetFail1;
-	public static final String syncDataSkip1 = "%s data sync skipped. ";
-	public static final String syncDataSkip = syncDataSkip1;
-	public static final String syncDataStarted1 = "%s data sync started. ";
-	public static final String syncDataStarted = syncDataStarted1;
+	public static final String importDataChoiceDonorComplete1 = "Importing donor data completed. ";
+	public static final String importDataChoiceDonorComplete = importDataChoiceDonorComplete1;
+	public static final String importDataChoiceDonorFail1 = "Importing donor data failed. ";
+	public static final String importDataChoiceDonorFail = importDataChoiceDonorFail1;
+	public static final String importDataChoiceDonorSkip1 = "Skip importing donor data. ";
+	public static final String importDataChoiceDonorSkip = importDataChoiceDonorSkip1;
+
+	public static final String importDataReportTypeComplete1 = "Importing report type data completed. ";
+	public static final String importDataReportTypeComplete = importDataReportTypeComplete1;
+	public static final String importDataReportTypeFail1 = "Importing report type data failed. ";
+	public static final String importDataReportTypeFail = importDataReportTypeFail1;
+	public static final String importDataReportTypeSkip1 = "Skip importing report type data. ";
+	public static final String importDataReportTypeSkip = importDataReportTypeSkip1;
+
+	public static final String importDataSitePageComplete1 = "Importing %s data completed. ";
+	public static final String importDataSitePageComplete = importDataSitePageComplete1;
+	public static final String importDataSitePageFail1 = "Importing %s data failed. ";
+	public static final String importDataSitePageFail = importDataSitePageFail1;
+
+	public static final String importSitePageComplete1 = "Importing page %s completed. ";
+	public static final String importSitePageComplete = importSitePageComplete1;
+	public static final String importSitePageFail1 = "Importing page %s failed. ";
+	public static final String importSitePageFail = importSitePageFail1;
 
 	public static final String refreshAllDataComplete1 = "Refresh all data completed. ";
 	public static final String refreshAllDataComplete = refreshAllDataComplete1;
+	public static final String refreshAllDataStarted1 = "Refresh all data started. ";
+	public static final String refreshAllDataStarted = refreshAllDataStarted1;
 	public static final String refreshAllDataFail1 = "Refresh all data failed. ";
 	public static final String refreshAllDataFail = refreshAllDataFail1;
 	public static final String refreshAllDataSkip1 = "Refresh all data skipped. ";
@@ -99,10 +122,14 @@ public abstract class WorkerVerticleGen<DEV> extends AbstractVerticle {
 
 	public static final String refreshDataComplete1 = "%s refresh completed. ";
 	public static final String refreshDataComplete = refreshDataComplete1;
-	public static final String refreshDataFail1 = "%s refresh failed. ";
-	public static final String refreshDataFail = refreshDataFail1;
+	public static final String refreshDataStarted1 = "%s data sync started. ";
+	public static final String refreshDataStarted = refreshDataStarted1;
 	public static final String refreshDataSkip1 = "%s refresh skipped. ";
 	public static final String refreshDataSkip = refreshDataSkip1;
+	public static final String refreshDataFail1 = "%s refresh failed. ";
+	public static final String refreshDataFail = refreshDataFail1;
+	public static final String refreshDataCounterResetFail1 = "%s data sync failed to reset counter. ";
+	public static final String refreshDataCounterResetFail = refreshDataCounterResetFail1;
 
 
 	//////////////
@@ -244,8 +271,9 @@ public abstract class WorkerVerticleGen<DEV> extends AbstractVerticle {
 		return sb.toString();
 	}
 
-	public static final String[] WorkerVerticleVals = new String[] { configureDataConnectionError1, configureDataConnectionSuccess1, configureDataInitError1, configureDataInitSuccess1, configureSharedWorkerExecutorFail1, configureSharedWorkerExecutorComplete1, configureEmailComplete1, configureEmailFail1, importTimerScheduling1, importTimerSkip1, importDataComplete1, importDataFail1, importDataSkip1, syncDbToSolrComplete1, syncDbToSolrFail1, syncDbToSolrSkip1, syncDataComplete1, syncDataFail1, syncDataCounterResetFail1, syncDataSkip1, syncDataStarted1, refreshAllDataComplete1, refreshAllDataFail1, refreshAllDataSkip1, refreshDataComplete1, refreshDataFail1, refreshDataSkip1 };
+	public static final String[] WorkerVerticleVals = new String[] { configureHandlebarsFail1, configureHandlebarsComplete1, configureDataConnectionError1, configureDataConnectionSuccess1, configureDataInitError1, configureDataInitSuccess1, configureSharedWorkerExecutorFail1, configureSharedWorkerExecutorComplete1, configureEmailComplete1, configureEmailFail1, importTimerScheduling1, importTimerSkip1, importTimerFail1, importDataSkip1, importDataClassComplete1, importDataClassFail1, importDataChoiceDonorComplete1, importDataChoiceDonorFail1, importDataChoiceDonorSkip1, importDataReportTypeComplete1, importDataReportTypeFail1, importDataReportTypeSkip1, importDataSitePageComplete1, importDataSitePageFail1, importSitePageComplete1, importSitePageFail1, refreshAllDataComplete1, refreshAllDataStarted1, refreshAllDataFail1, refreshAllDataSkip1, refreshDataComplete1, refreshDataStarted1, refreshDataSkip1, refreshDataFail1, refreshDataCounterResetFail1 };
 
+	public static final String CLASS_SIMPLE_NAME = "WorkerVerticle";
 
 
 	public static String displayNameForClass(String var) {

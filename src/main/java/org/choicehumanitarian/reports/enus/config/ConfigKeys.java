@@ -1,11 +1,11 @@
 package org.choicehumanitarian.reports.enus.config;
 
-import org.computate.vertx.config.ComputateVertxConfigKeys;
+import org.computate.vertx.config.ComputateConfigKeys;
 
 /**
  * Keyword: classSimpleNameConfigKeys
  */
-public class ConfigKeys extends ComputateVertxConfigKeys {
+public class ConfigKeys extends ComputateConfigKeys {
 
 	/**
 	 * 
