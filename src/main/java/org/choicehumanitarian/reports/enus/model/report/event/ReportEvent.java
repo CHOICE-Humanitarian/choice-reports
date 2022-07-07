@@ -13,6 +13,7 @@ import org.computate.search.wrap.Wrap;
  * Indexed: true
  * Saved: true
  * Map.Integer.sqlSort: 7
+ * Map.Integer.classSort: 7
  * Sort.asc: objectId
  * 
  * ApiTag.enUS: Calendar Item

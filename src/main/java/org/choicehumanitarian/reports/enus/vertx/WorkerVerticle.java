@@ -85,10 +85,10 @@ import io.vertx.ext.auth.authentication.TokenCredentials;
 import org.choicehumanitarian.reports.enus.model.user.SiteUser;
 import org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor;
 import org.choicehumanitarian.reports.enus.model.report.ChoiceReport;
-import org.choicehumanitarian.reports.enus.model.report.event.ReportEvent;
-import org.choicehumanitarian.reports.enus.model.report.narrative.ReportNarrative;
-import org.choicehumanitarian.reports.enus.model.report.schedule.ReportSchedule;
 import org.choicehumanitarian.reports.enus.model.report.type.ReportType;
+import org.choicehumanitarian.reports.enus.model.report.schedule.ReportSchedule;
+import org.choicehumanitarian.reports.enus.model.report.narrative.ReportNarrative;
+import org.choicehumanitarian.reports.enus.model.report.event.ReportEvent;
 import org.choicehumanitarian.reports.enus.model.page.SitePage;
 import org.choicehumanitarian.reports.enus.model.htm.SiteHtm;
 
@@ -793,10 +793,10 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 				refreshData(SiteUser.CLASS_SIMPLE_NAME).onSuccess(q -> {
 					refreshData(ChoiceDonor.CLASS_SIMPLE_NAME).onSuccess(q1 -> {
 						refreshData(ChoiceReport.CLASS_SIMPLE_NAME).onSuccess(q2 -> {
-							refreshData(ReportEvent.CLASS_SIMPLE_NAME).onSuccess(q3 -> {
-								refreshData(ReportNarrative.CLASS_SIMPLE_NAME).onSuccess(q4 -> {
-									refreshData(ReportSchedule.CLASS_SIMPLE_NAME).onSuccess(q5 -> {
-										refreshData(ReportType.CLASS_SIMPLE_NAME).onSuccess(q6 -> {
+							refreshData(ReportType.CLASS_SIMPLE_NAME).onSuccess(q3 -> {
+								refreshData(ReportSchedule.CLASS_SIMPLE_NAME).onSuccess(q4 -> {
+									refreshData(ReportNarrative.CLASS_SIMPLE_NAME).onSuccess(q5 -> {
+										refreshData(ReportEvent.CLASS_SIMPLE_NAME).onSuccess(q6 -> {
 											refreshData(SitePage.CLASS_SIMPLE_NAME).onSuccess(q7 -> {
 												refreshData(SiteHtm.CLASS_SIMPLE_NAME).onSuccess(q8 -> {
 													LOG.info(refreshAllDataComplete);

@@ -13,6 +13,7 @@ import org.computate.search.wrap.Wrap;
  * Indexed: true
  * Saved: true
  * Map.Integer.sqlSort: 4
+ * Map.Integer.classSort: 4
  * Sort.asc: objectId
  * 
  * ApiTag.enUS: Report Type

@@ -10412,6 +10412,8 @@ components:
               type: string
             assigneeKey:
               type: string
+            assigneeName:
+              type: string
             narrativeName:
               type: string
             firstDueDate:
@@ -10433,6 +10435,8 @@ components:
             scheduleKey:
               type: string
             assigneeKey:
+              type: string
+            assigneeName:
               type: string
             narrativeName:
               type: string
@@ -10465,6 +10469,13 @@ components:
             removeAssigneeKey:
               type: string
             removeAllAssigneeKey:
+              type: string
+            setAssigneeName:
+              type: string
+              nullable: true
+            removeAssigneeName:
+              type: string
+            removeAllAssigneeName:
               type: string
             setNarrativeName:
               type: string
@@ -10531,6 +10542,13 @@ components:
               type: string
             removeAllAssigneeKey:
               type: string
+            setAssigneeName:
+              type: string
+              nullable: true
+            removeAssigneeName:
+              type: string
+            removeAllAssigneeName:
+              type: string
             setNarrativeName:
               type: string
               nullable: true
@@ -10588,6 +10606,8 @@ components:
                 type: string
               assigneeKey:
                 type: string
+              assigneeName:
+                type: string
               narrativeName:
                 type: string
               firstDueDate:
@@ -10609,6 +10629,8 @@ components:
             scheduleKey:
               type: string
             assigneeKey:
+              type: string
+            assigneeName:
               type: string
             narrativeName:
               type: string
@@ -10632,6 +10654,8 @@ components:
               type: string
             assigneeKey:
               type: string
+            assigneeName:
+              type: string
             narrativeName:
               type: string
             firstDueDate:
@@ -10653,6 +10677,8 @@ components:
             scheduleKey:
               type: string
             assigneeKey:
+              type: string
+            assigneeName:
               type: string
             narrativeName:
               type: string

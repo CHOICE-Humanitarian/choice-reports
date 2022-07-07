@@ -18,6 +18,7 @@ import io.vertx.core.Promise;
  * Indexed: true
  * Saved: true
  * Map.Integer.sqlSort: 5
+ * Map.Integer.classSort: 5
  * Sort.asc: objectId
  * 
  * ApiTag.enUS: Report Schedule

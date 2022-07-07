@@ -67,20 +67,20 @@ REFRESH_DATA_PAUSE_IN_SECONDS: 10
 ENABLE_REFRESH_DATA: false
 ENABLE_REFRESH_DATA_ChoiceDonor: true
 ENABLE_REFRESH_DATA_ChoiceReport: true
-ENABLE_REFRESH_DATA_ReportEvent: true
-ENABLE_REFRESH_DATA_ReportNarrative: true
-ENABLE_REFRESH_DATA_ReportSchedule: true
 ENABLE_REFRESH_DATA_ReportType: true
+ENABLE_REFRESH_DATA_ReportSchedule: true
+ENABLE_REFRESH_DATA_ReportNarrative: true
+ENABLE_REFRESH_DATA_ReportEvent: true
 ENABLE_REFRESH_DATA_SitePage: true
 ENABLE_REFRESH_DATA_SiteHtm: true
 
 ENABLE_IMPORT_DATA: true
 ENABLE_IMPORT_DATA_ChoiceDonor: true
 ENABLE_IMPORT_DATA_ChoiceReport: true
-ENABLE_IMPORT_DATA_ReportEvent: true
-ENABLE_IMPORT_DATA_ReportNarrative: true
-ENABLE_IMPORT_DATA_ReportSchedule: true
 ENABLE_IMPORT_DATA_ReportType: true
+ENABLE_IMPORT_DATA_ReportSchedule: true
+ENABLE_IMPORT_DATA_ReportNarrative: true
+ENABLE_IMPORT_DATA_ReportEvent: true
 ENABLE_IMPORT_DATA_SitePage: true
 ENABLE_IMPORT_DATA_SiteHtm: true
 
@@ -92,14 +92,14 @@ AUTH_ROLES_REQUIRED_SiteUser: ['SiteAdmin']
 AUTH_ROLES_REQUIRED_ChoiceDonor: ['SiteAdmin']
 # The Auth roles required to add and modify report records. 
 AUTH_ROLES_REQUIRED_ChoiceReport: ['SiteAdmin']
-# The Auth roles required to add and modify calendar item records. 
-AUTH_ROLES_REQUIRED_ReportEvent: ['SiteAdmin']
-# The Auth roles required to add and modify report narrative records. 
-AUTH_ROLES_REQUIRED_ReportNarrative: ['SiteAdmin']
-# The Auth roles required to add and modify report schedule records. 
-AUTH_ROLES_REQUIRED_ReportSchedule: ['SiteAdmin']
 # The Auth roles required to add and modify report type records. 
 AUTH_ROLES_REQUIRED_ReportType: ['SiteAdmin']
+# The Auth roles required to add and modify report schedule records. 
+AUTH_ROLES_REQUIRED_ReportSchedule: ['SiteAdmin']
+# The Auth roles required to add and modify report narrative records. 
+AUTH_ROLES_REQUIRED_ReportNarrative: ['SiteAdmin']
+# The Auth roles required to add and modify calendar item records. 
+AUTH_ROLES_REQUIRED_ReportEvent: ['SiteAdmin']
 # The Auth roles required to add and modify article records. 
 AUTH_ROLES_REQUIRED_SitePage: ['SiteAdmin']
 # The Auth roles required to add and modify HTML records. 

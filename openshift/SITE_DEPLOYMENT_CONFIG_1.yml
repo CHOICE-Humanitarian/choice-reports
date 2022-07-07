@@ -229,14 +229,14 @@ spec:
               value: '{{ ENABLE_IMPORT_DATA_ChoiceDonor | to_json }}'
             - name: ENABLE_IMPORT_DATA_ChoiceReport
               value: '{{ ENABLE_IMPORT_DATA_ChoiceReport | to_json }}'
-            - name: ENABLE_IMPORT_DATA_ReportEvent
-              value: '{{ ENABLE_IMPORT_DATA_ReportEvent | to_json }}'
-            - name: ENABLE_IMPORT_DATA_ReportNarrative
-              value: '{{ ENABLE_IMPORT_DATA_ReportNarrative | to_json }}'
-            - name: ENABLE_IMPORT_DATA_ReportSchedule
-              value: '{{ ENABLE_IMPORT_DATA_ReportSchedule | to_json }}'
             - name: ENABLE_IMPORT_DATA_ReportType
               value: '{{ ENABLE_IMPORT_DATA_ReportType | to_json }}'
+            - name: ENABLE_IMPORT_DATA_ReportSchedule
+              value: '{{ ENABLE_IMPORT_DATA_ReportSchedule | to_json }}'
+            - name: ENABLE_IMPORT_DATA_ReportNarrative
+              value: '{{ ENABLE_IMPORT_DATA_ReportNarrative | to_json }}'
+            - name: ENABLE_IMPORT_DATA_ReportEvent
+              value: '{{ ENABLE_IMPORT_DATA_ReportEvent | to_json }}'
             - name: ENABLE_IMPORT_DATA_SitePage
               value: '{{ ENABLE_IMPORT_DATA_SitePage | to_json }}'
             - name: ENABLE_IMPORT_DATA_SiteHtm
@@ -251,14 +251,14 @@ spec:
               value: '{{ AUTH_ROLES_REQUIRED_ChoiceDonor | to_json }}'
             - name: AUTH_ROLES_REQUIRED_ChoiceReport
               value: '{{ AUTH_ROLES_REQUIRED_ChoiceReport | to_json }}'
-            - name: AUTH_ROLES_REQUIRED_ReportEvent
-              value: '{{ AUTH_ROLES_REQUIRED_ReportEvent | to_json }}'
-            - name: AUTH_ROLES_REQUIRED_ReportNarrative
-              value: '{{ AUTH_ROLES_REQUIRED_ReportNarrative | to_json }}'
-            - name: AUTH_ROLES_REQUIRED_ReportSchedule
-              value: '{{ AUTH_ROLES_REQUIRED_ReportSchedule | to_json }}'
             - name: AUTH_ROLES_REQUIRED_ReportType
               value: '{{ AUTH_ROLES_REQUIRED_ReportType | to_json }}'
+            - name: AUTH_ROLES_REQUIRED_ReportSchedule
+              value: '{{ AUTH_ROLES_REQUIRED_ReportSchedule | to_json }}'
+            - name: AUTH_ROLES_REQUIRED_ReportNarrative
+              value: '{{ AUTH_ROLES_REQUIRED_ReportNarrative | to_json }}'
+            - name: AUTH_ROLES_REQUIRED_ReportEvent
+              value: '{{ AUTH_ROLES_REQUIRED_ReportEvent | to_json }}'
             - name: AUTH_ROLES_REQUIRED_SitePage
               value: '{{ AUTH_ROLES_REQUIRED_SitePage | to_json }}'
             - name: AUTH_ROLES_REQUIRED_SiteHtm

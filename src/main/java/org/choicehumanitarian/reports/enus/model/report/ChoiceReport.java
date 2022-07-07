@@ -17,6 +17,7 @@ import io.vertx.core.Promise;
  * Indexed: true
  * Saved: true
  * Map.Integer.sqlSort: 3
+ * Map.Integer.classSort: 3
  * 
  * ApiTag.enUS: Report
  * ApiUri.enUS: /api/report

@@ -179,4 +179,5 @@ public class SiteUser extends SiteUserGen<BaseModel> implements ComputateSiteUse
 	 */
 	protected void _eventKeys(List<Long> l) {
 	}
+
 }

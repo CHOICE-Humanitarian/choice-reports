@@ -36,10 +36,10 @@ import org.choicehumanitarian.reports.enus.model.page.SitePageEnUSGenApiService;
 import org.choicehumanitarian.reports.enus.model.htm.SiteHtmEnUSGenApiService;
 import org.choicehumanitarian.reports.enus.model.donor.ChoiceDonorEnUSGenApiService;
 import org.choicehumanitarian.reports.enus.model.report.ChoiceReportEnUSGenApiService;
-import org.choicehumanitarian.reports.enus.model.report.event.ReportEventEnUSGenApiService;
-import org.choicehumanitarian.reports.enus.model.report.narrative.ReportNarrativeEnUSGenApiService;
-import org.choicehumanitarian.reports.enus.model.report.schedule.ReportScheduleEnUSGenApiService;
 import org.choicehumanitarian.reports.enus.model.report.type.ReportTypeEnUSGenApiService;
+import org.choicehumanitarian.reports.enus.model.report.schedule.ReportScheduleEnUSGenApiService;
+import org.choicehumanitarian.reports.enus.model.report.narrative.ReportNarrativeEnUSGenApiService;
+import org.choicehumanitarian.reports.enus.model.report.event.ReportEventEnUSGenApiService;
 import org.choicehumanitarian.reports.enus.model.page.SitePageEnUSGenApiService;
 import org.choicehumanitarian.reports.enus.model.htm.SiteHtmEnUSGenApiService;
 import org.slf4j.Logger;
@@ -751,10 +751,10 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 			SiteUserEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine, vertx);
 			ChoiceDonorEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine, vertx);
 			ChoiceReportEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine, vertx);
-			ReportEventEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine, vertx);
-			ReportNarrativeEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine, vertx);
-			ReportScheduleEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine, vertx);
 			ReportTypeEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine, vertx);
+			ReportScheduleEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine, vertx);
+			ReportNarrativeEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine, vertx);
+			ReportEventEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine, vertx);
 			SitePageEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine, vertx);
 			SiteHtmEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine, vertx);
 

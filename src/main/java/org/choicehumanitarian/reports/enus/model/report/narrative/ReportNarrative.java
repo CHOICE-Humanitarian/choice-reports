@@ -19,6 +19,7 @@ import io.vertx.core.Promise;
  * Indexed: true
  * Saved: true
  * Map.Integer.sqlSort: 6
+ * Map.Integer.classSort: 6
  * Sort.asc: objectId
  * 
  * ApiTag.enUS: Report Narrative
