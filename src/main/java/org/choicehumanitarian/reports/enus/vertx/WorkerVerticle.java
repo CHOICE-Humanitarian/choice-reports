@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.Stack;
 import java.util.concurrent.TimeUnit;
 
@@ -84,11 +85,11 @@ import io.vertx.ext.auth.authentication.TokenCredentials;
 import org.choicehumanitarian.reports.enus.model.user.SiteUser;
 import org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor;
 import org.choicehumanitarian.reports.enus.model.report.ChoiceReport;
-import org.choicehumanitarian.reports.enus.model.page.SitePage;
 import org.choicehumanitarian.reports.enus.model.report.event.ReportEvent;
 import org.choicehumanitarian.reports.enus.model.report.narrative.ReportNarrative;
 import org.choicehumanitarian.reports.enus.model.report.schedule.ReportSchedule;
 import org.choicehumanitarian.reports.enus.model.report.type.ReportType;
+import org.choicehumanitarian.reports.enus.model.page.SitePage;
 import org.choicehumanitarian.reports.enus.model.htm.SiteHtm;
 
 /**
@@ -351,202 +352,31 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 		return promise.future();
 	}
 
-	/**	
-	 * Import initial data
-	 * Val.Skip.enUS:The data import is disabled. 
+	/**
+	 * Description: Import initial data
+	 * Val.Complete.enUS:Configuring the import of %s data completed. 
+	 * Val.Fail.enUS:Configuring the import of %s data failed. 
 	 **/
-	private Future<Void> importData() {
+	private Future<Void> importDataClass(String classSimpleName, ZonedDateTime startDateTime) {
 		Promise<Void> promise = Promise.promise();
-		if(config().getBoolean(ConfigKeys.ENABLE_IMPORT_DATA)) {
-			importTimer(ChoiceDonor.CLASS_SIMPLE_NAME).onSuccess(a -> {
-				importTimer(ReportType.CLASS_SIMPLE_NAME).onSuccess(b -> {
-					importTimer(SitePage.CLASS_SIMPLE_NAME).onSuccess(c -> {
-						promise.complete();
-					});
-				});
-			});
-		}
-		else {
-			LOG.info(importDataSkip);
-			promise.complete();
-		}
+		promise.complete();
 		return promise.future();
 	}
 
 	/**
 	 * Description: Import initial data
-	 * Val.Complete.enUS:Configuring the import of %s data completed. 
-	 * Val.Fail.enUS:Configuring the import of %s data failed. 
-	 */
-	private Future<Void> importDataClass(String classSimpleName, ZonedDateTime startDateTime) {
-		Promise<Void> promise = Promise.promise();
-		if(ChoiceDonor.CLASS_SIMPLE_NAME.equals(classSimpleName)) {
-			importDataChoiceDonor().onComplete(a -> {
-				String importPeriod = config().getString(String.format("%s_%s", ConfigKeys.IMPORT_DATA_PERIOD, classSimpleName));
-				if(importPeriod != null && startDateTime != null) {
-					Duration duration = TimeTool.parseNextDuration(importPeriod);
-					ZonedDateTime nextStartTime = startDateTime.plus(duration);
-					LOG.info(String.format(importTimerScheduling, classSimpleName, nextStartTime.format(TIME_FORMAT)));
-					Duration nextStartDuration = Duration.between(Instant.now(), nextStartTime);
-					vertx.setTimer(nextStartDuration.toMillis(), b -> {
-						importDataClass(classSimpleName, nextStartTime);
-					});
-					promise.complete();
-				} else {
-					promise.complete();
-				}
-			});
-		} else if(ReportType.CLASS_SIMPLE_NAME.equals(classSimpleName)) {
-			importDataReportType().onComplete(a -> {
-				String importPeriod = config().getString(String.format("%s_%s", ConfigKeys.IMPORT_DATA_PERIOD, classSimpleName));
-				if(importPeriod != null && startDateTime != null) {
-					Duration duration = TimeTool.parseNextDuration(importPeriod);
-					ZonedDateTime nextStartTime = startDateTime.plus(duration);
-					LOG.info(String.format(importTimerScheduling, classSimpleName, nextStartTime.format(TIME_FORMAT)));
-					Duration nextStartDuration = Duration.between(Instant.now(), nextStartTime);
-					vertx.setTimer(nextStartDuration.toMillis(), b -> {
-						importDataClass(classSimpleName, nextStartTime);
-					});
-					promise.complete();
-				} else {
-					promise.complete();
-				}
-			});
-		} else if(SitePage.CLASS_SIMPLE_NAME.equals(classSimpleName)) {
-			importDataSitePage().onComplete(a -> {
-				String importPeriod = config().getString(String.format("%s_%s", ConfigKeys.IMPORT_DATA_PERIOD, classSimpleName));
-				if(importPeriod != null && startDateTime != null) {
-					Duration duration = TimeTool.parseNextDuration(importPeriod);
-					ZonedDateTime nextStartTime = startDateTime.plus(duration);
-					LOG.info(String.format(importTimerScheduling, classSimpleName, nextStartTime.format(TIME_FORMAT)));
-					Duration nextStartDuration = Duration.between(Instant.now(), nextStartTime);
-					vertx.setTimer(nextStartDuration.toMillis(), b -> {
-						importDataClass(classSimpleName, nextStartTime);
-					});
-					promise.complete();
-				} else {
-					promise.complete();
-				}
-			});
-		}
-		return promise.future();
-	}
-
-	/**
-	 * Import initial data
-	 * Val.Complete.enUS:Importing donor data completed. 
-	 * Val.Fail.enUS:Importing donor data failed. 
-	 * Val.Skip.enUS:Skip importing donor data. 
+	 * Val.Skip.enUS:The data import is disabled. 
 	 **/
-	private Future<Void> importDataChoiceDonor() {
+	private Future<Void> importData() {
 		Promise<Void> promise = Promise.promise();
-		webClient.post(config().getInteger(ConfigKeys.DOMO_PORT), config().getString(ConfigKeys.DOMO_HOST_NAME), config().getString(ConfigKeys.DOMO_AUTH_TOKEN_URI))
-				.expect(ResponsePredicate.SC_OK)
-				.ssl(config().getBoolean(ConfigKeys.DOMO_SSL))
-				.authentication(new UsernamePasswordCredentials(config().getString(ConfigKeys.DOMO_AUTH_CLIENT_ID), config().getString(ConfigKeys.DOMO_AUTH_CLIENT_SECRET)))
-				.putHeader("Content-Type", "application/x-www-form-urlencoded")
-				.sendForm(MultiMap.caseInsensitiveMultiMap().set("grant_type", "client_credentials").set("scope", config().getString(ConfigKeys.DOMO_AUTH_SCOPE)))
-				.onSuccess(tokenResponse -> {
-			JsonObject token = tokenResponse.bodyAsJsonObject();
-			webClient.post(config().getInteger(ConfigKeys.DOMO_PORT), config().getString(ConfigKeys.DOMO_HOST_NAME), config().getString(ConfigKeys.DOMO_DATASET_CPP_URI))
-					.ssl(config().getBoolean(ConfigKeys.DOMO_SSL))
-					.authentication(new TokenCredentials(token.getString("access_token")))
-					.sendJson(new JsonObject().put("sql", "SELECT * FROM table"))
-					.onSuccess(cppResponse -> {
-				JsonObject cppData = cppResponse.bodyAsJsonObject();
-				List<Future> futures = new ArrayList<>();
-
-				cppData.getJsonArray("rows").stream().map(o -> (JsonArray)o).forEach(row -> {
-					String donorFullName = row.getString(0);
-					Long donorId = row.getLong(1);
-					String donorAttributeName = row.getString(2);
-					Long donorAttributeId = row.getLong(3);
-					String donorInKind = row.getString(4);
-					BigDecimal donorTotal = BigDecimal.valueOf(row.getDouble(5));
-					BigDecimal donorYtd = BigDecimal.valueOf(row.getDouble(6));
-					BigDecimal donorQ1 = BigDecimal.valueOf(row.getDouble(7));
-					BigDecimal donorQ2 = BigDecimal.valueOf(row.getDouble(8));
-					BigDecimal donorQ3 = BigDecimal.valueOf(row.getDouble(9));
-					BigDecimal donorQ4 = BigDecimal.valueOf(row.getDouble(10));
-					String donorParentName = row.getString(11);
-
-					JsonObject body = new JsonObject()
-							.put("saves", new JsonArray().add("inheritPk").add("donorFullName").add("donorId").add("stateKey").add("donorAttributeName").add("donorAttributeId").add("donorInKind").add("donorTotal").add("donorYtd").add("donorQ1").add("donorQ2").add("donorQ3").add("donorQ4").add("donorParentName"))
-							.put("pk", Optional.ofNullable(donorId).map(v -> v.toString()).orElse(null))
-							.put("donorFullName", Optional.ofNullable(donorFullName).map(v -> v.trim()).orElse(null))
-							.put("donorId", Optional.ofNullable(donorId).map(v -> v.toString()).orElse(null))
-							.put("donorAttributeName", Optional.ofNullable(donorAttributeName).map(v -> v.trim()).orElse(null))
-							.put("donorAttributeId", Optional.ofNullable(donorAttributeId).map(v -> v.toString()).orElse(null))
-							.put("donorInKind", Optional.ofNullable(donorInKind).map(v -> v.toString()).orElse(null))
-							.put("donorTotal", Optional.ofNullable(donorTotal).map(v -> v.toString()).orElse(null))
-							.put("donorYtd", Optional.ofNullable(donorYtd).map(v -> v.toString()).orElse(null))
-							.put("donorQ1", Optional.ofNullable(donorQ1).map(v -> v.toString()).orElse(null))
-							.put("donorQ2", Optional.ofNullable(donorQ2).map(v -> v.toString()).orElse(null))
-							.put("donorQ3", Optional.ofNullable(donorQ3).map(v -> v.toString()).orElse(null))
-							.put("donorQ4", Optional.ofNullable(donorQ4).map(v -> v.toString()).orElse(null))
-							.put("donorParentName", Optional.ofNullable(donorParentName).map(v -> v.trim()).orElse(null))
-							;
-					JsonObject params = new JsonObject();
-					params.put("body", body);
-					params.put("path", new JsonObject());
-					params.put("cookie", new JsonObject());
-					params.put("query", new JsonObject().put("commitWithin", 10000).put("q", "*:*").put("var", new JsonArray().add("refresh:false")));
-					JsonObject context = new JsonObject().put("params", params);
-					JsonObject json = new JsonObject().put("context", context);
-					futures.add(vertx.eventBus().request(String.format("choice-reports-enUS-%s", "ChoiceDonor"), json, new DeliveryOptions().addHeader("action", String.format("putimport%sFuture", "ChoiceDonor"))));
-				});
-				CompositeFuture.all(futures).onSuccess(a -> {
-					LOG.info(importDataChoiceDonorComplete);
-					promise.complete();
-				}).onFailure(ex -> {
-					LOG.error(importDataChoiceDonorFail, ex);
-					promise.fail(ex);
-				});
-			}).onFailure(ex -> {
-				LOG.error(importDataChoiceDonorFail, ex);
-				promise.fail(ex);
-			});
-		}).onFailure(ex -> {
-			LOG.error(importDataChoiceDonorFail, ex);
-			promise.fail(ex);
-		});
-		return promise.future();
-	}
-
-	/**
-	 * Import initial data
-	 * Val.Complete.enUS:Importing report type data completed. 
-	 * Val.Fail.enUS:Importing report type data failed. 
-	 * Val.Skip.enUS:Skip importing report type data. 
-	 **/
-	private Future<Void> importDataReportType() {
-		Promise<Void> promise = Promise.promise();
-		JsonArray reportTypes = Optional.ofNullable(config().getValue(String.format("IMPORT_DATA_%s", "ReportType"))).map(v -> v instanceof JsonArray ? (JsonArray)v : new JsonArray(v.toString())).orElse(new JsonArray());
-		List<Future> futures = new ArrayList<>();
-
-		reportTypes.stream().map(o -> (JsonObject)o).forEach(reportType -> {
-	
-			JsonObject body = new JsonObject()
-					.put(ReportType.VAR_saves, new JsonArray().add(ReportType.VAR_inheritPk).add(ReportType.VAR_typeName))
-					.put(ReportType.VAR_pk, reportType.getString(ReportType.VAR_typeName))
-					.put(ReportType.VAR_typeName, reportType.getString(ReportType.VAR_typeName))
-					;
-			JsonObject params = new JsonObject();
-			params.put("body", body);
-			params.put("path", new JsonObject());
-			params.put("cookie", new JsonObject());
-			params.put("query", new JsonObject().put("commitWithin", 10000).put("q", "*:*").put("var", new JsonArray().add("refresh:false")));
-			JsonObject context = new JsonObject().put("params", params);
-			JsonObject json = new JsonObject().put("context", context);
-			futures.add(vertx.eventBus().request(String.format("choice-reports-enUS-%s", "ReportType"), json, new DeliveryOptions().addHeader("action", String.format("putimport%sFuture", "ReportType"))));
-		});
-		CompositeFuture.all(futures).onSuccess(a -> {
-			LOG.info(importDataReportTypeComplete);
+		if(config().getBoolean(ConfigKeys.ENABLE_IMPORT_DATA)) {
+			importTimer("MODEL_CLASS");
 			promise.complete();
-		}).onFailure(ex -> {
-			LOG.error(importDataReportTypeFail, ex);
-			promise.fail(ex);
-		});
+		}
+		else {
+			LOG.info(importDataSkip);
+			promise.complete();
+		}
 		return promise.future();
 	}
 
@@ -592,6 +422,26 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 					siteRequest.setConfig(config());
 					siteRequest.setWebClient(webClient);
 					siteRequest.initDeepSiteRequestEnUS(siteRequest);
+
+					json.put("page", new JsonObject()
+							.put(SitePage.VAR_siteName, config().getString(ConfigKeys.SITE_NAME))
+							.put(SitePage.VAR_siteDisplayName, config().getString(ConfigKeys.SITE_DISPLAY_NAME))
+							);
+
+					String[] fieldNames = json.fieldNames().toArray(new String[json.fieldNames().size()]);
+					for(Integer i = 0; i < json.size(); i++) {
+						String key = fieldNames[i];
+						Object o = json.getValue(key);
+						if(o instanceof String) {
+							try {
+								Template template = handlebars.compileInline((String)o);
+								Context engineContext = Context.newBuilder(json.getMap()).resolver(templateEngine.getResolvers()).build();
+								json.put(key, Buffer.buffer(template.apply(engineContext)).toString());
+							} catch (IOException ex) {
+								ExceptionUtils.rethrow(ex);
+							}
+						}
+					}
 
 					SitePage page = new SitePage();
 					page.setSiteRequest_(siteRequest);
@@ -639,12 +489,12 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 							for(String htmGroup : json.fieldNames()) {
 								if(StringUtils.startsWith(htmGroup, "htm")) {
 									JsonArray pageItems = json.getJsonArray(htmGroup);
-									sequenceNum = importSiteHtm(page, json, stack, pageId, htmGroup, pageItems, futures, sequenceNum);
+									sequenceNum = importSiteHtm(page, json, new JsonArray(), stack, pageId, htmGroup, pageItems, futures, sequenceNum);
 								}
 							}
 							JsonObject pageBody2 = JsonObject.mapFrom(page);
 							json.put("page", pageBody2);
-			
+
 							CompositeFuture.all(futures).onSuccess(b -> {
 								JsonObject pageParams = new JsonObject();
 								pageParams.put("body", pageBody2);
@@ -706,7 +556,7 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 		return promise.future();
 	}
 
-	private Long importSiteHtm(SitePage page, JsonObject json, Stack<String> stack, String pageId, String htmGroup, JsonArray pageItems, List<Future> futures, Long sequenceNum) throws Exception {
+	private Long importSiteHtm(SitePage page, JsonObject json, JsonArray labels, Stack<String> stack, String pageId, String htmGroup, JsonArray pageItems, List<Future> futures, Long sequenceNum) throws Exception {
 		Double sort = 0D;
 		for(Integer i = 0; i < pageItems.size(); i++) {
 			// Process a page item, one at a time
@@ -714,19 +564,24 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 			String uri = json.getString(SiteHtm.VAR_uri);
 			Object in = pageItem.getValue("in");
 			String e = pageItem.getString("e");
+			JsonArray labels2 = Optional.ofNullable(pageItem.getValue("label")).map(o -> o instanceof JsonArray ? (JsonArray)o : new JsonArray().add(o)).orElse(null);
+			JsonArray labels3 = new JsonArray();
 			String each = pageItem.getString("each");
 			JsonObject a = pageItem.getJsonObject(SiteHtm.VAR_a);
 			Boolean eNoWrapParent = false;
 			Boolean eNoWrap = false;
 			String tabs = "";
+			String comment = pageItem.getString(SiteHtm.VAR_comment);
 
 			if(e != null) {
 				// Stack the element and determine element name, wrap and tabs
 				String localNameParent = stack.isEmpty() ? null : stack.peek();
 				eNoWrapParent = localNameParent == null || XmlTool.HTML_ELEMENTS_NO_WRAP.contains(localNameParent);
 				eNoWrap = localNameParent == null || XmlTool.HTML_ELEMENTS_NO_WRAP.contains(e);
-				tabs = String.join("", Collections.nCopies(stack.size(), "  "));
+				tabs = String.join("", Collections.nCopies(stack.size(), "\t"));
 				stack.push(e);
+			} else if(comment != null) {
+				tabs = String.join("", Collections.nCopies(stack.size(), "\t"));
 			}
 
 			{
@@ -735,16 +590,43 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 				JsonObject importItem = new JsonObject();
 				if(e != null)
 					importItem.put(SiteHtm.VAR_eBefore, e);
+
+				if(comment != null) {
+					// Split text by lines and index each line as it's own value
+					Template template = handlebars.compileInline(comment);
+					Context engineContext = Context.newBuilder(json.getMap()).resolver(templateEngine.getResolvers()).build();
+					Buffer buffer = Buffer.buffer(template.apply(engineContext));
+					String[] strs = buffer.toString().split("\r?\n");
+					importItem.put(SiteHtm.VAR_comment, new JsonArray().addAll(new JsonArray(Arrays.asList(strs))));
+					page.addObjectText(strs);
+				}
+
 				String text = pageItem.getString(SiteHtm.VAR_text);
 				if(text != null) {
 					// Split text by lines and index each line as it's own value
 					Template template = handlebars.compileInline(text);
 					Context engineContext = Context.newBuilder(json.getMap()).resolver(templateEngine.getResolvers()).build();
 					Buffer buffer = Buffer.buffer(template.apply(engineContext));
-					String[] strs = buffer.toString().split("\r?\n");
+					String text2 = buffer.toString();
+					if(text2.contains("{{")) {
+						Template template2 = handlebars.compileInline(text2);
+						Context engineContext2 = Context.newBuilder(json.getMap()).resolver(templateEngine.getResolvers()).build();
+						Buffer buffer2 = Buffer.buffer(template2.apply(engineContext2));
+						text2 = buffer2.toString();
+					}
+					String[] strs = text2.split("\r?\n");
 					importItem.put(SiteHtm.VAR_text, new JsonArray().addAll(new JsonArray(Arrays.asList(strs))));
 					page.addObjectText(strs);
 				}
+
+				labels3.addAll(labels);
+				if(labels2 != null) {
+					labels3.addAll(labels2);
+				}
+				if(labels3.size() > 0) {
+					importItem.put(SiteHtm.VAR_labels, labels3);
+				}
+
 				if(!eNoWrapParent && !tabs.isEmpty()) {
 					importItem.put(SiteHtm.VAR_tabs, tabs);
 				}
@@ -761,6 +643,7 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 						.add(SiteHtm.VAR_tabs)
 						.add(SiteHtm.VAR_uri)
 						.add(SiteHtm.VAR_text)
+						.add(SiteHtm.VAR_labels)
 						);
 				importItem.put(SiteHtm.VAR_created, ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER.format(ZonedDateTime.now()));
 				importItem.put(SiteHtm.VAR_pageId, pageId);
@@ -777,7 +660,14 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 							Template template = handlebars.compileInline(val);
 							Context engineContext = Context.newBuilder(json.getMap()).resolver(templateEngine.getResolvers()).build();
 							Buffer buffer = Buffer.buffer(template.apply(engineContext));
-							attrs.put(field, buffer.toString());
+							String val2 = buffer.toString();
+							if(val2.contains("{{")) {
+								Template template2 = handlebars.compileInline(val2);
+								Context engineContext2 = Context.newBuilder(json.getMap()).resolver(templateEngine.getResolvers()).build();
+								Buffer buffer2 = Buffer.buffer(template2.apply(engineContext2));
+								val2 = buffer2.toString();
+							}
+							attrs.put(field, val2);
 						}
 					}
 					importItem.put(SiteHtm.VAR_a, attrs);
@@ -817,10 +707,10 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 						// Process nested elements of the "in" value
 						if(in instanceof JsonObject) {
 							// Process the nested JsonObject of the "in" value
-							sequenceNum = importSiteHtm(page, json2, stack, pageId, htmGroup, new JsonArray().add(in), futures, sequenceNum);
+							sequenceNum = importSiteHtm(page, json2, labels3, stack, pageId, htmGroup, new JsonArray().add(in), futures, sequenceNum);
 						} else if(in instanceof JsonArray) {
 							// Process the each of the nested JsonObjects in the array of the "in" value
-							sequenceNum = importSiteHtm(page, json2, stack, pageId, htmGroup, (JsonArray)in, futures, sequenceNum);
+							sequenceNum = importSiteHtm(page, json2, labels3, stack, pageId, htmGroup, (JsonArray)in, futures, sequenceNum);
 						}
 					}
 				}
@@ -830,10 +720,10 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 					// Process nested elements of the "in" value
 					if(in instanceof JsonObject) {
 						// Process the nested JsonObject of the "in" value
-						sequenceNum = importSiteHtm(page, json, stack, pageId, htmGroup, new JsonArray().add(in), futures, sequenceNum);
+						sequenceNum = importSiteHtm(page, json, labels3, stack, pageId, htmGroup, new JsonArray().add(in), futures, sequenceNum);
 					} else if(in instanceof JsonArray) {
 						// Process the each of the nested JsonObjects in the array of the "in" value
-						sequenceNum = importSiteHtm(page, json, stack, pageId, htmGroup, (JsonArray)in, futures, sequenceNum);
+						sequenceNum = importSiteHtm(page, json, labels3, stack, pageId, htmGroup, (JsonArray)in, futures, sequenceNum);
 					}
 				}
 			}
@@ -849,6 +739,9 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 				if(!eNoWrapParent) {
 					importItem.put(SiteHtm.VAR_newLine, true);
 				}
+				if(labels3.size() > 0) {
+					importItem.put(SiteHtm.VAR_labels, labels3);
+				}
 				importItem.put(SiteHtm.VAR_saves, new JsonArray()
 						.add(SiteHtm.VAR_eAfter)
 						.add(SiteHtm.VAR_htmAfter)
@@ -857,6 +750,7 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 						.add(SiteHtm.VAR_pageId)
 						.add(SiteHtm.VAR_tabs)
 						.add(SiteHtm.VAR_uri)
+						.add(SiteHtm.VAR_labels)
 						);
 				importItem.put(SiteHtm.VAR_created, ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER.format(ZonedDateTime.now()));
 				importItem.put(SiteHtm.VAR_pageId, pageId);
@@ -899,11 +793,11 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 				refreshData(SiteUser.CLASS_SIMPLE_NAME).onSuccess(q -> {
 					refreshData(ChoiceDonor.CLASS_SIMPLE_NAME).onSuccess(q1 -> {
 						refreshData(ChoiceReport.CLASS_SIMPLE_NAME).onSuccess(q2 -> {
-							refreshData(SitePage.CLASS_SIMPLE_NAME).onSuccess(q3 -> {
-								refreshData(ReportEvent.CLASS_SIMPLE_NAME).onSuccess(q4 -> {
-									refreshData(ReportNarrative.CLASS_SIMPLE_NAME).onSuccess(q5 -> {
-										refreshData(ReportSchedule.CLASS_SIMPLE_NAME).onSuccess(q6 -> {
-											refreshData(ReportType.CLASS_SIMPLE_NAME).onSuccess(q7 -> {
+							refreshData(ReportEvent.CLASS_SIMPLE_NAME).onSuccess(q3 -> {
+								refreshData(ReportNarrative.CLASS_SIMPLE_NAME).onSuccess(q4 -> {
+									refreshData(ReportSchedule.CLASS_SIMPLE_NAME).onSuccess(q5 -> {
+										refreshData(ReportType.CLASS_SIMPLE_NAME).onSuccess(q6 -> {
+											refreshData(SitePage.CLASS_SIMPLE_NAME).onSuccess(q7 -> {
 												refreshData(SiteHtm.CLASS_SIMPLE_NAME).onSuccess(q8 -> {
 													LOG.info(refreshAllDataComplete);
 													promise.complete();

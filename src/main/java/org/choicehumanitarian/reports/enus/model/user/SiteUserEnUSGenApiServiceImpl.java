@@ -485,6 +485,70 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 							num++;
 							bParams.add(o2.sqlDeleted());
 						break;
+					case "setUserId":
+							o2.setUserId(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(SiteUser.VAR_userId + "=$" + num);
+							num++;
+							bParams.add(o2.sqlUserId());
+						break;
+					case "setUserName":
+							o2.setUserName(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(SiteUser.VAR_userName + "=$" + num);
+							num++;
+							bParams.add(o2.sqlUserName());
+						break;
+					case "setUserEmail":
+							o2.setUserEmail(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(SiteUser.VAR_userEmail + "=$" + num);
+							num++;
+							bParams.add(o2.sqlUserEmail());
+						break;
+					case "setUserFirstName":
+							o2.setUserFirstName(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(SiteUser.VAR_userFirstName + "=$" + num);
+							num++;
+							bParams.add(o2.sqlUserFirstName());
+						break;
+					case "setUserLastName":
+							o2.setUserLastName(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(SiteUser.VAR_userLastName + "=$" + num);
+							num++;
+							bParams.add(o2.sqlUserLastName());
+						break;
+					case "setUserFullName":
+							o2.setUserFullName(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(SiteUser.VAR_userFullName + "=$" + num);
+							num++;
+							bParams.add(o2.sqlUserFullName());
+						break;
+					case "setSeeArchived":
+							o2.setSeeArchived(jsonObject.getBoolean(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(SiteUser.VAR_seeArchived + "=$" + num);
+							num++;
+							bParams.add(o2.sqlSeeArchived());
+						break;
+					case "setSeeDeleted":
+							o2.setSeeDeleted(jsonObject.getBoolean(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(SiteUser.VAR_seeDeleted + "=$" + num);
+							num++;
+							bParams.add(o2.sqlSeeDeleted());
+						break;
 					case "setNarrativeKeys":
 						JsonArray setNarrativeKeysValues = Optional.ofNullable(jsonObject.getJsonArray(entityVar)).orElse(new JsonArray());
 						setNarrativeKeysValues.stream().map(oVal -> oVal.toString()).forEach(val -> {
@@ -658,70 +722,6 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 								});
 							}));
 						});
-						break;
-					case "setUserId":
-							o2.setUserId(jsonObject.getString(entityVar));
-							if(bParams.size() > 0)
-								bSql.append(", ");
-							bSql.append(SiteUser.VAR_userId + "=$" + num);
-							num++;
-							bParams.add(o2.sqlUserId());
-						break;
-					case "setUserName":
-							o2.setUserName(jsonObject.getString(entityVar));
-							if(bParams.size() > 0)
-								bSql.append(", ");
-							bSql.append(SiteUser.VAR_userName + "=$" + num);
-							num++;
-							bParams.add(o2.sqlUserName());
-						break;
-					case "setUserEmail":
-							o2.setUserEmail(jsonObject.getString(entityVar));
-							if(bParams.size() > 0)
-								bSql.append(", ");
-							bSql.append(SiteUser.VAR_userEmail + "=$" + num);
-							num++;
-							bParams.add(o2.sqlUserEmail());
-						break;
-					case "setUserFirstName":
-							o2.setUserFirstName(jsonObject.getString(entityVar));
-							if(bParams.size() > 0)
-								bSql.append(", ");
-							bSql.append(SiteUser.VAR_userFirstName + "=$" + num);
-							num++;
-							bParams.add(o2.sqlUserFirstName());
-						break;
-					case "setUserLastName":
-							o2.setUserLastName(jsonObject.getString(entityVar));
-							if(bParams.size() > 0)
-								bSql.append(", ");
-							bSql.append(SiteUser.VAR_userLastName + "=$" + num);
-							num++;
-							bParams.add(o2.sqlUserLastName());
-						break;
-					case "setUserFullName":
-							o2.setUserFullName(jsonObject.getString(entityVar));
-							if(bParams.size() > 0)
-								bSql.append(", ");
-							bSql.append(SiteUser.VAR_userFullName + "=$" + num);
-							num++;
-							bParams.add(o2.sqlUserFullName());
-						break;
-					case "setSeeArchived":
-							o2.setSeeArchived(jsonObject.getBoolean(entityVar));
-							if(bParams.size() > 0)
-								bSql.append(", ");
-							bSql.append(SiteUser.VAR_seeArchived + "=$" + num);
-							num++;
-							bParams.add(o2.sqlSeeArchived());
-						break;
-					case "setSeeDeleted":
-							o2.setSeeDeleted(jsonObject.getBoolean(entityVar));
-							if(bParams.size() > 0)
-								bSql.append(", ");
-							bSql.append(SiteUser.VAR_seeDeleted + "=$" + num);
-							num++;
-							bParams.add(o2.sqlSeeDeleted());
 						break;
 				}
 			}
@@ -1037,44 +1037,6 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 						num++;
 						bParams.add(o2.sqlUserKey());
 						break;
-					case SiteUser.VAR_narrativeKeys:
-						Optional.ofNullable(jsonObject.getJsonArray(entityVar)).orElse(new JsonArray()).stream().map(oVal -> oVal.toString()).forEach(val -> {
-							futures2.add(Future.future(promise2 -> {
-								search(siteRequest).query(ReportNarrative.class, val, inheritPk).onSuccess(pk2 -> {
-									if(!pks.contains(pk2)) {
-										pks.add(pk2);
-										classes.add("ReportNarrative");
-									}
-									sql(siteRequest).update(ReportNarrative.class, pk2).set(ReportNarrative.VAR_assigneeKey, SiteUser.class, pk).onSuccess(a -> {
-										promise2.complete();
-									}).onFailure(ex -> {
-										promise2.fail(ex);
-									});
-								}).onFailure(ex -> {
-									promise2.fail(ex);
-								});
-							}));
-						});
-						break;
-					case SiteUser.VAR_eventKeys:
-						Optional.ofNullable(jsonObject.getJsonArray(entityVar)).orElse(new JsonArray()).stream().map(oVal -> oVal.toString()).forEach(val -> {
-							futures2.add(Future.future(promise2 -> {
-								search(siteRequest).query(ReportEvent.class, val, inheritPk).onSuccess(pk2 -> {
-									if(!pks.contains(pk2)) {
-										pks.add(pk2);
-										classes.add("ReportEvent");
-									}
-									sql(siteRequest).update(ReportEvent.class, pk2).set(ReportEvent.VAR_assigneeKey, SiteUser.class, pk).onSuccess(a -> {
-										promise2.complete();
-									}).onFailure(ex -> {
-										promise2.fail(ex);
-									});
-								}).onFailure(ex -> {
-									promise2.fail(ex);
-								});
-							}));
-						});
-						break;
 					case SiteUser.VAR_userId:
 						o2.setUserId(jsonObject.getString(entityVar));
 						if(bParams.size() > 0) {
@@ -1146,6 +1108,44 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 						bSql.append(SiteUser.VAR_seeDeleted + "=$" + num);
 						num++;
 						bParams.add(o2.sqlSeeDeleted());
+						break;
+					case SiteUser.VAR_narrativeKeys:
+						Optional.ofNullable(jsonObject.getJsonArray(entityVar)).orElse(new JsonArray()).stream().map(oVal -> oVal.toString()).forEach(val -> {
+							futures2.add(Future.future(promise2 -> {
+								search(siteRequest).query(ReportNarrative.class, val, inheritPk).onSuccess(pk2 -> {
+									if(!pks.contains(pk2)) {
+										pks.add(pk2);
+										classes.add("ReportNarrative");
+									}
+									sql(siteRequest).update(ReportNarrative.class, pk2).set(ReportNarrative.VAR_assigneeKey, SiteUser.class, pk).onSuccess(a -> {
+										promise2.complete();
+									}).onFailure(ex -> {
+										promise2.fail(ex);
+									});
+								}).onFailure(ex -> {
+									promise2.fail(ex);
+								});
+							}));
+						});
+						break;
+					case SiteUser.VAR_eventKeys:
+						Optional.ofNullable(jsonObject.getJsonArray(entityVar)).orElse(new JsonArray()).stream().map(oVal -> oVal.toString()).forEach(val -> {
+							futures2.add(Future.future(promise2 -> {
+								search(siteRequest).query(ReportEvent.class, val, inheritPk).onSuccess(pk2 -> {
+									if(!pks.contains(pk2)) {
+										pks.add(pk2);
+										classes.add("ReportEvent");
+									}
+									sql(siteRequest).update(ReportEvent.class, pk2).set(ReportEvent.VAR_assigneeKey, SiteUser.class, pk).onSuccess(a -> {
+										promise2.complete();
+									}).onFailure(ex -> {
+										promise2.fail(ex);
+									});
+								}).onFailure(ex -> {
+									promise2.fail(ex);
+								});
+							}));
+						});
 						break;
 					}
 				}

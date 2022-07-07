@@ -3,6 +3,7 @@ package org.choicehumanitarian.reports.enus.vertx;
 import java.net.URLDecoder;
 import java.text.Normalizer;
 import java.util.Map.Entry;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
@@ -35,11 +36,11 @@ import org.choicehumanitarian.reports.enus.model.page.SitePageEnUSGenApiService;
 import org.choicehumanitarian.reports.enus.model.htm.SiteHtmEnUSGenApiService;
 import org.choicehumanitarian.reports.enus.model.donor.ChoiceDonorEnUSGenApiService;
 import org.choicehumanitarian.reports.enus.model.report.ChoiceReportEnUSGenApiService;
-import org.choicehumanitarian.reports.enus.model.page.SitePageEnUSGenApiService;
 import org.choicehumanitarian.reports.enus.model.report.event.ReportEventEnUSGenApiService;
 import org.choicehumanitarian.reports.enus.model.report.narrative.ReportNarrativeEnUSGenApiService;
 import org.choicehumanitarian.reports.enus.model.report.schedule.ReportScheduleEnUSGenApiService;
 import org.choicehumanitarian.reports.enus.model.report.type.ReportTypeEnUSGenApiService;
+import org.choicehumanitarian.reports.enus.model.page.SitePageEnUSGenApiService;
 import org.choicehumanitarian.reports.enus.model.htm.SiteHtmEnUSGenApiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,9 +63,12 @@ import io.vertx.core.WorkerExecutor;
 import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.EventBusOptions;
 import io.vertx.core.http.Cookie;
+import io.vertx.core.http.HttpClientOptions;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.http.HttpServerOptions;
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
+import io.vertx.core.MultiMap;
 import io.vertx.core.net.JksOptions;
 import io.vertx.core.net.PemKeyCertOptions;
 import io.vertx.core.spi.cluster.ClusterManager;
@@ -260,10 +264,13 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 			vertxOptions.setClusterManager(clusterManager);
 		}
 		Long vertxWarningExceptionSeconds = config.getLong(ConfigKeys.VERTX_WARNING_EXCEPTION_SECONDS);
+		Long vertxMaxEventLoopExecuteTime = config.getLong(ConfigKeys.VERTX_MAX_EVENT_LOOP_EXECUTE_TIME);
 		Integer siteInstances = config.getInteger(ConfigKeys.SITE_INSTANCES);
 		vertxOptions.setEventBusOptions(eventBusOptions);
 		vertxOptions.setWarningExceptionTime(vertxWarningExceptionSeconds);
 		vertxOptions.setWarningExceptionTimeUnit(TimeUnit.SECONDS);
+		vertxOptions.setMaxEventLoopExecuteTime(vertxMaxEventLoopExecuteTime);
+		vertxOptions.setMaxEventLoopExecuteTimeUnit(TimeUnit.SECONDS);
 		vertxOptions.setWorkerPoolSize(config.getInteger(ConfigKeys.WORKER_POOL_SIZE));
 		Consumer<Vertx> runner = vertx -> {
 			try {
@@ -278,10 +285,6 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 				DeploymentOptions WorkerVerticleDeploymentOptions = new DeploymentOptions();
 				WorkerVerticleDeploymentOptions.setConfig(config);
 				WorkerVerticleDeploymentOptions.setInstances(1);
-	
-				DeploymentOptions ceylonVerticleDeploymentOptions = new DeploymentOptions();
-				ceylonVerticleDeploymentOptions.setConfig(config);
-				ceylonVerticleDeploymentOptions.setInstances(1);
 	
 				vertx.deployVerticle(MainVerticle.class, deploymentOptions).onSuccess(a -> {
 					LOG.info("Started main verticle. ");
@@ -444,6 +447,7 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 			JsonObject extraParams = new JsonObject();
 			extraParams.put("scope", "profile");
 			oauth2ClientOptions.setExtraParameters(extraParams);
+			oauth2ClientOptions.setHttpClientOptions(new HttpClientOptions().setConnectTimeout(120000));
 
 			OpenIDConnectAuth.discover(vertx, oauth2ClientOptions, a -> {
 				if(a.succeeded()) {
@@ -640,38 +644,6 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 			siteInstances = Optional.ofNullable(System.getenv(ConfigKeys.SITE_INSTANCES)).map(s -> Integer.parseInt(s)).orElse(1);
 			workerPoolSize = System.getenv(ConfigKeys.WORKER_POOL_SIZE) == null ? null : Integer.parseInt(System.getenv(ConfigKeys.WORKER_POOL_SIZE));
 
-			healthCheckHandler.register("database", 2000, a -> {
-				pgPool.preparedQuery("select current_timestamp").execute(selectCAsync -> {
-					if(selectCAsync.succeeded()) {
-						a.complete(Status.OK(new JsonObject().put("jdbcMaxPoolSize", jdbcMaxPoolSize).put("jdbcMaxWaitQueueSize", jdbcMaxWaitQueueSize)));
-					} else {
-						LOG.error(configureHealthChecksErrorDatabase, a.future().cause());
-						promise.fail(a.future().cause());
-					}
-				});
-			});
-			healthCheckHandler.register("solr", 2000, a -> {
-				try {
-					String solrHostName = config().getString(ConfigKeys.SOLR_HOST_NAME);
-					Integer solrPort = config().getInteger(ConfigKeys.SOLR_PORT);
-					String solrCollection = config().getString(ConfigKeys.SOLR_COLLECTION);
-					String solrRequestUri = String.format("/solr/%s/select%s", solrCollection, "");
-					webClient.get(solrPort, solrHostName, solrRequestUri).send().onSuccess(b -> {
-						try {
-							a.complete(Status.OK());
-						} catch(Exception ex) {
-							LOG.error("Could not read response from Solr. ", ex);
-							a.fail(ex);
-						}
-					}).onFailure(ex -> {
-						LOG.error(String.format("Solr request failed. "), new RuntimeException(ex));
-						a.fail(ex);
-					});
-				} catch (Exception e) {
-					LOG.error(configureHealthChecksErrorSolr, a.future().cause());
-					a.fail(a.future().cause());
-				}
-			});
 			healthCheckHandler.register("vertx", 2000, a -> {
 				a.complete(Status.OK(new JsonObject().put(ConfigKeys.SITE_INSTANCES, siteInstances).put("workerPoolSize", workerPoolSize)));
 			});
@@ -779,11 +751,11 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 			SiteUserEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine, vertx);
 			ChoiceDonorEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine, vertx);
 			ChoiceReportEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine, vertx);
-			SitePageEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine, vertx);
 			ReportEventEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine, vertx);
 			ReportNarrativeEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine, vertx);
 			ReportScheduleEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine, vertx);
 			ReportTypeEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine, vertx);
+			SitePageEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine, vertx);
 			SiteHtmEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine, vertx);
 
 			LOG.info(configureApiComplete);
@@ -816,8 +788,21 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 				try {
 					ctx.put(ConfigKeys.STATIC_BASE_URL, config().getString(ConfigKeys.STATIC_BASE_URL));
 					HomePage t = new HomePage();
+					JsonObject query = new JsonObject();
+					MultiMap queryParams = ctx.queryParams();
+					for(String name : queryParams.names()) {
+						JsonArray array = query.getJsonArray(name);
+						List<String> vals = queryParams.getAll(name);
+						if(array == null) {
+							array = new JsonArray();
+							query.put(name, array);
+						}
+						for(String val : vals) {
+							array.add(val);
+						}
+					}
 					ServiceRequest serviceRequest = new ServiceRequest(
-							new JsonObject().put("path", JsonObject.mapFrom(ctx.pathParams())).put("query", JsonObject.mapFrom(ctx.queryParams())).put("cookie", JsonObject.mapFrom(ctx.cookieMap()))
+							new JsonObject().put("path", JsonObject.mapFrom(ctx.pathParams())).put("query", query).put("cookie", JsonObject.mapFrom(ctx.cookieMap()))
 							, ctx.request().headers()
 							, Optional.ofNullable(ctx.user()).map(u -> u.principal()).orElse(null)
 							, new JsonObject()
@@ -852,8 +837,21 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 			router.getWithRegex("(?<uri>\\/(?<lang>(?<lang1>[a-z][a-z])-(?<lang2>[a-z][a-z]))\\/.*)").handler(ctx -> {
 				String uri = ctx.pathParam("uri");
 				String lang = String.format("%s%s", ctx.pathParam("lang1"), ctx.pathParam("lang2").toUpperCase());
+				JsonObject query = new JsonObject();
+				MultiMap queryParams = ctx.queryParams();
+				for(String name : queryParams.names()) {
+					JsonArray array = query.getJsonArray(name);
+					List<String> vals = queryParams.getAll(name);
+					if(array == null) {
+						array = new JsonArray();
+						query.put(name, array);
+					}
+					for(String val : vals) {
+						array.add(val);
+					}
+				}
 				ServiceRequest serviceRequest = new ServiceRequest(
-						new JsonObject().put("path", JsonObject.mapFrom(ctx.pathParams())).put("query", JsonObject.mapFrom(ctx.queryParams())).put("cookie", JsonObject.mapFrom(ctx.cookieMap()))
+						new JsonObject().put("path", JsonObject.mapFrom(ctx.pathParams())).put("query", query).put("cookie", JsonObject.mapFrom(ctx.cookieMap()))
 						, ctx.request().headers()
 						, Optional.ofNullable(ctx.user()).map(u -> u.principal()).orElse(null)
 						, new JsonObject()
@@ -880,6 +878,7 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 						page.promiseDeepForClass(siteRequest).onSuccess(b -> {
 							JsonObject json = JsonObject.mapFrom(page);
 							json.put(ConfigKeys.STATIC_BASE_URL, config().getString(ConfigKeys.STATIC_BASE_URL));
+							json.put(ConfigKeys.SITE_BASE_URL, config().getString(ConfigKeys.SITE_BASE_URL));
 							json.put(ConfigKeys.GITHUB_ORG, config().getString(ConfigKeys.GITHUB_ORG));
 							json.put(ConfigKeys.SITE_NAME, config().getString(ConfigKeys.SITE_NAME));
 							json.put(ConfigKeys.SITE_DISPLAY_NAME, config().getString(ConfigKeys.SITE_DISPLAY_NAME));

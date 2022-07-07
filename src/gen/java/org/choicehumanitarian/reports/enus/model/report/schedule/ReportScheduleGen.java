@@ -1609,7 +1609,7 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 
 	public static final String DISPLAY_NAME_typeKey = "report type";
 	public static final String DISPLAY_NAME_narrativeKeys = "narratives";
-	public static final String DISPLAY_NAME_eventKeys = "events";
+	public static final String DISPLAY_NAME_eventKeys = "calendar items";
 	public static final String DISPLAY_NAME_typeSearch = "";
 	public static final String DISPLAY_NAME_type_ = "";
 	public static final String DISPLAY_NAME_typeName = "report type name";
@@ -1750,9 +1750,9 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 		case VAR_firstDueDate:
 			return 1;
 		case VAR_dataPullDate:
-			return 1;
-		case VAR_dataSources:
 			return 2;
+		case VAR_dataSources:
+			return 3;
 			default:
 				return BaseModel.htmlCellBaseModel(var);
 		}

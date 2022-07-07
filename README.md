@@ -263,41 +263,22 @@ ansible-playbook --vault-id @prompt -e @~/.local/src/choice-reports-ansible/vaul
 ansible-playbook --vault-id @prompt -e @~/.local/src/choice-reports-ansible/vault/$USER-staging/vault ~/.ansible/roles/computate.computate_project_openshift/install.yml -e SITE_NAME=choice-reports
 ```
 
+## How to run the application as a Podman container
+
+### Install the prerequiste packages for buildah and podman
+
+```bash
+pkcon install -y buildah
+pkcon install -y podman
+```
+
+```bash
+cd ~/.local/src/choice-reports
+ podman build -t computate/choice-reports:latest .
+```
+
 ## How the base classes for this project were created
 
 ```bash
 ansible-playbook -e @~/.local/src/choice-reports/local/ansible_install_vars.yml ~/.local/src/computate-org/vertx_project.yml
-```
-
-# Load a new map traffic data into SUMO
-
-```bash
-cd ~/.local/share/sumo/data
-env LD_LIBRARY_PATH=~/.local/lib "SUMO_HOME=$HOME/.local/share/sumo" python ~/.local/share/sumo/tools/osmWebWizard.py
-```
-
-# Export SUMO vehicle coordinate data
-
-```bash
-env LD_LIBRARY_PATH=~/.local/lib "SUMO_HOME=$HOME/.local/share/sumo" SUMO_HOME=~/.local/share/sumo sumo --fcd-output ~/.local/share/sumo/data/veberod/veberod-fcd.xml -c ~/.local/share/sumo/data/veberod/veberod.sumocfg --fcd-output.geo -b 10 -e 360 --step-length 0.1
-```
-
-# Run SUMO with Traci TCP server
-
-```bash
-env SUMO_HOME=/home/ctate/.local/share/sumo LD_LIBRARY_PATH=/home/ctate/.local/lib /home/ctate/.local/bin/sumo-gui --remote-port 8813 --num-clients 1 --start
-```
-
-## Python interact with the Traci TCP server
-
-```bash
-cd ~/.local/share/sumo/tools
-```
-
-```python
-import traci
-conn = traci.connect()
-conn.simulationStep()
-conn.simulationStep()
-conn.simulationStep()
 ```

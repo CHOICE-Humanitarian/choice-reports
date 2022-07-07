@@ -671,6 +671,24 @@ public class ReportNarrativeEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 						num++;
 						bParams.add(o2.sqlNarrativeName());
 						break;
+					case ReportNarrative.VAR_pullStartDate:
+						o2.setPullStartDate(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(ReportNarrative.VAR_pullStartDate + "=$" + num);
+						num++;
+						bParams.add(o2.sqlPullStartDate());
+						break;
+					case ReportNarrative.VAR_pullEndDate:
+						o2.setPullEndDate(jsonObject.getString(entityVar));
+						if(bParams.size() > 0) {
+							bSql.append(", ");
+						}
+						bSql.append(ReportNarrative.VAR_pullEndDate + "=$" + num);
+						num++;
+						bParams.add(o2.sqlPullEndDate());
+						break;
 					}
 				}
 			}
@@ -1063,6 +1081,22 @@ public class ReportNarrativeEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 							bSql.append(ReportNarrative.VAR_narrativeName + "=$" + num);
 							num++;
 							bParams.add(o2.sqlNarrativeName());
+						break;
+					case "setPullStartDate":
+							o2.setPullStartDate(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(ReportNarrative.VAR_pullStartDate + "=$" + num);
+							num++;
+							bParams.add(o2.sqlPullStartDate());
+						break;
+					case "setPullEndDate":
+							o2.setPullEndDate(jsonObject.getString(entityVar));
+							if(bParams.size() > 0)
+								bSql.append(", ");
+							bSql.append(ReportNarrative.VAR_pullEndDate + "=$" + num);
+							num++;
+							bParams.add(o2.sqlPullEndDate());
 						break;
 				}
 			}
@@ -1853,7 +1887,7 @@ public class ReportNarrativeEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 									params.put("body", new JsonObject());
 									params.put("cookie", new JsonObject());
 									params.put("path", new JsonObject());
-									params.put("query", new JsonObject().put("q", "*:*").put("fq", new JsonArray().add("pk:" + pk2)));
+									params.put("query", new JsonObject().put("q", "*:*").put("fq", new JsonArray().add("pk:" + pk2)).put("var", new JsonArray().add("refresh:false")));
 									JsonObject context = new JsonObject().put("params", params).put("user", siteRequest.getUserPrincipal());
 									JsonObject json = new JsonObject().put("context", context);
 									eventBus.request("choice-reports-enUS-ReportSchedule", json, new DeliveryOptions().addHeader("action", "patchReportScheduleFuture")).onSuccess(c -> {
@@ -1888,7 +1922,7 @@ public class ReportNarrativeEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 									params.put("body", new JsonObject());
 									params.put("cookie", new JsonObject());
 									params.put("path", new JsonObject());
-									params.put("query", new JsonObject().put("q", "*:*").put("fq", new JsonArray().add("pk:" + pk2)));
+									params.put("query", new JsonObject().put("q", "*:*").put("fq", new JsonArray().add("pk:" + pk2)).put("var", new JsonArray().add("refresh:false")));
 									JsonObject context = new JsonObject().put("params", params).put("user", siteRequest.getUserPrincipal());
 									JsonObject json = new JsonObject().put("context", context);
 									eventBus.request("choice-reports-enUS-SiteUser", json, new DeliveryOptions().addHeader("action", "patchSiteUserFuture")).onSuccess(c -> {
@@ -1925,7 +1959,7 @@ public class ReportNarrativeEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 						query.put("softCommit", softCommit);
 					if(commitWithin != null)
 						query.put("commitWithin", commitWithin);
-					query.put("q", "*:*").put("fq", new JsonArray().add("pk:" + o.getPk()));
+					query.put("q", "*:*").put("fq", new JsonArray().add("pk:" + o.getPk())).put("var", new JsonArray().add("refresh:false"));
 					params.put("query", query);
 					JsonObject context = new JsonObject().put("params", params).put("user", siteRequest.getUserPrincipal());
 					JsonObject json = new JsonObject().put("context", context);

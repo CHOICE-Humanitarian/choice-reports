@@ -46,6 +46,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.lang.Integer;
+import io.vertx.core.json.JsonObject;
+import java.math.BigDecimal;
 import io.vertx.core.json.JsonArray;
 import org.computate.search.response.solr.SolrResponse.Stats;
 import org.computate.search.response.solr.SolrResponse.FacetCounts;
@@ -792,6 +794,129 @@ public abstract class ReportScheduleGenPageGen<DEV> extends BaseModelPage {
 		return ReportScheduleGenPage.staticSearchStrDefaultPivotMinCount(siteRequest_, ReportScheduleGenPage.staticSearchDefaultPivotMinCount(siteRequest_, ReportScheduleGenPage.staticSetDefaultPivotMinCount(siteRequest_, o)));
 	}
 
+	//////////////////////////
+	// DEFAULT_MAP_LOCATION //
+	//////////////////////////
+
+	/**	 The entity DEFAULT_MAP_LOCATION
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected JsonObject DEFAULT_MAP_LOCATION;
+
+	/**	<br> The entity DEFAULT_MAP_LOCATION
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.schedule.ReportScheduleGenPage&fq=entiteVar_enUS_indexed_string:DEFAULT_MAP_LOCATION">Find the entity DEFAULT_MAP_LOCATION in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _DEFAULT_MAP_LOCATION(Wrap<JsonObject> w);
+
+	public JsonObject getDEFAULT_MAP_LOCATION() {
+		return DEFAULT_MAP_LOCATION;
+	}
+
+	public void setDEFAULT_MAP_LOCATION(JsonObject DEFAULT_MAP_LOCATION) {
+		this.DEFAULT_MAP_LOCATION = DEFAULT_MAP_LOCATION;
+	}
+	@JsonIgnore
+	public void setDEFAULT_MAP_LOCATION(String o) {
+		this.DEFAULT_MAP_LOCATION = ReportScheduleGenPage.staticSetDEFAULT_MAP_LOCATION(siteRequest_, o);
+	}
+	public static JsonObject staticSetDEFAULT_MAP_LOCATION(SiteRequestEnUS siteRequest_, String o) {
+		if(o != null) {
+				return new JsonObject(o);
+		}
+		return null;
+	}
+	protected ReportScheduleGenPage DEFAULT_MAP_LOCATIONInit() {
+		Wrap<JsonObject> DEFAULT_MAP_LOCATIONWrap = new Wrap<JsonObject>().var("DEFAULT_MAP_LOCATION");
+		if(DEFAULT_MAP_LOCATION == null) {
+			_DEFAULT_MAP_LOCATION(DEFAULT_MAP_LOCATIONWrap);
+			setDEFAULT_MAP_LOCATION(DEFAULT_MAP_LOCATIONWrap.o);
+		}
+		return (ReportScheduleGenPage)this;
+	}
+
+	public static JsonObject staticSearchDEFAULT_MAP_LOCATION(SiteRequestEnUS siteRequest_, JsonObject o) {
+		return o;
+	}
+
+	public static String staticSearchStrDEFAULT_MAP_LOCATION(SiteRequestEnUS siteRequest_, JsonObject o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqDEFAULT_MAP_LOCATION(SiteRequestEnUS siteRequest_, String o) {
+		return ReportScheduleGenPage.staticSearchStrDEFAULT_MAP_LOCATION(siteRequest_, ReportScheduleGenPage.staticSearchDEFAULT_MAP_LOCATION(siteRequest_, ReportScheduleGenPage.staticSetDEFAULT_MAP_LOCATION(siteRequest_, o)));
+	}
+
+	//////////////////////
+	// DEFAULT_MAP_ZOOM //
+	//////////////////////
+
+	/**	 The entity DEFAULT_MAP_ZOOM
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonSerialize(using = ToStringSerializer.class)
+	@JsonInclude(Include.NON_NULL)
+	protected BigDecimal DEFAULT_MAP_ZOOM;
+
+	/**	<br> The entity DEFAULT_MAP_ZOOM
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.schedule.ReportScheduleGenPage&fq=entiteVar_enUS_indexed_string:DEFAULT_MAP_ZOOM">Find the entity DEFAULT_MAP_ZOOM in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _DEFAULT_MAP_ZOOM(Wrap<BigDecimal> w);
+
+	public BigDecimal getDEFAULT_MAP_ZOOM() {
+		return DEFAULT_MAP_ZOOM;
+	}
+
+	public void setDEFAULT_MAP_ZOOM(BigDecimal DEFAULT_MAP_ZOOM) {
+		this.DEFAULT_MAP_ZOOM = DEFAULT_MAP_ZOOM;
+	}
+	@JsonIgnore
+	public void setDEFAULT_MAP_ZOOM(String o) {
+		this.DEFAULT_MAP_ZOOM = ReportScheduleGenPage.staticSetDEFAULT_MAP_ZOOM(siteRequest_, o);
+	}
+	public static BigDecimal staticSetDEFAULT_MAP_ZOOM(SiteRequestEnUS siteRequest_, String o) {
+		o = StringUtils.removeAll(o, "[^\\d\\.]");
+		if(NumberUtils.isParsable(o))
+			return new BigDecimal(o, MathContext.DECIMAL64).setScale(2, RoundingMode.HALF_UP);
+		return null;
+	}
+	@JsonIgnore
+	public void setDEFAULT_MAP_ZOOM(Double o) {
+			this.DEFAULT_MAP_ZOOM = new BigDecimal(o, MathContext.DECIMAL64).setScale(2, RoundingMode.HALF_UP);
+	}
+	@JsonIgnore
+	public void setDEFAULT_MAP_ZOOM(Integer o) {
+			this.DEFAULT_MAP_ZOOM = new BigDecimal(o, MathContext.DECIMAL64).setScale(2, RoundingMode.HALF_UP);
+	}
+	protected ReportScheduleGenPage DEFAULT_MAP_ZOOMInit() {
+		Wrap<BigDecimal> DEFAULT_MAP_ZOOMWrap = new Wrap<BigDecimal>().var("DEFAULT_MAP_ZOOM");
+		if(DEFAULT_MAP_ZOOM == null) {
+			_DEFAULT_MAP_ZOOM(DEFAULT_MAP_ZOOMWrap);
+			setDEFAULT_MAP_ZOOM(DEFAULT_MAP_ZOOMWrap.o);
+		}
+		return (ReportScheduleGenPage)this;
+	}
+
+	public static Double staticSearchDEFAULT_MAP_ZOOM(SiteRequestEnUS siteRequest_, BigDecimal o) {
+		return o == null ? null : o.doubleValue();
+	}
+
+	public static String staticSearchStrDEFAULT_MAP_ZOOM(SiteRequestEnUS siteRequest_, Double o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqDEFAULT_MAP_ZOOM(SiteRequestEnUS siteRequest_, String o) {
+		return ReportScheduleGenPage.staticSearchStrDEFAULT_MAP_ZOOM(siteRequest_, ReportScheduleGenPage.staticSearchDEFAULT_MAP_ZOOM(siteRequest_, ReportScheduleGenPage.staticSetDEFAULT_MAP_ZOOM(siteRequest_, o)));
+	}
+
 	////////////////////////
 	// listReportSchedule //
 	////////////////////////
@@ -1195,6 +1320,8 @@ public abstract class ReportScheduleGenPageGen<DEV> extends BaseModelPage {
 				defaultFacetLimitInit();
 				defaultFacetMinCountInit();
 				defaultPivotMinCountInit();
+				DEFAULT_MAP_LOCATIONInit();
+				DEFAULT_MAP_ZOOMInit();
 				listReportScheduleInit();
 				statsInit();
 				facetCountsInit();
@@ -1284,6 +1411,10 @@ public abstract class ReportScheduleGenPageGen<DEV> extends BaseModelPage {
 				return oReportScheduleGenPage.defaultFacetMinCount;
 			case "defaultPivotMinCount":
 				return oReportScheduleGenPage.defaultPivotMinCount;
+			case "DEFAULT_MAP_LOCATION":
+				return oReportScheduleGenPage.DEFAULT_MAP_LOCATION;
+			case "DEFAULT_MAP_ZOOM":
+				return oReportScheduleGenPage.DEFAULT_MAP_ZOOM;
 			case "listReportSchedule":
 				return oReportScheduleGenPage.listReportSchedule;
 			case "stats":
@@ -1361,6 +1492,10 @@ public abstract class ReportScheduleGenPageGen<DEV> extends BaseModelPage {
 			return ReportScheduleGenPage.staticSetDefaultFacetMinCount(siteRequest_, o);
 		case "defaultPivotMinCount":
 			return ReportScheduleGenPage.staticSetDefaultPivotMinCount(siteRequest_, o);
+		case "DEFAULT_MAP_LOCATION":
+			return ReportScheduleGenPage.staticSetDEFAULT_MAP_LOCATION(siteRequest_, o);
+		case "DEFAULT_MAP_ZOOM":
+			return ReportScheduleGenPage.staticSetDEFAULT_MAP_ZOOM(siteRequest_, o);
 		case "reportScheduleCount":
 			return ReportScheduleGenPage.staticSetReportScheduleCount(siteRequest_, o);
 		case "pk":
@@ -1405,6 +1540,10 @@ public abstract class ReportScheduleGenPageGen<DEV> extends BaseModelPage {
 			return ReportScheduleGenPage.staticSearchDefaultFacetMinCount(siteRequest_, (Integer)o);
 		case "defaultPivotMinCount":
 			return ReportScheduleGenPage.staticSearchDefaultPivotMinCount(siteRequest_, (Integer)o);
+		case "DEFAULT_MAP_LOCATION":
+			return ReportScheduleGenPage.staticSearchDEFAULT_MAP_LOCATION(siteRequest_, (JsonObject)o);
+		case "DEFAULT_MAP_ZOOM":
+			return ReportScheduleGenPage.staticSearchDEFAULT_MAP_ZOOM(siteRequest_, (BigDecimal)o);
 		case "reportScheduleCount":
 			return ReportScheduleGenPage.staticSearchReportScheduleCount(siteRequest_, (Integer)o);
 		case "pk":
@@ -1449,6 +1588,10 @@ public abstract class ReportScheduleGenPageGen<DEV> extends BaseModelPage {
 			return ReportScheduleGenPage.staticSearchStrDefaultFacetMinCount(siteRequest_, (Integer)o);
 		case "defaultPivotMinCount":
 			return ReportScheduleGenPage.staticSearchStrDefaultPivotMinCount(siteRequest_, (Integer)o);
+		case "DEFAULT_MAP_LOCATION":
+			return ReportScheduleGenPage.staticSearchStrDEFAULT_MAP_LOCATION(siteRequest_, (JsonObject)o);
+		case "DEFAULT_MAP_ZOOM":
+			return ReportScheduleGenPage.staticSearchStrDEFAULT_MAP_ZOOM(siteRequest_, (Double)o);
 		case "reportScheduleCount":
 			return ReportScheduleGenPage.staticSearchStrReportScheduleCount(siteRequest_, (Integer)o);
 		case "pk":
@@ -1493,6 +1636,10 @@ public abstract class ReportScheduleGenPageGen<DEV> extends BaseModelPage {
 			return ReportScheduleGenPage.staticSearchFqDefaultFacetMinCount(siteRequest_, o);
 		case "defaultPivotMinCount":
 			return ReportScheduleGenPage.staticSearchFqDefaultPivotMinCount(siteRequest_, o);
+		case "DEFAULT_MAP_LOCATION":
+			return ReportScheduleGenPage.staticSearchFqDEFAULT_MAP_LOCATION(siteRequest_, o);
+		case "DEFAULT_MAP_ZOOM":
+			return ReportScheduleGenPage.staticSearchFqDEFAULT_MAP_ZOOM(siteRequest_, o);
 		case "reportScheduleCount":
 			return ReportScheduleGenPage.staticSearchFqReportScheduleCount(siteRequest_, o);
 		case "pk":
@@ -1531,6 +1678,8 @@ public abstract class ReportScheduleGenPageGen<DEV> extends BaseModelPage {
 	public static final String VAR_defaultFacetLimit = "defaultFacetLimit";
 	public static final String VAR_defaultFacetMinCount = "defaultFacetMinCount";
 	public static final String VAR_defaultPivotMinCount = "defaultPivotMinCount";
+	public static final String VAR_DEFAULT_MAP_LOCATION = "DEFAULT_MAP_LOCATION";
+	public static final String VAR_DEFAULT_MAP_ZOOM = "DEFAULT_MAP_ZOOM";
 	public static final String VAR_listReportSchedule = "listReportSchedule";
 	public static final String VAR_stats = "stats";
 	public static final String VAR_facetCounts = "facetCounts";
@@ -1554,6 +1703,8 @@ public abstract class ReportScheduleGenPageGen<DEV> extends BaseModelPage {
 	public static final String DISPLAY_NAME_defaultFacetLimit = "";
 	public static final String DISPLAY_NAME_defaultFacetMinCount = "";
 	public static final String DISPLAY_NAME_defaultPivotMinCount = "";
+	public static final String DISPLAY_NAME_DEFAULT_MAP_LOCATION = "";
+	public static final String DISPLAY_NAME_DEFAULT_MAP_ZOOM = "";
 	public static final String DISPLAY_NAME_listReportSchedule = "";
 	public static final String DISPLAY_NAME_stats = "";
 	public static final String DISPLAY_NAME_facetCounts = "";
@@ -1596,6 +1747,10 @@ public abstract class ReportScheduleGenPageGen<DEV> extends BaseModelPage {
 			return DISPLAY_NAME_defaultFacetMinCount;
 		case VAR_defaultPivotMinCount:
 			return DISPLAY_NAME_defaultPivotMinCount;
+		case VAR_DEFAULT_MAP_LOCATION:
+			return DISPLAY_NAME_DEFAULT_MAP_LOCATION;
+		case VAR_DEFAULT_MAP_ZOOM:
+			return DISPLAY_NAME_DEFAULT_MAP_ZOOM;
 		case VAR_listReportSchedule:
 			return DISPLAY_NAME_listReportSchedule;
 		case VAR_stats:

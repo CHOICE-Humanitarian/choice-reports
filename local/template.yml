@@ -79,11 +79,11 @@ WRITE_COMMENTS: true
 ENABLE_IMPORT_DATA: {{ ENABLE_IMPORT_DATA | lower }}
 ENABLE_IMPORT_DATA_ChoiceDonor: true
 ENABLE_IMPORT_DATA_ChoiceReport: true
-ENABLE_IMPORT_DATA_SitePage: true
 ENABLE_IMPORT_DATA_ReportEvent: true
 ENABLE_IMPORT_DATA_ReportNarrative: true
 ENABLE_IMPORT_DATA_ReportSchedule: true
 ENABLE_IMPORT_DATA_ReportType: true
+ENABLE_IMPORT_DATA_SitePage: true
 ENABLE_IMPORT_DATA_SiteHtm: true
 
 # The Auth roles required to be an admin in the site. 
@@ -94,9 +94,7 @@ AUTH_ROLES_REQUIRED_SiteUser: ['SiteAdmin']
 AUTH_ROLES_REQUIRED_ChoiceDonor: ['SiteAdmin']
 # The Auth roles required to add and modify report records. 
 AUTH_ROLES_REQUIRED_ChoiceReport: ['SiteAdmin']
-# The Auth roles required to add and modify article records. 
-AUTH_ROLES_REQUIRED_SitePage: ['SiteAdmin']
-# The Auth roles required to add and modify report event records. 
+# The Auth roles required to add and modify calendar item records. 
 AUTH_ROLES_REQUIRED_ReportEvent: ['SiteAdmin']
 # The Auth roles required to add and modify report narrative records. 
 AUTH_ROLES_REQUIRED_ReportNarrative: ['SiteAdmin']
@@ -104,6 +102,8 @@ AUTH_ROLES_REQUIRED_ReportNarrative: ['SiteAdmin']
 AUTH_ROLES_REQUIRED_ReportSchedule: ['SiteAdmin']
 # The Auth roles required to add and modify report type records. 
 AUTH_ROLES_REQUIRED_ReportType: ['SiteAdmin']
+# The Auth roles required to add and modify article records. 
+AUTH_ROLES_REQUIRED_SitePage: ['SiteAdmin']
 # The Auth roles required to add and modify HTML records. 
 AUTH_ROLES_REQUIRED_SiteHtm: ['SiteAdmin']
 IMPORT_DATA_ReportType:

@@ -34,26 +34,32 @@ spec:
             - containerPort: 8778
               name: jolokia
               protocol: TCP
+            - containerPort: 3333
+              name: jms
+              protocol: TCP
+            - containerPort: 8998
+              name: debug
+              protocol: TCP
           readinessProbe:
-            failureThreshold: 5
             httpGet:
               path: /health
               port: 8080
               scheme: "HTTP"
-            initialDelaySeconds: 1
-            periodSeconds: 10
-            successThreshold: 1
+            initialDelaySeconds: 30
             timeoutSeconds: 5
+            periodSeconds: 20
+            successThreshold: 1
+            failureThreshold: 20
           livenessProbe:
-            failureThreshold: 5
             httpGet:
               path: /health
               port: 8080
               scheme: "HTTP"
-            initialDelaySeconds: 5
-            periodSeconds: 10
-            successThreshold: 1
+            initialDelaySeconds: 30
             timeoutSeconds: 5
+            periodSeconds: 20
+            successThreshold: 1
+            failureThreshold: 20
           resources:
             limits:
               memory: '{{ SITE_LIMITS_MEMORY }}'
@@ -201,6 +207,17 @@ spec:
               value: "{{ WORKER_POOL_SIZE }}"
             - name: DYNAMIC_PAGE_PATH
               value: "{{ DYNAMIC_PAGE_PATH }}"
+            - name: VERTX_WARNING_EXCEPTION_SECONDS
+              value: "{{ VERTX_WARNING_EXCEPTION_SECONDS }}"
+            - name: CLUSTER_HOST_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: status.podIP
+            - name: CLUSTER_PUBLIC_HOST_NAME
+              value: "{{ SITE_NAME }}.{{ SITE_NAMESPACE }}.svc"
+            - name: JAVA_OPTS
+              value: "{{ JAVA_OPTS }}"
 
             - name: API_COUNTER_FETCH
               value: "{{ API_COUNTER_FETCH }}"
@@ -212,8 +229,6 @@ spec:
               value: '{{ ENABLE_IMPORT_DATA_ChoiceDonor | to_json }}'
             - name: ENABLE_IMPORT_DATA_ChoiceReport
               value: '{{ ENABLE_IMPORT_DATA_ChoiceReport | to_json }}'
-            - name: ENABLE_IMPORT_DATA_SitePage
-              value: '{{ ENABLE_IMPORT_DATA_SitePage | to_json }}'
             - name: ENABLE_IMPORT_DATA_ReportEvent
               value: '{{ ENABLE_IMPORT_DATA_ReportEvent | to_json }}'
             - name: ENABLE_IMPORT_DATA_ReportNarrative
@@ -222,12 +237,12 @@ spec:
               value: '{{ ENABLE_IMPORT_DATA_ReportSchedule | to_json }}'
             - name: ENABLE_IMPORT_DATA_ReportType
               value: '{{ ENABLE_IMPORT_DATA_ReportType | to_json }}'
+            - name: ENABLE_IMPORT_DATA_SitePage
+              value: '{{ ENABLE_IMPORT_DATA_SitePage | to_json }}'
             - name: ENABLE_IMPORT_DATA_SiteHtm
               value: '{{ ENABLE_IMPORT_DATA_SiteHtm | to_json }}'
             - name: ENABLE_REFRESH_DATA
               value: "{{ ENABLE_REFRESH_DATA }}"
-            - name: TIMER_DB_SOLR_SYNC_IN_SECONDS
-              value: "{{ TIMER_DB_SOLR_SYNC_IN_SECONDS }}"
             - name: AUTH_ROLES_ADMIN
               value: '{{ AUTH_ROLES_ADMIN | to_json }}'
             - name: AUTH_ROLES_REQUIRED_SiteUser
@@ -236,8 +251,6 @@ spec:
               value: '{{ AUTH_ROLES_REQUIRED_ChoiceDonor | to_json }}'
             - name: AUTH_ROLES_REQUIRED_ChoiceReport
               value: '{{ AUTH_ROLES_REQUIRED_ChoiceReport | to_json }}'
-            - name: AUTH_ROLES_REQUIRED_SitePage
-              value: '{{ AUTH_ROLES_REQUIRED_SitePage | to_json }}'
             - name: AUTH_ROLES_REQUIRED_ReportEvent
               value: '{{ AUTH_ROLES_REQUIRED_ReportEvent | to_json }}'
             - name: AUTH_ROLES_REQUIRED_ReportNarrative
@@ -246,9 +259,91 @@ spec:
               value: '{{ AUTH_ROLES_REQUIRED_ReportSchedule | to_json }}'
             - name: AUTH_ROLES_REQUIRED_ReportType
               value: '{{ AUTH_ROLES_REQUIRED_ReportType | to_json }}'
+            - name: AUTH_ROLES_REQUIRED_SitePage
+              value: '{{ AUTH_ROLES_REQUIRED_SitePage | to_json }}'
             - name: AUTH_ROLES_REQUIRED_SiteHtm
               value: '{{ AUTH_ROLES_REQUIRED_SiteHtm | to_json }}'
 
+            - name: "DOMO_HOST_NAME"
+              valueFrom:
+                secretKeyRef:
+                  key: "DOMO_HOST_NAME"
+                  name: "{{ SITE_NAME }}-secret"
+            - name: "DOMO_PORT"
+              valueFrom:
+                secretKeyRef:
+                  key: "DOMO_PORT"
+                  name: "{{ SITE_NAME }}-secret"
+            - name: "DOMO_SSL"
+              valueFrom:
+                secretKeyRef:
+                  key: "DOMO_SSL"
+                  name: "{{ SITE_NAME }}-secret"
+            - name: "DOMO_AUTH_TOKEN_URI"
+              valueFrom:
+                secretKeyRef:
+                  key: "DOMO_AUTH_TOKEN_URI"
+                  name: "{{ SITE_NAME }}-secret"
+            - name: "DOMO_AUTH_SCOPE"
+              valueFrom:
+                secretKeyRef:
+                  key: "DOMO_AUTH_SCOPE"
+                  name: "{{ SITE_NAME }}-secret"
+            - name: "DOMO_AUTH_CLIENT_ID"
+              valueFrom:
+                secretKeyRef:
+                  key: "DOMO_AUTH_CLIENT_ID"
+                  name: "{{ SITE_NAME }}-secret"
+            - name: "DOMO_AUTH_CLIENT_SECRET"
+              valueFrom:
+                secretKeyRef:
+                  key: "DOMO_AUTH_CLIENT_SECRET"
+                  name: "{{ SITE_NAME }}-secret"
+            - name: "DOMO_DATASET_CPP_URI"
+              valueFrom:
+                secretKeyRef:
+                  key: "DOMO_DATASET_CPP_URI"
+                  name: "{{ SITE_NAME }}-secret"
+            - name: "NEOCITIES_HOST_NAME"
+              valueFrom:
+                secretKeyRef:
+                  key: "NEOCITIES_HOST_NAME"
+                  name: "{{ SITE_NAME }}-secret"
+            - name: "NEOCITIES_PORT"
+              valueFrom:
+                secretKeyRef:
+                  key: "NEOCITIES_PORT"
+                  name: "{{ SITE_NAME }}-secret"
+            - name: "NEOCITIES_SSL"
+              valueFrom:
+                secretKeyRef:
+                  key: "NEOCITIES_SSL"
+                  name: "{{ SITE_NAME }}-secret"
+            - name: "NEOCITIES_API_UPLOAD"
+              valueFrom:
+                secretKeyRef:
+                  key: "NEOCITIES_API_UPLOAD"
+                  name: "{{ SITE_NAME }}-secret"
+            - name: "NEOCITIES_API_DELETE"
+              valueFrom:
+                secretKeyRef:
+                  key: "NEOCITIES_API_DELETE"
+                  name: "{{ SITE_NAME }}-secret"
+            - name: "NEOCITIES_API_LIST"
+              valueFrom:
+                secretKeyRef:
+                  key: "NEOCITIES_API_LIST"
+                  name: "{{ SITE_NAME }}-secret"
+            - name: "NEOCITIES_API_INFO"
+              valueFrom:
+                secretKeyRef:
+                  key: "NEOCITIES_API_INFO"
+                  name: "{{ SITE_NAME }}-secret"
+            - name: "NEOCITIES_API_RENAME"
+              valueFrom:
+                secretKeyRef:
+                  key: "NEOCITIES_API_RENAME"
+                  name: "{{ SITE_NAME }}-secret"
           volumeMounts:
       volumes:
   triggers:

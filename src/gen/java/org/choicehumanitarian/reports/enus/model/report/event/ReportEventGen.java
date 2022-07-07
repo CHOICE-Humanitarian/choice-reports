@@ -77,7 +77,7 @@ public abstract class ReportEventGen<DEV> extends BaseModel {
 	public static final String ReportEvent_Title_enUS = "calendar items";
 	public static final String ReportEvent_ThePluralName_enUS = "the calendar items";
 	public static final String ReportEvent_NoNameFound_enUS = "no calendar item found";
-	public static final String ReportEvent_NameVar_enUS = "reportEvent";
+	public static final String ReportEvent_NameVar_enUS = "calendarItem";
 	public static final String ReportEvent_OfName_enUS = "of calendar item";
 	public static final String ReportEvent_ANameAdjective_enUS = "a calendar item";
 	public static final String ReportEvent_NameAdjectiveSingular_enUS = "calendar item";

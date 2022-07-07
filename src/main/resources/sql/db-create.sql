@@ -90,6 +90,8 @@ CREATE TABLE IF NOT EXISTS ReportNarrative();
 ALTER TABLE ReportNarrative ADD COLUMN IF NOT EXISTS scheduleKey bigint references ReportSchedule(pk);
 ALTER TABLE ReportNarrative ADD COLUMN IF NOT EXISTS assigneeKey bigint references SiteUser(pk);
 ALTER TABLE ReportNarrative ADD COLUMN IF NOT EXISTS narrativeName text;
+ALTER TABLE ReportNarrative ADD COLUMN IF NOT EXISTS pullStartDate date;
+ALTER TABLE ReportNarrative ADD COLUMN IF NOT EXISTS pullEndDate date;
 ALTER TABLE ReportNarrative ADD COLUMN IF NOT EXISTS pk bigserial primary key;
 ALTER TABLE ReportNarrative ADD COLUMN IF NOT EXISTS inheritPk text;
 ALTER TABLE ReportNarrative ADD COLUMN IF NOT EXISTS created timestamp with time zone;

@@ -3506,7 +3506,7 @@ paths:
             text/html; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/SearchPageChoiceReportResponse'
-  /api/report-event:
+  /api/calendar-item:
     post:
       operationId: postReportEvent
       x-vertx-event-bus: choice-reports-enUS-ReportEvent
@@ -3516,7 +3516,7 @@ paths:
       description: >+
       summary: >+
       tags:
-        - Report Event
+        - Calendar Item
       requestBody:
         description: >+
         required: true
@@ -3540,7 +3540,7 @@ paths:
       description: >+
       summary: >+
       tags:
-        - Report Event
+        - Calendar Item
       parameters:
         - name: vertx-web.session
           in: cookie
@@ -3596,7 +3596,7 @@ paths:
       description: >+
       summary: >+
       tags:
-        - Report Event
+        - Calendar Item
       parameters:
         - name: vertx-web.session
           in: cookie
@@ -3765,7 +3765,7 @@ paths:
             application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/SearchReportEventResponse'
-  /api/report-event-import:
+  /api/calendar-item-import:
     put:
       operationId: putimportReportEvent
       x-vertx-event-bus: choice-reports-enUS-ReportEvent
@@ -3775,7 +3775,7 @@ paths:
       description: >+
       summary: >+
       tags:
-        - Report Event
+        - Calendar Item
       parameters:
         - name: vertx-web.session
           in: cookie
@@ -3799,7 +3799,7 @@ paths:
             application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/PUTImportReportEventResponse'
-  /api/report-event/{id}:
+  /api/calendar-item/{id}:
     get:
       operationId: getReportEvent
       x-vertx-event-bus: choice-reports-enUS-ReportEvent
@@ -3809,7 +3809,7 @@ paths:
       description: >+
       summary: >+
       tags:
-        - Report Event
+        - Calendar Item
       parameters:
         - name: vertx-web.session
           in: cookie
@@ -3832,7 +3832,7 @@ paths:
             application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/GETReportEventResponse'
-  /report-event/{id}:
+  /calendar-item/{id}:
     get:
       operationId: searchpageReportEventId
       x-vertx-event-bus: choice-reports-enUS-ReportEvent
@@ -3842,7 +3842,7 @@ paths:
       description: >+
       summary: >+
       tags:
-        - Report Event
+        - Calendar Item
       parameters:
         - name: vertx-web.session
           in: cookie
@@ -4017,7 +4017,7 @@ paths:
             text/html; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/SearchPageReportEventResponse'
-  /report-event:
+  /calendar-item:
     get:
       operationId: searchpageReportEvent
       x-vertx-event-bus: choice-reports-enUS-ReportEvent
@@ -4027,7 +4027,7 @@ paths:
       description: >+
       summary: >+
       tags:
-        - Report Event
+        - Calendar Item
       parameters:
         - name: vertx-web.session
           in: cookie
@@ -7780,6 +7780,10 @@ components:
                 type: string
               htmGroup:
                 type: string
+              labels:
+                type: array
+                items:
+                  type: string
               eBefore:
                 type: string
               eAfter:
@@ -7787,6 +7791,10 @@ components:
               a:
                 type: object
               text:
+                type: array
+                items:
+                  type: string
+              comment:
                 type: array
                 items:
                   type: string
@@ -7850,6 +7858,10 @@ components:
               type: string
             htmGroup:
               type: string
+            labels:
+              type: array
+              items:
+                type: string
             eBefore:
               type: string
             eAfter:
@@ -7857,6 +7869,10 @@ components:
             a:
               type: object
             text:
+              type: array
+              items:
+                type: string
+            comment:
               type: array
               items:
                 type: string
@@ -7920,6 +7936,10 @@ components:
               type: string
             htmGroup:
               type: string
+            labels:
+              type: array
+              items:
+                type: string
             eBefore:
               type: string
             eAfter:
@@ -7927,6 +7947,10 @@ components:
             a:
               type: object
             text:
+              type: array
+              items:
+                type: string
+            comment:
               type: array
               items:
                 type: string
@@ -8052,6 +8076,23 @@ components:
               type: string
             removeAllHtmGroup:
               type: string
+            setLabels:
+              type: array
+              nullable: true
+              items:
+                type: string
+            removeLabels:
+              type: string
+            removeAllLabels:
+              type: array
+              items:
+                type: string
+            addLabels:
+              type: string
+            addAllLabels:
+              type: array
+              items:
+                type: string
             setEBefore:
               type: string
               nullable: true
@@ -8087,6 +8128,23 @@ components:
             addText:
               type: string
             addAllText:
+              type: array
+              items:
+                type: string
+            setComment:
+              type: array
+              nullable: true
+              items:
+                type: string
+            removeComment:
+              type: string
+            removeAllComment:
+              type: array
+              items:
+                type: string
+            addComment:
+              type: string
+            addAllComment:
               type: array
               items:
                 type: string
@@ -8295,6 +8353,23 @@ components:
               type: string
             removeAllHtmGroup:
               type: string
+            setLabels:
+              type: array
+              nullable: true
+              items:
+                type: string
+            removeLabels:
+              type: string
+            removeAllLabels:
+              type: array
+              items:
+                type: string
+            addLabels:
+              type: string
+            addAllLabels:
+              type: array
+              items:
+                type: string
             setEBefore:
               type: string
               nullable: true
@@ -8330,6 +8405,23 @@ components:
             addText:
               type: string
             addAllText:
+              type: array
+              items:
+                type: string
+            setComment:
+              type: array
+              nullable: true
+              items:
+                type: string
+            removeComment:
+              type: string
+            removeAllComment:
+              type: array
+              items:
+                type: string
+            addComment:
+              type: string
+            addAllComment:
               type: array
               items:
                 type: string
@@ -8476,6 +8568,10 @@ components:
               type: string
             htmGroup:
               type: string
+            labels:
+              type: array
+              items:
+                type: string
             eBefore:
               type: string
             eAfter:
@@ -8483,6 +8579,10 @@ components:
             a:
               type: object
             text:
+              type: array
+              items:
+                type: string
+            comment:
               type: array
               items:
                 type: string
@@ -8546,6 +8646,10 @@ components:
               type: string
             htmGroup:
               type: string
+            labels:
+              type: array
+              items:
+                type: string
             eBefore:
               type: string
             eAfter:
@@ -8553,6 +8657,10 @@ components:
             a:
               type: object
             text:
+              type: array
+              items:
+                type: string
+            comment:
               type: array
               items:
                 type: string
@@ -8616,6 +8724,10 @@ components:
               type: string
             htmGroup:
               type: string
+            labels:
+              type: array
+              items:
+                type: string
             eBefore:
               type: string
             eAfter:
@@ -8623,6 +8735,10 @@ components:
             a:
               type: object
             text:
+              type: array
+              items:
+                type: string
+            comment:
               type: array
               items:
                 type: string
@@ -8667,17 +8783,23 @@ components:
           items:
             type: object
             properties:
-              SITE_DISPLAY_NAME:
+              siteName:
                 type: string
-              STATIC_BASE_URL:
+              siteDisplayName:
                 type: string
-              pageId:
+              staticBaseUrl:
+                type: string
+              staticPath:
+                type: string
+              siteBaseUrl:
                 type: string
               courseNum:
                 type: string
               lessonNum:
                 type: string
               uri:
+                type: string
+              pageId:
                 type: string
               h1:
                 type: string
@@ -8694,6 +8816,12 @@ components:
               author:
                 type: string
               pageImageUri:
+                type: string
+              pageImageWidth:
+                type: string
+              pageImageHeight:
+                type: string
+              pageImageType:
                 type: string
               archived:
                 type: boolean
@@ -8739,17 +8867,23 @@ components:
       allOf:
         - type: object
           properties:
-            SITE_DISPLAY_NAME:
+            siteName:
               type: string
-            STATIC_BASE_URL:
+            siteDisplayName:
               type: string
-            pageId:
+            staticBaseUrl:
+              type: string
+            staticPath:
+              type: string
+            siteBaseUrl:
               type: string
             courseNum:
               type: string
             lessonNum:
               type: string
             uri:
+              type: string
+            pageId:
               type: string
             h1:
               type: string
@@ -8766,6 +8900,12 @@ components:
             author:
               type: string
             pageImageUri:
+              type: string
+            pageImageWidth:
+              type: string
+            pageImageHeight:
+              type: string
+            pageImageType:
               type: string
             archived:
               type: boolean
@@ -8811,17 +8951,23 @@ components:
       allOf:
         - type: object
           properties:
-            SITE_DISPLAY_NAME:
+            siteName:
               type: string
-            STATIC_BASE_URL:
+            siteDisplayName:
               type: string
-            pageId:
+            staticBaseUrl:
+              type: string
+            staticPath:
+              type: string
+            siteBaseUrl:
               type: string
             courseNum:
               type: string
             lessonNum:
               type: string
             uri:
+              type: string
+            pageId:
               type: string
             h1:
               type: string
@@ -8838,6 +8984,12 @@ components:
             author:
               type: string
             pageImageUri:
+              type: string
+            pageImageWidth:
+              type: string
+            pageImageHeight:
+              type: string
+            pageImageType:
               type: string
             archived:
               type: boolean
@@ -8883,26 +9035,40 @@ components:
       allOf:
         - type: object
           properties:
-            setSITE_DISPLAY_NAME:
+            setSiteName:
               type: string
               nullable: true
-            removeSITE_DISPLAY_NAME:
+            removeSiteName:
               type: string
-            removeAllSITE_DISPLAY_NAME:
+            removeAllSiteName:
               type: string
-            setSTATIC_BASE_URL:
-              type: string
-              nullable: true
-            removeSTATIC_BASE_URL:
-              type: string
-            removeAllSTATIC_BASE_URL:
-              type: string
-            setPageId:
+            setSiteDisplayName:
               type: string
               nullable: true
-            removePageId:
+            removeSiteDisplayName:
               type: string
-            removeAllPageId:
+            removeAllSiteDisplayName:
+              type: string
+            setStaticBaseUrl:
+              type: string
+              nullable: true
+            removeStaticBaseUrl:
+              type: string
+            removeAllStaticBaseUrl:
+              type: string
+            setStaticPath:
+              type: string
+              nullable: true
+            removeStaticPath:
+              type: string
+            removeAllStaticPath:
+              type: string
+            setSiteBaseUrl:
+              type: string
+              nullable: true
+            removeSiteBaseUrl:
+              type: string
+            removeAllSiteBaseUrl:
               type: string
             setCourseNum:
               type: string
@@ -8924,6 +9090,13 @@ components:
             removeUri:
               type: string
             removeAllUri:
+              type: string
+            setPageId:
+              type: string
+              nullable: true
+            removePageId:
+              type: string
+            removeAllPageId:
               type: string
             setH1:
               type: string
@@ -8979,6 +9152,27 @@ components:
             removePageImageUri:
               type: string
             removeAllPageImageUri:
+              type: string
+            setPageImageWidth:
+              type: string
+              nullable: true
+            removePageImageWidth:
+              type: string
+            removeAllPageImageWidth:
+              type: string
+            setPageImageHeight:
+              type: string
+              nullable: true
+            removePageImageHeight:
+              type: string
+            removeAllPageImageHeight:
+              type: string
+            setPageImageType:
+              type: string
+              nullable: true
+            removePageImageType:
+              type: string
+            removeAllPageImageType:
               type: string
             setArchived:
               type: boolean
@@ -9133,26 +9327,40 @@ components:
       allOf:
         - type: object
           properties:
-            setSITE_DISPLAY_NAME:
+            setSiteName:
               type: string
               nullable: true
-            removeSITE_DISPLAY_NAME:
+            removeSiteName:
               type: string
-            removeAllSITE_DISPLAY_NAME:
+            removeAllSiteName:
               type: string
-            setSTATIC_BASE_URL:
-              type: string
-              nullable: true
-            removeSTATIC_BASE_URL:
-              type: string
-            removeAllSTATIC_BASE_URL:
-              type: string
-            setPageId:
+            setSiteDisplayName:
               type: string
               nullable: true
-            removePageId:
+            removeSiteDisplayName:
               type: string
-            removeAllPageId:
+            removeAllSiteDisplayName:
+              type: string
+            setStaticBaseUrl:
+              type: string
+              nullable: true
+            removeStaticBaseUrl:
+              type: string
+            removeAllStaticBaseUrl:
+              type: string
+            setStaticPath:
+              type: string
+              nullable: true
+            removeStaticPath:
+              type: string
+            removeAllStaticPath:
+              type: string
+            setSiteBaseUrl:
+              type: string
+              nullable: true
+            removeSiteBaseUrl:
+              type: string
+            removeAllSiteBaseUrl:
               type: string
             setCourseNum:
               type: string
@@ -9174,6 +9382,13 @@ components:
             removeUri:
               type: string
             removeAllUri:
+              type: string
+            setPageId:
+              type: string
+              nullable: true
+            removePageId:
+              type: string
+            removeAllPageId:
               type: string
             setH1:
               type: string
@@ -9229,6 +9444,27 @@ components:
             removePageImageUri:
               type: string
             removeAllPageImageUri:
+              type: string
+            setPageImageWidth:
+              type: string
+              nullable: true
+            removePageImageWidth:
+              type: string
+            removeAllPageImageWidth:
+              type: string
+            setPageImageHeight:
+              type: string
+              nullable: true
+            removePageImageHeight:
+              type: string
+            removeAllPageImageHeight:
+              type: string
+            setPageImageType:
+              type: string
+              nullable: true
+            removePageImageType:
+              type: string
+            removeAllPageImageType:
               type: string
             setArchived:
               type: boolean
@@ -9383,17 +9619,23 @@ components:
       allOf:
         - type: object
           properties:
-            SITE_DISPLAY_NAME:
+            siteName:
               type: string
-            STATIC_BASE_URL:
+            siteDisplayName:
               type: string
-            pageId:
+            staticBaseUrl:
+              type: string
+            staticPath:
+              type: string
+            siteBaseUrl:
               type: string
             courseNum:
               type: string
             lessonNum:
               type: string
             uri:
+              type: string
+            pageId:
               type: string
             h1:
               type: string
@@ -9410,6 +9652,12 @@ components:
             author:
               type: string
             pageImageUri:
+              type: string
+            pageImageWidth:
+              type: string
+            pageImageHeight:
+              type: string
+            pageImageType:
               type: string
             archived:
               type: boolean
@@ -9455,17 +9703,23 @@ components:
       allOf:
         - type: object
           properties:
-            SITE_DISPLAY_NAME:
+            siteName:
               type: string
-            STATIC_BASE_URL:
+            siteDisplayName:
               type: string
-            pageId:
+            staticBaseUrl:
+              type: string
+            staticPath:
+              type: string
+            siteBaseUrl:
               type: string
             courseNum:
               type: string
             lessonNum:
               type: string
             uri:
+              type: string
+            pageId:
               type: string
             h1:
               type: string
@@ -9482,6 +9736,12 @@ components:
             author:
               type: string
             pageImageUri:
+              type: string
+            pageImageWidth:
+              type: string
+            pageImageHeight:
+              type: string
+            pageImageType:
               type: string
             archived:
               type: boolean
@@ -9527,17 +9787,23 @@ components:
       allOf:
         - type: object
           properties:
-            SITE_DISPLAY_NAME:
+            siteName:
               type: string
-            STATIC_BASE_URL:
+            siteDisplayName:
               type: string
-            pageId:
+            staticBaseUrl:
+              type: string
+            staticPath:
+              type: string
+            siteBaseUrl:
               type: string
             courseNum:
               type: string
             lessonNum:
               type: string
             uri:
+              type: string
+            pageId:
               type: string
             h1:
               type: string
@@ -9554,6 +9820,12 @@ components:
             author:
               type: string
             pageImageUri:
+              type: string
+            pageImageWidth:
+              type: string
+            pageImageHeight:
+              type: string
+            pageImageType:
               type: string
             archived:
               type: boolean
@@ -10142,6 +10414,18 @@ components:
               type: string
             narrativeName:
               type: string
+            firstDueDate:
+              type: string
+              format: date
+            dataPullDate:
+              type: string
+              format: date
+            pullStartDate:
+              type: string
+              format: date
+            pullEndDate:
+              type: string
+              format: date
     POSTReportNarrativeResponse:
       allOf:
         - type: object
@@ -10152,6 +10436,18 @@ components:
               type: string
             narrativeName:
               type: string
+            firstDueDate:
+              type: string
+              format: date
+            dataPullDate:
+              type: string
+              format: date
+            pullStartDate:
+              type: string
+              format: date
+            pullEndDate:
+              type: string
+              format: date
     PATCHReportNarrativeRequest:
       allOf:
         - type: object
@@ -10177,6 +10473,46 @@ components:
               type: string
             removeAllNarrativeName:
               type: string
+            setFirstDueDate:
+              type: string
+              nullable: true
+              format: date
+            removeFirstDueDate:
+              type: string
+              format: date
+            removeAllFirstDueDate:
+              type: string
+              format: date
+            setDataPullDate:
+              type: string
+              nullable: true
+              format: date
+            removeDataPullDate:
+              type: string
+              format: date
+            removeAllDataPullDate:
+              type: string
+              format: date
+            setPullStartDate:
+              type: string
+              nullable: true
+              format: date
+            removePullStartDate:
+              type: string
+              format: date
+            removeAllPullStartDate:
+              type: string
+              format: date
+            setPullEndDate:
+              type: string
+              nullable: true
+              format: date
+            removePullEndDate:
+              type: string
+              format: date
+            removeAllPullEndDate:
+              type: string
+              format: date
     PATCHReportNarrativeResponse:
       allOf:
         - type: object
@@ -10202,6 +10538,46 @@ components:
               type: string
             removeAllNarrativeName:
               type: string
+            setFirstDueDate:
+              type: string
+              nullable: true
+              format: date
+            removeFirstDueDate:
+              type: string
+              format: date
+            removeAllFirstDueDate:
+              type: string
+              format: date
+            setDataPullDate:
+              type: string
+              nullable: true
+              format: date
+            removeDataPullDate:
+              type: string
+              format: date
+            removeAllDataPullDate:
+              type: string
+              format: date
+            setPullStartDate:
+              type: string
+              nullable: true
+              format: date
+            removePullStartDate:
+              type: string
+              format: date
+            removeAllPullStartDate:
+              type: string
+              format: date
+            setPullEndDate:
+              type: string
+              nullable: true
+              format: date
+            removePullEndDate:
+              type: string
+              format: date
+            removeAllPullEndDate:
+              type: string
+              format: date
     SearchReportNarrativeResponse:
       allOf:
         - type: array
@@ -10214,6 +10590,18 @@ components:
                 type: string
               narrativeName:
                 type: string
+              firstDueDate:
+                type: string
+                format: date
+              dataPullDate:
+                type: string
+                format: date
+              pullStartDate:
+                type: string
+                format: date
+              pullEndDate:
+                type: string
+                format: date
     PUTImportReportNarrativeRequest:
       allOf:
         - type: object
@@ -10224,6 +10612,18 @@ components:
               type: string
             narrativeName:
               type: string
+            firstDueDate:
+              type: string
+              format: date
+            dataPullDate:
+              type: string
+              format: date
+            pullStartDate:
+              type: string
+              format: date
+            pullEndDate:
+              type: string
+              format: date
     PUTImportReportNarrativeResponse:
       allOf:
         - type: object
@@ -10234,6 +10634,18 @@ components:
               type: string
             narrativeName:
               type: string
+            firstDueDate:
+              type: string
+              format: date
+            dataPullDate:
+              type: string
+              format: date
+            pullStartDate:
+              type: string
+              format: date
+            pullEndDate:
+              type: string
+              format: date
     GETReportNarrativeResponse:
       allOf:
         - type: object
@@ -10244,6 +10656,18 @@ components:
               type: string
             narrativeName:
               type: string
+            firstDueDate:
+              type: string
+              format: date
+            dataPullDate:
+              type: string
+              format: date
+            pullStartDate:
+              type: string
+              format: date
+            pullEndDate:
+              type: string
+              format: date
     SearchPageReportNarrativeResponse:
       allOf:
         - type: string
@@ -10785,14 +11209,6 @@ components:
           items:
             type: object
             properties:
-              narrativeKeys:
-                type: array
-                items:
-                  type: string
-              eventKeys:
-                type: array
-                items:
-                  type: string
               userKeys:
                 type: array
                 items:
@@ -10813,44 +11229,18 @@ components:
                 type: boolean
               seeDeleted:
                 type: boolean
+              narrativeKeys:
+                type: array
+                items:
+                  type: string
+              eventKeys:
+                type: array
+                items:
+                  type: string
     PATCHSiteUserRequest:
       allOf:
         - type: object
           properties:
-            setNarrativeKeys:
-              type: array
-              nullable: true
-              items:
-                type: string
-            removeNarrativeKeys:
-              type: string
-            removeAllNarrativeKeys:
-              type: array
-              items:
-                type: string
-            addNarrativeKeys:
-              type: string
-            addAllNarrativeKeys:
-              type: array
-              items:
-                type: string
-            setEventKeys:
-              type: array
-              nullable: true
-              items:
-                type: string
-            removeEventKeys:
-              type: string
-            removeAllEventKeys:
-              type: array
-              items:
-                type: string
-            addEventKeys:
-              type: string
-            addAllEventKeys:
-              type: array
-              items:
-                type: string
             setUserKeys:
               type: array
               nullable: true
@@ -10924,44 +11314,44 @@ components:
               type: boolean
             removeAllSeeDeleted:
               type: boolean
+            setNarrativeKeys:
+              type: array
+              nullable: true
+              items:
+                type: string
+            removeNarrativeKeys:
+              type: string
+            removeAllNarrativeKeys:
+              type: array
+              items:
+                type: string
+            addNarrativeKeys:
+              type: string
+            addAllNarrativeKeys:
+              type: array
+              items:
+                type: string
+            setEventKeys:
+              type: array
+              nullable: true
+              items:
+                type: string
+            removeEventKeys:
+              type: string
+            removeAllEventKeys:
+              type: array
+              items:
+                type: string
+            addEventKeys:
+              type: string
+            addAllEventKeys:
+              type: array
+              items:
+                type: string
     PATCHSiteUserResponse:
       allOf:
         - type: object
           properties:
-            setNarrativeKeys:
-              type: array
-              nullable: true
-              items:
-                type: string
-            removeNarrativeKeys:
-              type: string
-            removeAllNarrativeKeys:
-              type: array
-              items:
-                type: string
-            addNarrativeKeys:
-              type: string
-            addAllNarrativeKeys:
-              type: array
-              items:
-                type: string
-            setEventKeys:
-              type: array
-              nullable: true
-              items:
-                type: string
-            removeEventKeys:
-              type: string
-            removeAllEventKeys:
-              type: array
-              items:
-                type: string
-            addEventKeys:
-              type: string
-            addAllEventKeys:
-              type: array
-              items:
-                type: string
             setUserKeys:
               type: array
               nullable: true
@@ -11035,18 +11425,44 @@ components:
               type: boolean
             removeAllSeeDeleted:
               type: boolean
+            setNarrativeKeys:
+              type: array
+              nullable: true
+              items:
+                type: string
+            removeNarrativeKeys:
+              type: string
+            removeAllNarrativeKeys:
+              type: array
+              items:
+                type: string
+            addNarrativeKeys:
+              type: string
+            addAllNarrativeKeys:
+              type: array
+              items:
+                type: string
+            setEventKeys:
+              type: array
+              nullable: true
+              items:
+                type: string
+            removeEventKeys:
+              type: string
+            removeAllEventKeys:
+              type: array
+              items:
+                type: string
+            addEventKeys:
+              type: string
+            addAllEventKeys:
+              type: array
+              items:
+                type: string
     POSTSiteUserRequest:
       allOf:
         - type: object
           properties:
-            narrativeKeys:
-              type: array
-              items:
-                type: string
-            eventKeys:
-              type: array
-              items:
-                type: string
             userKeys:
               type: array
               items:
@@ -11067,18 +11483,18 @@ components:
               type: boolean
             seeDeleted:
               type: boolean
+            narrativeKeys:
+              type: array
+              items:
+                type: string
+            eventKeys:
+              type: array
+              items:
+                type: string
     POSTSiteUserResponse:
       allOf:
         - type: object
           properties:
-            narrativeKeys:
-              type: array
-              items:
-                type: string
-            eventKeys:
-              type: array
-              items:
-                type: string
             userKeys:
               type: array
               items:
@@ -11099,18 +11515,18 @@ components:
               type: boolean
             seeDeleted:
               type: boolean
+            narrativeKeys:
+              type: array
+              items:
+                type: string
+            eventKeys:
+              type: array
+              items:
+                type: string
     PUTImportSiteUserRequest:
       allOf:
         - type: object
           properties:
-            narrativeKeys:
-              type: array
-              items:
-                type: string
-            eventKeys:
-              type: array
-              items:
-                type: string
             userKeys:
               type: array
               items:
@@ -11131,18 +11547,18 @@ components:
               type: boolean
             seeDeleted:
               type: boolean
+            narrativeKeys:
+              type: array
+              items:
+                type: string
+            eventKeys:
+              type: array
+              items:
+                type: string
     PUTImportSiteUserResponse:
       allOf:
         - type: object
           properties:
-            narrativeKeys:
-              type: array
-              items:
-                type: string
-            eventKeys:
-              type: array
-              items:
-                type: string
             userKeys:
               type: array
               items:
@@ -11163,6 +11579,14 @@ components:
               type: boolean
             seeDeleted:
               type: boolean
+            narrativeKeys:
+              type: array
+              items:
+                type: string
+            eventKeys:
+              type: array
+              items:
+                type: string
     SearchPageSiteUserResponse:
       allOf:
         - type: string

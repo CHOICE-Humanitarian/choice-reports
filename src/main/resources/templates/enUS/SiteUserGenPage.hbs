@@ -41,6 +41,12 @@
 				window.varsFq = JSON.parse('{{{toJsonObjectStringInApostrophes varsFq}}}');
 				pageGraph();
 			});
+{{#if DEFAULT_MAP_LOCATION }}
+			window.DEFAULT_MAP_LOCATION = { lat: {{ DEFAULT_MAP_LOCATION.lat }}, lon: {{ DEFAULT_MAP_LOCATION.lon }} };
+{{/if}}
+{{#if DEFAULT_MAP_ZOOM }}
+			window.DEFAULT_MAP_ZOOM = {{ DEFAULT_MAP_ZOOM }};
+{{/if}}
 		</script>
 {{/inline}}
 {{#*inline "htmUrlSiteUser"}}{{pageUri}}?q={{query.q}}&amp;rows={{#if rows}}{{rows}}{{else}}{{pagination.rows}}{{/if}}&amp;rows={{#if start}}{{start}}{{else}}{{pagination.start}}{{/if}}{{#each query.fq}}{{#eq fq this}}{{else}}&fq={{fq}}:{{val}}{{/eq}}{{/each}}{{#each query.sort}}{{#eq sort this}}{{else}}&sort={{var}} {{order}}{{/eq}}{{/each}}{{/inline}}
@@ -249,6 +255,8 @@
 												<div data-class="SiteUser" data-var="{{ ../var }}" data-val="{{ @key }}">{{ @key }}: {{ this }}</div>
 {{/eq}}
 {{/each}}
+{{#if ./stats/min }}
+									<div>									<span> step </span>									<input id="animateStatsStep" placeholder="step" value="1" style="width: 4em; "/>									<span> min </span>									<input id="animateStatsMin" placeholder="min" value="{{ ./stats/min }}" style="width: 4em; "/>									<span> max </span>									<input id="animateStatsMax" placeholder="max" value="{{ ./stats/max }}" style="width: 4em; "/>									<span> speed in seconds </span>									<input id="animateStatsSpeed" placeholder="speed" value="1" style="width: 4em; "/>									<button onclick="animateStats(); ">animate</button>									</div>{{/if}}
 {{/if}}
 											</div>
 										</td>
@@ -260,7 +268,7 @@
 {{#*inline "htmBodyMenuSiteUserPage"}}		<!-- #*inline "htmBodyMenuSiteUserPage" -->
 {{> "htmBodyMenuBaseModelPage"}}{{/inline}}
 {{#*inline "htmBodyGraphSiteUserPage"}}		<!-- #*inline "htmBodyGraphSiteUserPage" -->
-<div id="htmBodyGraphBaseModelPage" class="htmBodyGraph "></div>{{/inline}}
+<div id="htmBodyGraphBaseModelPage" class="w3-content htmBodyGraph "></div>{{/inline}}
 {{#*inline "htmBodyCount0SiteUserPage"}}		<!-- #*inline "htmBodyCount0SiteUserPage" -->
 		<h1>
 			<a href="{{pageUri}}" class="w3-bar-item w3-btn w3-center w3-block w3-gray w3-hover-gray">
@@ -622,8 +630,8 @@
 		<div class="w3-bar w3-content ">
 {{#block "htmBodySidebar"}}{{/block}}
 		</div>
-	<div class="pageContent w3-content ">
 {{#block "htmBodyGraph"}}{{/block}}
+	<div class="pageContent w3-content ">
 	{{#eq siteUserCount int0}}
 {{#block "htmBodyCount0"}}{{/block}}
 	{{else}}
@@ -774,154 +782,6 @@
 			</div>
 {{/inline}}
 {{> BaseModelPage baseModel_=siteUser_}}
-
-{{#*inline "htmNarrativeKeys"}}
-								<div class="w3-cell w3-cell-top w3-center w3-mobile ">
-									<div class="w3-padding ">
-										<div id="suggest{{classApiMethodMethod}}SiteUserNarrativeKeys">
-											<div class="w3-card ">
-												<div class="w3-cell-row ">
-													<a href="/report-narrative?fq=assigneeKey:{{siteUser_.pk}}" class="w3-cell w3-btn w3-center h4 w3-block h4 w3-light-green w3-hover-light-green ">
-														<i class="fad fa-calendar-pen "></i>
-														narratives
-													</a>
-												</div>
-												<div class="w3-cell-row ">
-													<h5 class="w3-cell ">
-														relate  to this site user
-													</h5>
-												</div>
-												<div class="w3-cell-row w3-padding ">
-													<div class="w3-cell ">
-														<div class="w3-cell-row ">
-
-														{{> "inputNarrativeKeys"}}
-														</div>
-													</div>
-												</div>
-												<div class="w3-cell-row w3-padding ">
-													<div class="w3-cell w3-left-align w3-cell-top ">
-														<ul class="w3-ul w3-hoverable " id="listSiteUserNarrativeKeys_{{classApiMethodMethod}}">
-														</ul>
-														{{#ifContainsAnyRoles roles rolesRequired}}
-	{{#eq 'Page' classApiMethodMethod}}
-																<div class="w3-cell-row ">
-																	<button
-																		 class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-light-green "
-																		 id="{{classApiMethodMethod}}_narrativeKeys_add"
-																		 onclick="$(this).addClass('w3-disabled'); this.disabled = true; this.innerHTML = 'Sending…'; postReportNarrativeVals({ assigneeKey: '{{pk}}' }, function() { $('#{{classApiMethodMethod}}_narrativeKeys_add').disabled = false; $('#{{classApiMethodMethod}}_narrativeKeys_add').innerHTML = 'add a report narrative'; }, function() { addError($('#{{classApiMethodMethod}}narrativeKeys')); });"
-																		>add a report narrative</button>
-																</div>
-	{{/eq}}
-														{{/ifContainsAnyRoles}}
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-{{/inline}}
-
-{{#*inline "inputNarrativeKeys"}}
-		{{#ifContainsAnyRoles roles rolesRequired}}
-														<i class="far fa-search w3-xxlarge w3-cell w3-cell-middle "></i>
-														{{#eq 'PUTCopy' classApiMethodMethod}}
-															<div>
-																<input 
-																	type="checkbox"
-																	id="{{classApiMethodMethod}}_narrativeKeys_clear"
-																	class="narrativeKeys_clear "
-																	>
-																<label for="{{classApiMethodMethod}}_narrativeKeys_clear">clear</label>
-															</div>
-														{{/eq}}
-														<input
-																type="text"
-																placeholder="narratives"
-															class="valueObjectSuggest suggestNarrativeKeys w3-input w3-border w3-cell w3-cell-middle "
-															name="setNarrativeKeys"
-															id="{{classApiMethodMethod}}_narrativeKeys"
-															autocomplete="off"
-															oninput="suggestSiteUserNarrativeKeys($(this).val() ? [ { 'name': 'q', 'value': 'objectSuggest:' + $(this).val() }, { 'name': 'rows', 'value': '10' }, { 'name': 'fl', 'value': 'classCanonicalName,assigneeKey,pk,pageUrlPk,objectTitle' } ] : [{{#if pk}}{'name':'fq','value':'assigneeKey:{{pk}}'}{{else}}{{/if}}], $('#listSiteUserNarrativeKeys_{{classApiMethodMethod}}'), {{pk}}); "
-															/>
-
-													{{else}}
-		{{/ifContainsAnyRoles}}
-{{/inline}}
-
-{{#*inline "htmEventKeys"}}
-								<div class="w3-cell w3-cell-top w3-center w3-mobile ">
-									<div class="w3-padding ">
-										<div id="suggest{{classApiMethodMethod}}SiteUserEventKeys">
-											<div class="w3-card ">
-												<div class="w3-cell-row ">
-													<a href="/calendar-item?fq=assigneeKey:{{siteUser_.pk}}" class="w3-cell w3-btn w3-center h4 w3-block h4 w3-light-green w3-hover-light-green ">
-														<i class="fad fa-calendar-star "></i>
-														events
-													</a>
-												</div>
-												<div class="w3-cell-row ">
-													<h5 class="w3-cell ">
-														relate  to this site user
-													</h5>
-												</div>
-												<div class="w3-cell-row w3-padding ">
-													<div class="w3-cell ">
-														<div class="w3-cell-row ">
-
-														{{> "inputEventKeys"}}
-														</div>
-													</div>
-												</div>
-												<div class="w3-cell-row w3-padding ">
-													<div class="w3-cell w3-left-align w3-cell-top ">
-														<ul class="w3-ul w3-hoverable " id="listSiteUserEventKeys_{{classApiMethodMethod}}">
-														</ul>
-														{{#ifContainsAnyRoles roles rolesRequired}}
-	{{#eq 'Page' classApiMethodMethod}}
-																<div class="w3-cell-row ">
-																	<button
-																		 class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-light-green "
-																		 id="{{classApiMethodMethod}}_eventKeys_add"
-																		 onclick="$(this).addClass('w3-disabled'); this.disabled = true; this.innerHTML = 'Sending…'; postReportEventVals({ assigneeKey: '{{pk}}' }, function() { $('#{{classApiMethodMethod}}_eventKeys_add').disabled = false; $('#{{classApiMethodMethod}}_eventKeys_add').innerHTML = 'add a calendar item'; }, function() { addError($('#{{classApiMethodMethod}}eventKeys')); });"
-																		>add a calendar item</button>
-																</div>
-	{{/eq}}
-														{{/ifContainsAnyRoles}}
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-{{/inline}}
-
-{{#*inline "inputEventKeys"}}
-		{{#ifContainsAnyRoles roles rolesRequired}}
-														<i class="far fa-search w3-xxlarge w3-cell w3-cell-middle "></i>
-														{{#eq 'PUTCopy' classApiMethodMethod}}
-															<div>
-																<input 
-																	type="checkbox"
-																	id="{{classApiMethodMethod}}_eventKeys_clear"
-																	class="eventKeys_clear "
-																	>
-																<label for="{{classApiMethodMethod}}_eventKeys_clear">clear</label>
-															</div>
-														{{/eq}}
-														<input
-																type="text"
-																placeholder="events"
-															class="valueObjectSuggest suggestEventKeys w3-input w3-border w3-cell w3-cell-middle "
-															name="setEventKeys"
-															id="{{classApiMethodMethod}}_eventKeys"
-															autocomplete="off"
-															oninput="suggestSiteUserEventKeys($(this).val() ? [ { 'name': 'q', 'value': 'objectSuggest:' + $(this).val() }, { 'name': 'rows', 'value': '10' }, { 'name': 'fl', 'value': 'classCanonicalName,assigneeKey,pk,pageUrlPk,objectTitle' } ] : [{{#if pk}}{'name':'fq','value':'assigneeKey:{{pk}}'}{{else}}{{/if}}], $('#listSiteUserEventKeys_{{classApiMethodMethod}}'), {{pk}}); "
-															/>
-
-													{{else}}
-		{{/ifContainsAnyRoles}}
-{{/inline}}
 
 {{#*inline "htmUserId"}}
 								<div class="w3-cell w3-cell-top w3-center w3-mobile ">
@@ -1412,5 +1272,153 @@
 
 													{{else}}
 															<span class="varSiteUser{{pk}}SeeDeleted ">{{siteUser_.seeDeleted}}</span>
+		{{/ifContainsAnyRoles}}
+{{/inline}}
+
+{{#*inline "htmNarrativeKeys"}}
+								<div class="w3-cell w3-cell-top w3-center w3-mobile ">
+									<div class="w3-padding ">
+										<div id="suggest{{classApiMethodMethod}}SiteUserNarrativeKeys">
+											<div class="w3-card ">
+												<div class="w3-cell-row ">
+													<a href="/report-narrative?fq=assigneeKey:{{siteUser_.pk}}" class="w3-cell w3-btn w3-center h4 w3-block h4 w3-light-green w3-hover-light-green ">
+														<i class="fad fa-calendar-pen "></i>
+														narratives
+													</a>
+												</div>
+												<div class="w3-cell-row ">
+													<h5 class="w3-cell ">
+														relate  to this site user
+													</h5>
+												</div>
+												<div class="w3-cell-row w3-padding ">
+													<div class="w3-cell ">
+														<div class="w3-cell-row ">
+
+														{{> "inputNarrativeKeys"}}
+														</div>
+													</div>
+												</div>
+												<div class="w3-cell-row w3-padding ">
+													<div class="w3-cell w3-left-align w3-cell-top ">
+														<ul class="w3-ul w3-hoverable " id="listSiteUserNarrativeKeys_{{classApiMethodMethod}}">
+														</ul>
+														{{#ifContainsAnyRoles roles rolesRequired}}
+	{{#eq 'Page' classApiMethodMethod}}
+																<div class="w3-cell-row ">
+																	<button
+																		 class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-light-green "
+																		 id="{{classApiMethodMethod}}_narrativeKeys_add"
+																		 onclick="$(this).addClass('w3-disabled'); this.disabled = true; this.innerHTML = 'Sending…'; postReportNarrativeVals({ assigneeKey: '{{pk}}' }, function() { $('#{{classApiMethodMethod}}_narrativeKeys_add').disabled = false; $('#{{classApiMethodMethod}}_narrativeKeys_add').innerHTML = 'add a report narrative'; }, function() { addError($('#{{classApiMethodMethod}}narrativeKeys')); });"
+																		>add a report narrative</button>
+																</div>
+	{{/eq}}
+														{{/ifContainsAnyRoles}}
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+{{/inline}}
+
+{{#*inline "inputNarrativeKeys"}}
+		{{#ifContainsAnyRoles roles rolesRequired}}
+														<i class="far fa-search w3-xxlarge w3-cell w3-cell-middle "></i>
+														{{#eq 'PUTCopy' classApiMethodMethod}}
+															<div>
+																<input 
+																	type="checkbox"
+																	id="{{classApiMethodMethod}}_narrativeKeys_clear"
+																	class="narrativeKeys_clear "
+																	>
+																<label for="{{classApiMethodMethod}}_narrativeKeys_clear">clear</label>
+															</div>
+														{{/eq}}
+														<input
+																type="text"
+																placeholder="narratives"
+															class="valueObjectSuggest suggestNarrativeKeys w3-input w3-border w3-cell w3-cell-middle "
+															name="setNarrativeKeys"
+															id="{{classApiMethodMethod}}_narrativeKeys"
+															autocomplete="off"
+															oninput="suggestSiteUserNarrativeKeys($(this).val() ? [ { 'name': 'q', 'value': 'objectSuggest:' + $(this).val() }, { 'name': 'rows', 'value': '10' }, { 'name': 'fl', 'value': 'classCanonicalName,assigneeKey,pk,pageUrlPk,objectTitle' } ] : [{{#if pk}}{'name':'fq','value':'assigneeKey:{{pk}}'}{{else}}{{/if}}], $('#listSiteUserNarrativeKeys_{{classApiMethodMethod}}'), {{pk}}); "
+															/>
+
+													{{else}}
+		{{/ifContainsAnyRoles}}
+{{/inline}}
+
+{{#*inline "htmEventKeys"}}
+								<div class="w3-cell w3-cell-top w3-center w3-mobile ">
+									<div class="w3-padding ">
+										<div id="suggest{{classApiMethodMethod}}SiteUserEventKeys">
+											<div class="w3-card ">
+												<div class="w3-cell-row ">
+													<a href="/calendar-item?fq=assigneeKey:{{siteUser_.pk}}" class="w3-cell w3-btn w3-center h4 w3-block h4 w3-light-green w3-hover-light-green ">
+														<i class="fad fa-calendar-star "></i>
+														events
+													</a>
+												</div>
+												<div class="w3-cell-row ">
+													<h5 class="w3-cell ">
+														relate  to this site user
+													</h5>
+												</div>
+												<div class="w3-cell-row w3-padding ">
+													<div class="w3-cell ">
+														<div class="w3-cell-row ">
+
+														{{> "inputEventKeys"}}
+														</div>
+													</div>
+												</div>
+												<div class="w3-cell-row w3-padding ">
+													<div class="w3-cell w3-left-align w3-cell-top ">
+														<ul class="w3-ul w3-hoverable " id="listSiteUserEventKeys_{{classApiMethodMethod}}">
+														</ul>
+														{{#ifContainsAnyRoles roles rolesRequired}}
+	{{#eq 'Page' classApiMethodMethod}}
+																<div class="w3-cell-row ">
+																	<button
+																		 class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-light-green "
+																		 id="{{classApiMethodMethod}}_eventKeys_add"
+																		 onclick="$(this).addClass('w3-disabled'); this.disabled = true; this.innerHTML = 'Sending…'; postReportEventVals({ assigneeKey: '{{pk}}' }, function() { $('#{{classApiMethodMethod}}_eventKeys_add').disabled = false; $('#{{classApiMethodMethod}}_eventKeys_add').innerHTML = 'add a calendar item'; }, function() { addError($('#{{classApiMethodMethod}}eventKeys')); });"
+																		>add a calendar item</button>
+																</div>
+	{{/eq}}
+														{{/ifContainsAnyRoles}}
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+{{/inline}}
+
+{{#*inline "inputEventKeys"}}
+		{{#ifContainsAnyRoles roles rolesRequired}}
+														<i class="far fa-search w3-xxlarge w3-cell w3-cell-middle "></i>
+														{{#eq 'PUTCopy' classApiMethodMethod}}
+															<div>
+																<input 
+																	type="checkbox"
+																	id="{{classApiMethodMethod}}_eventKeys_clear"
+																	class="eventKeys_clear "
+																	>
+																<label for="{{classApiMethodMethod}}_eventKeys_clear">clear</label>
+															</div>
+														{{/eq}}
+														<input
+																type="text"
+																placeholder="events"
+															class="valueObjectSuggest suggestEventKeys w3-input w3-border w3-cell w3-cell-middle "
+															name="setEventKeys"
+															id="{{classApiMethodMethod}}_eventKeys"
+															autocomplete="off"
+															oninput="suggestSiteUserEventKeys($(this).val() ? [ { 'name': 'q', 'value': 'objectSuggest:' + $(this).val() }, { 'name': 'rows', 'value': '10' }, { 'name': 'fl', 'value': 'classCanonicalName,assigneeKey,pk,pageUrlPk,objectTitle' } ] : [{{#if pk}}{'name':'fq','value':'assigneeKey:{{pk}}'}{{else}}{{/if}}], $('#listSiteUserEventKeys_{{classApiMethodMethod}}'), {{pk}}); "
+															/>
+
+													{{else}}
 		{{/ifContainsAnyRoles}}
 {{/inline}}

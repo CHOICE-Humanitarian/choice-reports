@@ -34,11 +34,11 @@ import org.slf4j.LoggerFactory;
 import java.math.RoundingMode;
 import java.util.Map;
 import java.lang.Long;
-import org.choicehumanitarian.reports.enus.model.report.narrative.ReportNarrative;
 import java.lang.String;
 import io.vertx.core.json.JsonArray;
-import org.choicehumanitarian.reports.enus.model.report.event.ReportEvent;
 import java.lang.Boolean;
+import org.choicehumanitarian.reports.enus.model.report.narrative.ReportNarrative;
+import org.choicehumanitarian.reports.enus.model.report.event.ReportEvent;
 import org.computate.search.wrap.Wrap;
 import io.vertx.core.Promise;
 import io.vertx.core.Future;
@@ -91,178 +91,6 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	public static final String SiteUser_Color = "gray";
 	public static final String SiteUser_IconGroup = "regular";
 	public static final String SiteUser_IconName = "user-cog";
-
-	///////////////////
-	// narrativeKeys //
-	///////////////////
-
-	/**	 The entity narrativeKeys
-	 *	 It is constructed before being initialized with the constructor by default. 
-	 */
-	@JsonProperty
-	@JsonFormat(shape = JsonFormat.Shape.ARRAY)
-	@JsonSerialize(contentUsing = ToStringSerializer.class)
-	@JsonInclude(Include.NON_NULL)
-	protected List<Long> narrativeKeys = new ArrayList<Long>();
-
-	/**	<br> The entity narrativeKeys
-	 *  It is constructed before being initialized with the constructor by default. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.user.SiteUser&fq=entiteVar_enUS_indexed_string:narrativeKeys">Find the entity narrativeKeys in Solr</a>
-	 * <br>
-	 * @param l is the entity already constructed. 
-	 **/
-	protected abstract void _narrativeKeys(List<Long> l);
-
-	public List<Long> getNarrativeKeys() {
-		return narrativeKeys;
-	}
-
-	public void setNarrativeKeys(List<Long> narrativeKeys) {
-		this.narrativeKeys = narrativeKeys;
-	}
-	@JsonIgnore
-	public void setNarrativeKeys(String o) {
-		Long l = SiteUser.staticSetNarrativeKeys(siteRequest_, o);
-		if(l != null)
-			addNarrativeKeys(l);
-	}
-	public static Long staticSetNarrativeKeys(SiteRequestEnUS siteRequest_, String o) {
-		if(NumberUtils.isParsable(o))
-			return Long.parseLong(o);
-		return null;
-	}
-	public SiteUser addNarrativeKeys(Long...objects) {
-		for(Long o : objects) {
-			addNarrativeKeys(o);
-		}
-		return (SiteUser)this;
-	}
-	public SiteUser addNarrativeKeys(Long o) {
-		if(o != null)
-			this.narrativeKeys.add(o);
-		return (SiteUser)this;
-	}
-	@JsonIgnore
-	public void setNarrativeKeys(JsonArray objects) {
-		narrativeKeys.clear();
-		for(int i = 0; i < objects.size(); i++) {
-			Long o = objects.getLong(i);
-			addNarrativeKeys(o);
-		}
-	}
-	public SiteUser addNarrativeKeys(String o) {
-		if(NumberUtils.isParsable(o)) {
-			Long p = Long.parseLong(o);
-			addNarrativeKeys(p);
-		}
-		return (SiteUser)this;
-	}
-	protected SiteUser narrativeKeysInit() {
-		_narrativeKeys(narrativeKeys);
-		return (SiteUser)this;
-	}
-
-	public static Long staticSearchNarrativeKeys(SiteRequestEnUS siteRequest_, Long o) {
-		return o;
-	}
-
-	public static String staticSearchStrNarrativeKeys(SiteRequestEnUS siteRequest_, Long o) {
-		return o == null ? null : o.toString();
-	}
-
-	public static String staticSearchFqNarrativeKeys(SiteRequestEnUS siteRequest_, String o) {
-		return SiteUser.staticSearchStrNarrativeKeys(siteRequest_, SiteUser.staticSearchNarrativeKeys(siteRequest_, SiteUser.staticSetNarrativeKeys(siteRequest_, o)));
-	}
-
-	public List<Long> sqlNarrativeKeys() {
-		return narrativeKeys;
-	}
-
-	///////////////
-	// eventKeys //
-	///////////////
-
-	/**	 The entity eventKeys
-	 *	 It is constructed before being initialized with the constructor by default. 
-	 */
-	@JsonProperty
-	@JsonFormat(shape = JsonFormat.Shape.ARRAY)
-	@JsonSerialize(contentUsing = ToStringSerializer.class)
-	@JsonInclude(Include.NON_NULL)
-	protected List<Long> eventKeys = new ArrayList<Long>();
-
-	/**	<br> The entity eventKeys
-	 *  It is constructed before being initialized with the constructor by default. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.user.SiteUser&fq=entiteVar_enUS_indexed_string:eventKeys">Find the entity eventKeys in Solr</a>
-	 * <br>
-	 * @param l is the entity already constructed. 
-	 **/
-	protected abstract void _eventKeys(List<Long> l);
-
-	public List<Long> getEventKeys() {
-		return eventKeys;
-	}
-
-	public void setEventKeys(List<Long> eventKeys) {
-		this.eventKeys = eventKeys;
-	}
-	@JsonIgnore
-	public void setEventKeys(String o) {
-		Long l = SiteUser.staticSetEventKeys(siteRequest_, o);
-		if(l != null)
-			addEventKeys(l);
-	}
-	public static Long staticSetEventKeys(SiteRequestEnUS siteRequest_, String o) {
-		if(NumberUtils.isParsable(o))
-			return Long.parseLong(o);
-		return null;
-	}
-	public SiteUser addEventKeys(Long...objects) {
-		for(Long o : objects) {
-			addEventKeys(o);
-		}
-		return (SiteUser)this;
-	}
-	public SiteUser addEventKeys(Long o) {
-		if(o != null)
-			this.eventKeys.add(o);
-		return (SiteUser)this;
-	}
-	@JsonIgnore
-	public void setEventKeys(JsonArray objects) {
-		eventKeys.clear();
-		for(int i = 0; i < objects.size(); i++) {
-			Long o = objects.getLong(i);
-			addEventKeys(o);
-		}
-	}
-	public SiteUser addEventKeys(String o) {
-		if(NumberUtils.isParsable(o)) {
-			Long p = Long.parseLong(o);
-			addEventKeys(p);
-		}
-		return (SiteUser)this;
-	}
-	protected SiteUser eventKeysInit() {
-		_eventKeys(eventKeys);
-		return (SiteUser)this;
-	}
-
-	public static Long staticSearchEventKeys(SiteRequestEnUS siteRequest_, Long o) {
-		return o;
-	}
-
-	public static String staticSearchStrEventKeys(SiteRequestEnUS siteRequest_, Long o) {
-		return o == null ? null : o.toString();
-	}
-
-	public static String staticSearchFqEventKeys(SiteRequestEnUS siteRequest_, String o) {
-		return SiteUser.staticSearchStrEventKeys(siteRequest_, SiteUser.staticSearchEventKeys(siteRequest_, SiteUser.staticSetEventKeys(siteRequest_, o)));
-	}
-
-	public List<Long> sqlEventKeys() {
-		return eventKeys;
-	}
 
 	//////////////
 	// userKeys //
@@ -780,6 +608,178 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		return seeDeleted;
 	}
 
+	///////////////////
+	// narrativeKeys //
+	///////////////////
+
+	/**	 The entity narrativeKeys
+	 *	 It is constructed before being initialized with the constructor by default. 
+	 */
+	@JsonProperty
+	@JsonFormat(shape = JsonFormat.Shape.ARRAY)
+	@JsonSerialize(contentUsing = ToStringSerializer.class)
+	@JsonInclude(Include.NON_NULL)
+	protected List<Long> narrativeKeys = new ArrayList<Long>();
+
+	/**	<br> The entity narrativeKeys
+	 *  It is constructed before being initialized with the constructor by default. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.user.SiteUser&fq=entiteVar_enUS_indexed_string:narrativeKeys">Find the entity narrativeKeys in Solr</a>
+	 * <br>
+	 * @param l is the entity already constructed. 
+	 **/
+	protected abstract void _narrativeKeys(List<Long> l);
+
+	public List<Long> getNarrativeKeys() {
+		return narrativeKeys;
+	}
+
+	public void setNarrativeKeys(List<Long> narrativeKeys) {
+		this.narrativeKeys = narrativeKeys;
+	}
+	@JsonIgnore
+	public void setNarrativeKeys(String o) {
+		Long l = SiteUser.staticSetNarrativeKeys(siteRequest_, o);
+		if(l != null)
+			addNarrativeKeys(l);
+	}
+	public static Long staticSetNarrativeKeys(SiteRequestEnUS siteRequest_, String o) {
+		if(NumberUtils.isParsable(o))
+			return Long.parseLong(o);
+		return null;
+	}
+	public SiteUser addNarrativeKeys(Long...objects) {
+		for(Long o : objects) {
+			addNarrativeKeys(o);
+		}
+		return (SiteUser)this;
+	}
+	public SiteUser addNarrativeKeys(Long o) {
+		if(o != null)
+			this.narrativeKeys.add(o);
+		return (SiteUser)this;
+	}
+	@JsonIgnore
+	public void setNarrativeKeys(JsonArray objects) {
+		narrativeKeys.clear();
+		for(int i = 0; i < objects.size(); i++) {
+			Long o = objects.getLong(i);
+			addNarrativeKeys(o);
+		}
+	}
+	public SiteUser addNarrativeKeys(String o) {
+		if(NumberUtils.isParsable(o)) {
+			Long p = Long.parseLong(o);
+			addNarrativeKeys(p);
+		}
+		return (SiteUser)this;
+	}
+	protected SiteUser narrativeKeysInit() {
+		_narrativeKeys(narrativeKeys);
+		return (SiteUser)this;
+	}
+
+	public static Long staticSearchNarrativeKeys(SiteRequestEnUS siteRequest_, Long o) {
+		return o;
+	}
+
+	public static String staticSearchStrNarrativeKeys(SiteRequestEnUS siteRequest_, Long o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqNarrativeKeys(SiteRequestEnUS siteRequest_, String o) {
+		return SiteUser.staticSearchStrNarrativeKeys(siteRequest_, SiteUser.staticSearchNarrativeKeys(siteRequest_, SiteUser.staticSetNarrativeKeys(siteRequest_, o)));
+	}
+
+	public List<Long> sqlNarrativeKeys() {
+		return narrativeKeys;
+	}
+
+	///////////////
+	// eventKeys //
+	///////////////
+
+	/**	 The entity eventKeys
+	 *	 It is constructed before being initialized with the constructor by default. 
+	 */
+	@JsonProperty
+	@JsonFormat(shape = JsonFormat.Shape.ARRAY)
+	@JsonSerialize(contentUsing = ToStringSerializer.class)
+	@JsonInclude(Include.NON_NULL)
+	protected List<Long> eventKeys = new ArrayList<Long>();
+
+	/**	<br> The entity eventKeys
+	 *  It is constructed before being initialized with the constructor by default. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.user.SiteUser&fq=entiteVar_enUS_indexed_string:eventKeys">Find the entity eventKeys in Solr</a>
+	 * <br>
+	 * @param l is the entity already constructed. 
+	 **/
+	protected abstract void _eventKeys(List<Long> l);
+
+	public List<Long> getEventKeys() {
+		return eventKeys;
+	}
+
+	public void setEventKeys(List<Long> eventKeys) {
+		this.eventKeys = eventKeys;
+	}
+	@JsonIgnore
+	public void setEventKeys(String o) {
+		Long l = SiteUser.staticSetEventKeys(siteRequest_, o);
+		if(l != null)
+			addEventKeys(l);
+	}
+	public static Long staticSetEventKeys(SiteRequestEnUS siteRequest_, String o) {
+		if(NumberUtils.isParsable(o))
+			return Long.parseLong(o);
+		return null;
+	}
+	public SiteUser addEventKeys(Long...objects) {
+		for(Long o : objects) {
+			addEventKeys(o);
+		}
+		return (SiteUser)this;
+	}
+	public SiteUser addEventKeys(Long o) {
+		if(o != null)
+			this.eventKeys.add(o);
+		return (SiteUser)this;
+	}
+	@JsonIgnore
+	public void setEventKeys(JsonArray objects) {
+		eventKeys.clear();
+		for(int i = 0; i < objects.size(); i++) {
+			Long o = objects.getLong(i);
+			addEventKeys(o);
+		}
+	}
+	public SiteUser addEventKeys(String o) {
+		if(NumberUtils.isParsable(o)) {
+			Long p = Long.parseLong(o);
+			addEventKeys(p);
+		}
+		return (SiteUser)this;
+	}
+	protected SiteUser eventKeysInit() {
+		_eventKeys(eventKeys);
+		return (SiteUser)this;
+	}
+
+	public static Long staticSearchEventKeys(SiteRequestEnUS siteRequest_, Long o) {
+		return o;
+	}
+
+	public static String staticSearchStrEventKeys(SiteRequestEnUS siteRequest_, Long o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqEventKeys(SiteRequestEnUS siteRequest_, String o) {
+		return SiteUser.staticSearchStrEventKeys(siteRequest_, SiteUser.staticSearchEventKeys(siteRequest_, SiteUser.staticSetEventKeys(siteRequest_, o)));
+	}
+
+	public List<Long> sqlEventKeys() {
+		return eventKeys;
+	}
+
 	//////////////
 	// initDeep //
 	//////////////
@@ -809,8 +809,6 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		Future.future(a -> a.complete()).compose(a -> {
 			Promise<Void> promise2 = Promise.promise();
 			try {
-				narrativeKeysInit();
-				eventKeysInit();
 				userKeysInit();
 				userIdInit();
 				userNameInit();
@@ -820,6 +818,8 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 				userFullNameInit();
 				seeArchivedInit();
 				seeDeletedInit();
+				narrativeKeysInit();
+				eventKeysInit();
 				promise2.complete();
 			} catch(Exception ex) {
 				promise2.fail(ex);
@@ -873,10 +873,6 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	public Object obtainSiteUser(String var) {
 		SiteUser oSiteUser = (SiteUser)this;
 		switch(var) {
-			case "narrativeKeys":
-				return oSiteUser.narrativeKeys;
-			case "eventKeys":
-				return oSiteUser.eventKeys;
 			case "userKeys":
 				return oSiteUser.userKeys;
 			case "userId":
@@ -895,6 +891,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 				return oSiteUser.seeArchived;
 			case "seeDeleted":
 				return oSiteUser.seeDeleted;
+			case "narrativeKeys":
+				return oSiteUser.narrativeKeys;
+			case "eventKeys":
+				return oSiteUser.eventKeys;
 			default:
 				return super.obtainBaseModel(var);
 		}
@@ -944,10 +944,6 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	}
 	public static Object staticSetSiteUser(String entityVar, SiteRequestEnUS siteRequest_, String o) {
 		switch(entityVar) {
-		case "narrativeKeys":
-			return SiteUser.staticSetNarrativeKeys(siteRequest_, o);
-		case "eventKeys":
-			return SiteUser.staticSetEventKeys(siteRequest_, o);
 		case "userKeys":
 			return SiteUser.staticSetUserKeys(siteRequest_, o);
 		case "userId":
@@ -966,6 +962,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 			return SiteUser.staticSetSeeArchived(siteRequest_, o);
 		case "seeDeleted":
 			return SiteUser.staticSetSeeDeleted(siteRequest_, o);
+		case "narrativeKeys":
+			return SiteUser.staticSetNarrativeKeys(siteRequest_, o);
+		case "eventKeys":
+			return SiteUser.staticSetEventKeys(siteRequest_, o);
 			default:
 				return BaseModel.staticSetBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -980,10 +980,6 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	}
 	public static Object staticSearchSiteUser(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
 		switch(entityVar) {
-		case "narrativeKeys":
-			return SiteUser.staticSearchNarrativeKeys(siteRequest_, (Long)o);
-		case "eventKeys":
-			return SiteUser.staticSearchEventKeys(siteRequest_, (Long)o);
 		case "userKeys":
 			return SiteUser.staticSearchUserKeys(siteRequest_, (Long)o);
 		case "userId":
@@ -1002,6 +998,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 			return SiteUser.staticSearchSeeArchived(siteRequest_, (Boolean)o);
 		case "seeDeleted":
 			return SiteUser.staticSearchSeeDeleted(siteRequest_, (Boolean)o);
+		case "narrativeKeys":
+			return SiteUser.staticSearchNarrativeKeys(siteRequest_, (Long)o);
+		case "eventKeys":
+			return SiteUser.staticSearchEventKeys(siteRequest_, (Long)o);
 			default:
 				return BaseModel.staticSearchBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -1016,10 +1016,6 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	}
 	public static String staticSearchStrSiteUser(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
 		switch(entityVar) {
-		case "narrativeKeys":
-			return SiteUser.staticSearchStrNarrativeKeys(siteRequest_, (Long)o);
-		case "eventKeys":
-			return SiteUser.staticSearchStrEventKeys(siteRequest_, (Long)o);
 		case "userKeys":
 			return SiteUser.staticSearchStrUserKeys(siteRequest_, (Long)o);
 		case "userId":
@@ -1038,6 +1034,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 			return SiteUser.staticSearchStrSeeArchived(siteRequest_, (Boolean)o);
 		case "seeDeleted":
 			return SiteUser.staticSearchStrSeeDeleted(siteRequest_, (Boolean)o);
+		case "narrativeKeys":
+			return SiteUser.staticSearchStrNarrativeKeys(siteRequest_, (Long)o);
+		case "eventKeys":
+			return SiteUser.staticSearchStrEventKeys(siteRequest_, (Long)o);
 			default:
 				return BaseModel.staticSearchStrBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -1052,10 +1052,6 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	}
 	public static String staticSearchFqSiteUser(String entityVar, SiteRequestEnUS siteRequest_, String o) {
 		switch(entityVar) {
-		case "narrativeKeys":
-			return SiteUser.staticSearchFqNarrativeKeys(siteRequest_, o);
-		case "eventKeys":
-			return SiteUser.staticSearchFqEventKeys(siteRequest_, o);
 		case "userKeys":
 			return SiteUser.staticSearchFqUserKeys(siteRequest_, o);
 		case "userId":
@@ -1074,6 +1070,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 			return SiteUser.staticSearchFqSeeArchived(siteRequest_, o);
 		case "seeDeleted":
 			return SiteUser.staticSearchFqSeeDeleted(siteRequest_, o);
+		case "narrativeKeys":
+			return SiteUser.staticSearchFqNarrativeKeys(siteRequest_, o);
+		case "eventKeys":
+			return SiteUser.staticSearchFqEventKeys(siteRequest_, o);
 			default:
 				return BaseModel.staticSearchFqBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -1166,20 +1166,6 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	}
 
 	public void indexSiteUser(JsonObject doc) {
-		if(narrativeKeys != null) {
-			JsonArray l = new JsonArray();
-			doc.put("narrativeKeys_docvalues_longs", l);
-			for(Long o : narrativeKeys) {
-				l.add(o);
-			}
-		}
-		if(eventKeys != null) {
-			JsonArray l = new JsonArray();
-			doc.put("eventKeys_docvalues_longs", l);
-			for(Long o : eventKeys) {
-				l.add(o);
-			}
-		}
 		if(userKeys != null) {
 			JsonArray l = new JsonArray();
 			doc.put("userKeys_docvalues_longs", l);
@@ -1211,16 +1197,26 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		if(seeDeleted != null) {
 			doc.put("seeDeleted_docvalues_boolean", seeDeleted);
 		}
+		if(narrativeKeys != null) {
+			JsonArray l = new JsonArray();
+			doc.put("narrativeKeys_docvalues_longs", l);
+			for(Long o : narrativeKeys) {
+				l.add(o);
+			}
+		}
+		if(eventKeys != null) {
+			JsonArray l = new JsonArray();
+			doc.put("eventKeys_docvalues_longs", l);
+			for(Long o : eventKeys) {
+				l.add(o);
+			}
+		}
 		super.indexBaseModel(doc);
 
 	}
 
 	public static String varStoredSiteUser(String entityVar) {
 		switch(entityVar) {
-			case "narrativeKeys":
-				return "narrativeKeys_docvalues_longs";
-			case "eventKeys":
-				return "eventKeys_docvalues_longs";
 			case "userKeys":
 				return "userKeys_docvalues_longs";
 			case "userId":
@@ -1239,6 +1235,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 				return "seeArchived_docvalues_boolean";
 			case "seeDeleted":
 				return "seeDeleted_docvalues_boolean";
+			case "narrativeKeys":
+				return "narrativeKeys_docvalues_longs";
+			case "eventKeys":
+				return "eventKeys_docvalues_longs";
 			default:
 				return BaseModel.varStoredBaseModel(entityVar);
 		}
@@ -1246,10 +1246,6 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 
 	public static String varIndexedSiteUser(String entityVar) {
 		switch(entityVar) {
-			case "narrativeKeys":
-				return "narrativeKeys_docvalues_longs";
-			case "eventKeys":
-				return "eventKeys_docvalues_longs";
 			case "userKeys":
 				return "userKeys_docvalues_longs";
 			case "userId":
@@ -1268,6 +1264,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 				return "seeArchived_docvalues_boolean";
 			case "seeDeleted":
 				return "seeDeleted_docvalues_boolean";
+			case "narrativeKeys":
+				return "narrativeKeys_docvalues_longs";
+			case "eventKeys":
+				return "eventKeys_docvalues_longs";
 			default:
 				return BaseModel.varIndexedBaseModel(entityVar);
 		}
@@ -1275,10 +1275,6 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 
 	public static String searchVarSiteUser(String searchVar) {
 		switch(searchVar) {
-			case "narrativeKeys_docvalues_longs":
-				return "narrativeKeys";
-			case "eventKeys_docvalues_longs":
-				return "eventKeys";
 			case "userKeys_docvalues_longs":
 				return "userKeys";
 			case "userId_docvalues_string":
@@ -1297,6 +1293,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 				return "seeArchived";
 			case "seeDeleted_docvalues_boolean":
 				return "seeDeleted";
+			case "narrativeKeys_docvalues_longs":
+				return "narrativeKeys";
+			case "eventKeys_docvalues_longs":
+				return "eventKeys";
 			default:
 				return BaseModel.searchVarBaseModel(searchVar);
 		}
@@ -1326,12 +1326,6 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	public void storeSiteUser(SolrResponse.Doc doc) {
 		SiteUser oSiteUser = (SiteUser)this;
 
-		Optional.ofNullable((List<?>)doc.get("narrativeKeys_docvalues_longs")).orElse(Arrays.asList()).stream().filter(v -> v != null).forEach(v -> {
-			oSiteUser.addNarrativeKeys(v.toString());
-		});
-		Optional.ofNullable((List<?>)doc.get("eventKeys_docvalues_longs")).orElse(Arrays.asList()).stream().filter(v -> v != null).forEach(v -> {
-			oSiteUser.addEventKeys(v.toString());
-		});
 		Optional.ofNullable((List<?>)doc.get("userKeys_docvalues_longs")).orElse(Arrays.asList()).stream().filter(v -> v != null).forEach(v -> {
 			oSiteUser.addUserKeys(v.toString());
 		});
@@ -1343,6 +1337,12 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		oSiteUser.setUserFullName(Optional.ofNullable(doc.get("userFullName_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oSiteUser.setSeeArchived(Optional.ofNullable(doc.get("seeArchived_docvalues_boolean")).map(v -> v.toString()).orElse(null));
 		oSiteUser.setSeeDeleted(Optional.ofNullable(doc.get("seeDeleted_docvalues_boolean")).map(v -> v.toString()).orElse(null));
+		Optional.ofNullable((List<?>)doc.get("narrativeKeys_docvalues_longs")).orElse(Arrays.asList()).stream().filter(v -> v != null).forEach(v -> {
+			oSiteUser.addNarrativeKeys(v.toString());
+		});
+		Optional.ofNullable((List<?>)doc.get("eventKeys_docvalues_longs")).orElse(Arrays.asList()).stream().filter(v -> v != null).forEach(v -> {
+			oSiteUser.addEventKeys(v.toString());
+		});
 
 		super.storeBaseModel(doc);
 	}
@@ -1356,10 +1356,6 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		Object o = Optional.ofNullable(apiRequest).map(ApiRequest::getOriginal).orElse(null);
 		if(o != null && o instanceof SiteUser) {
 			SiteUser original = (SiteUser)o;
-			if(!Objects.equals(narrativeKeys, original.getNarrativeKeys()))
-				apiRequest.addVars("narrativeKeys");
-			if(!Objects.equals(eventKeys, original.getEventKeys()))
-				apiRequest.addVars("eventKeys");
 			if(!Objects.equals(userKeys, original.getUserKeys()))
 				apiRequest.addVars("userKeys");
 			if(!Objects.equals(userId, original.getUserId()))
@@ -1378,6 +1374,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 				apiRequest.addVars("seeArchived");
 			if(!Objects.equals(seeDeleted, original.getSeeDeleted()))
 				apiRequest.addVars("seeDeleted");
+			if(!Objects.equals(narrativeKeys, original.getNarrativeKeys()))
+				apiRequest.addVars("narrativeKeys");
+			if(!Objects.equals(eventKeys, original.getEventKeys()))
+				apiRequest.addVars("eventKeys");
 			super.apiRequestBaseModel();
 		}
 	}
@@ -1389,8 +1389,6 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	@Override public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(super.toString());
-		sb.append(Optional.ofNullable(narrativeKeys).map(v -> "narrativeKeys: " + v + "\n").orElse(""));
-		sb.append(Optional.ofNullable(eventKeys).map(v -> "eventKeys: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(userKeys).map(v -> "userKeys: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(userId).map(v -> "userId: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(userName).map(v -> "userName: \"" + v + "\"\n" ).orElse(""));
@@ -1400,12 +1398,12 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		sb.append(Optional.ofNullable(userFullName).map(v -> "userFullName: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(seeArchived).map(v -> "seeArchived: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(seeDeleted).map(v -> "seeDeleted: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(narrativeKeys).map(v -> "narrativeKeys: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(eventKeys).map(v -> "eventKeys: " + v + "\n").orElse(""));
 		return sb.toString();
 	}
 
 	public static final String CLASS_SIMPLE_NAME = "SiteUser";
-	public static final String VAR_narrativeKeys = "narrativeKeys";
-	public static final String VAR_eventKeys = "eventKeys";
 	public static final String VAR_userKeys = "userKeys";
 	public static final String VAR_userId = "userId";
 	public static final String VAR_userName = "userName";
@@ -1415,6 +1413,8 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	public static final String VAR_userFullName = "userFullName";
 	public static final String VAR_seeArchived = "seeArchived";
 	public static final String VAR_seeDeleted = "seeDeleted";
+	public static final String VAR_narrativeKeys = "narrativeKeys";
+	public static final String VAR_eventKeys = "eventKeys";
 
 	public static List<String> varsQForClass() {
 		return SiteUser.varsQSiteUser(new ArrayList<String>());
@@ -1440,8 +1440,6 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		return vars;
 	}
 
-	public static final String DISPLAY_NAME_narrativeKeys = "narratives";
-	public static final String DISPLAY_NAME_eventKeys = "events";
 	public static final String DISPLAY_NAME_userKeys = "";
 	public static final String DISPLAY_NAME_userId = "";
 	public static final String DISPLAY_NAME_userName = "";
@@ -1451,16 +1449,14 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	public static final String DISPLAY_NAME_userFullName = "";
 	public static final String DISPLAY_NAME_seeArchived = "see archived";
 	public static final String DISPLAY_NAME_seeDeleted = "see deleted";
+	public static final String DISPLAY_NAME_narrativeKeys = "narratives";
+	public static final String DISPLAY_NAME_eventKeys = "events";
 
 	public static String displayNameForClass(String var) {
 		return SiteUser.displayNameSiteUser(var);
 	}
 	public static String displayNameSiteUser(String var) {
 		switch(var) {
-		case VAR_narrativeKeys:
-			return DISPLAY_NAME_narrativeKeys;
-		case VAR_eventKeys:
-			return DISPLAY_NAME_eventKeys;
 		case VAR_userKeys:
 			return DISPLAY_NAME_userKeys;
 		case VAR_userId:
@@ -1479,6 +1475,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 			return DISPLAY_NAME_seeArchived;
 		case VAR_seeDeleted:
 			return DISPLAY_NAME_seeDeleted;
+		case VAR_narrativeKeys:
+			return DISPLAY_NAME_narrativeKeys;
+		case VAR_eventKeys:
+			return DISPLAY_NAME_eventKeys;
 		default:
 			return BaseModel.displayNameBaseModel(var);
 		}
@@ -1511,10 +1511,6 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 
 	public static String classSimpleNameSiteUser(String var) {
 		switch(var) {
-		case VAR_narrativeKeys:
-			return "List";
-		case VAR_eventKeys:
-			return "List";
 		case VAR_userKeys:
 			return "List";
 		case VAR_userId:
@@ -1533,6 +1529,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 			return "Boolean";
 		case VAR_seeDeleted:
 			return "Boolean";
+		case VAR_narrativeKeys:
+			return "List";
+		case VAR_eventKeys:
+			return "List";
 			default:
 				return BaseModel.classSimpleNameBaseModel(var);
 		}
@@ -1547,14 +1547,14 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 
 	public static Integer htmlRowSiteUser(String var) {
 		switch(var) {
-		case VAR_narrativeKeys:
-			return 4;
-		case VAR_eventKeys:
-			return 4;
 		case VAR_seeArchived:
 			return 3;
 		case VAR_seeDeleted:
 			return 3;
+		case VAR_narrativeKeys:
+			return 4;
+		case VAR_eventKeys:
+			return 4;
 			default:
 				return BaseModel.htmlRowBaseModel(var);
 		}
@@ -1562,14 +1562,14 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 
 	public static Integer htmlCellSiteUser(String var) {
 		switch(var) {
-		case VAR_narrativeKeys:
-			return 1;
-		case VAR_eventKeys:
-			return 1;
 		case VAR_seeArchived:
 			return 2;
 		case VAR_seeDeleted:
 			return 3;
+		case VAR_narrativeKeys:
+			return 1;
+		case VAR_eventKeys:
+			return 1;
 			default:
 				return BaseModel.htmlCellBaseModel(var);
 		}

@@ -47,6 +47,12 @@
 				window.varsFq = JSON.parse('{{{toJsonObjectStringInApostrophes varsFq}}}');
 				pageGraph();
 			});
+{{#if DEFAULT_MAP_LOCATION }}
+			window.DEFAULT_MAP_LOCATION = { lat: {{ DEFAULT_MAP_LOCATION.lat }}, lon: {{ DEFAULT_MAP_LOCATION.lon }} };
+{{/if}}
+{{#if DEFAULT_MAP_ZOOM }}
+			window.DEFAULT_MAP_ZOOM = {{ DEFAULT_MAP_ZOOM }};
+{{/if}}
 		</script>
 {{/inline}}
 {{#*inline "htmUrlReportSchedule"}}{{pageUri}}?q={{query.q}}&amp;rows={{#if rows}}{{rows}}{{else}}{{pagination.rows}}{{/if}}&amp;rows={{#if start}}{{start}}{{else}}{{pagination.start}}{{/if}}{{#each query.fq}}{{#eq fq this}}{{else}}&fq={{fq}}:{{val}}{{/eq}}{{/each}}{{#each query.sort}}{{#eq sort this}}{{else}}&sort={{var}} {{order}}{{/eq}}{{/each}}{{/inline}}
@@ -255,6 +261,8 @@
 												<div data-class="ReportSchedule" data-var="{{ ../var }}" data-val="{{ @key }}">{{ @key }}: {{ this }}</div>
 {{/eq}}
 {{/each}}
+{{#if ./stats/min }}
+									<div>									<span> step </span>									<input id="animateStatsStep" placeholder="step" value="1" style="width: 4em; "/>									<span> min </span>									<input id="animateStatsMin" placeholder="min" value="{{ ./stats/min }}" style="width: 4em; "/>									<span> max </span>									<input id="animateStatsMax" placeholder="max" value="{{ ./stats/max }}" style="width: 4em; "/>									<span> speed in seconds </span>									<input id="animateStatsSpeed" placeholder="speed" value="1" style="width: 4em; "/>									<button onclick="animateStats(); ">animate</button>									</div>{{/if}}
 {{/if}}
 											</div>
 										</td>
@@ -266,7 +274,7 @@
 {{#*inline "htmBodyMenuReportSchedulePage"}}		<!-- #*inline "htmBodyMenuReportSchedulePage" -->
 {{> "htmBodyMenuBaseModelPage"}}{{/inline}}
 {{#*inline "htmBodyGraphReportSchedulePage"}}		<!-- #*inline "htmBodyGraphReportSchedulePage" -->
-<div id="htmBodyGraphBaseModelPage" class="htmBodyGraph "></div>{{/inline}}
+<div id="htmBodyGraphBaseModelPage" class="w3-content htmBodyGraph "></div>{{/inline}}
 {{#*inline "htmBodyCount0ReportSchedulePage"}}		<!-- #*inline "htmBodyCount0ReportSchedulePage" -->
 		<h1>
 			<a href="{{pageUri}}" class="w3-bar-item w3-btn w3-center w3-block w3-light-green w3-hover-light-green">
@@ -652,8 +660,8 @@
 		<div class="w3-bar w3-content ">
 {{#block "htmBodySidebar"}}{{/block}}
 		</div>
-	<div class="pageContent w3-content ">
 {{#block "htmBodyGraph"}}{{/block}}
+	<div class="pageContent w3-content ">
 	{{#eq reportScheduleCount int0}}
 {{#block "htmBodyCount0"}}{{/block}}
 	{{else}}
@@ -961,7 +969,7 @@
 												<div class="w3-cell-row ">
 													<a href="/calendar-item?fq=scheduleKey:{{reportSchedule_.pk}}" class="w3-cell w3-btn w3-center h4 w3-block h4 w3-light-green w3-hover-light-green ">
 														<i class="fad fa-calendar-star "></i>
-														events
+														calendar items
 													</a>
 												</div>
 												<div class="w3-cell-row ">
@@ -1015,7 +1023,7 @@
 														{{/eq}}
 														<input
 																type="text"
-																placeholder="events"
+																placeholder="calendar items"
 															class="valueObjectSuggest suggestEventKeys w3-input w3-border w3-cell w3-cell-middle "
 															name="setEventKeys"
 															id="{{classApiMethodMethod}}_eventKeys"

@@ -34,7 +34,7 @@ import org.computate.search.wrap.Wrap;
  * Color: light-green
  * IconGroup: duotone
  * IconName: calendar-star
- * NameVar.enUS: reportEvent
+ * NameVar.enUS: calendarItem
  * 
  * Role.enUS: SiteAdmin
  * 
@@ -49,7 +49,7 @@ public class ReportEvent extends ReportEventGen<BaseModel> {
 	 * HtmlRow: 3
 	 * HtmlCell: 1
 	 * DisplayName.enUS: schedule
-	 */        
+	 */
 	protected void _scheduleKey(Wrap<Long> w) {
 	}
 

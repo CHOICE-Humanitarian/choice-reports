@@ -44,7 +44,7 @@ import io.vertx.core.Promise;
  * Role.enUS: SiteAdmin
  * 
  * Rows: 100
-**/        
+**/       
 public class ReportSchedule extends ReportScheduleGen<BaseModel> {
 
 	/**  
@@ -75,7 +75,7 @@ public class ReportSchedule extends ReportScheduleGen<BaseModel> {
 	 * Relate: ReportEvent.scheduleKey
 	 * HtmlRow: 3
 	 * HtmlCell: 1
-	 * DisplayName.enUS: events
+	 * DisplayName.enUS: calendar items
 	 */
 	protected void _eventKeys(List<Long> l) {
 	}
@@ -156,26 +156,15 @@ public class ReportSchedule extends ReportScheduleGen<BaseModel> {
 	protected void _frequencyYearsAfterCompletion(Wrap<Integer> w) {
 	}
 
-	/**  
+	/**
 	 * {@inheritDoc}
 	 * DocValues: true
 	 * Persist: true
 	 * HtmlRow: 5
 	 * HtmlCell: 1
 	 * DisplayName.enUS: first due date
-	 */  
+	 */
 	protected void _firstDueDate(Wrap<LocalDate> w) {
-	}
-
-	/**  
-	 * {@inheritDoc}
-	 * DocValues: true
-	 * Persist: true
-	 * HtmlRow: 5
-	 * HtmlCell: 1
-	 * DisplayName.enUS: data pull date
-	 */  
-	protected void _dataPullDate(Wrap<LocalDate> w) {
 	}
 
 	/**
@@ -184,6 +173,17 @@ public class ReportSchedule extends ReportScheduleGen<BaseModel> {
 	 * Persist: true
 	 * HtmlRow: 5
 	 * HtmlCell: 2
+	 * DisplayName.enUS: data pull date
+	 */
+	protected void _dataPullDate(Wrap<LocalDate> w) {
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Persist: true
+	 * HtmlRow: 5
+	 * HtmlCell: 3
 	 * Multiline: true
 	 * DisplayName.enUS: data sources
 	 */
