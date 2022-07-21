@@ -180,4 +180,26 @@ public class SiteUser extends SiteUserGen<BaseModel> implements ComputateSiteUse
 	protected void _eventKeys(List<Long> l) {
 	}
 
+	/**  
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Relate: ReportSchedule.pullOwnerKey
+	 * HtmlRow: 4
+	 * HtmlCell: 1
+	 * DisplayName.enUS: events
+	 */
+	protected void _pullOwnerReportScheduleKeys(List<Long> l) {
+	}
+
+	/**  
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Relate: ReportSchedule.finalOwnerKey
+	 * HtmlRow: 4
+	 * HtmlCell: 1
+	 * DisplayName.enUS: events
+	 */
+	protected void _finalOwnerReportScheduleKeys(List<Long> l) {
+	}
+
 }

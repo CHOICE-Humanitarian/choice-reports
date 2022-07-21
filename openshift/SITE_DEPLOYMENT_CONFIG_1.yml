@@ -2,7 +2,7 @@
 apiVersion: apps.openshift.io/v1
 kind: DeploymentConfig
 spec:
-  replicas: 1
+  replicas: '{{ SITE_REPLICAS }}'
   selector:
     app: "{{ SITE_NAME }}"
     deploymentconfig: "{{ SITE_NAME }}"
@@ -345,7 +345,16 @@ spec:
                   key: "NEOCITIES_API_RENAME"
                   name: "{{ SITE_NAME }}-secret"
           volumeMounts:
+{% if PROJECT_VOLUME_MOUNT_PATH and PROJECT_VOLUME_NAME %}
+            - mountPath: "{{ PROJECT_VOLUME_MOUNT_PATH }}"
+              name: "{{ PROJECT_VOLUME_NAME }}"
+{% endif %}
       volumes:
+{% if PROJECT_VOLUME_NAME %}
+        - name: "{{ PROJECT_VOLUME_NAME }}"
+          persistentVolumeClaim:
+            claimName: "{{ PROJECT_VOLUME_NAME }}"
+{% endif %}
   triggers:
     - imageChangeParams:
         automatic: true

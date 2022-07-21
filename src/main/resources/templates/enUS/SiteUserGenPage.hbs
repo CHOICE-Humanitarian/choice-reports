@@ -7,6 +7,8 @@
 		<script src="{{staticBaseUrl}}/js/enUS/SiteUserPage.js"></script>
 		<script src="{{staticBaseUrl}}/js/enUS/ReportNarrativePage.js"></script>
 		<script src="{{staticBaseUrl}}/js/enUS/ReportEventPage.js"></script>
+		<script src="{{staticBaseUrl}}/js/enUS/ReportSchedulePage.js"></script>
+		<script src="{{staticBaseUrl}}/js/enUS/ReportSchedulePage.js"></script>
 {{/inline}}
 {{#*inline "htmScriptSiteUserPage"}}		<!-- inline "htmScriptSiteUserPage" -->
 		<script>
@@ -35,6 +37,16 @@
 					suggestSiteUserEventKeys([{'name':'fq','value':'assigneeKey:' + pk}], $('#listSiteUserEventKeys_Page'), pk, true);
 		{{else}}
 					suggestSiteUserEventKeys([{'name':'fq','value':'assigneeKey:' + pk}], $('#listSiteUserEventKeys_Page'), pk, false);
+		{{/ifContainsAnyRoles}}
+		{{#ifContainsAnyRoles roles rolesRequired}}
+					suggestSiteUserPullOwnerReportScheduleKeys([{'name':'fq','value':'pullOwnerKey:' + pk}], $('#listSiteUserPullOwnerReportScheduleKeys_Page'), pk, true);
+		{{else}}
+					suggestSiteUserPullOwnerReportScheduleKeys([{'name':'fq','value':'pullOwnerKey:' + pk}], $('#listSiteUserPullOwnerReportScheduleKeys_Page'), pk, false);
+		{{/ifContainsAnyRoles}}
+		{{#ifContainsAnyRoles roles rolesRequired}}
+					suggestSiteUserFinalOwnerReportScheduleKeys([{'name':'fq','value':'finalOwnerKey:' + pk}], $('#listSiteUserFinalOwnerReportScheduleKeys_Page'), pk, true);
+		{{else}}
+					suggestSiteUserFinalOwnerReportScheduleKeys([{'name':'fq','value':'finalOwnerKey:' + pk}], $('#listSiteUserFinalOwnerReportScheduleKeys_Page'), pk, false);
 		{{/ifContainsAnyRoles}}
 				}
 				websocketSiteUser(websocketSiteUserInner);
@@ -425,6 +437,8 @@
 							<div class="w3-cell-row ">
 {{> "htmNarrativeKeys" classApiMethodMethod="PATCH"}}
 {{> "htmEventKeys" classApiMethodMethod="PATCH"}}
+{{> "htmPullOwnerReportScheduleKeys" classApiMethodMethod="PATCH"}}
+{{> "htmFinalOwnerReportScheduleKeys" classApiMethodMethod="PATCH"}}
 							</div>
 						<button
 							class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-margin w3-gray "
@@ -468,6 +482,8 @@
 							<div class="w3-cell-row ">
 {{> "htmNarrativeKeys" classApiMethodMethod="POST"}}
 {{> "htmEventKeys" classApiMethodMethod="POST"}}
+{{> "htmPullOwnerReportScheduleKeys" classApiMethodMethod="POST"}}
+{{> "htmFinalOwnerReportScheduleKeys" classApiMethodMethod="POST"}}
 							</div>
 						</div>
 						<button
@@ -536,6 +552,8 @@
 							<div class="w3-cell-row ">
 {{> "htmNarrativeKeys" classApiMethodMethod="Page"}}
 {{> "htmEventKeys" classApiMethodMethod="Page"}}
+{{> "htmPullOwnerReportScheduleKeys" classApiMethodMethod="Page"}}
+{{> "htmFinalOwnerReportScheduleKeys" classApiMethodMethod="Page"}}
 							</div>
 						</div>
 					</div>
@@ -1417,6 +1435,154 @@
 															id="{{classApiMethodMethod}}_eventKeys"
 															autocomplete="off"
 															oninput="suggestSiteUserEventKeys($(this).val() ? [ { 'name': 'q', 'value': 'objectSuggest:' + $(this).val() }, { 'name': 'rows', 'value': '10' }, { 'name': 'fl', 'value': 'classCanonicalName,assigneeKey,pk,pageUrlPk,objectTitle' } ] : [{{#if pk}}{'name':'fq','value':'assigneeKey:{{pk}}'}{{else}}{{/if}}], $('#listSiteUserEventKeys_{{classApiMethodMethod}}'), {{pk}}); "
+															/>
+
+													{{else}}
+		{{/ifContainsAnyRoles}}
+{{/inline}}
+
+{{#*inline "htmPullOwnerReportScheduleKeys"}}
+								<div class="w3-cell w3-cell-top w3-center w3-mobile ">
+									<div class="w3-padding ">
+										<div id="suggest{{classApiMethodMethod}}SiteUserPullOwnerReportScheduleKeys">
+											<div class="w3-card ">
+												<div class="w3-cell-row ">
+													<a href="/report-schedule?fq=pullOwnerKey:{{siteUser_.pk}}" class="w3-cell w3-btn w3-center h4 w3-block h4 w3-light-green w3-hover-light-green ">
+														<i class="fad fa-calendar-days "></i>
+														events
+													</a>
+												</div>
+												<div class="w3-cell-row ">
+													<h5 class="w3-cell ">
+														relate  to this site user
+													</h5>
+												</div>
+												<div class="w3-cell-row w3-padding ">
+													<div class="w3-cell ">
+														<div class="w3-cell-row ">
+
+														{{> "inputPullOwnerReportScheduleKeys"}}
+														</div>
+													</div>
+												</div>
+												<div class="w3-cell-row w3-padding ">
+													<div class="w3-cell w3-left-align w3-cell-top ">
+														<ul class="w3-ul w3-hoverable " id="listSiteUserPullOwnerReportScheduleKeys_{{classApiMethodMethod}}">
+														</ul>
+														{{#ifContainsAnyRoles roles rolesRequired}}
+	{{#eq 'Page' classApiMethodMethod}}
+																<div class="w3-cell-row ">
+																	<button
+																		 class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-light-green "
+																		 id="{{classApiMethodMethod}}_pullOwnerReportScheduleKeys_add"
+																		 onclick="$(this).addClass('w3-disabled'); this.disabled = true; this.innerHTML = 'Sending…'; postReportScheduleVals({ pullOwnerKey: '{{pk}}' }, function() { $('#{{classApiMethodMethod}}_pullOwnerReportScheduleKeys_add').disabled = false; $('#{{classApiMethodMethod}}_pullOwnerReportScheduleKeys_add').innerHTML = 'add a report schedule'; }, function() { addError($('#{{classApiMethodMethod}}pullOwnerReportScheduleKeys')); });"
+																		>add a report schedule</button>
+																</div>
+	{{/eq}}
+														{{/ifContainsAnyRoles}}
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+{{/inline}}
+
+{{#*inline "inputPullOwnerReportScheduleKeys"}}
+		{{#ifContainsAnyRoles roles rolesRequired}}
+														<i class="far fa-search w3-xxlarge w3-cell w3-cell-middle "></i>
+														{{#eq 'PUTCopy' classApiMethodMethod}}
+															<div>
+																<input 
+																	type="checkbox"
+																	id="{{classApiMethodMethod}}_pullOwnerReportScheduleKeys_clear"
+																	class="pullOwnerReportScheduleKeys_clear "
+																	>
+																<label for="{{classApiMethodMethod}}_pullOwnerReportScheduleKeys_clear">clear</label>
+															</div>
+														{{/eq}}
+														<input
+																type="text"
+																placeholder="events"
+															class="valueObjectSuggest suggestPullOwnerReportScheduleKeys w3-input w3-border w3-cell w3-cell-middle "
+															name="setPullOwnerReportScheduleKeys"
+															id="{{classApiMethodMethod}}_pullOwnerReportScheduleKeys"
+															autocomplete="off"
+															oninput="suggestSiteUserPullOwnerReportScheduleKeys($(this).val() ? [ { 'name': 'q', 'value': 'objectSuggest:' + $(this).val() }, { 'name': 'rows', 'value': '10' }, { 'name': 'fl', 'value': 'classCanonicalName,pullOwnerKey,pk,pageUrlPk,objectTitle' } ] : [{{#if pk}}{'name':'fq','value':'pullOwnerKey:{{pk}}'}{{else}}{{/if}}], $('#listSiteUserPullOwnerReportScheduleKeys_{{classApiMethodMethod}}'), {{pk}}); "
+															/>
+
+													{{else}}
+		{{/ifContainsAnyRoles}}
+{{/inline}}
+
+{{#*inline "htmFinalOwnerReportScheduleKeys"}}
+								<div class="w3-cell w3-cell-top w3-center w3-mobile ">
+									<div class="w3-padding ">
+										<div id="suggest{{classApiMethodMethod}}SiteUserFinalOwnerReportScheduleKeys">
+											<div class="w3-card ">
+												<div class="w3-cell-row ">
+													<a href="/report-schedule?fq=finalOwnerKey:{{siteUser_.pk}}" class="w3-cell w3-btn w3-center h4 w3-block h4 w3-light-green w3-hover-light-green ">
+														<i class="fad fa-calendar-days "></i>
+														events
+													</a>
+												</div>
+												<div class="w3-cell-row ">
+													<h5 class="w3-cell ">
+														relate  to this site user
+													</h5>
+												</div>
+												<div class="w3-cell-row w3-padding ">
+													<div class="w3-cell ">
+														<div class="w3-cell-row ">
+
+														{{> "inputFinalOwnerReportScheduleKeys"}}
+														</div>
+													</div>
+												</div>
+												<div class="w3-cell-row w3-padding ">
+													<div class="w3-cell w3-left-align w3-cell-top ">
+														<ul class="w3-ul w3-hoverable " id="listSiteUserFinalOwnerReportScheduleKeys_{{classApiMethodMethod}}">
+														</ul>
+														{{#ifContainsAnyRoles roles rolesRequired}}
+	{{#eq 'Page' classApiMethodMethod}}
+																<div class="w3-cell-row ">
+																	<button
+																		 class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-light-green "
+																		 id="{{classApiMethodMethod}}_finalOwnerReportScheduleKeys_add"
+																		 onclick="$(this).addClass('w3-disabled'); this.disabled = true; this.innerHTML = 'Sending…'; postReportScheduleVals({ finalOwnerKey: '{{pk}}' }, function() { $('#{{classApiMethodMethod}}_finalOwnerReportScheduleKeys_add').disabled = false; $('#{{classApiMethodMethod}}_finalOwnerReportScheduleKeys_add').innerHTML = 'add a report schedule'; }, function() { addError($('#{{classApiMethodMethod}}finalOwnerReportScheduleKeys')); });"
+																		>add a report schedule</button>
+																</div>
+	{{/eq}}
+														{{/ifContainsAnyRoles}}
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+{{/inline}}
+
+{{#*inline "inputFinalOwnerReportScheduleKeys"}}
+		{{#ifContainsAnyRoles roles rolesRequired}}
+														<i class="far fa-search w3-xxlarge w3-cell w3-cell-middle "></i>
+														{{#eq 'PUTCopy' classApiMethodMethod}}
+															<div>
+																<input 
+																	type="checkbox"
+																	id="{{classApiMethodMethod}}_finalOwnerReportScheduleKeys_clear"
+																	class="finalOwnerReportScheduleKeys_clear "
+																	>
+																<label for="{{classApiMethodMethod}}_finalOwnerReportScheduleKeys_clear">clear</label>
+															</div>
+														{{/eq}}
+														<input
+																type="text"
+																placeholder="events"
+															class="valueObjectSuggest suggestFinalOwnerReportScheduleKeys w3-input w3-border w3-cell w3-cell-middle "
+															name="setFinalOwnerReportScheduleKeys"
+															id="{{classApiMethodMethod}}_finalOwnerReportScheduleKeys"
+															autocomplete="off"
+															oninput="suggestSiteUserFinalOwnerReportScheduleKeys($(this).val() ? [ { 'name': 'q', 'value': 'objectSuggest:' + $(this).val() }, { 'name': 'rows', 'value': '10' }, { 'name': 'fl', 'value': 'classCanonicalName,finalOwnerKey,pk,pageUrlPk,objectTitle' } ] : [{{#if pk}}{'name':'fq','value':'finalOwnerKey:{{pk}}'}{{else}}{{/if}}], $('#listSiteUserFinalOwnerReportScheduleKeys_{{classApiMethodMethod}}'), {{pk}}); "
 															/>
 
 													{{else}}

@@ -117,6 +117,7 @@ public class ReportNarrative extends ReportNarrativeGen<BaseModel> {
 	 * {@inheritDoc}
 	 * DocValues: true
 	 * DisplayName.enUS: assignee name
+	 * Facet: true
 	 */
 	protected void _assigneeName(Wrap<String> w) {
 		w.o(Optional.ofNullable(assignee_).map(a -> a.getUserFullName()).orElse(null));
@@ -129,6 +130,7 @@ public class ReportNarrative extends ReportNarrativeGen<BaseModel> {
 	 * HtmlRow: 3
 	 * HtmlCell: 1
 	 * DisplayName.enUS: narrative name
+	 * Facet: true
 	 */
 	protected void _narrativeName(Wrap<String> w) {
 	}
@@ -139,6 +141,7 @@ public class ReportNarrative extends ReportNarrativeGen<BaseModel> {
 	 * HtmlRow: 4
 	 * HtmlCell: 1
 	 * DisplayName.enUS: report first due date
+	 * Facet: true
 	 */
 	protected void _firstDueDate(Wrap<LocalDate> w) {
 		w.o(Optional.ofNullable(schedule_).map(s -> s.getFirstDueDate()).orElse(null));
@@ -150,6 +153,7 @@ public class ReportNarrative extends ReportNarrativeGen<BaseModel> {
 	 * HtmlRow: 4
 	 * HtmlCell: 2
 	 * DisplayName.enUS: report data pull date
+	 * Facet: true
 	 */
 	protected void _dataPullDate(Wrap<LocalDate> w) {
 		w.o(Optional.ofNullable(schedule_).map(s -> s.getDataPullDate()).orElse(null));
@@ -161,20 +165,10 @@ public class ReportNarrative extends ReportNarrativeGen<BaseModel> {
 	 * Persist: true
 	 * HtmlRow: 4
 	 * HtmlCell: 3
-	 * DisplayName.enUS: pull start date
+	 * DisplayName.enUS: narrative due date
+	 * Facet: true
 	 */
-	protected void _pullStartDate(Wrap<LocalDate> w) {
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * DocValues: true
-	 * Persist: true
-	 * HtmlRow: 4
-	 * HtmlCell: 4
-	 * DisplayName.enUS: pull end date
-	 */
-	protected void _pullEndDate(Wrap<LocalDate> w) {
+	protected void _narrativeDueDate(Wrap<LocalDate> w) {
 	}
 
 	@Override

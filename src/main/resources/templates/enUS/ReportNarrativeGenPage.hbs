@@ -459,8 +459,7 @@
 {{> "htmNarrativeName" classApiMethodMethod="POST"}}
 							</div>
 							<div class="w3-cell-row ">
-{{> "htmPullStartDate" classApiMethodMethod="POST"}}
-{{> "htmPullEndDate" classApiMethodMethod="POST"}}
+{{> "htmNarrativeDueDate" classApiMethodMethod="POST"}}
 							</div>
 						</div>
 						<button
@@ -503,8 +502,7 @@
 {{> "htmNarrativeName" classApiMethodMethod="PATCH"}}
 							</div>
 							<div class="w3-cell-row ">
-{{> "htmPullStartDate" classApiMethodMethod="PATCH"}}
-{{> "htmPullEndDate" classApiMethodMethod="PATCH"}}
+{{> "htmNarrativeDueDate" classApiMethodMethod="PATCH"}}
 							</div>
 						<button
 							class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-margin w3-light-green "
@@ -539,8 +537,7 @@
 							<div class="w3-cell-row ">
 {{> "htmFirstDueDate" classApiMethodMethod="Page"}}
 {{> "htmDataPullDate" classApiMethodMethod="Page"}}
-{{> "htmPullStartDate" classApiMethodMethod="Page"}}
-{{> "htmPullEndDate" classApiMethodMethod="Page"}}
+{{> "htmNarrativeDueDate" classApiMethodMethod="Page"}}
 							</div>
 						</div>
 					</div>
@@ -1060,17 +1057,17 @@
 	{{/eq}}
 {{/inline}}
 
-{{#*inline "htmPullStartDate"}}
+{{#*inline "htmNarrativeDueDate"}}
 								<div class="w3-cell w3-cell-top w3-center w3-mobile ">
 									<div class="w3-padding ">
-										<div id="suggest{{classApiMethodMethod}}ReportNarrativePullStartDate">
+										<div id="suggest{{classApiMethodMethod}}ReportNarrativeNarrativeDueDate">
 											<div class="w3-card ">
 												<div class="w3-cell-row w3-light-green">
-													<label for="{{classApiMethodMethod}}_pullStartDate">pull start date</label>
+													<label for="{{classApiMethodMethod}}_narrativeDueDate">narrative due date</label>
 												</div>
 												<div class="w3-cell-row  ">
 													<div class="w3-cell ">
-														{{> "inputPullStartDate"}}
+														{{> "inputNarrativeDueDate"}}
 													</div>
 	{{#ifContainsAnyRoles roles rolesRequired}}
 		{{#eq 'Page' classApiMethodMethod}}
@@ -1078,7 +1075,7 @@
 																<button
 																		tabindex="-1"
 																		class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-bar-item w3-light-green "
-																		onclick="removeGlow($('#{{classApiMethodMethod}}_pullStartDate')); $('#{{classApiMethodMethod}}_pullStartDate').val(null); patch{{classSimpleName}}Val([{ name: 'softCommit', value: 'true' }, { name: 'fq', value: 'pk:' + $('#ReportNarrativeForm :input[name=pk]').val() }], 'setPullStartDate', null, function() { addGlow($('#{{classApiMethodMethod}}_pullStartDate')); }, function() { addError($('#{{classApiMethodMethod}}_pullStartDate')); }); "
+																		onclick="removeGlow($('#{{classApiMethodMethod}}_narrativeDueDate')); $('#{{classApiMethodMethod}}_narrativeDueDate').val(null); patch{{classSimpleName}}Val([{ name: 'softCommit', value: 'true' }, { name: 'fq', value: 'pk:' + $('#ReportNarrativeForm :input[name=pk]').val() }], 'setNarrativeDueDate', null, function() { addGlow($('#{{classApiMethodMethod}}_narrativeDueDate')); }, function() { addError($('#{{classApiMethodMethod}}_narrativeDueDate')); }); "
 																		>
 																	<i class="far fa-eraser "></i>
 																</button>
@@ -1092,70 +1089,20 @@
 								</div>
 {{/inline}}
 
-{{#*inline "inputPullStartDate"}}
+{{#*inline "inputNarrativeDueDate"}}
 		{{#ifContainsAnyRoles roles rolesRequired}}
 														<input
 																type="date"
-																class="w3-input w3-border setPullStartDate classReportNarrative inputReportNarrative{{pk}}PullStartDate w3-input w3-border "
-																id="{{classApiMethodMethod}}_pullStartDate"
-																value="{{reportNarrative_.pullStartDate}}"
+																class="w3-input w3-border setNarrativeDueDate classReportNarrative inputReportNarrative{{pk}}NarrativeDueDate w3-input w3-border "
+																id="{{classApiMethodMethod}}_narrativeDueDate"
+																value="{{reportNarrative_.narrativeDueDate}}"
 														{{#eq 'Page' classApiMethodMethod}}
-															onchange="if(this.value) { patch{{classSimpleName}}Val([{ name: 'softCommit', value: 'true' }, { name: 'fq', value: 'pk:{{pk}}' }], 'setPullStartDate', this.value, function() { addGlow($('#{{classApiMethodMethod}}_pullStartDate')); }, function() { addError($('#{{classApiMethodMethod}}_pullStartDate')); }); } "
+															onchange="if(this.value) { patch{{classSimpleName}}Val([{ name: 'softCommit', value: 'true' }, { name: 'fq', value: 'pk:{{pk}}' }], 'setNarrativeDueDate', this.value, function() { addGlow($('#{{classApiMethodMethod}}_narrativeDueDate')); }, function() { addError($('#{{classApiMethodMethod}}_narrativeDueDate')); }); } "
 														{{/eq}}
 														/>
 													{{else}}
 														{{#ifContainsKeys userKeys}}
-															<span class="varReportNarrative{{pk}}PullStartDate ">{{reportNarrative_.pullStartDate}}</span>
-			{{/ifContainsKeys}}
-		{{/ifContainsAnyRoles}}
-{{/inline}}
-
-{{#*inline "htmPullEndDate"}}
-								<div class="w3-cell w3-cell-top w3-center w3-mobile ">
-									<div class="w3-padding ">
-										<div id="suggest{{classApiMethodMethod}}ReportNarrativePullEndDate">
-											<div class="w3-card ">
-												<div class="w3-cell-row w3-light-green">
-													<label for="{{classApiMethodMethod}}_pullEndDate">pull end date</label>
-												</div>
-												<div class="w3-cell-row  ">
-													<div class="w3-cell ">
-														{{> "inputPullEndDate"}}
-													</div>
-	{{#ifContainsAnyRoles roles rolesRequired}}
-		{{#eq 'Page' classApiMethodMethod}}
-															<div class="w3-cell w3-left-align w3-cell-top ">
-																<button
-																		tabindex="-1"
-																		class="w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-bar-item w3-light-green "
-																		onclick="removeGlow($('#{{classApiMethodMethod}}_pullEndDate')); $('#{{classApiMethodMethod}}_pullEndDate').val(null); patch{{classSimpleName}}Val([{ name: 'softCommit', value: 'true' }, { name: 'fq', value: 'pk:' + $('#ReportNarrativeForm :input[name=pk]').val() }], 'setPullEndDate', null, function() { addGlow($('#{{classApiMethodMethod}}_pullEndDate')); }, function() { addError($('#{{classApiMethodMethod}}_pullEndDate')); }); "
-																		>
-																	<i class="far fa-eraser "></i>
-																</button>
-															</div>
-														{{/eq}}
-	{{/ifContainsAnyRoles}}
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-{{/inline}}
-
-{{#*inline "inputPullEndDate"}}
-		{{#ifContainsAnyRoles roles rolesRequired}}
-														<input
-																type="date"
-																class="w3-input w3-border setPullEndDate classReportNarrative inputReportNarrative{{pk}}PullEndDate w3-input w3-border "
-																id="{{classApiMethodMethod}}_pullEndDate"
-																value="{{reportNarrative_.pullEndDate}}"
-														{{#eq 'Page' classApiMethodMethod}}
-															onchange="if(this.value) { patch{{classSimpleName}}Val([{ name: 'softCommit', value: 'true' }, { name: 'fq', value: 'pk:{{pk}}' }], 'setPullEndDate', this.value, function() { addGlow($('#{{classApiMethodMethod}}_pullEndDate')); }, function() { addError($('#{{classApiMethodMethod}}_pullEndDate')); }); } "
-														{{/eq}}
-														/>
-													{{else}}
-														{{#ifContainsKeys userKeys}}
-															<span class="varReportNarrative{{pk}}PullEndDate ">{{reportNarrative_.pullEndDate}}</span>
+															<span class="varReportNarrative{{pk}}NarrativeDueDate ">{{reportNarrative_.narrativeDueDate}}</span>
 			{{/ifContainsKeys}}
 		{{/ifContainsAnyRoles}}
 {{/inline}}

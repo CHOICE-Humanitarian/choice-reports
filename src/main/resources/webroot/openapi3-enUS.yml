@@ -7619,38 +7619,50 @@ components:
                 type: string
     SearchChoiceDonorResponse:
       allOf:
-        - type: array
-          items:
-            type: object
-            properties:
-              donorFullName:
-                type: string
-              donorParentName:
-                type: string
-              donorId:
-                type: string
-              donorAttributeId:
-                type: string
-              donorInKind:
-                type: string
-              donorTotal:
-                type: string
-              donorYtd:
-                type: string
-              donorQ1:
-                type: string
-              donorQ2:
-                type: string
-              donorQ3:
-                type: string
-              donorQ4:
-                type: string
-              donorLogoFilename:
-                type: string
-              reportKeys:
-                type: array
-                items:
-                  type: string
+        - type: object
+          properties:
+            startNum:
+              type: integer
+              minimum: 0
+            foundNum:
+              type: integer
+              minimum: 0
+            returnedNum:
+              type: integer
+              minimum: 0
+            list:
+              type: array
+              items:
+                type: object
+                properties:
+                  donorFullName:
+                    type: string
+                  donorParentName:
+                    type: string
+                  donorId:
+                    type: string
+                  donorAttributeId:
+                    type: string
+                  donorInKind:
+                    type: string
+                  donorTotal:
+                    type: string
+                  donorYtd:
+                    type: string
+                  donorQ1:
+                    type: string
+                  donorQ2:
+                    type: string
+                  donorQ3:
+                    type: string
+                  donorQ4:
+                    type: string
+                  donorLogoFilename:
+                    type: string
+                  reportKeys:
+                    type: array
+                    items:
+                      type: string
     PUTImportChoiceDonorRequest:
       allOf:
         - type: object
@@ -7752,84 +7764,96 @@ components:
         - type: string
     SearchSiteHtmResponse:
       allOf:
-        - type: array
-          items:
-            type: object
-            properties:
-              inheritPk:
-                type: string
-              created:
-                type: string
-                format: date-time
-              modified:
-                type: string
-                format: date-time
-              archived:
-                type: boolean
-              deleted:
-                type: boolean
-              saves:
-                type: array
-                items:
-                  type: string
-              uri:
-                type: string
-              pageId:
-                type: string
-              sequenceNum:
-                type: string
-              htmGroup:
-                type: string
-              labels:
-                type: array
-                items:
-                  type: string
-              eBefore:
-                type: string
-              eAfter:
-                type: string
-              a:
+        - type: object
+          properties:
+            startNum:
+              type: integer
+              minimum: 0
+            foundNum:
+              type: integer
+              minimum: 0
+            returnedNum:
+              type: integer
+              minimum: 0
+            list:
+              type: array
+              items:
                 type: object
-              text:
-                type: array
-                items:
-                  type: string
-              comment:
-                type: array
-                items:
-                  type: string
-              tabs:
-                type: string
-              newLine:
-                type: boolean
-              htmBefore:
-                type: string
-              htmAfter:
-                type: string
-              classCanonicalName:
-                type: string
-              classSimpleName:
-                type: string
-              classCanonicalNames:
-                type: array
-                items:
-                  type: string
-              objectTitle:
-                type: string
-              objectId:
-                type: string
-              objectNameVar:
-                type: string
-              objectSuggest:
-                type: string
-              pageUrlId:
-                type: string
-              pageUrlPk:
-                type: string
-              pageUrlApi:
-                type: string
-              id:
-                type: string
+                properties:
+                  inheritPk:
+                    type: string
+                  created:
+                    type: string
+                    format: date-time
+                  modified:
+                    type: string
+                    format: date-time
+                  archived:
+                    type: boolean
+                  deleted:
+                    type: boolean
+                  saves:
+                    type: array
+                    items:
+                      type: string
+                  uri:
+                    type: string
+                  pageId:
+                    type: string
+                  sequenceNum:
+                    type: string
+                  htmGroup:
+                    type: string
+                  labels:
+                    type: array
+                    items:
+                      type: string
+                  eBefore:
+                    type: string
+                  eAfter:
+                    type: string
+                  a:
+                    type: object
+                  text:
+                    type: array
+                    items:
+                      type: string
+                  comment:
+                    type: array
+                    items:
+                      type: string
+                  tabs:
+                    type: string
+                  newLine:
+                    type: boolean
+                  htmBefore:
+                    type: string
+                  htmAfter:
+                    type: string
+                  classCanonicalName:
+                    type: string
+                  classSimpleName:
+                    type: string
+                  classCanonicalNames:
+                    type: array
+                    items:
+                      type: string
+                  objectTitle:
+                    type: string
+                  objectId:
+                    type: string
+                  objectNameVar:
+                    type: string
+                  objectSuggest:
+                    type: string
+                  pageUrlId:
+                    type: string
+                  pageUrlPk:
+                    type: string
+                  pageUrlApi:
+                    type: string
+                  id:
+                    type: string
     POSTSiteHtmRequest:
       allOf:
         - type: object
@@ -8779,90 +8803,102 @@ components:
         - type: string
     SearchSitePageResponse:
       allOf:
-        - type: array
-          items:
-            type: object
-            properties:
-              siteName:
-                type: string
-              siteDisplayName:
-                type: string
-              staticBaseUrl:
-                type: string
-              staticPath:
-                type: string
-              siteBaseUrl:
-                type: string
-              courseNum:
-                type: string
-              lessonNum:
-                type: string
-              uri:
-                type: string
-              pageId:
-                type: string
-              h1:
-                type: string
-              h2:
-                type: string
-              inheritPk:
-                type: string
-              created:
-                type: string
-                format: date-time
-              modified:
-                type: string
-                format: date-time
-              author:
-                type: string
-              pageImageUri:
-                type: string
-              pageImageWidth:
-                type: string
-              pageImageHeight:
-                type: string
-              pageImageType:
-                type: string
-              archived:
-                type: boolean
-              deleted:
-                type: boolean
-              classCanonicalName:
-                type: string
-              classSimpleName:
-                type: string
-              classCanonicalNames:
-                type: array
-                items:
-                  type: string
-              sessionId:
-                type: string
-              userKey:
-                type: string
-              saves:
-                type: array
-                items:
-                  type: string
-              objectTitle:
-                type: string
-              objectId:
-                type: string
-              objectNameVar:
-                type: string
-              objectSuggest:
-                type: string
-              objectText:
-                type: array
-                items:
-                  type: string
-              pageUrlId:
-                type: string
-              pageUrlPk:
-                type: string
-              pageUrlApi:
-                type: string
-              id:
-                type: string
+        - type: object
+          properties:
+            startNum:
+              type: integer
+              minimum: 0
+            foundNum:
+              type: integer
+              minimum: 0
+            returnedNum:
+              type: integer
+              minimum: 0
+            list:
+              type: array
+              items:
+                type: object
+                properties:
+                  siteName:
+                    type: string
+                  siteDisplayName:
+                    type: string
+                  staticBaseUrl:
+                    type: string
+                  staticPath:
+                    type: string
+                  siteBaseUrl:
+                    type: string
+                  courseNum:
+                    type: string
+                  lessonNum:
+                    type: string
+                  uri:
+                    type: string
+                  pageId:
+                    type: string
+                  h1:
+                    type: string
+                  h2:
+                    type: string
+                  inheritPk:
+                    type: string
+                  created:
+                    type: string
+                    format: date-time
+                  modified:
+                    type: string
+                    format: date-time
+                  author:
+                    type: string
+                  pageImageUri:
+                    type: string
+                  pageImageWidth:
+                    type: string
+                  pageImageHeight:
+                    type: string
+                  pageImageType:
+                    type: string
+                  archived:
+                    type: boolean
+                  deleted:
+                    type: boolean
+                  classCanonicalName:
+                    type: string
+                  classSimpleName:
+                    type: string
+                  classCanonicalNames:
+                    type: array
+                    items:
+                      type: string
+                  sessionId:
+                    type: string
+                  userKey:
+                    type: string
+                  saves:
+                    type: array
+                    items:
+                      type: string
+                  objectTitle:
+                    type: string
+                  objectId:
+                    type: string
+                  objectNameVar:
+                    type: string
+                  objectSuggest:
+                    type: string
+                  objectText:
+                    type: array
+                    items:
+                      type: string
+                  pageUrlId:
+                    type: string
+                  pageUrlPk:
+                    type: string
+                  pageUrlApi:
+                    type: string
+                  id:
+                    type: string
     POSTSitePageRequest:
       allOf:
         - type: object
@@ -10122,36 +10158,48 @@ components:
               type: string
     SearchChoiceReportResponse:
       allOf:
-        - type: array
-          items:
-            type: object
-            properties:
-              donorKey:
-                type: string
-              donorFullName:
-                type: string
-              donorParentName:
-                type: string
-              donorId:
-                type: string
-              donorAttributeId:
-                type: string
-              donorInKind:
-                type: string
-              donorTotal:
-                type: string
-              donorYtd:
-                type: string
-              donorQ1:
-                type: string
-              donorQ2:
-                type: string
-              donorQ3:
-                type: string
-              donorQ4:
-                type: string
-              donorLogoFilename:
-                type: string
+        - type: object
+          properties:
+            startNum:
+              type: integer
+              minimum: 0
+            foundNum:
+              type: integer
+              minimum: 0
+            returnedNum:
+              type: integer
+              minimum: 0
+            list:
+              type: array
+              items:
+                type: object
+                properties:
+                  donorKey:
+                    type: string
+                  donorFullName:
+                    type: string
+                  donorParentName:
+                    type: string
+                  donorId:
+                    type: string
+                  donorAttributeId:
+                    type: string
+                  donorInKind:
+                    type: string
+                  donorTotal:
+                    type: string
+                  donorYtd:
+                    type: string
+                  donorQ1:
+                    type: string
+                  donorQ2:
+                    type: string
+                  donorQ3:
+                    type: string
+                  donorQ4:
+                    type: string
+                  donorLogoFilename:
+                    type: string
     PUTImportChoiceReportRequest:
       allOf:
         - type: object
@@ -10349,19 +10397,31 @@ components:
               format: date
     SearchReportEventResponse:
       allOf:
-        - type: array
-          items:
-            type: object
-            properties:
-              scheduleKey:
-                type: string
-              assigneeKey:
-                type: string
-              eventName:
-                type: string
-              eventDate:
-                type: string
-                format: date
+        - type: object
+          properties:
+            startNum:
+              type: integer
+              minimum: 0
+            foundNum:
+              type: integer
+              minimum: 0
+            returnedNum:
+              type: integer
+              minimum: 0
+            list:
+              type: array
+              items:
+                type: object
+                properties:
+                  scheduleKey:
+                    type: string
+                  assigneeKey:
+                    type: string
+                  eventName:
+                    type: string
+                  eventDate:
+                    type: string
+                    format: date
     PUTImportReportEventRequest:
       allOf:
         - type: object
@@ -10422,10 +10482,7 @@ components:
             dataPullDate:
               type: string
               format: date
-            pullStartDate:
-              type: string
-              format: date
-            pullEndDate:
+            narrativeDueDate:
               type: string
               format: date
     POSTReportNarrativeResponse:
@@ -10446,10 +10503,7 @@ components:
             dataPullDate:
               type: string
               format: date
-            pullStartDate:
-              type: string
-              format: date
-            pullEndDate:
+            narrativeDueDate:
               type: string
               format: date
     PATCHReportNarrativeRequest:
@@ -10504,24 +10558,14 @@ components:
             removeAllDataPullDate:
               type: string
               format: date
-            setPullStartDate:
+            setNarrativeDueDate:
               type: string
               nullable: true
               format: date
-            removePullStartDate:
+            removeNarrativeDueDate:
               type: string
               format: date
-            removeAllPullStartDate:
-              type: string
-              format: date
-            setPullEndDate:
-              type: string
-              nullable: true
-              format: date
-            removePullEndDate:
-              type: string
-              format: date
-            removeAllPullEndDate:
+            removeAllNarrativeDueDate:
               type: string
               format: date
     PATCHReportNarrativeResponse:
@@ -10576,52 +10620,51 @@ components:
             removeAllDataPullDate:
               type: string
               format: date
-            setPullStartDate:
+            setNarrativeDueDate:
               type: string
               nullable: true
               format: date
-            removePullStartDate:
+            removeNarrativeDueDate:
               type: string
               format: date
-            removeAllPullStartDate:
-              type: string
-              format: date
-            setPullEndDate:
-              type: string
-              nullable: true
-              format: date
-            removePullEndDate:
-              type: string
-              format: date
-            removeAllPullEndDate:
+            removeAllNarrativeDueDate:
               type: string
               format: date
     SearchReportNarrativeResponse:
       allOf:
-        - type: array
-          items:
-            type: object
-            properties:
-              scheduleKey:
-                type: string
-              assigneeKey:
-                type: string
-              assigneeName:
-                type: string
-              narrativeName:
-                type: string
-              firstDueDate:
-                type: string
-                format: date
-              dataPullDate:
-                type: string
-                format: date
-              pullStartDate:
-                type: string
-                format: date
-              pullEndDate:
-                type: string
-                format: date
+        - type: object
+          properties:
+            startNum:
+              type: integer
+              minimum: 0
+            foundNum:
+              type: integer
+              minimum: 0
+            returnedNum:
+              type: integer
+              minimum: 0
+            list:
+              type: array
+              items:
+                type: object
+                properties:
+                  scheduleKey:
+                    type: string
+                  assigneeKey:
+                    type: string
+                  assigneeName:
+                    type: string
+                  narrativeName:
+                    type: string
+                  firstDueDate:
+                    type: string
+                    format: date
+                  dataPullDate:
+                    type: string
+                    format: date
+                  narrativeDueDate:
+                    type: string
+                    format: date
     PUTImportReportNarrativeRequest:
       allOf:
         - type: object
@@ -10640,10 +10683,7 @@ components:
             dataPullDate:
               type: string
               format: date
-            pullStartDate:
-              type: string
-              format: date
-            pullEndDate:
+            narrativeDueDate:
               type: string
               format: date
     PUTImportReportNarrativeResponse:
@@ -10664,10 +10704,7 @@ components:
             dataPullDate:
               type: string
               format: date
-            pullStartDate:
-              type: string
-              format: date
-            pullEndDate:
+            narrativeDueDate:
               type: string
               format: date
     GETReportNarrativeResponse:
@@ -10688,10 +10725,7 @@ components:
             dataPullDate:
               type: string
               format: date
-            pullStartDate:
-              type: string
-              format: date
-            pullEndDate:
+            narrativeDueDate:
               type: string
               format: date
     SearchPageReportNarrativeResponse:
@@ -10703,6 +10737,8 @@ components:
           properties:
             typeKey:
               type: string
+            typeName:
+              type: string
             narrativeKeys:
               type: array
               items:
@@ -10711,7 +10747,13 @@ components:
               type: array
               items:
                 type: string
-            typeName:
+            pullOwnerKey:
+              type: string
+            pullOwnerName:
+              type: string
+            finalOwnerKey:
+              type: string
+            finalOwnerName:
               type: string
             scheduleName:
               type: string
@@ -10722,6 +10764,12 @@ components:
             frequencyYearsAfterCompletion:
               type: string
             firstDueDate:
+              type: string
+              format: date
+            dataPeriodStartDate:
+              type: string
+              format: date
+            dataPullEndDate:
               type: string
               format: date
             dataPullDate:
@@ -10735,6 +10783,8 @@ components:
           properties:
             typeKey:
               type: string
+            typeName:
+              type: string
             narrativeKeys:
               type: array
               items:
@@ -10743,7 +10793,13 @@ components:
               type: array
               items:
                 type: string
-            typeName:
+            pullOwnerKey:
+              type: string
+            pullOwnerName:
+              type: string
+            finalOwnerKey:
+              type: string
+            finalOwnerName:
               type: string
             scheduleName:
               type: string
@@ -10754,6 +10810,12 @@ components:
             frequencyYearsAfterCompletion:
               type: string
             firstDueDate:
+              type: string
+              format: date
+            dataPeriodStartDate:
+              type: string
+              format: date
+            dataPullEndDate:
               type: string
               format: date
             dataPullDate:
@@ -10771,6 +10833,13 @@ components:
             removeTypeKey:
               type: string
             removeAllTypeKey:
+              type: string
+            setTypeName:
+              type: string
+              nullable: true
+            removeTypeName:
+              type: string
+            removeAllTypeName:
               type: string
             setNarrativeKeys:
               type: array
@@ -10806,12 +10875,33 @@ components:
               type: array
               items:
                 type: string
-            setTypeName:
+            setPullOwnerKey:
               type: string
               nullable: true
-            removeTypeName:
+            removePullOwnerKey:
               type: string
-            removeAllTypeName:
+            removeAllPullOwnerKey:
+              type: string
+            setPullOwnerName:
+              type: string
+              nullable: true
+            removePullOwnerName:
+              type: string
+            removeAllPullOwnerName:
+              type: string
+            setFinalOwnerKey:
+              type: string
+              nullable: true
+            removeFinalOwnerKey:
+              type: string
+            removeAllFinalOwnerKey:
+              type: string
+            setFinalOwnerName:
+              type: string
+              nullable: true
+            removeFinalOwnerName:
+              type: string
+            removeAllFinalOwnerName:
               type: string
             setScheduleName:
               type: string
@@ -10849,6 +10939,26 @@ components:
               type: string
               format: date
             removeAllFirstDueDate:
+              type: string
+              format: date
+            setDataPeriodStartDate:
+              type: string
+              nullable: true
+              format: date
+            removeDataPeriodStartDate:
+              type: string
+              format: date
+            removeAllDataPeriodStartDate:
+              type: string
+              format: date
+            setDataPullEndDate:
+              type: string
+              nullable: true
+              format: date
+            removeDataPullEndDate:
+              type: string
+              format: date
+            removeAllDataPullEndDate:
               type: string
               format: date
             setDataPullDate:
@@ -10879,6 +10989,13 @@ components:
               type: string
             removeAllTypeKey:
               type: string
+            setTypeName:
+              type: string
+              nullable: true
+            removeTypeName:
+              type: string
+            removeAllTypeName:
+              type: string
             setNarrativeKeys:
               type: array
               nullable: true
@@ -10913,12 +11030,33 @@ components:
               type: array
               items:
                 type: string
-            setTypeName:
+            setPullOwnerKey:
               type: string
               nullable: true
-            removeTypeName:
+            removePullOwnerKey:
               type: string
-            removeAllTypeName:
+            removeAllPullOwnerKey:
+              type: string
+            setPullOwnerName:
+              type: string
+              nullable: true
+            removePullOwnerName:
+              type: string
+            removeAllPullOwnerName:
+              type: string
+            setFinalOwnerKey:
+              type: string
+              nullable: true
+            removeFinalOwnerKey:
+              type: string
+            removeAllFinalOwnerKey:
+              type: string
+            setFinalOwnerName:
+              type: string
+              nullable: true
+            removeFinalOwnerName:
+              type: string
+            removeAllFinalOwnerName:
               type: string
             setScheduleName:
               type: string
@@ -10958,6 +11096,26 @@ components:
             removeAllFirstDueDate:
               type: string
               format: date
+            setDataPeriodStartDate:
+              type: string
+              nullable: true
+              format: date
+            removeDataPeriodStartDate:
+              type: string
+              format: date
+            removeAllDataPeriodStartDate:
+              type: string
+              format: date
+            setDataPullEndDate:
+              type: string
+              nullable: true
+              format: date
+            removeDataPullEndDate:
+              type: string
+              format: date
+            removeAllDataPullEndDate:
+              type: string
+              format: date
             setDataPullDate:
               type: string
               nullable: true
@@ -10977,43 +11135,71 @@ components:
               type: string
     SearchReportScheduleResponse:
       allOf:
-        - type: array
-          items:
-            type: object
-            properties:
-              typeKey:
-                type: string
-              narrativeKeys:
-                type: array
-                items:
-                  type: string
-              eventKeys:
-                type: array
-                items:
-                  type: string
-              typeName:
-                type: string
-              scheduleName:
-                type: string
-              frequencyOneTime:
-                type: boolean
-              frequencyTimesPerYear:
-                type: string
-              frequencyYearsAfterCompletion:
-                type: string
-              firstDueDate:
-                type: string
-                format: date
-              dataPullDate:
-                type: string
-                format: date
-              dataSources:
-                type: string
+        - type: object
+          properties:
+            startNum:
+              type: integer
+              minimum: 0
+            foundNum:
+              type: integer
+              minimum: 0
+            returnedNum:
+              type: integer
+              minimum: 0
+            list:
+              type: array
+              items:
+                type: object
+                properties:
+                  typeKey:
+                    type: string
+                  typeName:
+                    type: string
+                  narrativeKeys:
+                    type: array
+                    items:
+                      type: string
+                  eventKeys:
+                    type: array
+                    items:
+                      type: string
+                  pullOwnerKey:
+                    type: string
+                  pullOwnerName:
+                    type: string
+                  finalOwnerKey:
+                    type: string
+                  finalOwnerName:
+                    type: string
+                  scheduleName:
+                    type: string
+                  frequencyOneTime:
+                    type: boolean
+                  frequencyTimesPerYear:
+                    type: string
+                  frequencyYearsAfterCompletion:
+                    type: string
+                  firstDueDate:
+                    type: string
+                    format: date
+                  dataPeriodStartDate:
+                    type: string
+                    format: date
+                  dataPullEndDate:
+                    type: string
+                    format: date
+                  dataPullDate:
+                    type: string
+                    format: date
+                  dataSources:
+                    type: string
     PUTImportReportScheduleRequest:
       allOf:
         - type: object
           properties:
             typeKey:
+              type: string
+            typeName:
               type: string
             narrativeKeys:
               type: array
@@ -11023,7 +11209,13 @@ components:
               type: array
               items:
                 type: string
-            typeName:
+            pullOwnerKey:
+              type: string
+            pullOwnerName:
+              type: string
+            finalOwnerKey:
+              type: string
+            finalOwnerName:
               type: string
             scheduleName:
               type: string
@@ -11034,6 +11226,12 @@ components:
             frequencyYearsAfterCompletion:
               type: string
             firstDueDate:
+              type: string
+              format: date
+            dataPeriodStartDate:
+              type: string
+              format: date
+            dataPullEndDate:
               type: string
               format: date
             dataPullDate:
@@ -11047,6 +11245,8 @@ components:
           properties:
             typeKey:
               type: string
+            typeName:
+              type: string
             narrativeKeys:
               type: array
               items:
@@ -11055,7 +11255,13 @@ components:
               type: array
               items:
                 type: string
-            typeName:
+            pullOwnerKey:
+              type: string
+            pullOwnerName:
+              type: string
+            finalOwnerKey:
+              type: string
+            finalOwnerName:
               type: string
             scheduleName:
               type: string
@@ -11066,6 +11272,12 @@ components:
             frequencyYearsAfterCompletion:
               type: string
             firstDueDate:
+              type: string
+              format: date
+            dataPeriodStartDate:
+              type: string
+              format: date
+            dataPullEndDate:
               type: string
               format: date
             dataPullDate:
@@ -11079,6 +11291,8 @@ components:
           properties:
             typeKey:
               type: string
+            typeName:
+              type: string
             narrativeKeys:
               type: array
               items:
@@ -11087,7 +11301,13 @@ components:
               type: array
               items:
                 type: string
-            typeName:
+            pullOwnerKey:
+              type: string
+            pullOwnerName:
+              type: string
+            finalOwnerKey:
+              type: string
+            finalOwnerName:
               type: string
             scheduleName:
               type: string
@@ -11098,6 +11318,12 @@ components:
             frequencyYearsAfterCompletion:
               type: string
             firstDueDate:
+              type: string
+              format: date
+            dataPeriodStartDate:
+              type: string
+              format: date
+            dataPullEndDate:
               type: string
               format: date
             dataPullDate:
@@ -11186,16 +11412,28 @@ components:
               type: string
     SearchReportTypeResponse:
       allOf:
-        - type: array
-          items:
-            type: object
-            properties:
-              scheduleKeys:
-                type: array
-                items:
-                  type: string
-              typeName:
-                type: string
+        - type: object
+          properties:
+            startNum:
+              type: integer
+              minimum: 0
+            foundNum:
+              type: integer
+              minimum: 0
+            returnedNum:
+              type: integer
+              minimum: 0
+            list:
+              type: array
+              items:
+                type: object
+                properties:
+                  scheduleKeys:
+                    type: array
+                    items:
+                      type: string
+                  typeName:
+                    type: string
     PUTImportReportTypeRequest:
       allOf:
         - type: object
@@ -11231,38 +11469,58 @@ components:
         - type: string
     SearchSiteUserResponse:
       allOf:
-        - type: array
-          items:
-            type: object
-            properties:
-              userKeys:
-                type: array
-                items:
-                  type: string
-              userId:
-                type: string
-              userName:
-                type: string
-              userEmail:
-                type: string
-              userFirstName:
-                type: string
-              userLastName:
-                type: string
-              userFullName:
-                type: string
-              seeArchived:
-                type: boolean
-              seeDeleted:
-                type: boolean
-              narrativeKeys:
-                type: array
-                items:
-                  type: string
-              eventKeys:
-                type: array
-                items:
-                  type: string
+        - type: object
+          properties:
+            startNum:
+              type: integer
+              minimum: 0
+            foundNum:
+              type: integer
+              minimum: 0
+            returnedNum:
+              type: integer
+              minimum: 0
+            list:
+              type: array
+              items:
+                type: object
+                properties:
+                  userKeys:
+                    type: array
+                    items:
+                      type: string
+                  userId:
+                    type: string
+                  userName:
+                    type: string
+                  userEmail:
+                    type: string
+                  userFirstName:
+                    type: string
+                  userLastName:
+                    type: string
+                  userFullName:
+                    type: string
+                  seeArchived:
+                    type: boolean
+                  seeDeleted:
+                    type: boolean
+                  narrativeKeys:
+                    type: array
+                    items:
+                      type: string
+                  eventKeys:
+                    type: array
+                    items:
+                      type: string
+                  pullOwnerReportScheduleKeys:
+                    type: array
+                    items:
+                      type: string
+                  finalOwnerReportScheduleKeys:
+                    type: array
+                    items:
+                      type: string
     PATCHSiteUserRequest:
       allOf:
         - type: object
@@ -11371,6 +11629,40 @@ components:
             addEventKeys:
               type: string
             addAllEventKeys:
+              type: array
+              items:
+                type: string
+            setPullOwnerReportScheduleKeys:
+              type: array
+              nullable: true
+              items:
+                type: string
+            removePullOwnerReportScheduleKeys:
+              type: string
+            removeAllPullOwnerReportScheduleKeys:
+              type: array
+              items:
+                type: string
+            addPullOwnerReportScheduleKeys:
+              type: string
+            addAllPullOwnerReportScheduleKeys:
+              type: array
+              items:
+                type: string
+            setFinalOwnerReportScheduleKeys:
+              type: array
+              nullable: true
+              items:
+                type: string
+            removeFinalOwnerReportScheduleKeys:
+              type: string
+            removeAllFinalOwnerReportScheduleKeys:
+              type: array
+              items:
+                type: string
+            addFinalOwnerReportScheduleKeys:
+              type: string
+            addAllFinalOwnerReportScheduleKeys:
               type: array
               items:
                 type: string
@@ -11485,6 +11777,40 @@ components:
               type: array
               items:
                 type: string
+            setPullOwnerReportScheduleKeys:
+              type: array
+              nullable: true
+              items:
+                type: string
+            removePullOwnerReportScheduleKeys:
+              type: string
+            removeAllPullOwnerReportScheduleKeys:
+              type: array
+              items:
+                type: string
+            addPullOwnerReportScheduleKeys:
+              type: string
+            addAllPullOwnerReportScheduleKeys:
+              type: array
+              items:
+                type: string
+            setFinalOwnerReportScheduleKeys:
+              type: array
+              nullable: true
+              items:
+                type: string
+            removeFinalOwnerReportScheduleKeys:
+              type: string
+            removeAllFinalOwnerReportScheduleKeys:
+              type: array
+              items:
+                type: string
+            addFinalOwnerReportScheduleKeys:
+              type: string
+            addAllFinalOwnerReportScheduleKeys:
+              type: array
+              items:
+                type: string
     POSTSiteUserRequest:
       allOf:
         - type: object
@@ -11514,6 +11840,14 @@ components:
               items:
                 type: string
             eventKeys:
+              type: array
+              items:
+                type: string
+            pullOwnerReportScheduleKeys:
+              type: array
+              items:
+                type: string
+            finalOwnerReportScheduleKeys:
               type: array
               items:
                 type: string
@@ -11549,6 +11883,14 @@ components:
               type: array
               items:
                 type: string
+            pullOwnerReportScheduleKeys:
+              type: array
+              items:
+                type: string
+            finalOwnerReportScheduleKeys:
+              type: array
+              items:
+                type: string
     PUTImportSiteUserRequest:
       allOf:
         - type: object
@@ -11581,6 +11923,14 @@ components:
               type: array
               items:
                 type: string
+            pullOwnerReportScheduleKeys:
+              type: array
+              items:
+                type: string
+            finalOwnerReportScheduleKeys:
+              type: array
+              items:
+                type: string
     PUTImportSiteUserResponse:
       allOf:
         - type: object
@@ -11610,6 +11960,14 @@ components:
               items:
                 type: string
             eventKeys:
+              type: array
+              items:
+                type: string
+            pullOwnerReportScheduleKeys:
+              type: array
+              items:
+                type: string
+            finalOwnerReportScheduleKeys:
               type: array
               items:
                 type: string

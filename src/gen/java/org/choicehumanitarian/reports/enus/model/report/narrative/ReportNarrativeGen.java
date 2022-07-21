@@ -647,11 +647,11 @@ public abstract class ReportNarrativeGen<DEV> extends BaseModel {
 		return ReportNarrative.staticSearchStrDataPullDate(siteRequest_, ReportNarrative.staticSearchDataPullDate(siteRequest_, ReportNarrative.staticSetDataPullDate(siteRequest_, o)));
 	}
 
-	///////////////////
-	// pullStartDate //
-	///////////////////
+	//////////////////////
+	// narrativeDueDate //
+	//////////////////////
 
-	/**	 The entity pullStartDate
+	/**	 The entity narrativeDueDate
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonProperty
@@ -659,33 +659,33 @@ public abstract class ReportNarrativeGen<DEV> extends BaseModel {
 	@JsonSerialize(using = ComputateLocalDateSerializer.class)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	@JsonInclude(Include.NON_NULL)
-	protected LocalDate pullStartDate;
+	protected LocalDate narrativeDueDate;
 
-	/**	<br> The entity pullStartDate
+	/**	<br> The entity narrativeDueDate
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.narrative.ReportNarrative&fq=entiteVar_enUS_indexed_string:pullStartDate">Find the entity pullStartDate in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.narrative.ReportNarrative&fq=entiteVar_enUS_indexed_string:narrativeDueDate">Find the entity narrativeDueDate in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _pullStartDate(Wrap<LocalDate> w);
+	protected abstract void _narrativeDueDate(Wrap<LocalDate> w);
 
-	public LocalDate getPullStartDate() {
-		return pullStartDate;
+	public LocalDate getNarrativeDueDate() {
+		return narrativeDueDate;
 	}
 
-	public void setPullStartDate(LocalDate pullStartDate) {
-		this.pullStartDate = pullStartDate;
+	public void setNarrativeDueDate(LocalDate narrativeDueDate) {
+		this.narrativeDueDate = narrativeDueDate;
 	}
 	@JsonIgnore
-	public void setPullStartDate(Instant o) {
-		this.pullStartDate = o == null ? null : LocalDate.from(o);
+	public void setNarrativeDueDate(Instant o) {
+		this.narrativeDueDate = o == null ? null : LocalDate.from(o);
 	}
 	/** Example: 2011-12-03+01:00 **/
 	@JsonIgnore
-	public void setPullStartDate(String o) {
-		this.pullStartDate = ReportNarrative.staticSetPullStartDate(siteRequest_, o);
+	public void setNarrativeDueDate(String o) {
+		this.narrativeDueDate = ReportNarrative.staticSetNarrativeDueDate(siteRequest_, o);
 	}
-	public static LocalDate staticSetPullStartDate(SiteRequestEnUS siteRequest_, String o) {
+	public static LocalDate staticSetNarrativeDueDate(SiteRequestEnUS siteRequest_, String o) {
 		if(o != null) {
 			if(o.contains("T")) {
 				return java.time.LocalDateTime.parse(o, DateTimeFormatter.ISO_DATE_TIME).atZone(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).toLocalDate();
@@ -696,109 +696,32 @@ public abstract class ReportNarrativeGen<DEV> extends BaseModel {
 		return o == null ? null : LocalDate.parse(o, DateTimeFormatter.ISO_DATE);
 	}
 	@JsonIgnore
-	public void setPullStartDate(Date o) {
-		this.pullStartDate = o == null ? null : o.toInstant().atZone(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).toLocalDate();
+	public void setNarrativeDueDate(Date o) {
+		this.narrativeDueDate = o == null ? null : o.toInstant().atZone(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).toLocalDate();
 	}
-	protected ReportNarrative pullStartDateInit() {
-		Wrap<LocalDate> pullStartDateWrap = new Wrap<LocalDate>().var("pullStartDate");
-		if(pullStartDate == null) {
-			_pullStartDate(pullStartDateWrap);
-			setPullStartDate(pullStartDateWrap.o);
+	protected ReportNarrative narrativeDueDateInit() {
+		Wrap<LocalDate> narrativeDueDateWrap = new Wrap<LocalDate>().var("narrativeDueDate");
+		if(narrativeDueDate == null) {
+			_narrativeDueDate(narrativeDueDateWrap);
+			setNarrativeDueDate(narrativeDueDateWrap.o);
 		}
 		return (ReportNarrative)this;
 	}
 
-	public static Date staticSearchPullStartDate(SiteRequestEnUS siteRequest_, LocalDate o) {
+	public static Date staticSearchNarrativeDueDate(SiteRequestEnUS siteRequest_, LocalDate o) {
 		return o == null ? null : Date.from(o.atStartOfDay(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).toInstant().atZone(ZoneId.of("Z")).toInstant());
 	}
 
-	public static String staticSearchStrPullStartDate(SiteRequestEnUS siteRequest_, Date o) {
+	public static String staticSearchStrNarrativeDueDate(SiteRequestEnUS siteRequest_, Date o) {
 		return "\"" + DateTimeFormatter.ISO_DATE_TIME.format(o.toInstant().atOffset(ZoneOffset.UTC)) + "\"";
 	}
 
-	public static String staticSearchFqPullStartDate(SiteRequestEnUS siteRequest_, String o) {
-		return ReportNarrative.staticSearchStrPullStartDate(siteRequest_, ReportNarrative.staticSearchPullStartDate(siteRequest_, ReportNarrative.staticSetPullStartDate(siteRequest_, o)));
+	public static String staticSearchFqNarrativeDueDate(SiteRequestEnUS siteRequest_, String o) {
+		return ReportNarrative.staticSearchStrNarrativeDueDate(siteRequest_, ReportNarrative.staticSearchNarrativeDueDate(siteRequest_, ReportNarrative.staticSetNarrativeDueDate(siteRequest_, o)));
 	}
 
-	public LocalDate sqlPullStartDate() {
-		return pullStartDate;
-	}
-
-	/////////////////
-	// pullEndDate //
-	/////////////////
-
-	/**	 The entity pullEndDate
-	 *	 is defined as null before being initialized. 
-	 */
-	@JsonProperty
-	@JsonDeserialize(using = ComputateLocalDateDeserializer.class)
-	@JsonSerialize(using = ComputateLocalDateSerializer.class)
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-	@JsonInclude(Include.NON_NULL)
-	protected LocalDate pullEndDate;
-
-	/**	<br> The entity pullEndDate
-	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.narrative.ReportNarrative&fq=entiteVar_enUS_indexed_string:pullEndDate">Find the entity pullEndDate in Solr</a>
-	 * <br>
-	 * @param w is for wrapping a value to assign to this entity during initialization. 
-	 **/
-	protected abstract void _pullEndDate(Wrap<LocalDate> w);
-
-	public LocalDate getPullEndDate() {
-		return pullEndDate;
-	}
-
-	public void setPullEndDate(LocalDate pullEndDate) {
-		this.pullEndDate = pullEndDate;
-	}
-	@JsonIgnore
-	public void setPullEndDate(Instant o) {
-		this.pullEndDate = o == null ? null : LocalDate.from(o);
-	}
-	/** Example: 2011-12-03+01:00 **/
-	@JsonIgnore
-	public void setPullEndDate(String o) {
-		this.pullEndDate = ReportNarrative.staticSetPullEndDate(siteRequest_, o);
-	}
-	public static LocalDate staticSetPullEndDate(SiteRequestEnUS siteRequest_, String o) {
-		if(o != null) {
-			if(o.contains("T")) {
-				return java.time.LocalDateTime.parse(o, DateTimeFormatter.ISO_DATE_TIME).atZone(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).toLocalDate();
-			} else {
-				return LocalDate.parse(o, DateTimeFormatter.ISO_DATE);
-			}
-		}
-		return o == null ? null : LocalDate.parse(o, DateTimeFormatter.ISO_DATE);
-	}
-	@JsonIgnore
-	public void setPullEndDate(Date o) {
-		this.pullEndDate = o == null ? null : o.toInstant().atZone(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).toLocalDate();
-	}
-	protected ReportNarrative pullEndDateInit() {
-		Wrap<LocalDate> pullEndDateWrap = new Wrap<LocalDate>().var("pullEndDate");
-		if(pullEndDate == null) {
-			_pullEndDate(pullEndDateWrap);
-			setPullEndDate(pullEndDateWrap.o);
-		}
-		return (ReportNarrative)this;
-	}
-
-	public static Date staticSearchPullEndDate(SiteRequestEnUS siteRequest_, LocalDate o) {
-		return o == null ? null : Date.from(o.atStartOfDay(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).toInstant().atZone(ZoneId.of("Z")).toInstant());
-	}
-
-	public static String staticSearchStrPullEndDate(SiteRequestEnUS siteRequest_, Date o) {
-		return "\"" + DateTimeFormatter.ISO_DATE_TIME.format(o.toInstant().atOffset(ZoneOffset.UTC)) + "\"";
-	}
-
-	public static String staticSearchFqPullEndDate(SiteRequestEnUS siteRequest_, String o) {
-		return ReportNarrative.staticSearchStrPullEndDate(siteRequest_, ReportNarrative.staticSearchPullEndDate(siteRequest_, ReportNarrative.staticSetPullEndDate(siteRequest_, o)));
-	}
-
-	public LocalDate sqlPullEndDate() {
-		return pullEndDate;
+	public LocalDate sqlNarrativeDueDate() {
+		return narrativeDueDate;
 	}
 
 	//////////////
@@ -870,8 +793,7 @@ public abstract class ReportNarrativeGen<DEV> extends BaseModel {
 				narrativeNameInit();
 				firstDueDateInit();
 				dataPullDateInit();
-				pullStartDateInit();
-				pullEndDateInit();
+				narrativeDueDateInit();
 				promise2.complete();
 			} catch(Exception ex) {
 				promise2.fail(ex);
@@ -949,10 +871,8 @@ public abstract class ReportNarrativeGen<DEV> extends BaseModel {
 				return oReportNarrative.firstDueDate;
 			case "dataPullDate":
 				return oReportNarrative.dataPullDate;
-			case "pullStartDate":
-				return oReportNarrative.pullStartDate;
-			case "pullEndDate":
-				return oReportNarrative.pullEndDate;
+			case "narrativeDueDate":
+				return oReportNarrative.narrativeDueDate;
 			default:
 				return super.obtainBaseModel(var);
 		}
@@ -1016,10 +936,8 @@ public abstract class ReportNarrativeGen<DEV> extends BaseModel {
 			return ReportNarrative.staticSetFirstDueDate(siteRequest_, o);
 		case "dataPullDate":
 			return ReportNarrative.staticSetDataPullDate(siteRequest_, o);
-		case "pullStartDate":
-			return ReportNarrative.staticSetPullStartDate(siteRequest_, o);
-		case "pullEndDate":
-			return ReportNarrative.staticSetPullEndDate(siteRequest_, o);
+		case "narrativeDueDate":
+			return ReportNarrative.staticSetNarrativeDueDate(siteRequest_, o);
 			default:
 				return BaseModel.staticSetBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -1046,10 +964,8 @@ public abstract class ReportNarrativeGen<DEV> extends BaseModel {
 			return ReportNarrative.staticSearchFirstDueDate(siteRequest_, (LocalDate)o);
 		case "dataPullDate":
 			return ReportNarrative.staticSearchDataPullDate(siteRequest_, (LocalDate)o);
-		case "pullStartDate":
-			return ReportNarrative.staticSearchPullStartDate(siteRequest_, (LocalDate)o);
-		case "pullEndDate":
-			return ReportNarrative.staticSearchPullEndDate(siteRequest_, (LocalDate)o);
+		case "narrativeDueDate":
+			return ReportNarrative.staticSearchNarrativeDueDate(siteRequest_, (LocalDate)o);
 			default:
 				return BaseModel.staticSearchBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -1076,10 +992,8 @@ public abstract class ReportNarrativeGen<DEV> extends BaseModel {
 			return ReportNarrative.staticSearchStrFirstDueDate(siteRequest_, (Date)o);
 		case "dataPullDate":
 			return ReportNarrative.staticSearchStrDataPullDate(siteRequest_, (Date)o);
-		case "pullStartDate":
-			return ReportNarrative.staticSearchStrPullStartDate(siteRequest_, (Date)o);
-		case "pullEndDate":
-			return ReportNarrative.staticSearchStrPullEndDate(siteRequest_, (Date)o);
+		case "narrativeDueDate":
+			return ReportNarrative.staticSearchStrNarrativeDueDate(siteRequest_, (Date)o);
 			default:
 				return BaseModel.staticSearchStrBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -1106,10 +1020,8 @@ public abstract class ReportNarrativeGen<DEV> extends BaseModel {
 			return ReportNarrative.staticSearchFqFirstDueDate(siteRequest_, o);
 		case "dataPullDate":
 			return ReportNarrative.staticSearchFqDataPullDate(siteRequest_, o);
-		case "pullStartDate":
-			return ReportNarrative.staticSearchFqPullStartDate(siteRequest_, o);
-		case "pullEndDate":
-			return ReportNarrative.staticSearchFqPullEndDate(siteRequest_, o);
+		case "narrativeDueDate":
+			return ReportNarrative.staticSearchFqNarrativeDueDate(siteRequest_, o);
 			default:
 				return BaseModel.staticSearchFqBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -1155,19 +1067,12 @@ public abstract class ReportNarrativeGen<DEV> extends BaseModel {
 					setNarrativeName((String)val);
 				saves.add("narrativeName");
 				return val;
-			case "pullstartdate":
+			case "narrativeduedate":
 				if(val instanceof LocalDate)
-					setPullStartDate((LocalDate)val);
+					setNarrativeDueDate((LocalDate)val);
 				else if(val instanceof String)
-					setPullStartDate((String)val);
-				saves.add("pullStartDate");
-				return val;
-			case "pullenddate":
-				if(val instanceof LocalDate)
-					setPullEndDate((LocalDate)val);
-				else if(val instanceof String)
-					setPullEndDate((String)val);
-				saves.add("pullEndDate");
+					setNarrativeDueDate((String)val);
+				saves.add("narrativeDueDate");
 				return val;
 			default:
 				return super.persistBaseModel(var, val);
@@ -1209,11 +1114,8 @@ public abstract class ReportNarrativeGen<DEV> extends BaseModel {
 		if(dataPullDate != null) {
 			doc.put("dataPullDate_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(dataPullDate.atStartOfDay(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).toInstant().atZone(ZoneId.of("Z"))));
 		}
-		if(pullStartDate != null) {
-			doc.put("pullStartDate_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(pullStartDate.atStartOfDay(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).toInstant().atZone(ZoneId.of("Z"))));
-		}
-		if(pullEndDate != null) {
-			doc.put("pullEndDate_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(pullEndDate.atStartOfDay(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).toInstant().atZone(ZoneId.of("Z"))));
+		if(narrativeDueDate != null) {
+			doc.put("narrativeDueDate_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(narrativeDueDate.atStartOfDay(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).toInstant().atZone(ZoneId.of("Z"))));
 		}
 		super.indexBaseModel(doc);
 
@@ -1233,10 +1135,8 @@ public abstract class ReportNarrativeGen<DEV> extends BaseModel {
 				return "firstDueDate_docvalues_date";
 			case "dataPullDate":
 				return "dataPullDate_docvalues_date";
-			case "pullStartDate":
-				return "pullStartDate_docvalues_date";
-			case "pullEndDate":
-				return "pullEndDate_docvalues_date";
+			case "narrativeDueDate":
+				return "narrativeDueDate_docvalues_date";
 			default:
 				return BaseModel.varStoredBaseModel(entityVar);
 		}
@@ -1256,10 +1156,8 @@ public abstract class ReportNarrativeGen<DEV> extends BaseModel {
 				return "firstDueDate_docvalues_date";
 			case "dataPullDate":
 				return "dataPullDate_docvalues_date";
-			case "pullStartDate":
-				return "pullStartDate_docvalues_date";
-			case "pullEndDate":
-				return "pullEndDate_docvalues_date";
+			case "narrativeDueDate":
+				return "narrativeDueDate_docvalues_date";
 			default:
 				return BaseModel.varIndexedBaseModel(entityVar);
 		}
@@ -1279,10 +1177,8 @@ public abstract class ReportNarrativeGen<DEV> extends BaseModel {
 				return "firstDueDate";
 			case "dataPullDate_docvalues_date":
 				return "dataPullDate";
-			case "pullStartDate_docvalues_date":
-				return "pullStartDate";
-			case "pullEndDate_docvalues_date":
-				return "pullEndDate";
+			case "narrativeDueDate_docvalues_date":
+				return "narrativeDueDate";
 			default:
 				return BaseModel.searchVarBaseModel(searchVar);
 		}
@@ -1318,8 +1214,7 @@ public abstract class ReportNarrativeGen<DEV> extends BaseModel {
 		oReportNarrative.setNarrativeName(Optional.ofNullable(doc.get("narrativeName_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oReportNarrative.setFirstDueDate(Optional.ofNullable(doc.get("firstDueDate_docvalues_date")).map(v -> v.toString()).orElse(null));
 		oReportNarrative.setDataPullDate(Optional.ofNullable(doc.get("dataPullDate_docvalues_date")).map(v -> v.toString()).orElse(null));
-		oReportNarrative.setPullStartDate(Optional.ofNullable(doc.get("pullStartDate_docvalues_date")).map(v -> v.toString()).orElse(null));
-		oReportNarrative.setPullEndDate(Optional.ofNullable(doc.get("pullEndDate_docvalues_date")).map(v -> v.toString()).orElse(null));
+		oReportNarrative.setNarrativeDueDate(Optional.ofNullable(doc.get("narrativeDueDate_docvalues_date")).map(v -> v.toString()).orElse(null));
 
 		super.storeBaseModel(doc);
 	}
@@ -1345,10 +1240,8 @@ public abstract class ReportNarrativeGen<DEV> extends BaseModel {
 				apiRequest.addVars("firstDueDate");
 			if(!Objects.equals(dataPullDate, original.getDataPullDate()))
 				apiRequest.addVars("dataPullDate");
-			if(!Objects.equals(pullStartDate, original.getPullStartDate()))
-				apiRequest.addVars("pullStartDate");
-			if(!Objects.equals(pullEndDate, original.getPullEndDate()))
-				apiRequest.addVars("pullEndDate");
+			if(!Objects.equals(narrativeDueDate, original.getNarrativeDueDate()))
+				apiRequest.addVars("narrativeDueDate");
 			super.apiRequestBaseModel();
 		}
 	}
@@ -1366,8 +1259,7 @@ public abstract class ReportNarrativeGen<DEV> extends BaseModel {
 		sb.append(Optional.ofNullable(narrativeName).map(v -> "narrativeName: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(firstDueDate).map(v -> "firstDueDate: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(dataPullDate).map(v -> "dataPullDate: " + v + "\n").orElse(""));
-		sb.append(Optional.ofNullable(pullStartDate).map(v -> "pullStartDate: " + v + "\n").orElse(""));
-		sb.append(Optional.ofNullable(pullEndDate).map(v -> "pullEndDate: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(narrativeDueDate).map(v -> "narrativeDueDate: " + v + "\n").orElse(""));
 		return sb.toString();
 	}
 
@@ -1382,8 +1274,7 @@ public abstract class ReportNarrativeGen<DEV> extends BaseModel {
 	public static final String VAR_narrativeName = "narrativeName";
 	public static final String VAR_firstDueDate = "firstDueDate";
 	public static final String VAR_dataPullDate = "dataPullDate";
-	public static final String VAR_pullStartDate = "pullStartDate";
-	public static final String VAR_pullEndDate = "pullEndDate";
+	public static final String VAR_narrativeDueDate = "narrativeDueDate";
 
 	public static List<String> varsQForClass() {
 		return ReportNarrative.varsQReportNarrative(new ArrayList<String>());
@@ -1397,6 +1288,11 @@ public abstract class ReportNarrativeGen<DEV> extends BaseModel {
 		return ReportNarrative.varsFqReportNarrative(new ArrayList<String>());
 	}
 	public static List<String> varsFqReportNarrative(List<String> vars) {
+		vars.add(VAR_assigneeName);
+		vars.add(VAR_narrativeName);
+		vars.add(VAR_firstDueDate);
+		vars.add(VAR_dataPullDate);
+		vars.add(VAR_narrativeDueDate);
 		BaseModel.varsFqBaseModel(vars);
 		return vars;
 	}
@@ -1419,8 +1315,7 @@ public abstract class ReportNarrativeGen<DEV> extends BaseModel {
 	public static final String DISPLAY_NAME_narrativeName = "narrative name";
 	public static final String DISPLAY_NAME_firstDueDate = "report first due date";
 	public static final String DISPLAY_NAME_dataPullDate = "report data pull date";
-	public static final String DISPLAY_NAME_pullStartDate = "pull start date";
-	public static final String DISPLAY_NAME_pullEndDate = "pull end date";
+	public static final String DISPLAY_NAME_narrativeDueDate = "narrative due date";
 
 	public static String displayNameForClass(String var) {
 		return ReportNarrative.displayNameReportNarrative(var);
@@ -1447,10 +1342,8 @@ public abstract class ReportNarrativeGen<DEV> extends BaseModel {
 			return DISPLAY_NAME_firstDueDate;
 		case VAR_dataPullDate:
 			return DISPLAY_NAME_dataPullDate;
-		case VAR_pullStartDate:
-			return DISPLAY_NAME_pullStartDate;
-		case VAR_pullEndDate:
-			return DISPLAY_NAME_pullEndDate;
+		case VAR_narrativeDueDate:
+			return DISPLAY_NAME_narrativeDueDate;
 		default:
 			return BaseModel.displayNameBaseModel(var);
 		}
@@ -1485,9 +1378,7 @@ public abstract class ReportNarrativeGen<DEV> extends BaseModel {
 			return "LocalDate";
 		case VAR_dataPullDate:
 			return "LocalDate";
-		case VAR_pullStartDate:
-			return "LocalDate";
-		case VAR_pullEndDate:
+		case VAR_narrativeDueDate:
 			return "LocalDate";
 			default:
 				return BaseModel.classSimpleNameBaseModel(var);
@@ -1513,9 +1404,7 @@ public abstract class ReportNarrativeGen<DEV> extends BaseModel {
 			return 4;
 		case VAR_dataPullDate:
 			return 4;
-		case VAR_pullStartDate:
-			return 4;
-		case VAR_pullEndDate:
+		case VAR_narrativeDueDate:
 			return 4;
 			default:
 				return BaseModel.htmlRowBaseModel(var);
@@ -1534,10 +1423,8 @@ public abstract class ReportNarrativeGen<DEV> extends BaseModel {
 			return 1;
 		case VAR_dataPullDate:
 			return 2;
-		case VAR_pullStartDate:
+		case VAR_narrativeDueDate:
 			return 3;
-		case VAR_pullEndDate:
-			return 4;
 			default:
 				return BaseModel.htmlCellBaseModel(var);
 		}

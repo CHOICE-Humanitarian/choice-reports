@@ -36,10 +36,11 @@ import java.util.Map;
 import java.lang.Long;
 import org.choicehumanitarian.reports.enus.model.report.type.ReportType;
 import java.lang.String;
+import org.computate.vertx.search.list.SearchList;
 import org.choicehumanitarian.reports.enus.model.report.narrative.ReportNarrative;
 import io.vertx.core.json.JsonArray;
 import org.choicehumanitarian.reports.enus.model.report.event.ReportEvent;
-import org.computate.vertx.search.list.SearchList;
+import org.choicehumanitarian.reports.enus.model.user.SiteUser;
 import java.lang.Boolean;
 import java.lang.Integer;
 import java.time.LocalDate;
@@ -163,6 +164,143 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 
 	public Long sqlTypeKey() {
 		return typeKey;
+	}
+
+	////////////////
+	// typeSearch //
+	////////////////
+
+	/**	 The entity typeSearch
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonIgnore
+	@JsonInclude(Include.NON_NULL)
+	protected SearchList<ReportType> typeSearch;
+
+	/**	<br> The entity typeSearch
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.schedule.ReportSchedule&fq=entiteVar_enUS_indexed_string:typeSearch">Find the entity typeSearch in Solr</a>
+	 * <br>
+	 * @param promise is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _typeSearch(Promise<SearchList<ReportType>> promise);
+
+	public SearchList<ReportType> getTypeSearch() {
+		return typeSearch;
+	}
+
+	public void setTypeSearch(SearchList<ReportType> typeSearch) {
+		this.typeSearch = typeSearch;
+	}
+	public static SearchList<ReportType> staticSetTypeSearch(SiteRequestEnUS siteRequest_, String o) {
+		return null;
+	}
+	protected Future<SearchList<ReportType>> typeSearchPromise() {
+		Promise<SearchList<ReportType>> promise = Promise.promise();
+		Promise<SearchList<ReportType>> promise2 = Promise.promise();
+		_typeSearch(promise2);
+		promise2.future().onSuccess(o -> {
+			if(o != null && typeSearch == null) {
+				o.promiseDeepForClass(siteRequest_).onSuccess(a -> {
+					setTypeSearch(o);
+					promise.complete(o);
+				}).onFailure(ex -> {
+					promise.fail(ex);
+				});
+			} else {
+				promise.complete(o);
+			}
+		}).onFailure(ex -> {
+			promise.fail(ex);
+		});
+		return promise.future();
+	}
+
+	///////////
+	// type_ //
+	///////////
+
+	/**	 The entity type_
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected ReportType type_;
+
+	/**	<br> The entity type_
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.schedule.ReportSchedule&fq=entiteVar_enUS_indexed_string:type_">Find the entity type_ in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _type_(Wrap<ReportType> w);
+
+	public ReportType getType_() {
+		return type_;
+	}
+
+	public void setType_(ReportType type_) {
+		this.type_ = type_;
+	}
+	public static ReportType staticSetType_(SiteRequestEnUS siteRequest_, String o) {
+		return null;
+	}
+	protected ReportSchedule type_Init() {
+		Wrap<ReportType> type_Wrap = new Wrap<ReportType>().var("type_");
+		if(type_ == null) {
+			_type_(type_Wrap);
+			setType_(type_Wrap.o);
+		}
+		return (ReportSchedule)this;
+	}
+
+	//////////////
+	// typeName //
+	//////////////
+
+	/**	 The entity typeName
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String typeName;
+
+	/**	<br> The entity typeName
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.schedule.ReportSchedule&fq=entiteVar_enUS_indexed_string:typeName">Find the entity typeName in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _typeName(Wrap<String> w);
+
+	public String getTypeName() {
+		return typeName;
+	}
+	public void setTypeName(String o) {
+		this.typeName = ReportSchedule.staticSetTypeName(siteRequest_, o);
+	}
+	public static String staticSetTypeName(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected ReportSchedule typeNameInit() {
+		Wrap<String> typeNameWrap = new Wrap<String>().var("typeName");
+		if(typeName == null) {
+			_typeName(typeNameWrap);
+			setTypeName(typeNameWrap.o);
+		}
+		return (ReportSchedule)this;
+	}
+
+	public static String staticSearchTypeName(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSearchStrTypeName(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqTypeName(SiteRequestEnUS siteRequest_, String o) {
+		return ReportSchedule.staticSearchStrTypeName(siteRequest_, ReportSchedule.staticSearchTypeName(siteRequest_, ReportSchedule.staticSetTypeName(siteRequest_, o)));
 	}
 
 	///////////////////
@@ -337,43 +475,104 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 		return eventKeys;
 	}
 
-	////////////////
-	// typeSearch //
-	////////////////
+	//////////////////
+	// pullOwnerKey //
+	//////////////////
 
-	/**	 The entity typeSearch
+	/**	 The entity pullOwnerKey
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonSerialize(using = ToStringSerializer.class)
+	@JsonInclude(Include.NON_NULL)
+	protected Long pullOwnerKey;
+
+	/**	<br> The entity pullOwnerKey
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.schedule.ReportSchedule&fq=entiteVar_enUS_indexed_string:pullOwnerKey">Find the entity pullOwnerKey in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _pullOwnerKey(Wrap<Long> w);
+
+	public Long getPullOwnerKey() {
+		return pullOwnerKey;
+	}
+
+	public void setPullOwnerKey(Long pullOwnerKey) {
+		this.pullOwnerKey = pullOwnerKey;
+	}
+	@JsonIgnore
+	public void setPullOwnerKey(String o) {
+		this.pullOwnerKey = ReportSchedule.staticSetPullOwnerKey(siteRequest_, o);
+	}
+	public static Long staticSetPullOwnerKey(SiteRequestEnUS siteRequest_, String o) {
+		if(NumberUtils.isParsable(o))
+			return Long.parseLong(o);
+		return null;
+	}
+	protected ReportSchedule pullOwnerKeyInit() {
+		Wrap<Long> pullOwnerKeyWrap = new Wrap<Long>().var("pullOwnerKey");
+		if(pullOwnerKey == null) {
+			_pullOwnerKey(pullOwnerKeyWrap);
+			setPullOwnerKey(pullOwnerKeyWrap.o);
+		}
+		return (ReportSchedule)this;
+	}
+
+	public static Long staticSearchPullOwnerKey(SiteRequestEnUS siteRequest_, Long o) {
+		return o;
+	}
+
+	public static String staticSearchStrPullOwnerKey(SiteRequestEnUS siteRequest_, Long o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqPullOwnerKey(SiteRequestEnUS siteRequest_, String o) {
+		return ReportSchedule.staticSearchStrPullOwnerKey(siteRequest_, ReportSchedule.staticSearchPullOwnerKey(siteRequest_, ReportSchedule.staticSetPullOwnerKey(siteRequest_, o)));
+	}
+
+	public Long sqlPullOwnerKey() {
+		return pullOwnerKey;
+	}
+
+	/////////////////////
+	// pullOwnerSearch //
+	/////////////////////
+
+	/**	 The entity pullOwnerSearch
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonIgnore
 	@JsonInclude(Include.NON_NULL)
-	protected SearchList<ReportType> typeSearch;
+	protected SearchList<SiteUser> pullOwnerSearch;
 
-	/**	<br> The entity typeSearch
+	/**	<br> The entity pullOwnerSearch
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.schedule.ReportSchedule&fq=entiteVar_enUS_indexed_string:typeSearch">Find the entity typeSearch in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.schedule.ReportSchedule&fq=entiteVar_enUS_indexed_string:pullOwnerSearch">Find the entity pullOwnerSearch in Solr</a>
 	 * <br>
 	 * @param promise is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _typeSearch(Promise<SearchList<ReportType>> promise);
+	protected abstract void _pullOwnerSearch(Promise<SearchList<SiteUser>> promise);
 
-	public SearchList<ReportType> getTypeSearch() {
-		return typeSearch;
+	public SearchList<SiteUser> getPullOwnerSearch() {
+		return pullOwnerSearch;
 	}
 
-	public void setTypeSearch(SearchList<ReportType> typeSearch) {
-		this.typeSearch = typeSearch;
+	public void setPullOwnerSearch(SearchList<SiteUser> pullOwnerSearch) {
+		this.pullOwnerSearch = pullOwnerSearch;
 	}
-	public static SearchList<ReportType> staticSetTypeSearch(SiteRequestEnUS siteRequest_, String o) {
+	public static SearchList<SiteUser> staticSetPullOwnerSearch(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
-	protected Future<SearchList<ReportType>> typeSearchPromise() {
-		Promise<SearchList<ReportType>> promise = Promise.promise();
-		Promise<SearchList<ReportType>> promise2 = Promise.promise();
-		_typeSearch(promise2);
+	protected Future<SearchList<SiteUser>> pullOwnerSearchPromise() {
+		Promise<SearchList<SiteUser>> promise = Promise.promise();
+		Promise<SearchList<SiteUser>> promise2 = Promise.promise();
+		_pullOwnerSearch(promise2);
 		promise2.future().onSuccess(o -> {
-			if(o != null && typeSearch == null) {
+			if(o != null && pullOwnerSearch == null) {
 				o.promiseDeepForClass(siteRequest_).onSuccess(a -> {
-					setTypeSearch(o);
+					setPullOwnerSearch(o);
 					promise.complete(o);
 				}).onFailure(ex -> {
 					promise.fail(ex);
@@ -387,91 +586,289 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 		return promise.future();
 	}
 
-	///////////
-	// type_ //
-	///////////
+	////////////////
+	// pullOwner_ //
+	////////////////
 
-	/**	 The entity type_
+	/**	 The entity pullOwner_
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
-	protected ReportType type_;
+	protected SiteUser pullOwner_;
 
-	/**	<br> The entity type_
+	/**	<br> The entity pullOwner_
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.schedule.ReportSchedule&fq=entiteVar_enUS_indexed_string:type_">Find the entity type_ in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.schedule.ReportSchedule&fq=entiteVar_enUS_indexed_string:pullOwner_">Find the entity pullOwner_ in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _type_(Wrap<ReportType> w);
+	protected abstract void _pullOwner_(Wrap<SiteUser> w);
 
-	public ReportType getType_() {
-		return type_;
+	public SiteUser getPullOwner_() {
+		return pullOwner_;
 	}
 
-	public void setType_(ReportType type_) {
-		this.type_ = type_;
+	public void setPullOwner_(SiteUser pullOwner_) {
+		this.pullOwner_ = pullOwner_;
 	}
-	public static ReportType staticSetType_(SiteRequestEnUS siteRequest_, String o) {
+	public static SiteUser staticSetPullOwner_(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
-	protected ReportSchedule type_Init() {
-		Wrap<ReportType> type_Wrap = new Wrap<ReportType>().var("type_");
-		if(type_ == null) {
-			_type_(type_Wrap);
-			setType_(type_Wrap.o);
+	protected ReportSchedule pullOwner_Init() {
+		Wrap<SiteUser> pullOwner_Wrap = new Wrap<SiteUser>().var("pullOwner_");
+		if(pullOwner_ == null) {
+			_pullOwner_(pullOwner_Wrap);
+			setPullOwner_(pullOwner_Wrap.o);
 		}
 		return (ReportSchedule)this;
 	}
 
-	//////////////
-	// typeName //
-	//////////////
+	///////////////////
+	// pullOwnerName //
+	///////////////////
 
-	/**	 The entity typeName
+	/**	 The entity pullOwnerName
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
-	protected String typeName;
+	protected String pullOwnerName;
 
-	/**	<br> The entity typeName
+	/**	<br> The entity pullOwnerName
 	 *  is defined as null before being initialized. 
-	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.schedule.ReportSchedule&fq=entiteVar_enUS_indexed_string:typeName">Find the entity typeName in Solr</a>
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.schedule.ReportSchedule&fq=entiteVar_enUS_indexed_string:pullOwnerName">Find the entity pullOwnerName in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _typeName(Wrap<String> w);
+	protected abstract void _pullOwnerName(Wrap<String> w);
 
-	public String getTypeName() {
-		return typeName;
+	public String getPullOwnerName() {
+		return pullOwnerName;
 	}
-	public void setTypeName(String o) {
-		this.typeName = ReportSchedule.staticSetTypeName(siteRequest_, o);
+	public void setPullOwnerName(String o) {
+		this.pullOwnerName = ReportSchedule.staticSetPullOwnerName(siteRequest_, o);
 	}
-	public static String staticSetTypeName(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSetPullOwnerName(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
-	protected ReportSchedule typeNameInit() {
-		Wrap<String> typeNameWrap = new Wrap<String>().var("typeName");
-		if(typeName == null) {
-			_typeName(typeNameWrap);
-			setTypeName(typeNameWrap.o);
+	protected ReportSchedule pullOwnerNameInit() {
+		Wrap<String> pullOwnerNameWrap = new Wrap<String>().var("pullOwnerName");
+		if(pullOwnerName == null) {
+			_pullOwnerName(pullOwnerNameWrap);
+			setPullOwnerName(pullOwnerNameWrap.o);
 		}
 		return (ReportSchedule)this;
 	}
 
-	public static String staticSearchTypeName(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchPullOwnerName(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrTypeName(SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSearchStrPullOwnerName(SiteRequestEnUS siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqTypeName(SiteRequestEnUS siteRequest_, String o) {
-		return ReportSchedule.staticSearchStrTypeName(siteRequest_, ReportSchedule.staticSearchTypeName(siteRequest_, ReportSchedule.staticSetTypeName(siteRequest_, o)));
+	public static String staticSearchFqPullOwnerName(SiteRequestEnUS siteRequest_, String o) {
+		return ReportSchedule.staticSearchStrPullOwnerName(siteRequest_, ReportSchedule.staticSearchPullOwnerName(siteRequest_, ReportSchedule.staticSetPullOwnerName(siteRequest_, o)));
+	}
+
+	///////////////////
+	// finalOwnerKey //
+	///////////////////
+
+	/**	 The entity finalOwnerKey
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonSerialize(using = ToStringSerializer.class)
+	@JsonInclude(Include.NON_NULL)
+	protected Long finalOwnerKey;
+
+	/**	<br> The entity finalOwnerKey
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.schedule.ReportSchedule&fq=entiteVar_enUS_indexed_string:finalOwnerKey">Find the entity finalOwnerKey in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _finalOwnerKey(Wrap<Long> w);
+
+	public Long getFinalOwnerKey() {
+		return finalOwnerKey;
+	}
+
+	public void setFinalOwnerKey(Long finalOwnerKey) {
+		this.finalOwnerKey = finalOwnerKey;
+	}
+	@JsonIgnore
+	public void setFinalOwnerKey(String o) {
+		this.finalOwnerKey = ReportSchedule.staticSetFinalOwnerKey(siteRequest_, o);
+	}
+	public static Long staticSetFinalOwnerKey(SiteRequestEnUS siteRequest_, String o) {
+		if(NumberUtils.isParsable(o))
+			return Long.parseLong(o);
+		return null;
+	}
+	protected ReportSchedule finalOwnerKeyInit() {
+		Wrap<Long> finalOwnerKeyWrap = new Wrap<Long>().var("finalOwnerKey");
+		if(finalOwnerKey == null) {
+			_finalOwnerKey(finalOwnerKeyWrap);
+			setFinalOwnerKey(finalOwnerKeyWrap.o);
+		}
+		return (ReportSchedule)this;
+	}
+
+	public static Long staticSearchFinalOwnerKey(SiteRequestEnUS siteRequest_, Long o) {
+		return o;
+	}
+
+	public static String staticSearchStrFinalOwnerKey(SiteRequestEnUS siteRequest_, Long o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqFinalOwnerKey(SiteRequestEnUS siteRequest_, String o) {
+		return ReportSchedule.staticSearchStrFinalOwnerKey(siteRequest_, ReportSchedule.staticSearchFinalOwnerKey(siteRequest_, ReportSchedule.staticSetFinalOwnerKey(siteRequest_, o)));
+	}
+
+	public Long sqlFinalOwnerKey() {
+		return finalOwnerKey;
+	}
+
+	//////////////////////
+	// finalOwnerSearch //
+	//////////////////////
+
+	/**	 The entity finalOwnerSearch
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonIgnore
+	@JsonInclude(Include.NON_NULL)
+	protected SearchList<SiteUser> finalOwnerSearch;
+
+	/**	<br> The entity finalOwnerSearch
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.schedule.ReportSchedule&fq=entiteVar_enUS_indexed_string:finalOwnerSearch">Find the entity finalOwnerSearch in Solr</a>
+	 * <br>
+	 * @param promise is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _finalOwnerSearch(Promise<SearchList<SiteUser>> promise);
+
+	public SearchList<SiteUser> getFinalOwnerSearch() {
+		return finalOwnerSearch;
+	}
+
+	public void setFinalOwnerSearch(SearchList<SiteUser> finalOwnerSearch) {
+		this.finalOwnerSearch = finalOwnerSearch;
+	}
+	public static SearchList<SiteUser> staticSetFinalOwnerSearch(SiteRequestEnUS siteRequest_, String o) {
+		return null;
+	}
+	protected Future<SearchList<SiteUser>> finalOwnerSearchPromise() {
+		Promise<SearchList<SiteUser>> promise = Promise.promise();
+		Promise<SearchList<SiteUser>> promise2 = Promise.promise();
+		_finalOwnerSearch(promise2);
+		promise2.future().onSuccess(o -> {
+			if(o != null && finalOwnerSearch == null) {
+				o.promiseDeepForClass(siteRequest_).onSuccess(a -> {
+					setFinalOwnerSearch(o);
+					promise.complete(o);
+				}).onFailure(ex -> {
+					promise.fail(ex);
+				});
+			} else {
+				promise.complete(o);
+			}
+		}).onFailure(ex -> {
+			promise.fail(ex);
+		});
+		return promise.future();
+	}
+
+	/////////////////
+	// finalOwner_ //
+	/////////////////
+
+	/**	 The entity finalOwner_
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected SiteUser finalOwner_;
+
+	/**	<br> The entity finalOwner_
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.schedule.ReportSchedule&fq=entiteVar_enUS_indexed_string:finalOwner_">Find the entity finalOwner_ in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _finalOwner_(Wrap<SiteUser> w);
+
+	public SiteUser getFinalOwner_() {
+		return finalOwner_;
+	}
+
+	public void setFinalOwner_(SiteUser finalOwner_) {
+		this.finalOwner_ = finalOwner_;
+	}
+	public static SiteUser staticSetFinalOwner_(SiteRequestEnUS siteRequest_, String o) {
+		return null;
+	}
+	protected ReportSchedule finalOwner_Init() {
+		Wrap<SiteUser> finalOwner_Wrap = new Wrap<SiteUser>().var("finalOwner_");
+		if(finalOwner_ == null) {
+			_finalOwner_(finalOwner_Wrap);
+			setFinalOwner_(finalOwner_Wrap.o);
+		}
+		return (ReportSchedule)this;
+	}
+
+	////////////////////
+	// finalOwnerName //
+	////////////////////
+
+	/**	 The entity finalOwnerName
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String finalOwnerName;
+
+	/**	<br> The entity finalOwnerName
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.schedule.ReportSchedule&fq=entiteVar_enUS_indexed_string:finalOwnerName">Find the entity finalOwnerName in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _finalOwnerName(Wrap<String> w);
+
+	public String getFinalOwnerName() {
+		return finalOwnerName;
+	}
+	public void setFinalOwnerName(String o) {
+		this.finalOwnerName = ReportSchedule.staticSetFinalOwnerName(siteRequest_, o);
+	}
+	public static String staticSetFinalOwnerName(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected ReportSchedule finalOwnerNameInit() {
+		Wrap<String> finalOwnerNameWrap = new Wrap<String>().var("finalOwnerName");
+		if(finalOwnerName == null) {
+			_finalOwnerName(finalOwnerNameWrap);
+			setFinalOwnerName(finalOwnerNameWrap.o);
+		}
+		return (ReportSchedule)this;
+	}
+
+	public static String staticSearchFinalOwnerName(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSearchStrFinalOwnerName(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqFinalOwnerName(SiteRequestEnUS siteRequest_, String o) {
+		return ReportSchedule.staticSearchStrFinalOwnerName(siteRequest_, ReportSchedule.staticSearchFinalOwnerName(siteRequest_, ReportSchedule.staticSetFinalOwnerName(siteRequest_, o)));
 	}
 
 	//////////////////
@@ -784,6 +1181,160 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 		return firstDueDate;
 	}
 
+	/////////////////////////
+	// dataPeriodStartDate //
+	/////////////////////////
+
+	/**	 The entity dataPeriodStartDate
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonDeserialize(using = ComputateLocalDateDeserializer.class)
+	@JsonSerialize(using = ComputateLocalDateSerializer.class)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	@JsonInclude(Include.NON_NULL)
+	protected LocalDate dataPeriodStartDate;
+
+	/**	<br> The entity dataPeriodStartDate
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.schedule.ReportSchedule&fq=entiteVar_enUS_indexed_string:dataPeriodStartDate">Find the entity dataPeriodStartDate in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _dataPeriodStartDate(Wrap<LocalDate> w);
+
+	public LocalDate getDataPeriodStartDate() {
+		return dataPeriodStartDate;
+	}
+
+	public void setDataPeriodStartDate(LocalDate dataPeriodStartDate) {
+		this.dataPeriodStartDate = dataPeriodStartDate;
+	}
+	@JsonIgnore
+	public void setDataPeriodStartDate(Instant o) {
+		this.dataPeriodStartDate = o == null ? null : LocalDate.from(o);
+	}
+	/** Example: 2011-12-03+01:00 **/
+	@JsonIgnore
+	public void setDataPeriodStartDate(String o) {
+		this.dataPeriodStartDate = ReportSchedule.staticSetDataPeriodStartDate(siteRequest_, o);
+	}
+	public static LocalDate staticSetDataPeriodStartDate(SiteRequestEnUS siteRequest_, String o) {
+		if(o != null) {
+			if(o.contains("T")) {
+				return java.time.LocalDateTime.parse(o, DateTimeFormatter.ISO_DATE_TIME).atZone(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).toLocalDate();
+			} else {
+				return LocalDate.parse(o, DateTimeFormatter.ISO_DATE);
+			}
+		}
+		return o == null ? null : LocalDate.parse(o, DateTimeFormatter.ISO_DATE);
+	}
+	@JsonIgnore
+	public void setDataPeriodStartDate(Date o) {
+		this.dataPeriodStartDate = o == null ? null : o.toInstant().atZone(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).toLocalDate();
+	}
+	protected ReportSchedule dataPeriodStartDateInit() {
+		Wrap<LocalDate> dataPeriodStartDateWrap = new Wrap<LocalDate>().var("dataPeriodStartDate");
+		if(dataPeriodStartDate == null) {
+			_dataPeriodStartDate(dataPeriodStartDateWrap);
+			setDataPeriodStartDate(dataPeriodStartDateWrap.o);
+		}
+		return (ReportSchedule)this;
+	}
+
+	public static Date staticSearchDataPeriodStartDate(SiteRequestEnUS siteRequest_, LocalDate o) {
+		return o == null ? null : Date.from(o.atStartOfDay(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).toInstant().atZone(ZoneId.of("Z")).toInstant());
+	}
+
+	public static String staticSearchStrDataPeriodStartDate(SiteRequestEnUS siteRequest_, Date o) {
+		return "\"" + DateTimeFormatter.ISO_DATE_TIME.format(o.toInstant().atOffset(ZoneOffset.UTC)) + "\"";
+	}
+
+	public static String staticSearchFqDataPeriodStartDate(SiteRequestEnUS siteRequest_, String o) {
+		return ReportSchedule.staticSearchStrDataPeriodStartDate(siteRequest_, ReportSchedule.staticSearchDataPeriodStartDate(siteRequest_, ReportSchedule.staticSetDataPeriodStartDate(siteRequest_, o)));
+	}
+
+	public LocalDate sqlDataPeriodStartDate() {
+		return dataPeriodStartDate;
+	}
+
+	/////////////////////
+	// dataPullEndDate //
+	/////////////////////
+
+	/**	 The entity dataPullEndDate
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonDeserialize(using = ComputateLocalDateDeserializer.class)
+	@JsonSerialize(using = ComputateLocalDateSerializer.class)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	@JsonInclude(Include.NON_NULL)
+	protected LocalDate dataPullEndDate;
+
+	/**	<br> The entity dataPullEndDate
+	 *  is defined as null before being initialized. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.schedule.ReportSchedule&fq=entiteVar_enUS_indexed_string:dataPullEndDate">Find the entity dataPullEndDate in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _dataPullEndDate(Wrap<LocalDate> w);
+
+	public LocalDate getDataPullEndDate() {
+		return dataPullEndDate;
+	}
+
+	public void setDataPullEndDate(LocalDate dataPullEndDate) {
+		this.dataPullEndDate = dataPullEndDate;
+	}
+	@JsonIgnore
+	public void setDataPullEndDate(Instant o) {
+		this.dataPullEndDate = o == null ? null : LocalDate.from(o);
+	}
+	/** Example: 2011-12-03+01:00 **/
+	@JsonIgnore
+	public void setDataPullEndDate(String o) {
+		this.dataPullEndDate = ReportSchedule.staticSetDataPullEndDate(siteRequest_, o);
+	}
+	public static LocalDate staticSetDataPullEndDate(SiteRequestEnUS siteRequest_, String o) {
+		if(o != null) {
+			if(o.contains("T")) {
+				return java.time.LocalDateTime.parse(o, DateTimeFormatter.ISO_DATE_TIME).atZone(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).toLocalDate();
+			} else {
+				return LocalDate.parse(o, DateTimeFormatter.ISO_DATE);
+			}
+		}
+		return o == null ? null : LocalDate.parse(o, DateTimeFormatter.ISO_DATE);
+	}
+	@JsonIgnore
+	public void setDataPullEndDate(Date o) {
+		this.dataPullEndDate = o == null ? null : o.toInstant().atZone(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).toLocalDate();
+	}
+	protected ReportSchedule dataPullEndDateInit() {
+		Wrap<LocalDate> dataPullEndDateWrap = new Wrap<LocalDate>().var("dataPullEndDate");
+		if(dataPullEndDate == null) {
+			_dataPullEndDate(dataPullEndDateWrap);
+			setDataPullEndDate(dataPullEndDateWrap.o);
+		}
+		return (ReportSchedule)this;
+	}
+
+	public static Date staticSearchDataPullEndDate(SiteRequestEnUS siteRequest_, LocalDate o) {
+		return o == null ? null : Date.from(o.atStartOfDay(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).toInstant().atZone(ZoneId.of("Z")).toInstant());
+	}
+
+	public static String staticSearchStrDataPullEndDate(SiteRequestEnUS siteRequest_, Date o) {
+		return "\"" + DateTimeFormatter.ISO_DATE_TIME.format(o.toInstant().atOffset(ZoneOffset.UTC)) + "\"";
+	}
+
+	public static String staticSearchFqDataPullEndDate(SiteRequestEnUS siteRequest_, String o) {
+		return ReportSchedule.staticSearchStrDataPullEndDate(siteRequest_, ReportSchedule.staticSearchDataPullEndDate(siteRequest_, ReportSchedule.staticSetDataPullEndDate(siteRequest_, o)));
+	}
+
+	public LocalDate sqlDataPullEndDate() {
+		return dataPullEndDate;
+	}
+
 	//////////////////
 	// dataPullDate //
 	//////////////////
@@ -944,8 +1495,6 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 			Promise<Void> promise2 = Promise.promise();
 			try {
 				typeKeyInit();
-				narrativeKeysInit();
-				eventKeysInit();
 				promise2.complete();
 			} catch(Exception ex) {
 				promise2.fail(ex);
@@ -964,11 +1513,53 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 			try {
 				type_Init();
 				typeNameInit();
+				narrativeKeysInit();
+				eventKeysInit();
+				pullOwnerKeyInit();
+				promise2.complete();
+			} catch(Exception ex) {
+				promise2.fail(ex);
+			}
+			return promise2.future();
+		}).compose(a -> {
+			Promise<Void> promise2 = Promise.promise();
+			pullOwnerSearchPromise().onSuccess(pullOwnerSearch -> {
+				promise2.complete();
+			}).onFailure(ex -> {
+				promise2.fail(ex);
+			});
+			return promise2.future();
+		}).compose(a -> {
+			Promise<Void> promise2 = Promise.promise();
+			try {
+				pullOwner_Init();
+				pullOwnerNameInit();
+				finalOwnerKeyInit();
+				promise2.complete();
+			} catch(Exception ex) {
+				promise2.fail(ex);
+			}
+			return promise2.future();
+		}).compose(a -> {
+			Promise<Void> promise2 = Promise.promise();
+			finalOwnerSearchPromise().onSuccess(finalOwnerSearch -> {
+				promise2.complete();
+			}).onFailure(ex -> {
+				promise2.fail(ex);
+			});
+			return promise2.future();
+		}).compose(a -> {
+			Promise<Void> promise2 = Promise.promise();
+			try {
+				finalOwner_Init();
+				finalOwnerNameInit();
 				scheduleNameInit();
 				frequencyOneTimeInit();
 				frequencyTimesPerYearInit();
 				frequencyYearsAfterCompletionInit();
 				firstDueDateInit();
+				dataPeriodStartDateInit();
+				dataPullEndDateInit();
 				dataPullDateInit();
 				dataSourcesInit();
 				promise2.complete();
@@ -996,6 +1587,10 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 			super.siteRequestBaseModel(siteRequest_);
 		if(typeSearch != null)
 			typeSearch.setSiteRequest_(siteRequest_);
+		if(pullOwnerSearch != null)
+			pullOwnerSearch.setSiteRequest_(siteRequest_);
+		if(finalOwnerSearch != null)
+			finalOwnerSearch.setSiteRequest_(siteRequest_);
 	}
 
 	public void siteRequestForClass(SiteRequestEnUS siteRequest_) {
@@ -1028,16 +1623,32 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 		switch(var) {
 			case "typeKey":
 				return oReportSchedule.typeKey;
-			case "narrativeKeys":
-				return oReportSchedule.narrativeKeys;
-			case "eventKeys":
-				return oReportSchedule.eventKeys;
 			case "typeSearch":
 				return oReportSchedule.typeSearch;
 			case "type_":
 				return oReportSchedule.type_;
 			case "typeName":
 				return oReportSchedule.typeName;
+			case "narrativeKeys":
+				return oReportSchedule.narrativeKeys;
+			case "eventKeys":
+				return oReportSchedule.eventKeys;
+			case "pullOwnerKey":
+				return oReportSchedule.pullOwnerKey;
+			case "pullOwnerSearch":
+				return oReportSchedule.pullOwnerSearch;
+			case "pullOwner_":
+				return oReportSchedule.pullOwner_;
+			case "pullOwnerName":
+				return oReportSchedule.pullOwnerName;
+			case "finalOwnerKey":
+				return oReportSchedule.finalOwnerKey;
+			case "finalOwnerSearch":
+				return oReportSchedule.finalOwnerSearch;
+			case "finalOwner_":
+				return oReportSchedule.finalOwner_;
+			case "finalOwnerName":
+				return oReportSchedule.finalOwnerName;
 			case "scheduleName":
 				return oReportSchedule.scheduleName;
 			case "frequencyOneTime":
@@ -1048,6 +1659,10 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 				return oReportSchedule.frequencyYearsAfterCompletion;
 			case "firstDueDate":
 				return oReportSchedule.firstDueDate;
+			case "dataPeriodStartDate":
+				return oReportSchedule.dataPeriodStartDate;
+			case "dataPullEndDate":
+				return oReportSchedule.dataPullEndDate;
 			case "dataPullDate":
 				return oReportSchedule.dataPullDate;
 			case "dataSources":
@@ -1093,6 +1708,18 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 				if(!saves.contains("eventKeys"))
 					saves.add("eventKeys");
 				return val;
+			case "pullOwnerKey":
+				if(oReportSchedule.getPullOwnerKey() == null)
+					oReportSchedule.setPullOwnerKey(val == null ? null : (NumberUtils.isCreatable(val.toString()) ? Long.parseLong(val.toString()) : -1));
+				if(!saves.contains("pullOwnerKey"))
+					saves.add("pullOwnerKey");
+				return val;
+			case "finalOwnerKey":
+				if(oReportSchedule.getFinalOwnerKey() == null)
+					oReportSchedule.setFinalOwnerKey(val == null ? null : (NumberUtils.isCreatable(val.toString()) ? Long.parseLong(val.toString()) : -1));
+				if(!saves.contains("finalOwnerKey"))
+					saves.add("finalOwnerKey");
+				return val;
 			default:
 				return super.relateBaseModel(var, val);
 		}
@@ -1109,12 +1736,20 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 		switch(entityVar) {
 		case "typeKey":
 			return ReportSchedule.staticSetTypeKey(siteRequest_, o);
+		case "typeName":
+			return ReportSchedule.staticSetTypeName(siteRequest_, o);
 		case "narrativeKeys":
 			return ReportSchedule.staticSetNarrativeKeys(siteRequest_, o);
 		case "eventKeys":
 			return ReportSchedule.staticSetEventKeys(siteRequest_, o);
-		case "typeName":
-			return ReportSchedule.staticSetTypeName(siteRequest_, o);
+		case "pullOwnerKey":
+			return ReportSchedule.staticSetPullOwnerKey(siteRequest_, o);
+		case "pullOwnerName":
+			return ReportSchedule.staticSetPullOwnerName(siteRequest_, o);
+		case "finalOwnerKey":
+			return ReportSchedule.staticSetFinalOwnerKey(siteRequest_, o);
+		case "finalOwnerName":
+			return ReportSchedule.staticSetFinalOwnerName(siteRequest_, o);
 		case "scheduleName":
 			return ReportSchedule.staticSetScheduleName(siteRequest_, o);
 		case "frequencyOneTime":
@@ -1125,6 +1760,10 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 			return ReportSchedule.staticSetFrequencyYearsAfterCompletion(siteRequest_, o);
 		case "firstDueDate":
 			return ReportSchedule.staticSetFirstDueDate(siteRequest_, o);
+		case "dataPeriodStartDate":
+			return ReportSchedule.staticSetDataPeriodStartDate(siteRequest_, o);
+		case "dataPullEndDate":
+			return ReportSchedule.staticSetDataPullEndDate(siteRequest_, o);
 		case "dataPullDate":
 			return ReportSchedule.staticSetDataPullDate(siteRequest_, o);
 		case "dataSources":
@@ -1145,12 +1784,20 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 		switch(entityVar) {
 		case "typeKey":
 			return ReportSchedule.staticSearchTypeKey(siteRequest_, (Long)o);
+		case "typeName":
+			return ReportSchedule.staticSearchTypeName(siteRequest_, (String)o);
 		case "narrativeKeys":
 			return ReportSchedule.staticSearchNarrativeKeys(siteRequest_, (Long)o);
 		case "eventKeys":
 			return ReportSchedule.staticSearchEventKeys(siteRequest_, (Long)o);
-		case "typeName":
-			return ReportSchedule.staticSearchTypeName(siteRequest_, (String)o);
+		case "pullOwnerKey":
+			return ReportSchedule.staticSearchPullOwnerKey(siteRequest_, (Long)o);
+		case "pullOwnerName":
+			return ReportSchedule.staticSearchPullOwnerName(siteRequest_, (String)o);
+		case "finalOwnerKey":
+			return ReportSchedule.staticSearchFinalOwnerKey(siteRequest_, (Long)o);
+		case "finalOwnerName":
+			return ReportSchedule.staticSearchFinalOwnerName(siteRequest_, (String)o);
 		case "scheduleName":
 			return ReportSchedule.staticSearchScheduleName(siteRequest_, (String)o);
 		case "frequencyOneTime":
@@ -1161,6 +1808,10 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 			return ReportSchedule.staticSearchFrequencyYearsAfterCompletion(siteRequest_, (Integer)o);
 		case "firstDueDate":
 			return ReportSchedule.staticSearchFirstDueDate(siteRequest_, (LocalDate)o);
+		case "dataPeriodStartDate":
+			return ReportSchedule.staticSearchDataPeriodStartDate(siteRequest_, (LocalDate)o);
+		case "dataPullEndDate":
+			return ReportSchedule.staticSearchDataPullEndDate(siteRequest_, (LocalDate)o);
 		case "dataPullDate":
 			return ReportSchedule.staticSearchDataPullDate(siteRequest_, (LocalDate)o);
 		case "dataSources":
@@ -1181,12 +1832,20 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 		switch(entityVar) {
 		case "typeKey":
 			return ReportSchedule.staticSearchStrTypeKey(siteRequest_, (Long)o);
+		case "typeName":
+			return ReportSchedule.staticSearchStrTypeName(siteRequest_, (String)o);
 		case "narrativeKeys":
 			return ReportSchedule.staticSearchStrNarrativeKeys(siteRequest_, (Long)o);
 		case "eventKeys":
 			return ReportSchedule.staticSearchStrEventKeys(siteRequest_, (Long)o);
-		case "typeName":
-			return ReportSchedule.staticSearchStrTypeName(siteRequest_, (String)o);
+		case "pullOwnerKey":
+			return ReportSchedule.staticSearchStrPullOwnerKey(siteRequest_, (Long)o);
+		case "pullOwnerName":
+			return ReportSchedule.staticSearchStrPullOwnerName(siteRequest_, (String)o);
+		case "finalOwnerKey":
+			return ReportSchedule.staticSearchStrFinalOwnerKey(siteRequest_, (Long)o);
+		case "finalOwnerName":
+			return ReportSchedule.staticSearchStrFinalOwnerName(siteRequest_, (String)o);
 		case "scheduleName":
 			return ReportSchedule.staticSearchStrScheduleName(siteRequest_, (String)o);
 		case "frequencyOneTime":
@@ -1197,6 +1856,10 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 			return ReportSchedule.staticSearchStrFrequencyYearsAfterCompletion(siteRequest_, (Integer)o);
 		case "firstDueDate":
 			return ReportSchedule.staticSearchStrFirstDueDate(siteRequest_, (Date)o);
+		case "dataPeriodStartDate":
+			return ReportSchedule.staticSearchStrDataPeriodStartDate(siteRequest_, (Date)o);
+		case "dataPullEndDate":
+			return ReportSchedule.staticSearchStrDataPullEndDate(siteRequest_, (Date)o);
 		case "dataPullDate":
 			return ReportSchedule.staticSearchStrDataPullDate(siteRequest_, (Date)o);
 		case "dataSources":
@@ -1217,12 +1880,20 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 		switch(entityVar) {
 		case "typeKey":
 			return ReportSchedule.staticSearchFqTypeKey(siteRequest_, o);
+		case "typeName":
+			return ReportSchedule.staticSearchFqTypeName(siteRequest_, o);
 		case "narrativeKeys":
 			return ReportSchedule.staticSearchFqNarrativeKeys(siteRequest_, o);
 		case "eventKeys":
 			return ReportSchedule.staticSearchFqEventKeys(siteRequest_, o);
-		case "typeName":
-			return ReportSchedule.staticSearchFqTypeName(siteRequest_, o);
+		case "pullOwnerKey":
+			return ReportSchedule.staticSearchFqPullOwnerKey(siteRequest_, o);
+		case "pullOwnerName":
+			return ReportSchedule.staticSearchFqPullOwnerName(siteRequest_, o);
+		case "finalOwnerKey":
+			return ReportSchedule.staticSearchFqFinalOwnerKey(siteRequest_, o);
+		case "finalOwnerName":
+			return ReportSchedule.staticSearchFqFinalOwnerName(siteRequest_, o);
 		case "scheduleName":
 			return ReportSchedule.staticSearchFqScheduleName(siteRequest_, o);
 		case "frequencyOneTime":
@@ -1233,6 +1904,10 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 			return ReportSchedule.staticSearchFqFrequencyYearsAfterCompletion(siteRequest_, o);
 		case "firstDueDate":
 			return ReportSchedule.staticSearchFqFirstDueDate(siteRequest_, o);
+		case "dataPeriodStartDate":
+			return ReportSchedule.staticSearchFqDataPeriodStartDate(siteRequest_, o);
+		case "dataPullEndDate":
+			return ReportSchedule.staticSearchFqDataPullEndDate(siteRequest_, o);
 		case "dataPullDate":
 			return ReportSchedule.staticSearchFqDataPullDate(siteRequest_, o);
 		case "dataSources":
@@ -1270,6 +1945,20 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 					setTypeKey((String)val);
 				saves.add("typeKey");
 				return val;
+			case "pullownerkey":
+				if(val instanceof Long)
+					setPullOwnerKey((Long)val);
+				else if(val instanceof String)
+					setPullOwnerKey((String)val);
+				saves.add("pullOwnerKey");
+				return val;
+			case "finalownerkey":
+				if(val instanceof Long)
+					setFinalOwnerKey((Long)val);
+				else if(val instanceof String)
+					setFinalOwnerKey((String)val);
+				saves.add("finalOwnerKey");
+				return val;
 			case "schedulename":
 				if(val instanceof String)
 					setScheduleName((String)val);
@@ -1302,6 +1991,20 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 				else if(val instanceof String)
 					setFirstDueDate((String)val);
 				saves.add("firstDueDate");
+				return val;
+			case "dataperiodstartdate":
+				if(val instanceof LocalDate)
+					setDataPeriodStartDate((LocalDate)val);
+				else if(val instanceof String)
+					setDataPeriodStartDate((String)val);
+				saves.add("dataPeriodStartDate");
+				return val;
+			case "datapullenddate":
+				if(val instanceof LocalDate)
+					setDataPullEndDate((LocalDate)val);
+				else if(val instanceof String)
+					setDataPullEndDate((String)val);
+				saves.add("dataPullEndDate");
 				return val;
 			case "datapulldate":
 				if(val instanceof LocalDate)
@@ -1340,6 +2043,9 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 		if(typeKey != null) {
 			doc.put("typeKey_docvalues_long", typeKey);
 		}
+		if(typeName != null) {
+			doc.put("typeName_docvalues_string", typeName);
+		}
 		if(narrativeKeys != null) {
 			JsonArray l = new JsonArray();
 			doc.put("narrativeKeys_docvalues_longs", l);
@@ -1354,8 +2060,17 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 				l.add(o);
 			}
 		}
-		if(typeName != null) {
-			doc.put("typeName_docvalues_string", typeName);
+		if(pullOwnerKey != null) {
+			doc.put("pullOwnerKey_docvalues_long", pullOwnerKey);
+		}
+		if(pullOwnerName != null) {
+			doc.put("pullOwnerName_docvalues_string", pullOwnerName);
+		}
+		if(finalOwnerKey != null) {
+			doc.put("finalOwnerKey_docvalues_long", finalOwnerKey);
+		}
+		if(finalOwnerName != null) {
+			doc.put("finalOwnerName_docvalues_string", finalOwnerName);
 		}
 		if(scheduleName != null) {
 			doc.put("scheduleName_docvalues_string", scheduleName);
@@ -1372,6 +2087,12 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 		if(firstDueDate != null) {
 			doc.put("firstDueDate_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(firstDueDate.atStartOfDay(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).toInstant().atZone(ZoneId.of("Z"))));
 		}
+		if(dataPeriodStartDate != null) {
+			doc.put("dataPeriodStartDate_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(dataPeriodStartDate.atStartOfDay(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).toInstant().atZone(ZoneId.of("Z"))));
+		}
+		if(dataPullEndDate != null) {
+			doc.put("dataPullEndDate_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(dataPullEndDate.atStartOfDay(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).toInstant().atZone(ZoneId.of("Z"))));
+		}
 		if(dataPullDate != null) {
 			doc.put("dataPullDate_docvalues_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(dataPullDate.atStartOfDay(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).toInstant().atZone(ZoneId.of("Z"))));
 		}
@@ -1386,12 +2107,20 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 		switch(entityVar) {
 			case "typeKey":
 				return "typeKey_docvalues_long";
+			case "typeName":
+				return "typeName_docvalues_string";
 			case "narrativeKeys":
 				return "narrativeKeys_docvalues_longs";
 			case "eventKeys":
 				return "eventKeys_docvalues_longs";
-			case "typeName":
-				return "typeName_docvalues_string";
+			case "pullOwnerKey":
+				return "pullOwnerKey_docvalues_long";
+			case "pullOwnerName":
+				return "pullOwnerName_docvalues_string";
+			case "finalOwnerKey":
+				return "finalOwnerKey_docvalues_long";
+			case "finalOwnerName":
+				return "finalOwnerName_docvalues_string";
 			case "scheduleName":
 				return "scheduleName_docvalues_string";
 			case "frequencyOneTime":
@@ -1402,6 +2131,10 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 				return "frequencyYearsAfterCompletion_docvalues_int";
 			case "firstDueDate":
 				return "firstDueDate_docvalues_date";
+			case "dataPeriodStartDate":
+				return "dataPeriodStartDate_docvalues_date";
+			case "dataPullEndDate":
+				return "dataPullEndDate_docvalues_date";
 			case "dataPullDate":
 				return "dataPullDate_docvalues_date";
 			case "dataSources":
@@ -1415,12 +2148,20 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 		switch(entityVar) {
 			case "typeKey":
 				return "typeKey_docvalues_long";
+			case "typeName":
+				return "typeName_docvalues_string";
 			case "narrativeKeys":
 				return "narrativeKeys_docvalues_longs";
 			case "eventKeys":
 				return "eventKeys_docvalues_longs";
-			case "typeName":
-				return "typeName_docvalues_string";
+			case "pullOwnerKey":
+				return "pullOwnerKey_docvalues_long";
+			case "pullOwnerName":
+				return "pullOwnerName_docvalues_string";
+			case "finalOwnerKey":
+				return "finalOwnerKey_docvalues_long";
+			case "finalOwnerName":
+				return "finalOwnerName_docvalues_string";
 			case "scheduleName":
 				return "scheduleName_docvalues_string";
 			case "frequencyOneTime":
@@ -1431,6 +2172,10 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 				return "frequencyYearsAfterCompletion_docvalues_int";
 			case "firstDueDate":
 				return "firstDueDate_docvalues_date";
+			case "dataPeriodStartDate":
+				return "dataPeriodStartDate_docvalues_date";
+			case "dataPullEndDate":
+				return "dataPullEndDate_docvalues_date";
 			case "dataPullDate":
 				return "dataPullDate_docvalues_date";
 			case "dataSources":
@@ -1444,12 +2189,20 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 		switch(searchVar) {
 			case "typeKey_docvalues_long":
 				return "typeKey";
+			case "typeName_docvalues_string":
+				return "typeName";
 			case "narrativeKeys_docvalues_longs":
 				return "narrativeKeys";
 			case "eventKeys_docvalues_longs":
 				return "eventKeys";
-			case "typeName_docvalues_string":
-				return "typeName";
+			case "pullOwnerKey_docvalues_long":
+				return "pullOwnerKey";
+			case "pullOwnerName_docvalues_string":
+				return "pullOwnerName";
+			case "finalOwnerKey_docvalues_long":
+				return "finalOwnerKey";
+			case "finalOwnerName_docvalues_string":
+				return "finalOwnerName";
 			case "scheduleName_docvalues_string":
 				return "scheduleName";
 			case "frequencyOneTime_docvalues_boolean":
@@ -1460,6 +2213,10 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 				return "frequencyYearsAfterCompletion";
 			case "firstDueDate_docvalues_date":
 				return "firstDueDate";
+			case "dataPeriodStartDate_docvalues_date":
+				return "dataPeriodStartDate";
+			case "dataPullEndDate_docvalues_date":
+				return "dataPullEndDate";
 			case "dataPullDate_docvalues_date":
 				return "dataPullDate";
 			case "dataSources_docvalues_string":
@@ -1494,18 +2251,24 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 		ReportSchedule oReportSchedule = (ReportSchedule)this;
 
 		oReportSchedule.setTypeKey(Optional.ofNullable(doc.get("typeKey_docvalues_long")).map(v -> v.toString()).orElse(null));
+		oReportSchedule.setTypeName(Optional.ofNullable(doc.get("typeName_docvalues_string")).map(v -> v.toString()).orElse(null));
 		Optional.ofNullable((List<?>)doc.get("narrativeKeys_docvalues_longs")).orElse(Arrays.asList()).stream().filter(v -> v != null).forEach(v -> {
 			oReportSchedule.addNarrativeKeys(v.toString());
 		});
 		Optional.ofNullable((List<?>)doc.get("eventKeys_docvalues_longs")).orElse(Arrays.asList()).stream().filter(v -> v != null).forEach(v -> {
 			oReportSchedule.addEventKeys(v.toString());
 		});
-		oReportSchedule.setTypeName(Optional.ofNullable(doc.get("typeName_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oReportSchedule.setPullOwnerKey(Optional.ofNullable(doc.get("pullOwnerKey_docvalues_long")).map(v -> v.toString()).orElse(null));
+		oReportSchedule.setPullOwnerName(Optional.ofNullable(doc.get("pullOwnerName_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oReportSchedule.setFinalOwnerKey(Optional.ofNullable(doc.get("finalOwnerKey_docvalues_long")).map(v -> v.toString()).orElse(null));
+		oReportSchedule.setFinalOwnerName(Optional.ofNullable(doc.get("finalOwnerName_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oReportSchedule.setScheduleName(Optional.ofNullable(doc.get("scheduleName_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oReportSchedule.setFrequencyOneTime(Optional.ofNullable(doc.get("frequencyOneTime_docvalues_boolean")).map(v -> v.toString()).orElse(null));
 		oReportSchedule.setFrequencyTimesPerYear(Optional.ofNullable(doc.get("frequencyTimesPerYear_docvalues_int")).map(v -> v.toString()).orElse(null));
 		oReportSchedule.setFrequencyYearsAfterCompletion(Optional.ofNullable(doc.get("frequencyYearsAfterCompletion_docvalues_int")).map(v -> v.toString()).orElse(null));
 		oReportSchedule.setFirstDueDate(Optional.ofNullable(doc.get("firstDueDate_docvalues_date")).map(v -> v.toString()).orElse(null));
+		oReportSchedule.setDataPeriodStartDate(Optional.ofNullable(doc.get("dataPeriodStartDate_docvalues_date")).map(v -> v.toString()).orElse(null));
+		oReportSchedule.setDataPullEndDate(Optional.ofNullable(doc.get("dataPullEndDate_docvalues_date")).map(v -> v.toString()).orElse(null));
 		oReportSchedule.setDataPullDate(Optional.ofNullable(doc.get("dataPullDate_docvalues_date")).map(v -> v.toString()).orElse(null));
 		oReportSchedule.setDataSources(Optional.ofNullable(doc.get("dataSources_docvalues_string")).map(v -> v.toString()).orElse(null));
 
@@ -1523,12 +2286,20 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 			ReportSchedule original = (ReportSchedule)o;
 			if(!Objects.equals(typeKey, original.getTypeKey()))
 				apiRequest.addVars("typeKey");
+			if(!Objects.equals(typeName, original.getTypeName()))
+				apiRequest.addVars("typeName");
 			if(!Objects.equals(narrativeKeys, original.getNarrativeKeys()))
 				apiRequest.addVars("narrativeKeys");
 			if(!Objects.equals(eventKeys, original.getEventKeys()))
 				apiRequest.addVars("eventKeys");
-			if(!Objects.equals(typeName, original.getTypeName()))
-				apiRequest.addVars("typeName");
+			if(!Objects.equals(pullOwnerKey, original.getPullOwnerKey()))
+				apiRequest.addVars("pullOwnerKey");
+			if(!Objects.equals(pullOwnerName, original.getPullOwnerName()))
+				apiRequest.addVars("pullOwnerName");
+			if(!Objects.equals(finalOwnerKey, original.getFinalOwnerKey()))
+				apiRequest.addVars("finalOwnerKey");
+			if(!Objects.equals(finalOwnerName, original.getFinalOwnerName()))
+				apiRequest.addVars("finalOwnerName");
 			if(!Objects.equals(scheduleName, original.getScheduleName()))
 				apiRequest.addVars("scheduleName");
 			if(!Objects.equals(frequencyOneTime, original.getFrequencyOneTime()))
@@ -1539,6 +2310,10 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 				apiRequest.addVars("frequencyYearsAfterCompletion");
 			if(!Objects.equals(firstDueDate, original.getFirstDueDate()))
 				apiRequest.addVars("firstDueDate");
+			if(!Objects.equals(dataPeriodStartDate, original.getDataPeriodStartDate()))
+				apiRequest.addVars("dataPeriodStartDate");
+			if(!Objects.equals(dataPullEndDate, original.getDataPullEndDate()))
+				apiRequest.addVars("dataPullEndDate");
 			if(!Objects.equals(dataPullDate, original.getDataPullDate()))
 				apiRequest.addVars("dataPullDate");
 			if(!Objects.equals(dataSources, original.getDataSources()))
@@ -1555,14 +2330,20 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 		StringBuilder sb = new StringBuilder();
 		sb.append(super.toString());
 		sb.append(Optional.ofNullable(typeKey).map(v -> "typeKey: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(typeName).map(v -> "typeName: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(narrativeKeys).map(v -> "narrativeKeys: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(eventKeys).map(v -> "eventKeys: " + v + "\n").orElse(""));
-		sb.append(Optional.ofNullable(typeName).map(v -> "typeName: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(pullOwnerKey).map(v -> "pullOwnerKey: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(pullOwnerName).map(v -> "pullOwnerName: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(finalOwnerKey).map(v -> "finalOwnerKey: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(finalOwnerName).map(v -> "finalOwnerName: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(scheduleName).map(v -> "scheduleName: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(frequencyOneTime).map(v -> "frequencyOneTime: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(frequencyTimesPerYear).map(v -> "frequencyTimesPerYear: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(frequencyYearsAfterCompletion).map(v -> "frequencyYearsAfterCompletion: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(firstDueDate).map(v -> "firstDueDate: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(dataPeriodStartDate).map(v -> "dataPeriodStartDate: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(dataPullEndDate).map(v -> "dataPullEndDate: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(dataPullDate).map(v -> "dataPullDate: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(dataSources).map(v -> "dataSources: \"" + v + "\"\n" ).orElse(""));
 		return sb.toString();
@@ -1570,16 +2351,26 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 
 	public static final String CLASS_SIMPLE_NAME = "ReportSchedule";
 	public static final String VAR_typeKey = "typeKey";
-	public static final String VAR_narrativeKeys = "narrativeKeys";
-	public static final String VAR_eventKeys = "eventKeys";
 	public static final String VAR_typeSearch = "typeSearch";
 	public static final String VAR_type_ = "type_";
 	public static final String VAR_typeName = "typeName";
+	public static final String VAR_narrativeKeys = "narrativeKeys";
+	public static final String VAR_eventKeys = "eventKeys";
+	public static final String VAR_pullOwnerKey = "pullOwnerKey";
+	public static final String VAR_pullOwnerSearch = "pullOwnerSearch";
+	public static final String VAR_pullOwner_ = "pullOwner_";
+	public static final String VAR_pullOwnerName = "pullOwnerName";
+	public static final String VAR_finalOwnerKey = "finalOwnerKey";
+	public static final String VAR_finalOwnerSearch = "finalOwnerSearch";
+	public static final String VAR_finalOwner_ = "finalOwner_";
+	public static final String VAR_finalOwnerName = "finalOwnerName";
 	public static final String VAR_scheduleName = "scheduleName";
 	public static final String VAR_frequencyOneTime = "frequencyOneTime";
 	public static final String VAR_frequencyTimesPerYear = "frequencyTimesPerYear";
 	public static final String VAR_frequencyYearsAfterCompletion = "frequencyYearsAfterCompletion";
 	public static final String VAR_firstDueDate = "firstDueDate";
+	public static final String VAR_dataPeriodStartDate = "dataPeriodStartDate";
+	public static final String VAR_dataPullEndDate = "dataPullEndDate";
 	public static final String VAR_dataPullDate = "dataPullDate";
 	public static final String VAR_dataSources = "dataSources";
 
@@ -1608,16 +2399,26 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 	}
 
 	public static final String DISPLAY_NAME_typeKey = "report type";
-	public static final String DISPLAY_NAME_narrativeKeys = "narratives";
-	public static final String DISPLAY_NAME_eventKeys = "calendar items";
 	public static final String DISPLAY_NAME_typeSearch = "";
 	public static final String DISPLAY_NAME_type_ = "";
 	public static final String DISPLAY_NAME_typeName = "report type name";
+	public static final String DISPLAY_NAME_narrativeKeys = "narratives";
+	public static final String DISPLAY_NAME_eventKeys = "calendar items";
+	public static final String DISPLAY_NAME_pullOwnerKey = "pull owner";
+	public static final String DISPLAY_NAME_pullOwnerSearch = "";
+	public static final String DISPLAY_NAME_pullOwner_ = "";
+	public static final String DISPLAY_NAME_pullOwnerName = "pull owner name";
+	public static final String DISPLAY_NAME_finalOwnerKey = "final owner";
+	public static final String DISPLAY_NAME_finalOwnerSearch = "";
+	public static final String DISPLAY_NAME_finalOwner_ = "";
+	public static final String DISPLAY_NAME_finalOwnerName = "final owner name";
 	public static final String DISPLAY_NAME_scheduleName = "schedule name";
 	public static final String DISPLAY_NAME_frequencyOneTime = "one time";
 	public static final String DISPLAY_NAME_frequencyTimesPerYear = "times per year";
 	public static final String DISPLAY_NAME_frequencyYearsAfterCompletion = "years after completion";
-	public static final String DISPLAY_NAME_firstDueDate = "first due date";
+	public static final String DISPLAY_NAME_firstDueDate = "final report due date";
+	public static final String DISPLAY_NAME_dataPeriodStartDate = "data period start date";
+	public static final String DISPLAY_NAME_dataPullEndDate = "data period end date";
 	public static final String DISPLAY_NAME_dataPullDate = "data pull date";
 	public static final String DISPLAY_NAME_dataSources = "data sources";
 
@@ -1628,16 +2429,32 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 		switch(var) {
 		case VAR_typeKey:
 			return DISPLAY_NAME_typeKey;
-		case VAR_narrativeKeys:
-			return DISPLAY_NAME_narrativeKeys;
-		case VAR_eventKeys:
-			return DISPLAY_NAME_eventKeys;
 		case VAR_typeSearch:
 			return DISPLAY_NAME_typeSearch;
 		case VAR_type_:
 			return DISPLAY_NAME_type_;
 		case VAR_typeName:
 			return DISPLAY_NAME_typeName;
+		case VAR_narrativeKeys:
+			return DISPLAY_NAME_narrativeKeys;
+		case VAR_eventKeys:
+			return DISPLAY_NAME_eventKeys;
+		case VAR_pullOwnerKey:
+			return DISPLAY_NAME_pullOwnerKey;
+		case VAR_pullOwnerSearch:
+			return DISPLAY_NAME_pullOwnerSearch;
+		case VAR_pullOwner_:
+			return DISPLAY_NAME_pullOwner_;
+		case VAR_pullOwnerName:
+			return DISPLAY_NAME_pullOwnerName;
+		case VAR_finalOwnerKey:
+			return DISPLAY_NAME_finalOwnerKey;
+		case VAR_finalOwnerSearch:
+			return DISPLAY_NAME_finalOwnerSearch;
+		case VAR_finalOwner_:
+			return DISPLAY_NAME_finalOwner_;
+		case VAR_finalOwnerName:
+			return DISPLAY_NAME_finalOwnerName;
 		case VAR_scheduleName:
 			return DISPLAY_NAME_scheduleName;
 		case VAR_frequencyOneTime:
@@ -1648,6 +2465,10 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 			return DISPLAY_NAME_frequencyYearsAfterCompletion;
 		case VAR_firstDueDate:
 			return DISPLAY_NAME_firstDueDate;
+		case VAR_dataPeriodStartDate:
+			return DISPLAY_NAME_dataPeriodStartDate;
+		case VAR_dataPullEndDate:
+			return DISPLAY_NAME_dataPullEndDate;
 		case VAR_dataPullDate:
 			return DISPLAY_NAME_dataPullDate;
 		case VAR_dataSources:
@@ -1668,15 +2489,31 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 		switch(var) {
 		case VAR_typeKey:
 			return "Long";
-		case VAR_narrativeKeys:
-			return "List";
-		case VAR_eventKeys:
-			return "List";
 		case VAR_typeSearch:
 			return "SearchList";
 		case VAR_type_:
 			return "ReportType";
 		case VAR_typeName:
+			return "String";
+		case VAR_narrativeKeys:
+			return "List";
+		case VAR_eventKeys:
+			return "List";
+		case VAR_pullOwnerKey:
+			return "Long";
+		case VAR_pullOwnerSearch:
+			return "SearchList";
+		case VAR_pullOwner_:
+			return "SiteUser";
+		case VAR_pullOwnerName:
+			return "String";
+		case VAR_finalOwnerKey:
+			return "Long";
+		case VAR_finalOwnerSearch:
+			return "SearchList";
+		case VAR_finalOwner_:
+			return "SiteUser";
+		case VAR_finalOwnerName:
 			return "String";
 		case VAR_scheduleName:
 			return "String";
@@ -1687,6 +2524,10 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 		case VAR_frequencyYearsAfterCompletion:
 			return "Integer";
 		case VAR_firstDueDate:
+			return "LocalDate";
+		case VAR_dataPeriodStartDate:
+			return "LocalDate";
+		case VAR_dataPullEndDate:
 			return "LocalDate";
 		case VAR_dataPullDate:
 			return "LocalDate";
@@ -1712,20 +2553,28 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 			return 3;
 		case VAR_eventKeys:
 			return 3;
+		case VAR_pullOwnerKey:
+			return 4;
+		case VAR_finalOwnerKey:
+			return 4;
 		case VAR_scheduleName:
-			return 4;
+			return 5;
 		case VAR_frequencyOneTime:
-			return 4;
+			return 5;
 		case VAR_frequencyTimesPerYear:
-			return 4;
+			return 5;
 		case VAR_frequencyYearsAfterCompletion:
-			return 4;
+			return 5;
 		case VAR_firstDueDate:
-			return 5;
+			return 6;
+		case VAR_dataPeriodStartDate:
+			return 6;
+		case VAR_dataPullEndDate:
+			return 6;
 		case VAR_dataPullDate:
-			return 5;
+			return 6;
 		case VAR_dataSources:
-			return 5;
+			return 7;
 			default:
 				return BaseModel.htmlRowBaseModel(var);
 		}
@@ -1736,23 +2585,31 @@ public abstract class ReportScheduleGen<DEV> extends BaseModel {
 		case VAR_typeKey:
 			return 1;
 		case VAR_narrativeKeys:
-			return 1;
+			return 2;
 		case VAR_eventKeys:
-			return 1;
-		case VAR_scheduleName:
-			return 2;
-		case VAR_frequencyOneTime:
-			return 1;
-		case VAR_frequencyTimesPerYear:
-			return 2;
-		case VAR_frequencyYearsAfterCompletion:
 			return 3;
+		case VAR_pullOwnerKey:
+			return 1;
+		case VAR_finalOwnerKey:
+			return 2;
+		case VAR_scheduleName:
+			return 1;
+		case VAR_frequencyOneTime:
+			return 2;
+		case VAR_frequencyTimesPerYear:
+			return 3;
+		case VAR_frequencyYearsAfterCompletion:
+			return 4;
 		case VAR_firstDueDate:
 			return 1;
-		case VAR_dataPullDate:
+		case VAR_dataPeriodStartDate:
 			return 2;
-		case VAR_dataSources:
+		case VAR_dataPullEndDate:
 			return 3;
+		case VAR_dataPullDate:
+			return 4;
+		case VAR_dataSources:
+			return 1;
 			default:
 				return BaseModel.htmlCellBaseModel(var);
 		}

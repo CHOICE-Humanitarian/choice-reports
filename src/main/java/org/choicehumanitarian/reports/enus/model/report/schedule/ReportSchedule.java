@@ -2,9 +2,11 @@ package org.choicehumanitarian.reports.enus.model.report.schedule;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.choicehumanitarian.reports.enus.model.base.BaseModel;
 import org.choicehumanitarian.reports.enus.model.report.type.ReportType;
+import org.choicehumanitarian.reports.enus.model.user.SiteUser;
 import org.computate.search.wrap.Wrap;
 import org.computate.vertx.search.list.SearchList;
 
@@ -45,7 +47,7 @@ import io.vertx.core.Promise;
  * Role.enUS: SiteAdmin
  * 
  * Rows: 100
-**/       
+**/
 public class ReportSchedule extends ReportScheduleGen<BaseModel> {
 
 	/**  
@@ -57,28 +59,6 @@ public class ReportSchedule extends ReportScheduleGen<BaseModel> {
 	 * DisplayName.enUS: report type
 	 */       
 	protected void _typeKey(Wrap<Long> w) {
-	}
-
-	/**  
-	 * {@inheritDoc}
-	 * DocValues: true
-	 * Relate: ReportNarrative.scheduleKey
-	 * HtmlRow: 3
-	 * HtmlCell: 1
-	 * DisplayName.enUS: narratives
-	 */
-	protected void _narrativeKeys(List<Long> l) {
-	}
-
-	/**  
-	 * {@inheritDoc}
-	 * DocValues: true
-	 * Relate: ReportEvent.scheduleKey
-	 * HtmlRow: 3
-	 * HtmlCell: 1
-	 * DisplayName.enUS: calendar items
-	 */
-	protected void _eventKeys(List<Long> l) {
 	}
 
 	/**
@@ -115,9 +95,113 @@ public class ReportSchedule extends ReportScheduleGen<BaseModel> {
 	/**  
 	 * {@inheritDoc}
 	 * DocValues: true
-	 * Persist: true
+	 * Relate: ReportNarrative.scheduleKey
+	 * HtmlRow: 3
+	 * HtmlCell: 2
+	 * DisplayName.enUS: narratives
+	 */
+	protected void _narrativeKeys(List<Long> l) {
+	}
+
+	/**  
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Relate: ReportEvent.scheduleKey
+	 * HtmlRow: 3
+	 * HtmlCell: 3
+	 * DisplayName.enUS: calendar items
+	 */
+	protected void _eventKeys(List<Long> l) {
+	}
+
+	/**  
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Relate: SiteUser.pullOwnerReportScheduleKeys
+	 * HtmlRow: 4
+	 * HtmlCell: 1
+	 * DisplayName.enUS: pull owner
+	 */
+	protected void _pullOwnerKey(Wrap<Long> w) {
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * Ignore: true
+	 */      
+	protected void _pullOwnerSearch(Promise<SearchList<SiteUser>> promise) {
+		SearchList<SiteUser> l = new SearchList<>();
+		if(pullOwnerKey != null) {
+			l.q("*:*");
+			l.fq("pk_docvalues_long:" + pullOwnerKey);
+			l.setC(SiteUser.class);
+			l.setStore(true);
+		}
+		promise.complete(l);
+	}
+
+	protected void _pullOwner_(Wrap<SiteUser> w) {
+		if(pullOwnerSearch.size() > 0) {
+			w.o(pullOwnerSearch.get(0));
+		}
+	}
+
+	/**  
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * DisplayName.enUS: pull owner name
+	 */
+	protected void _pullOwnerName(Wrap<String> w) {
+		w.o(Optional.ofNullable(pullOwner_).map(a -> a.getUserFullName()).orElse(null));
+	}
+
+	/**  
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Relate: SiteUser.finalOwnerReportScheduleKeys
 	 * HtmlRow: 4
 	 * HtmlCell: 2
+	 * DisplayName.enUS: final owner
+	 */
+	protected void _finalOwnerKey(Wrap<Long> w) {
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * Ignore: true
+	 */      
+	protected void _finalOwnerSearch(Promise<SearchList<SiteUser>> promise) {
+		SearchList<SiteUser> l = new SearchList<>();
+		if(finalOwnerKey != null) {
+			l.q("*:*");
+			l.fq("pk_docvalues_long:" + finalOwnerKey);
+			l.setC(SiteUser.class);
+			l.setStore(true);
+		}
+		promise.complete(l);
+	}
+
+	protected void _finalOwner_(Wrap<SiteUser> w) {
+		if(finalOwnerSearch.size() > 0) {
+			w.o(finalOwnerSearch.get(0));
+		}
+	}
+
+	/**  
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * DisplayName.enUS: final owner name
+	 */
+	protected void _finalOwnerName(Wrap<String> w) {
+		w.o(Optional.ofNullable(finalOwner_).map(a -> a.getUserFullName()).orElse(null));
+	}
+
+	/**  
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Persist: true
+	 * HtmlRow: 5
+	 * HtmlCell: 1
 	 * DisplayName.enUS: schedule name
 	 */  
 	protected void _scheduleName(Wrap<String> w) {
@@ -127,8 +211,8 @@ public class ReportSchedule extends ReportScheduleGen<BaseModel> {
 	 * {@inheritDoc}
 	 * DocValues: true
 	 * Persist: true
-	 * HtmlRow: 4
-	 * HtmlCell: 1
+	 * HtmlRow: 5
+	 * HtmlCell: 2
 	 * DisplayName.enUS: one time
 	 */  
 	protected void _frequencyOneTime(Wrap<Boolean> w) {
@@ -139,8 +223,8 @@ public class ReportSchedule extends ReportScheduleGen<BaseModel> {
 	 * {@inheritDoc}
 	 * DocValues: true
 	 * Persist: true
-	 * HtmlRow: 4
-	 * HtmlCell: 2
+	 * HtmlRow: 5
+	 * HtmlCell: 3
 	 * DisplayName.enUS: times per year
 	 */  
 	protected void _frequencyTimesPerYear(Wrap<Integer> w) {
@@ -150,8 +234,8 @@ public class ReportSchedule extends ReportScheduleGen<BaseModel> {
 	 * {@inheritDoc}
 	 * DocValues: true
 	 * Persist: true
-	 * HtmlRow: 4
-	 * HtmlCell: 3
+	 * HtmlRow: 5
+	 * HtmlCell: 4
 	 * DisplayName.enUS: years after completion
 	 */
 	protected void _frequencyYearsAfterCompletion(Wrap<Integer> w) {
@@ -161,9 +245,9 @@ public class ReportSchedule extends ReportScheduleGen<BaseModel> {
 	 * {@inheritDoc}
 	 * DocValues: true
 	 * Persist: true
-	 * HtmlRow: 5
+	 * HtmlRow: 6
 	 * HtmlCell: 1
-	 * DisplayName.enUS: first due date
+	 * DisplayName.enUS: final report due date
 	 */
 	protected void _firstDueDate(Wrap<LocalDate> w) {
 	}
@@ -172,8 +256,30 @@ public class ReportSchedule extends ReportScheduleGen<BaseModel> {
 	 * {@inheritDoc}
 	 * DocValues: true
 	 * Persist: true
-	 * HtmlRow: 5
+	 * HtmlRow: 6
 	 * HtmlCell: 2
+	 * DisplayName.enUS: data period start date
+	 */
+	protected void _dataPeriodStartDate(Wrap<LocalDate> w) {
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Persist: true
+	 * HtmlRow: 6
+	 * HtmlCell: 3
+	 * DisplayName.enUS: data period end date
+	 */
+	protected void _dataPullEndDate(Wrap<LocalDate> w) {
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Persist: true
+	 * HtmlRow: 6
+	 * HtmlCell: 4
 	 * DisplayName.enUS: data pull date
 	 */
 	protected void _dataPullDate(Wrap<LocalDate> w) {
@@ -183,8 +289,8 @@ public class ReportSchedule extends ReportScheduleGen<BaseModel> {
 	 * {@inheritDoc}
 	 * DocValues: true
 	 * Persist: true
-	 * HtmlRow: 5
-	 * HtmlCell: 3
+	 * HtmlRow: 7
+	 * HtmlCell: 1
 	 * Multiline: true
 	 * DisplayName.enUS: data sources
 	 */

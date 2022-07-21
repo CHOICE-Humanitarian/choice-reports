@@ -1,4 +1,5 @@
 
+
 # Setup choice-reports development environment on MacOSX or Linux (Fedora, RHEL, CentOS, Ubuntu)
 
 ## Install Ansible dependencies on Linux
@@ -272,9 +273,17 @@ pkcon install -y buildah
 pkcon install -y podman
 ```
 
+### Build the container with podman
+
 ```bash
 cd ~/.local/src/choice-reports
- podman build -t computate/choice-reports:latest .
+podman build -t computate/choice-reports:latest .
+```
+
+### Push the container up to quay.io
+```bash
+podman login quay.io
+podman push computate/choice-reports:latest quay.io/computate/choice-reports:latest
 ```
 
 ## How the base classes for this project were created

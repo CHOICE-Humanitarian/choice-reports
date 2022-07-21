@@ -39,6 +39,7 @@ import io.vertx.core.json.JsonArray;
 import java.lang.Boolean;
 import org.choicehumanitarian.reports.enus.model.report.narrative.ReportNarrative;
 import org.choicehumanitarian.reports.enus.model.report.event.ReportEvent;
+import org.choicehumanitarian.reports.enus.model.report.schedule.ReportSchedule;
 import org.computate.search.wrap.Wrap;
 import io.vertx.core.Promise;
 import io.vertx.core.Future;
@@ -780,6 +781,178 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		return eventKeys;
 	}
 
+	/////////////////////////////////
+	// pullOwnerReportScheduleKeys //
+	/////////////////////////////////
+
+	/**	 The entity pullOwnerReportScheduleKeys
+	 *	 It is constructed before being initialized with the constructor by default. 
+	 */
+	@JsonProperty
+	@JsonFormat(shape = JsonFormat.Shape.ARRAY)
+	@JsonSerialize(contentUsing = ToStringSerializer.class)
+	@JsonInclude(Include.NON_NULL)
+	protected List<Long> pullOwnerReportScheduleKeys = new ArrayList<Long>();
+
+	/**	<br> The entity pullOwnerReportScheduleKeys
+	 *  It is constructed before being initialized with the constructor by default. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.user.SiteUser&fq=entiteVar_enUS_indexed_string:pullOwnerReportScheduleKeys">Find the entity pullOwnerReportScheduleKeys in Solr</a>
+	 * <br>
+	 * @param l is the entity already constructed. 
+	 **/
+	protected abstract void _pullOwnerReportScheduleKeys(List<Long> l);
+
+	public List<Long> getPullOwnerReportScheduleKeys() {
+		return pullOwnerReportScheduleKeys;
+	}
+
+	public void setPullOwnerReportScheduleKeys(List<Long> pullOwnerReportScheduleKeys) {
+		this.pullOwnerReportScheduleKeys = pullOwnerReportScheduleKeys;
+	}
+	@JsonIgnore
+	public void setPullOwnerReportScheduleKeys(String o) {
+		Long l = SiteUser.staticSetPullOwnerReportScheduleKeys(siteRequest_, o);
+		if(l != null)
+			addPullOwnerReportScheduleKeys(l);
+	}
+	public static Long staticSetPullOwnerReportScheduleKeys(SiteRequestEnUS siteRequest_, String o) {
+		if(NumberUtils.isParsable(o))
+			return Long.parseLong(o);
+		return null;
+	}
+	public SiteUser addPullOwnerReportScheduleKeys(Long...objects) {
+		for(Long o : objects) {
+			addPullOwnerReportScheduleKeys(o);
+		}
+		return (SiteUser)this;
+	}
+	public SiteUser addPullOwnerReportScheduleKeys(Long o) {
+		if(o != null)
+			this.pullOwnerReportScheduleKeys.add(o);
+		return (SiteUser)this;
+	}
+	@JsonIgnore
+	public void setPullOwnerReportScheduleKeys(JsonArray objects) {
+		pullOwnerReportScheduleKeys.clear();
+		for(int i = 0; i < objects.size(); i++) {
+			Long o = objects.getLong(i);
+			addPullOwnerReportScheduleKeys(o);
+		}
+	}
+	public SiteUser addPullOwnerReportScheduleKeys(String o) {
+		if(NumberUtils.isParsable(o)) {
+			Long p = Long.parseLong(o);
+			addPullOwnerReportScheduleKeys(p);
+		}
+		return (SiteUser)this;
+	}
+	protected SiteUser pullOwnerReportScheduleKeysInit() {
+		_pullOwnerReportScheduleKeys(pullOwnerReportScheduleKeys);
+		return (SiteUser)this;
+	}
+
+	public static Long staticSearchPullOwnerReportScheduleKeys(SiteRequestEnUS siteRequest_, Long o) {
+		return o;
+	}
+
+	public static String staticSearchStrPullOwnerReportScheduleKeys(SiteRequestEnUS siteRequest_, Long o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqPullOwnerReportScheduleKeys(SiteRequestEnUS siteRequest_, String o) {
+		return SiteUser.staticSearchStrPullOwnerReportScheduleKeys(siteRequest_, SiteUser.staticSearchPullOwnerReportScheduleKeys(siteRequest_, SiteUser.staticSetPullOwnerReportScheduleKeys(siteRequest_, o)));
+	}
+
+	public List<Long> sqlPullOwnerReportScheduleKeys() {
+		return pullOwnerReportScheduleKeys;
+	}
+
+	//////////////////////////////////
+	// finalOwnerReportScheduleKeys //
+	//////////////////////////////////
+
+	/**	 The entity finalOwnerReportScheduleKeys
+	 *	 It is constructed before being initialized with the constructor by default. 
+	 */
+	@JsonProperty
+	@JsonFormat(shape = JsonFormat.Shape.ARRAY)
+	@JsonSerialize(contentUsing = ToStringSerializer.class)
+	@JsonInclude(Include.NON_NULL)
+	protected List<Long> finalOwnerReportScheduleKeys = new ArrayList<Long>();
+
+	/**	<br> The entity finalOwnerReportScheduleKeys
+	 *  It is constructed before being initialized with the constructor by default. 
+	 * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.user.SiteUser&fq=entiteVar_enUS_indexed_string:finalOwnerReportScheduleKeys">Find the entity finalOwnerReportScheduleKeys in Solr</a>
+	 * <br>
+	 * @param l is the entity already constructed. 
+	 **/
+	protected abstract void _finalOwnerReportScheduleKeys(List<Long> l);
+
+	public List<Long> getFinalOwnerReportScheduleKeys() {
+		return finalOwnerReportScheduleKeys;
+	}
+
+	public void setFinalOwnerReportScheduleKeys(List<Long> finalOwnerReportScheduleKeys) {
+		this.finalOwnerReportScheduleKeys = finalOwnerReportScheduleKeys;
+	}
+	@JsonIgnore
+	public void setFinalOwnerReportScheduleKeys(String o) {
+		Long l = SiteUser.staticSetFinalOwnerReportScheduleKeys(siteRequest_, o);
+		if(l != null)
+			addFinalOwnerReportScheduleKeys(l);
+	}
+	public static Long staticSetFinalOwnerReportScheduleKeys(SiteRequestEnUS siteRequest_, String o) {
+		if(NumberUtils.isParsable(o))
+			return Long.parseLong(o);
+		return null;
+	}
+	public SiteUser addFinalOwnerReportScheduleKeys(Long...objects) {
+		for(Long o : objects) {
+			addFinalOwnerReportScheduleKeys(o);
+		}
+		return (SiteUser)this;
+	}
+	public SiteUser addFinalOwnerReportScheduleKeys(Long o) {
+		if(o != null)
+			this.finalOwnerReportScheduleKeys.add(o);
+		return (SiteUser)this;
+	}
+	@JsonIgnore
+	public void setFinalOwnerReportScheduleKeys(JsonArray objects) {
+		finalOwnerReportScheduleKeys.clear();
+		for(int i = 0; i < objects.size(); i++) {
+			Long o = objects.getLong(i);
+			addFinalOwnerReportScheduleKeys(o);
+		}
+	}
+	public SiteUser addFinalOwnerReportScheduleKeys(String o) {
+		if(NumberUtils.isParsable(o)) {
+			Long p = Long.parseLong(o);
+			addFinalOwnerReportScheduleKeys(p);
+		}
+		return (SiteUser)this;
+	}
+	protected SiteUser finalOwnerReportScheduleKeysInit() {
+		_finalOwnerReportScheduleKeys(finalOwnerReportScheduleKeys);
+		return (SiteUser)this;
+	}
+
+	public static Long staticSearchFinalOwnerReportScheduleKeys(SiteRequestEnUS siteRequest_, Long o) {
+		return o;
+	}
+
+	public static String staticSearchStrFinalOwnerReportScheduleKeys(SiteRequestEnUS siteRequest_, Long o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqFinalOwnerReportScheduleKeys(SiteRequestEnUS siteRequest_, String o) {
+		return SiteUser.staticSearchStrFinalOwnerReportScheduleKeys(siteRequest_, SiteUser.staticSearchFinalOwnerReportScheduleKeys(siteRequest_, SiteUser.staticSetFinalOwnerReportScheduleKeys(siteRequest_, o)));
+	}
+
+	public List<Long> sqlFinalOwnerReportScheduleKeys() {
+		return finalOwnerReportScheduleKeys;
+	}
+
 	//////////////
 	// initDeep //
 	//////////////
@@ -820,6 +993,8 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 				seeDeletedInit();
 				narrativeKeysInit();
 				eventKeysInit();
+				pullOwnerReportScheduleKeysInit();
+				finalOwnerReportScheduleKeysInit();
 				promise2.complete();
 			} catch(Exception ex) {
 				promise2.fail(ex);
@@ -895,6 +1070,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 				return oSiteUser.narrativeKeys;
 			case "eventKeys":
 				return oSiteUser.eventKeys;
+			case "pullOwnerReportScheduleKeys":
+				return oSiteUser.pullOwnerReportScheduleKeys;
+			case "finalOwnerReportScheduleKeys":
+				return oSiteUser.finalOwnerReportScheduleKeys;
 			default:
 				return super.obtainBaseModel(var);
 		}
@@ -929,6 +1108,16 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 				oSiteUser.addEventKeys((Long)val);
 				if(!saves.contains("eventKeys"))
 					saves.add("eventKeys");
+				return val;
+			case "pullOwnerReportScheduleKeys":
+				oSiteUser.addPullOwnerReportScheduleKeys((Long)val);
+				if(!saves.contains("pullOwnerReportScheduleKeys"))
+					saves.add("pullOwnerReportScheduleKeys");
+				return val;
+			case "finalOwnerReportScheduleKeys":
+				oSiteUser.addFinalOwnerReportScheduleKeys((Long)val);
+				if(!saves.contains("finalOwnerReportScheduleKeys"))
+					saves.add("finalOwnerReportScheduleKeys");
 				return val;
 			default:
 				return super.relateBaseModel(var, val);
@@ -966,6 +1155,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 			return SiteUser.staticSetNarrativeKeys(siteRequest_, o);
 		case "eventKeys":
 			return SiteUser.staticSetEventKeys(siteRequest_, o);
+		case "pullOwnerReportScheduleKeys":
+			return SiteUser.staticSetPullOwnerReportScheduleKeys(siteRequest_, o);
+		case "finalOwnerReportScheduleKeys":
+			return SiteUser.staticSetFinalOwnerReportScheduleKeys(siteRequest_, o);
 			default:
 				return BaseModel.staticSetBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -1002,6 +1195,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 			return SiteUser.staticSearchNarrativeKeys(siteRequest_, (Long)o);
 		case "eventKeys":
 			return SiteUser.staticSearchEventKeys(siteRequest_, (Long)o);
+		case "pullOwnerReportScheduleKeys":
+			return SiteUser.staticSearchPullOwnerReportScheduleKeys(siteRequest_, (Long)o);
+		case "finalOwnerReportScheduleKeys":
+			return SiteUser.staticSearchFinalOwnerReportScheduleKeys(siteRequest_, (Long)o);
 			default:
 				return BaseModel.staticSearchBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -1038,6 +1235,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 			return SiteUser.staticSearchStrNarrativeKeys(siteRequest_, (Long)o);
 		case "eventKeys":
 			return SiteUser.staticSearchStrEventKeys(siteRequest_, (Long)o);
+		case "pullOwnerReportScheduleKeys":
+			return SiteUser.staticSearchStrPullOwnerReportScheduleKeys(siteRequest_, (Long)o);
+		case "finalOwnerReportScheduleKeys":
+			return SiteUser.staticSearchStrFinalOwnerReportScheduleKeys(siteRequest_, (Long)o);
 			default:
 				return BaseModel.staticSearchStrBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -1074,6 +1275,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 			return SiteUser.staticSearchFqNarrativeKeys(siteRequest_, o);
 		case "eventKeys":
 			return SiteUser.staticSearchFqEventKeys(siteRequest_, o);
+		case "pullOwnerReportScheduleKeys":
+			return SiteUser.staticSearchFqPullOwnerReportScheduleKeys(siteRequest_, o);
+		case "finalOwnerReportScheduleKeys":
+			return SiteUser.staticSearchFqFinalOwnerReportScheduleKeys(siteRequest_, o);
 			default:
 				return BaseModel.staticSearchFqBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -1211,6 +1416,20 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 				l.add(o);
 			}
 		}
+		if(pullOwnerReportScheduleKeys != null) {
+			JsonArray l = new JsonArray();
+			doc.put("pullOwnerReportScheduleKeys_docvalues_longs", l);
+			for(Long o : pullOwnerReportScheduleKeys) {
+				l.add(o);
+			}
+		}
+		if(finalOwnerReportScheduleKeys != null) {
+			JsonArray l = new JsonArray();
+			doc.put("finalOwnerReportScheduleKeys_docvalues_longs", l);
+			for(Long o : finalOwnerReportScheduleKeys) {
+				l.add(o);
+			}
+		}
 		super.indexBaseModel(doc);
 
 	}
@@ -1239,6 +1458,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 				return "narrativeKeys_docvalues_longs";
 			case "eventKeys":
 				return "eventKeys_docvalues_longs";
+			case "pullOwnerReportScheduleKeys":
+				return "pullOwnerReportScheduleKeys_docvalues_longs";
+			case "finalOwnerReportScheduleKeys":
+				return "finalOwnerReportScheduleKeys_docvalues_longs";
 			default:
 				return BaseModel.varStoredBaseModel(entityVar);
 		}
@@ -1268,6 +1491,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 				return "narrativeKeys_docvalues_longs";
 			case "eventKeys":
 				return "eventKeys_docvalues_longs";
+			case "pullOwnerReportScheduleKeys":
+				return "pullOwnerReportScheduleKeys_docvalues_longs";
+			case "finalOwnerReportScheduleKeys":
+				return "finalOwnerReportScheduleKeys_docvalues_longs";
 			default:
 				return BaseModel.varIndexedBaseModel(entityVar);
 		}
@@ -1297,6 +1524,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 				return "narrativeKeys";
 			case "eventKeys_docvalues_longs":
 				return "eventKeys";
+			case "pullOwnerReportScheduleKeys_docvalues_longs":
+				return "pullOwnerReportScheduleKeys";
+			case "finalOwnerReportScheduleKeys_docvalues_longs":
+				return "finalOwnerReportScheduleKeys";
 			default:
 				return BaseModel.searchVarBaseModel(searchVar);
 		}
@@ -1343,6 +1574,12 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		Optional.ofNullable((List<?>)doc.get("eventKeys_docvalues_longs")).orElse(Arrays.asList()).stream().filter(v -> v != null).forEach(v -> {
 			oSiteUser.addEventKeys(v.toString());
 		});
+		Optional.ofNullable((List<?>)doc.get("pullOwnerReportScheduleKeys_docvalues_longs")).orElse(Arrays.asList()).stream().filter(v -> v != null).forEach(v -> {
+			oSiteUser.addPullOwnerReportScheduleKeys(v.toString());
+		});
+		Optional.ofNullable((List<?>)doc.get("finalOwnerReportScheduleKeys_docvalues_longs")).orElse(Arrays.asList()).stream().filter(v -> v != null).forEach(v -> {
+			oSiteUser.addFinalOwnerReportScheduleKeys(v.toString());
+		});
 
 		super.storeBaseModel(doc);
 	}
@@ -1378,6 +1615,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 				apiRequest.addVars("narrativeKeys");
 			if(!Objects.equals(eventKeys, original.getEventKeys()))
 				apiRequest.addVars("eventKeys");
+			if(!Objects.equals(pullOwnerReportScheduleKeys, original.getPullOwnerReportScheduleKeys()))
+				apiRequest.addVars("pullOwnerReportScheduleKeys");
+			if(!Objects.equals(finalOwnerReportScheduleKeys, original.getFinalOwnerReportScheduleKeys()))
+				apiRequest.addVars("finalOwnerReportScheduleKeys");
 			super.apiRequestBaseModel();
 		}
 	}
@@ -1400,6 +1641,8 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		sb.append(Optional.ofNullable(seeDeleted).map(v -> "seeDeleted: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(narrativeKeys).map(v -> "narrativeKeys: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(eventKeys).map(v -> "eventKeys: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(pullOwnerReportScheduleKeys).map(v -> "pullOwnerReportScheduleKeys: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(finalOwnerReportScheduleKeys).map(v -> "finalOwnerReportScheduleKeys: " + v + "\n").orElse(""));
 		return sb.toString();
 	}
 
@@ -1415,6 +1658,8 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	public static final String VAR_seeDeleted = "seeDeleted";
 	public static final String VAR_narrativeKeys = "narrativeKeys";
 	public static final String VAR_eventKeys = "eventKeys";
+	public static final String VAR_pullOwnerReportScheduleKeys = "pullOwnerReportScheduleKeys";
+	public static final String VAR_finalOwnerReportScheduleKeys = "finalOwnerReportScheduleKeys";
 
 	public static List<String> varsQForClass() {
 		return SiteUser.varsQSiteUser(new ArrayList<String>());
@@ -1451,6 +1696,8 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	public static final String DISPLAY_NAME_seeDeleted = "see deleted";
 	public static final String DISPLAY_NAME_narrativeKeys = "narratives";
 	public static final String DISPLAY_NAME_eventKeys = "events";
+	public static final String DISPLAY_NAME_pullOwnerReportScheduleKeys = "events";
+	public static final String DISPLAY_NAME_finalOwnerReportScheduleKeys = "events";
 
 	public static String displayNameForClass(String var) {
 		return SiteUser.displayNameSiteUser(var);
@@ -1479,6 +1726,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 			return DISPLAY_NAME_narrativeKeys;
 		case VAR_eventKeys:
 			return DISPLAY_NAME_eventKeys;
+		case VAR_pullOwnerReportScheduleKeys:
+			return DISPLAY_NAME_pullOwnerReportScheduleKeys;
+		case VAR_finalOwnerReportScheduleKeys:
+			return DISPLAY_NAME_finalOwnerReportScheduleKeys;
 		default:
 			return BaseModel.displayNameBaseModel(var);
 		}
@@ -1533,6 +1784,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 			return "List";
 		case VAR_eventKeys:
 			return "List";
+		case VAR_pullOwnerReportScheduleKeys:
+			return "List";
+		case VAR_finalOwnerReportScheduleKeys:
+			return "List";
 			default:
 				return BaseModel.classSimpleNameBaseModel(var);
 		}
@@ -1555,6 +1810,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 			return 4;
 		case VAR_eventKeys:
 			return 4;
+		case VAR_pullOwnerReportScheduleKeys:
+			return 4;
+		case VAR_finalOwnerReportScheduleKeys:
+			return 4;
 			default:
 				return BaseModel.htmlRowBaseModel(var);
 		}
@@ -1569,6 +1828,10 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		case VAR_narrativeKeys:
 			return 1;
 		case VAR_eventKeys:
+			return 1;
+		case VAR_pullOwnerReportScheduleKeys:
+			return 1;
+		case VAR_finalOwnerReportScheduleKeys:
 			return 1;
 			default:
 				return BaseModel.htmlCellBaseModel(var);

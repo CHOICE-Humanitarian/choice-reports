@@ -671,23 +671,14 @@ public class ReportNarrativeEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 						num++;
 						bParams.add(o2.sqlNarrativeName());
 						break;
-					case ReportNarrative.VAR_pullStartDate:
-						o2.setPullStartDate(jsonObject.getString(entityVar));
+					case ReportNarrative.VAR_narrativeDueDate:
+						o2.setNarrativeDueDate(jsonObject.getString(entityVar));
 						if(bParams.size() > 0) {
 							bSql.append(", ");
 						}
-						bSql.append(ReportNarrative.VAR_pullStartDate + "=$" + num);
+						bSql.append(ReportNarrative.VAR_narrativeDueDate + "=$" + num);
 						num++;
-						bParams.add(o2.sqlPullStartDate());
-						break;
-					case ReportNarrative.VAR_pullEndDate:
-						o2.setPullEndDate(jsonObject.getString(entityVar));
-						if(bParams.size() > 0) {
-							bSql.append(", ");
-						}
-						bSql.append(ReportNarrative.VAR_pullEndDate + "=$" + num);
-						num++;
-						bParams.add(o2.sqlPullEndDate());
+						bParams.add(o2.sqlNarrativeDueDate());
 						break;
 					}
 				}
@@ -1082,21 +1073,13 @@ public class ReportNarrativeEnUSGenApiServiceImpl extends BaseApiServiceImpl imp
 							num++;
 							bParams.add(o2.sqlNarrativeName());
 						break;
-					case "setPullStartDate":
-							o2.setPullStartDate(jsonObject.getString(entityVar));
+					case "setNarrativeDueDate":
+							o2.setNarrativeDueDate(jsonObject.getString(entityVar));
 							if(bParams.size() > 0)
 								bSql.append(", ");
-							bSql.append(ReportNarrative.VAR_pullStartDate + "=$" + num);
+							bSql.append(ReportNarrative.VAR_narrativeDueDate + "=$" + num);
 							num++;
-							bParams.add(o2.sqlPullStartDate());
-						break;
-					case "setPullEndDate":
-							o2.setPullEndDate(jsonObject.getString(entityVar));
-							if(bParams.size() > 0)
-								bSql.append(", ");
-							bSql.append(ReportNarrative.VAR_pullEndDate + "=$" + num);
-							num++;
-							bParams.add(o2.sqlPullEndDate());
+							bParams.add(o2.sqlNarrativeDueDate());
 						break;
 				}
 			}

@@ -103,6 +103,7 @@ import io.vertx.spi.cluster.zookeeper.ZookeeperClusterManager;
 import io.vertx.sqlclient.PoolOptions;
 
 
+
 /**
  * Description: A Java class to start the Vert.x application as a main method. 
  * Keyword: classSimpleNameVerticle
@@ -975,24 +976,7 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 	 */
 	private Future<Void> configureCamel() {
 		Promise<Void> promise = Promise.promise();
-		try {
-
-			camelContext = new DefaultCamelContext();
-			VertxComponent vertxComponent = new VertxComponent();
-			vertxComponent.setVertx(vertx);
-			camelContext.addComponent("vertx", vertxComponent);
-			RouteBuilder routeBuilder = new RouteBuilder() {
-				public void configure() {
-				}
-			};
-			routeBuilder.addRoutesToCamelContext(camelContext);
-			camelContext.start();
-			LOG.info(configureCamelComplete);
-			promise.complete();
-		} catch(Exception ex) {
-			LOG.error(configureCamelFail);
-			promise.fail(ex);
-		}
+		promise.complete();
 		return promise.future();
 	}
 

@@ -4,6 +4,10 @@ import org.choicehumanitarian.reports.enus.model.report.narrative.ReportNarrativ
 import org.choicehumanitarian.reports.enus.model.report.narrative.ReportNarrative;
 import org.choicehumanitarian.reports.enus.model.report.event.ReportEventEnUSApiServiceImpl;
 import org.choicehumanitarian.reports.enus.model.report.event.ReportEvent;
+import org.choicehumanitarian.reports.enus.model.report.schedule.ReportScheduleEnUSApiServiceImpl;
+import org.choicehumanitarian.reports.enus.model.report.schedule.ReportSchedule;
+import org.choicehumanitarian.reports.enus.model.report.schedule.ReportScheduleEnUSApiServiceImpl;
+import org.choicehumanitarian.reports.enus.model.report.schedule.ReportSchedule;
 import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import org.choicehumanitarian.reports.enus.model.user.SiteUser;
 import org.computate.vertx.api.ApiRequest;
@@ -723,6 +727,180 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 							}));
 						});
 						break;
+					case "setPullOwnerReportScheduleKeys":
+						JsonArray setPullOwnerReportScheduleKeysValues = Optional.ofNullable(jsonObject.getJsonArray(entityVar)).orElse(new JsonArray());
+						setPullOwnerReportScheduleKeysValues.stream().map(oVal -> oVal.toString()).forEach(val -> {
+							futures2.add(Future.future(promise2 -> {
+								search(siteRequest).query(ReportSchedule.class, val, inheritPk).onSuccess(pk2 -> {
+									if(!pks.contains(pk2)) {
+										pks.add(pk2);
+										classes.add("ReportSchedule");
+									}
+									sql(siteRequest).update(ReportSchedule.class, pk2).set(ReportSchedule.VAR_pullOwnerKey, SiteUser.class, pk).onSuccess(a -> {
+										promise2.complete();
+									}).onFailure(ex -> {
+										promise2.fail(ex);
+									});
+								}).onFailure(ex -> {
+									promise2.fail(ex);
+								});
+							}));
+						});
+						Optional.ofNullable(o.getPullOwnerReportScheduleKeys()).orElse(Arrays.asList()).stream().filter(oVal -> oVal != null && !setPullOwnerReportScheduleKeysValues.contains(oVal.toString())).forEach(pk2 -> {
+							if(!pks.contains(pk2)) {
+								pks.add(pk2);
+								classes.add("ReportSchedule");
+							}
+							futures2.add(Future.future(promise2 -> {
+								sql(siteRequest).update(ReportSchedule.class, pk2).setToNull(ReportSchedule.VAR_pullOwnerKey, SiteUser.class, pk2).onSuccess(a -> {
+									promise2.complete();
+								}).onFailure(ex -> {
+									promise2.fail(ex);
+								});
+							}));
+						});
+						break;
+					case "addAllPullOwnerReportScheduleKeys":
+						JsonArray addAllPullOwnerReportScheduleKeysValues = Optional.ofNullable(jsonObject.getJsonArray(entityVar)).orElse(new JsonArray());
+						addAllPullOwnerReportScheduleKeysValues.stream().map(oVal -> oVal.toString()).forEach(val -> {
+							futures2.add(Future.future(promise2 -> {
+								search(siteRequest).query(ReportSchedule.class, val, inheritPk).onSuccess(pk2 -> {
+									if(!pks.contains(pk2)) {
+										pks.add(pk2);
+										classes.add("ReportSchedule");
+									}
+									sql(siteRequest).update(ReportSchedule.class, pk2).set(ReportSchedule.VAR_pullOwnerKey, SiteUser.class, pk).onSuccess(a -> {
+										promise2.complete();
+									}).onFailure(ex -> {
+										promise2.fail(ex);
+									});
+								}).onFailure(ex -> {
+									promise2.fail(ex);
+								});
+							}));
+						});
+						break;
+					case "addPullOwnerReportScheduleKeys":
+						Optional.ofNullable(jsonObject.getString(entityVar)).ifPresent(val -> {
+							futures2.add(Future.future(promise2 -> {
+								search(siteRequest).query(ReportSchedule.class, val, inheritPk).onSuccess(pk2 -> {
+									if(!pks.contains(pk2)) {
+										pks.add(pk2);
+										classes.add("ReportSchedule");
+									}
+									sql(siteRequest).update(ReportSchedule.class, pk2).set(ReportSchedule.VAR_pullOwnerKey, SiteUser.class, pk).onSuccess(a -> {
+										promise2.complete();
+									}).onFailure(ex -> {
+										promise2.fail(ex);
+									});
+								}).onFailure(ex -> {
+									promise2.fail(ex);
+								});
+							}));
+						});
+						break;
+					case "removePullOwnerReportScheduleKeys":
+						Optional.ofNullable(jsonObject.getString(entityVar)).map(val -> Long.parseLong(val)).ifPresent(pk2 -> {
+							if(!pks.contains(pk2)) {
+								pks.add(pk2);
+								classes.add("ReportSchedule");
+							}
+							futures2.add(Future.future(promise2 -> {
+								sql(siteRequest).update(ReportSchedule.class, pk2).setToNull(ReportSchedule.VAR_pullOwnerKey, SiteUser.class, pk2).onSuccess(a -> {
+									promise2.complete();
+								}).onFailure(ex -> {
+									promise2.fail(ex);
+								});
+							}));
+						});
+						break;
+					case "setFinalOwnerReportScheduleKeys":
+						JsonArray setFinalOwnerReportScheduleKeysValues = Optional.ofNullable(jsonObject.getJsonArray(entityVar)).orElse(new JsonArray());
+						setFinalOwnerReportScheduleKeysValues.stream().map(oVal -> oVal.toString()).forEach(val -> {
+							futures2.add(Future.future(promise2 -> {
+								search(siteRequest).query(ReportSchedule.class, val, inheritPk).onSuccess(pk2 -> {
+									if(!pks.contains(pk2)) {
+										pks.add(pk2);
+										classes.add("ReportSchedule");
+									}
+									sql(siteRequest).update(ReportSchedule.class, pk2).set(ReportSchedule.VAR_finalOwnerKey, SiteUser.class, pk).onSuccess(a -> {
+										promise2.complete();
+									}).onFailure(ex -> {
+										promise2.fail(ex);
+									});
+								}).onFailure(ex -> {
+									promise2.fail(ex);
+								});
+							}));
+						});
+						Optional.ofNullable(o.getFinalOwnerReportScheduleKeys()).orElse(Arrays.asList()).stream().filter(oVal -> oVal != null && !setFinalOwnerReportScheduleKeysValues.contains(oVal.toString())).forEach(pk2 -> {
+							if(!pks.contains(pk2)) {
+								pks.add(pk2);
+								classes.add("ReportSchedule");
+							}
+							futures2.add(Future.future(promise2 -> {
+								sql(siteRequest).update(ReportSchedule.class, pk2).setToNull(ReportSchedule.VAR_finalOwnerKey, SiteUser.class, pk2).onSuccess(a -> {
+									promise2.complete();
+								}).onFailure(ex -> {
+									promise2.fail(ex);
+								});
+							}));
+						});
+						break;
+					case "addAllFinalOwnerReportScheduleKeys":
+						JsonArray addAllFinalOwnerReportScheduleKeysValues = Optional.ofNullable(jsonObject.getJsonArray(entityVar)).orElse(new JsonArray());
+						addAllFinalOwnerReportScheduleKeysValues.stream().map(oVal -> oVal.toString()).forEach(val -> {
+							futures2.add(Future.future(promise2 -> {
+								search(siteRequest).query(ReportSchedule.class, val, inheritPk).onSuccess(pk2 -> {
+									if(!pks.contains(pk2)) {
+										pks.add(pk2);
+										classes.add("ReportSchedule");
+									}
+									sql(siteRequest).update(ReportSchedule.class, pk2).set(ReportSchedule.VAR_finalOwnerKey, SiteUser.class, pk).onSuccess(a -> {
+										promise2.complete();
+									}).onFailure(ex -> {
+										promise2.fail(ex);
+									});
+								}).onFailure(ex -> {
+									promise2.fail(ex);
+								});
+							}));
+						});
+						break;
+					case "addFinalOwnerReportScheduleKeys":
+						Optional.ofNullable(jsonObject.getString(entityVar)).ifPresent(val -> {
+							futures2.add(Future.future(promise2 -> {
+								search(siteRequest).query(ReportSchedule.class, val, inheritPk).onSuccess(pk2 -> {
+									if(!pks.contains(pk2)) {
+										pks.add(pk2);
+										classes.add("ReportSchedule");
+									}
+									sql(siteRequest).update(ReportSchedule.class, pk2).set(ReportSchedule.VAR_finalOwnerKey, SiteUser.class, pk).onSuccess(a -> {
+										promise2.complete();
+									}).onFailure(ex -> {
+										promise2.fail(ex);
+									});
+								}).onFailure(ex -> {
+									promise2.fail(ex);
+								});
+							}));
+						});
+						break;
+					case "removeFinalOwnerReportScheduleKeys":
+						Optional.ofNullable(jsonObject.getString(entityVar)).map(val -> Long.parseLong(val)).ifPresent(pk2 -> {
+							if(!pks.contains(pk2)) {
+								pks.add(pk2);
+								classes.add("ReportSchedule");
+							}
+							futures2.add(Future.future(promise2 -> {
+								sql(siteRequest).update(ReportSchedule.class, pk2).setToNull(ReportSchedule.VAR_finalOwnerKey, SiteUser.class, pk2).onSuccess(a -> {
+									promise2.complete();
+								}).onFailure(ex -> {
+									promise2.fail(ex);
+								});
+							}));
+						});
+						break;
 				}
 			}
 			bSql.append(" WHERE pk=$" + num);
@@ -1137,6 +1315,44 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 										classes.add("ReportEvent");
 									}
 									sql(siteRequest).update(ReportEvent.class, pk2).set(ReportEvent.VAR_assigneeKey, SiteUser.class, pk).onSuccess(a -> {
+										promise2.complete();
+									}).onFailure(ex -> {
+										promise2.fail(ex);
+									});
+								}).onFailure(ex -> {
+									promise2.fail(ex);
+								});
+							}));
+						});
+						break;
+					case SiteUser.VAR_pullOwnerReportScheduleKeys:
+						Optional.ofNullable(jsonObject.getJsonArray(entityVar)).orElse(new JsonArray()).stream().map(oVal -> oVal.toString()).forEach(val -> {
+							futures2.add(Future.future(promise2 -> {
+								search(siteRequest).query(ReportSchedule.class, val, inheritPk).onSuccess(pk2 -> {
+									if(!pks.contains(pk2)) {
+										pks.add(pk2);
+										classes.add("ReportSchedule");
+									}
+									sql(siteRequest).update(ReportSchedule.class, pk2).set(ReportSchedule.VAR_pullOwnerKey, SiteUser.class, pk).onSuccess(a -> {
+										promise2.complete();
+									}).onFailure(ex -> {
+										promise2.fail(ex);
+									});
+								}).onFailure(ex -> {
+									promise2.fail(ex);
+								});
+							}));
+						});
+						break;
+					case SiteUser.VAR_finalOwnerReportScheduleKeys:
+						Optional.ofNullable(jsonObject.getJsonArray(entityVar)).orElse(new JsonArray()).stream().map(oVal -> oVal.toString()).forEach(val -> {
+							futures2.add(Future.future(promise2 -> {
+								search(siteRequest).query(ReportSchedule.class, val, inheritPk).onSuccess(pk2 -> {
+									if(!pks.contains(pk2)) {
+										pks.add(pk2);
+										classes.add("ReportSchedule");
+									}
+									sql(siteRequest).update(ReportSchedule.class, pk2).set(ReportSchedule.VAR_finalOwnerKey, SiteUser.class, pk).onSuccess(a -> {
 										promise2.complete();
 									}).onFailure(ex -> {
 										promise2.fail(ex);
@@ -1859,9 +2075,9 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 			SiteRequestEnUS siteRequest = o.getSiteRequest_();
 			SqlConnection sqlConnection = siteRequest.getSqlConnection();
 			Long pk = o.getPk();
-			sqlConnection.preparedQuery("SELECT pk as pk1, 'narrativeKeys' from ReportNarrative where assigneeKey=$1 UNION SELECT pk as pk1, 'eventKeys' from ReportEvent where assigneeKey=$2")
+			sqlConnection.preparedQuery("SELECT pk as pk1, 'narrativeKeys' from ReportNarrative where assigneeKey=$1 UNION SELECT pk as pk1, 'eventKeys' from ReportEvent where assigneeKey=$2 UNION SELECT pk as pk1, 'pullOwnerReportScheduleKeys' from ReportSchedule where pullOwnerKey=$3 UNION SELECT pk as pk1, 'finalOwnerReportScheduleKeys' from ReportSchedule where finalOwnerKey=$4")
 					.collecting(Collectors.toList())
-					.execute(Tuple.of(pk, pk)
+					.execute(Tuple.of(pk, pk, pk, pk)
 					).onSuccess(result -> {
 				try {
 					if(result != null) {
@@ -1994,6 +2210,41 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 									JsonObject context = new JsonObject().put("params", params).put("user", siteRequest.getUserPrincipal());
 									JsonObject json = new JsonObject().put("context", context);
 									eventBus.request("choice-reports-enUS-ReportEvent", json, new DeliveryOptions().addHeader("action", "patchReportEventFuture")).onSuccess(c -> {
+										JsonObject responseMessage = (JsonObject)c.body();
+										Integer statusCode = responseMessage.getInteger("statusCode");
+										if(statusCode.equals(200))
+											promise2.complete();
+										else
+											promise2.fail(new RuntimeException(responseMessage.getString("statusMessage")));
+									}).onFailure(ex -> {
+										promise2.fail(ex);
+									});
+								}
+							}).onFailure(ex -> {
+								promise2.fail(ex);
+							});
+						}));
+					}
+
+					if("ReportSchedule".equals(classSimpleName2) && pk2 != null) {
+						SearchList<ReportSchedule> searchList2 = new SearchList<ReportSchedule>();
+						searchList2.setStore(true);
+						searchList2.q("*:*");
+						searchList2.setC(ReportSchedule.class);
+						searchList2.fq("pk_docvalues_long:" + pk2);
+						searchList2.rows(1L);
+						futures.add(Future.future(promise2 -> {
+							searchList2.promiseDeepSearchList(siteRequest).onSuccess(b -> {
+								ReportSchedule o2 = searchList2.getList().stream().findFirst().orElse(null);
+								if(o2 != null) {
+									JsonObject params = new JsonObject();
+									params.put("body", new JsonObject());
+									params.put("cookie", new JsonObject());
+									params.put("path", new JsonObject());
+									params.put("query", new JsonObject().put("q", "*:*").put("fq", new JsonArray().add("pk:" + pk2)).put("var", new JsonArray().add("refresh:false")));
+									JsonObject context = new JsonObject().put("params", params).put("user", siteRequest.getUserPrincipal());
+									JsonObject json = new JsonObject().put("context", context);
+									eventBus.request("choice-reports-enUS-ReportSchedule", json, new DeliveryOptions().addHeader("action", "patchReportScheduleFuture")).onSuccess(c -> {
 										JsonObject responseMessage = (JsonObject)c.body();
 										Integer statusCode = responseMessage.getInteger("statusCode");
 										if(statusCode.equals(200))
