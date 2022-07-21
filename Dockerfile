@@ -8,3 +8,4 @@ USER root
 RUN mvn clean install -DskipTests
 RUN cp /home/jboss/target/*.jar /home/jboss/app.jar
 CMD java $JAVA_OPTS -cp .:* org.computate.smartvillageview.enus.vertx.MainVerticle
+

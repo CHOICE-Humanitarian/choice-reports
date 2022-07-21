@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -14,25 +15,23 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.Stack;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.choicehumanitarian.reports.enus.config.ConfigKeys;
-import org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor;
-import org.choicehumanitarian.reports.enus.model.htm.SiteHtm;
-import org.choicehumanitarian.reports.enus.model.page.SitePage;
-import org.choicehumanitarian.reports.enus.model.report.ChoiceReport;
-import org.choicehumanitarian.reports.enus.model.report.event.ReportEvent;
-import org.choicehumanitarian.reports.enus.model.report.narrative.ReportNarrative;
-import org.choicehumanitarian.reports.enus.model.report.schedule.ReportSchedule;
-import org.choicehumanitarian.reports.enus.model.report.type.ReportType;
-import org.choicehumanitarian.reports.enus.model.user.SiteUser;
-import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import org.computate.search.serialize.ComputateZonedDateTimeSerializer;
 import org.computate.search.tool.TimeTool;
 import org.computate.search.tool.XmlTool;
+import org.computate.vertx.api.ApiCounter;
+import org.computate.vertx.api.ApiRequest;
+import org.computate.vertx.api.ApiCounter;
+import org.computate.vertx.api.ApiRequest;
+import org.choicehumanitarian.reports.enus.config.ConfigKeys;
+import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
+import org.choicehumanitarian.reports.enus.model.page.SitePage;
+import org.choicehumanitarian.reports.enus.model.htm.SiteHtm;
 import org.computate.vertx.api.ApiCounter;
 import org.computate.vertx.api.ApiRequest;
 import org.computate.vertx.config.ComputateConfigKeys;
@@ -63,6 +62,7 @@ import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.authentication.TokenCredentials;
 import io.vertx.ext.auth.authentication.UsernamePasswordCredentials;
+import io.vertx.ext.jdbc.JDBCClient;
 import io.vertx.ext.mail.MailClient;
 import io.vertx.ext.mail.MailConfig;
 import io.vertx.ext.web.client.WebClient;
@@ -70,9 +70,27 @@ import io.vertx.ext.web.client.predicate.ResponsePredicate;
 import io.vertx.ext.web.templ.handlebars.HandlebarsTemplateEngine;
 import io.vertx.pgclient.PgConnectOptions;
 import io.vertx.pgclient.PgPool;
+import io.vertx.sqlclient.Cursor;
 import io.vertx.sqlclient.PoolOptions;
 import io.vertx.sqlclient.Row;
 import io.vertx.sqlclient.RowStream;
+import io.vertx.sqlclient.SqlConnection;
+import java.time.LocalDateTime;
+import io.vertx.ext.jdbc.JDBCClient;
+import io.vertx.sqlclient.Cursor;
+import io.vertx.sqlclient.SqlConnection;
+import io.vertx.ext.web.client.predicate.ResponsePredicate;
+import io.vertx.ext.auth.authentication.TokenCredentials;
+
+import org.choicehumanitarian.reports.enus.model.user.SiteUser;
+import org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor;
+import org.choicehumanitarian.reports.enus.model.report.ChoiceReport;
+import org.choicehumanitarian.reports.enus.model.report.type.ReportType;
+import org.choicehumanitarian.reports.enus.model.report.schedule.ReportSchedule;
+import org.choicehumanitarian.reports.enus.model.report.narrative.ReportNarrative;
+import org.choicehumanitarian.reports.enus.model.report.event.ReportEvent;
+import org.choicehumanitarian.reports.enus.model.page.SitePage;
+import org.choicehumanitarian.reports.enus.model.htm.SiteHtm;
 
 /**
  */
@@ -334,6 +352,20 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 		return promise.future();
 	}
 
+	/**	
+	 * Import initial data
+	 * Val.Complete.enUS:Importing initial data completed. 
+	 * Val.Fail.enUS:Importing initial data failed. 
+	 * Val.Skip.enUS:Skip importing data. 
+	 **/
+	private Future<Void> importData() {
+		Promise<Void> promise = Promise.promise();
+		importTimer("ChoiceDonor");
+		importTimer("ChoiceImage");
+		importTimer("ReportType");
+		return promise.future();
+	}
+
 	private Future<Void> importDataClass(String classSimpleName, ZonedDateTime startDateTime) {
 		Promise<Void> promise = Promise.promise();
 		if("ChoiceDonor".equals(classSimpleName)) {
@@ -385,20 +417,6 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 				}
 			});
 		}
-		return promise.future();
-	}
-
-	/**	
-	 * Import initial data
-	 * Val.Complete.enUS:Importing initial data completed. 
-	 * Val.Fail.enUS:Importing initial data failed. 
-	 * Val.Skip.enUS:Skip importing data. 
-	 **/
-	private Future<Void> importData() {
-		Promise<Void> promise = Promise.promise();
-		importTimer("ChoiceDonor");
-		importTimer("ChoiceImage");
-		importTimer("ReportType");
 		return promise.future();
 	}
 

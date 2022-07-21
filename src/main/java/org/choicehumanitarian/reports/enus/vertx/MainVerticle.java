@@ -977,6 +977,7 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 	private Future<Void> configureCamel() {
 		Promise<Void> promise = Promise.promise();
 		promise.complete();
+
 		return promise.future();
 	}
 
