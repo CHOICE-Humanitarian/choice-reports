@@ -6,7 +6,6 @@ import java.math.BigDecimal;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -15,23 +14,25 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.Stack;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.choicehumanitarian.reports.enus.config.ConfigKeys;
+import org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor;
+import org.choicehumanitarian.reports.enus.model.htm.SiteHtm;
+import org.choicehumanitarian.reports.enus.model.page.SitePage;
+import org.choicehumanitarian.reports.enus.model.report.ChoiceReport;
+import org.choicehumanitarian.reports.enus.model.report.event.ReportEvent;
+import org.choicehumanitarian.reports.enus.model.report.narrative.ReportNarrative;
+import org.choicehumanitarian.reports.enus.model.report.schedule.ReportSchedule;
+import org.choicehumanitarian.reports.enus.model.report.type.ReportType;
+import org.choicehumanitarian.reports.enus.model.user.SiteUser;
+import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
 import org.computate.search.serialize.ComputateZonedDateTimeSerializer;
 import org.computate.search.tool.TimeTool;
 import org.computate.search.tool.XmlTool;
-import org.computate.vertx.api.ApiCounter;
-import org.computate.vertx.api.ApiRequest;
-import org.computate.vertx.api.ApiCounter;
-import org.computate.vertx.api.ApiRequest;
-import org.choicehumanitarian.reports.enus.config.ConfigKeys;
-import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
-import org.choicehumanitarian.reports.enus.model.page.SitePage;
-import org.choicehumanitarian.reports.enus.model.htm.SiteHtm;
 import org.computate.vertx.api.ApiCounter;
 import org.computate.vertx.api.ApiRequest;
 import org.computate.vertx.config.ComputateConfigKeys;
@@ -62,7 +63,6 @@ import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.authentication.TokenCredentials;
 import io.vertx.ext.auth.authentication.UsernamePasswordCredentials;
-import io.vertx.ext.jdbc.JDBCClient;
 import io.vertx.ext.mail.MailClient;
 import io.vertx.ext.mail.MailConfig;
 import io.vertx.ext.web.client.WebClient;
@@ -70,27 +70,9 @@ import io.vertx.ext.web.client.predicate.ResponsePredicate;
 import io.vertx.ext.web.templ.handlebars.HandlebarsTemplateEngine;
 import io.vertx.pgclient.PgConnectOptions;
 import io.vertx.pgclient.PgPool;
-import io.vertx.sqlclient.Cursor;
 import io.vertx.sqlclient.PoolOptions;
 import io.vertx.sqlclient.Row;
 import io.vertx.sqlclient.RowStream;
-import io.vertx.sqlclient.SqlConnection;
-import java.time.LocalDateTime;
-import io.vertx.ext.jdbc.JDBCClient;
-import io.vertx.sqlclient.Cursor;
-import io.vertx.sqlclient.SqlConnection;
-import io.vertx.ext.web.client.predicate.ResponsePredicate;
-import io.vertx.ext.auth.authentication.TokenCredentials;
-
-import org.choicehumanitarian.reports.enus.model.user.SiteUser;
-import org.choicehumanitarian.reports.enus.model.donor.ChoiceDonor;
-import org.choicehumanitarian.reports.enus.model.report.ChoiceReport;
-import org.choicehumanitarian.reports.enus.model.report.type.ReportType;
-import org.choicehumanitarian.reports.enus.model.report.schedule.ReportSchedule;
-import org.choicehumanitarian.reports.enus.model.report.narrative.ReportNarrative;
-import org.choicehumanitarian.reports.enus.model.report.event.ReportEvent;
-import org.choicehumanitarian.reports.enus.model.page.SitePage;
-import org.choicehumanitarian.reports.enus.model.htm.SiteHtm;
 
 /**
  */
@@ -352,31 +334,252 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 		return promise.future();
 	}
 
-	/**
-	 * Description: Import initial data
-	 * Val.Complete.enUS:Configuring the import of %s data completed. 
-	 * Val.Fail.enUS:Configuring the import of %s data failed. 
-	 **/
 	private Future<Void> importDataClass(String classSimpleName, ZonedDateTime startDateTime) {
 		Promise<Void> promise = Promise.promise();
-		promise.complete();
+		if("ChoiceDonor".equals(classSimpleName)) {
+			importDataChoiceDonor().onComplete(a -> {
+				String importPeriod = config().getString(String.format("%s_%s", ConfigKeys.IMPORT_DATA_PERIOD, classSimpleName));
+				if(importPeriod != null && startDateTime != null) {
+					Duration duration = TimeTool.parseNextDuration(importPeriod);
+					ZonedDateTime nextStartTime = startDateTime.plus(duration);
+					LOG.info(String.format(importTimerScheduling, classSimpleName, nextStartTime.format(TIME_FORMAT)));
+					Duration nextStartDuration = Duration.between(Instant.now(), nextStartTime);
+					vertx.setTimer(nextStartDuration.toMillis(), b -> {
+						importDataClass(classSimpleName, nextStartTime);
+					});
+					promise.complete();
+				} else {
+					promise.complete();
+				}
+			});
+		} else if("ChoiceImage".equals(classSimpleName)) {
+			importDataChoiceImage().onComplete(a -> {
+				String importPeriod = config().getString(String.format("%s_%s", ConfigKeys.IMPORT_DATA_PERIOD, classSimpleName));
+				if(importPeriod != null && startDateTime != null) {
+					Duration duration = TimeTool.parseNextDuration(importPeriod);
+					ZonedDateTime nextStartTime = startDateTime.plus(duration);
+					LOG.info(String.format(importTimerScheduling, classSimpleName, nextStartTime.format(TIME_FORMAT)));
+					Duration nextStartDuration = Duration.between(Instant.now(), nextStartTime);
+					vertx.setTimer(nextStartDuration.toMillis(), c -> {
+						importDataClass(classSimpleName, nextStartTime);
+					});
+					promise.complete();
+				} else {
+					promise.complete();
+				}
+			});
+		} else if("ReportType".equals(classSimpleName)) {
+			importDataReportType().onComplete(a -> {
+				String importPeriod = config().getString(String.format("%s_%s", ConfigKeys.IMPORT_DATA_PERIOD, classSimpleName));
+				if(importPeriod != null && startDateTime != null) {
+					Duration duration = TimeTool.parseNextDuration(importPeriod);
+					ZonedDateTime nextStartTime = startDateTime.plus(duration);
+					LOG.info(String.format(importTimerScheduling, classSimpleName, nextStartTime.format(TIME_FORMAT)));
+					Duration nextStartDuration = Duration.between(Instant.now(), nextStartTime);
+					vertx.setTimer(nextStartDuration.toMillis(), c -> {
+						importDataClass(classSimpleName, nextStartTime);
+					});
+					promise.complete();
+				} else {
+					promise.complete();
+				}
+			});
+		}
 		return promise.future();
 	}
 
-	/**
-	 * Description: Import initial data
-	 * Val.Skip.enUS:The data import is disabled. 
+	/**	
+	 * Import initial data
+	 * Val.Complete.enUS:Importing initial data completed. 
+	 * Val.Fail.enUS:Importing initial data failed. 
+	 * Val.Skip.enUS:Skip importing data. 
 	 **/
 	private Future<Void> importData() {
 		Promise<Void> promise = Promise.promise();
-		if(config().getBoolean(ConfigKeys.ENABLE_IMPORT_DATA)) {
-			importTimer("MODEL_CLASS");
+		importTimer("ChoiceDonor");
+		importTimer("ChoiceImage");
+		importTimer("ReportType");
+		return promise.future();
+	}
+
+	private Future<Void> importDataChoiceDonor() {
+		Promise<Void> promise = Promise.promise();
+		webClient.post(config().getInteger(ConfigKeys.DOMO_PORT), config().getString(ConfigKeys.DOMO_HOST_NAME), config().getString(ConfigKeys.DOMO_AUTH_TOKEN_URI))
+				.expect(ResponsePredicate.SC_OK)
+				.ssl(config().getBoolean(ConfigKeys.DOMO_SSL))
+				.authentication(new UsernamePasswordCredentials(config().getString(ConfigKeys.DOMO_AUTH_CLIENT_ID), config().getString(ConfigKeys.DOMO_AUTH_CLIENT_SECRET)))
+				.putHeader("Content-Type", "application/x-www-form-urlencoded")
+				.sendForm(MultiMap.caseInsensitiveMultiMap().set("grant_type", "client_credentials").set("scope", config().getString(ConfigKeys.DOMO_AUTH_SCOPE)))
+				.onSuccess(tokenResponse -> {
+			JsonObject token = tokenResponse.bodyAsJsonObject();
+			webClient.post(config().getInteger(ConfigKeys.DOMO_PORT), config().getString(ConfigKeys.DOMO_HOST_NAME), config().getString(ConfigKeys.DOMO_DATASET_CPP_URI))
+					.ssl(config().getBoolean(ConfigKeys.DOMO_SSL))
+					.authentication(new TokenCredentials(token.getString("access_token")))
+					.sendJson(new JsonObject().put("sql", "SELECT * FROM table"))
+					.onSuccess(cppResponse -> {
+				JsonObject cppData = cppResponse.bodyAsJsonObject();
+				List<Future> futures = new ArrayList<>();
+
+				cppData.getJsonArray("rows").stream().map(o -> (JsonArray)o).forEach(row -> {
+					String donorFullName = row.getString(0);
+					Long donorId = row.getLong(1);
+					String donorAttributeName = row.getString(2);
+					Long donorAttributeId = row.getLong(3);
+					String donorInKind = row.getString(4);
+					BigDecimal donorTotal = BigDecimal.valueOf(row.getDouble(5));
+					BigDecimal donorYtd = BigDecimal.valueOf(row.getDouble(6));
+					BigDecimal donorQ1 = BigDecimal.valueOf(row.getDouble(7));
+					BigDecimal donorQ2 = BigDecimal.valueOf(row.getDouble(8));
+					BigDecimal donorQ3 = BigDecimal.valueOf(row.getDouble(9));
+					BigDecimal donorQ4 = BigDecimal.valueOf(row.getDouble(10));
+					String donorParentName = row.getString(11);
+
+					JsonObject body = new JsonObject()
+							.put("saves", new JsonArray().add("inheritPk").add("donorFullName").add("donorId").add("stateKey").add("donorAttributeName").add("donorAttributeId").add("donorInKind").add("donorTotal").add("donorYtd").add("donorQ1").add("donorQ2").add("donorQ3").add("donorQ4").add("donorParentName"))
+							.put("pk", Optional.ofNullable(donorId).map(v -> v.toString()).orElse(null))
+							.put("donorFullName", Optional.ofNullable(donorFullName).map(v -> v.trim()).orElse(null))
+							.put("donorId", Optional.ofNullable(donorId).map(v -> v.toString()).orElse(null))
+							.put("donorAttributeName", Optional.ofNullable(donorAttributeName).map(v -> v.trim()).orElse(null))
+							.put("donorAttributeId", Optional.ofNullable(donorAttributeId).map(v -> v.toString()).orElse(null))
+							.put("donorInKind", Optional.ofNullable(donorInKind).map(v -> v.toString()).orElse(null))
+							.put("donorTotal", Optional.ofNullable(donorTotal).map(v -> v.toString()).orElse(null))
+							.put("donorYtd", Optional.ofNullable(donorYtd).map(v -> v.toString()).orElse(null))
+							.put("donorQ1", Optional.ofNullable(donorQ1).map(v -> v.toString()).orElse(null))
+							.put("donorQ2", Optional.ofNullable(donorQ2).map(v -> v.toString()).orElse(null))
+							.put("donorQ3", Optional.ofNullable(donorQ3).map(v -> v.toString()).orElse(null))
+							.put("donorQ4", Optional.ofNullable(donorQ4).map(v -> v.toString()).orElse(null))
+							.put("donorParentName", Optional.ofNullable(donorParentName).map(v -> v.trim()).orElse(null))
+							;
+					JsonObject params = new JsonObject();
+					params.put("body", body);
+					params.put("path", new JsonObject());
+					params.put("cookie", new JsonObject());
+					params.put("query", new JsonObject().put("commitWithin", 10000).put("q", "*:*").put("var", new JsonArray().add("refresh:false")));
+					JsonObject context = new JsonObject().put("params", params);
+					JsonObject json = new JsonObject().put("context", context);
+					futures.add(vertx.eventBus().request(String.format("choice-reports-enUS-%s", "ChoiceDonor"), json, new DeliveryOptions().addHeader("action", String.format("putimport%sFuture", "ChoiceDonor"))));
+				});
+				CompositeFuture.all(futures).onSuccess(a -> {
+					LOG.info(importDataComplete);
+					promise.complete();
+				}).onFailure(ex -> {
+					LOG.error(importDataFail, ex);
+					promise.fail(ex);
+				});
+			}).onFailure(ex -> {
+				LOG.error(importDataFail, ex);
+				promise.fail(ex);
+			});
+		}).onFailure(ex -> {
+			LOG.error(importDataFail, ex);
+			promise.fail(ex);
+		});
+		return promise.future();
+	}
+
+	private Future<Void> importDataChoiceImage() {
+		Promise<Void> promise = Promise.promise();
+		webClient.post(config().getInteger(ConfigKeys.DOMO_PORT), config().getString(ConfigKeys.DOMO_HOST_NAME), config().getString(ConfigKeys.DOMO_AUTH_TOKEN_URI))
+				.expect(ResponsePredicate.SC_OK)
+				.ssl(config().getBoolean(ConfigKeys.DOMO_SSL))
+				.authentication(new UsernamePasswordCredentials(config().getString(ConfigKeys.DOMO_AUTH_CLIENT_ID), config().getString(ConfigKeys.DOMO_AUTH_CLIENT_SECRET)))
+				.putHeader("Content-Type", "application/x-www-form-urlencoded")
+				.sendForm(MultiMap.caseInsensitiveMultiMap().set("grant_type", "client_credentials").set("scope", config().getString(ConfigKeys.DOMO_AUTH_SCOPE)))
+				.onSuccess(tokenResponse -> {
+			JsonObject token = tokenResponse.bodyAsJsonObject();
+			webClient.post(config().getInteger(ConfigKeys.DOMO_PORT), config().getString(ConfigKeys.DOMO_HOST_NAME), config().getString(ConfigKeys.DOMO_DATASET_CPP_URI))
+					.ssl(config().getBoolean(ConfigKeys.DOMO_SSL))
+					.authentication(new TokenCredentials(token.getString("access_token")))
+					.sendJson(new JsonObject().put("sql", "SELECT * FROM table"))
+					.onSuccess(cppResponse -> {
+				JsonObject cppData = cppResponse.bodyAsJsonObject();
+				List<Future> futures = new ArrayList<>();
+
+				cppData.getJsonArray("rows").stream().map(o -> (JsonArray)o).forEach(row -> {
+					String donorFullName = row.getString(0);
+					Long donorId = row.getLong(1);
+					String donorAttributeName = row.getString(2);
+					Long donorAttributeId = row.getLong(3);
+					String donorInKind = row.getString(4);
+					BigDecimal donorTotal = BigDecimal.valueOf(row.getDouble(5));
+					BigDecimal donorYtd = BigDecimal.valueOf(row.getDouble(6));
+					BigDecimal donorQ1 = BigDecimal.valueOf(row.getDouble(7));
+					BigDecimal donorQ2 = BigDecimal.valueOf(row.getDouble(8));
+					BigDecimal donorQ3 = BigDecimal.valueOf(row.getDouble(9));
+					BigDecimal donorQ4 = BigDecimal.valueOf(row.getDouble(10));
+					String donorParentName = row.getString(11);
+
+					JsonObject body = new JsonObject()
+							.put("saves", new JsonArray().add("inheritPk").add("donorFullName").add("donorId").add("stateKey").add("donorAttributeName").add("donorAttributeId").add("donorInKind").add("donorTotal").add("donorYtd").add("donorQ1").add("donorQ2").add("donorQ3").add("donorQ4").add("donorParentName"))
+							.put("pk", Optional.ofNullable(donorId).map(v -> v.toString()).orElse(null))
+							.put("donorFullName", Optional.ofNullable(donorFullName).map(v -> v.trim()).orElse(null))
+							.put("donorId", Optional.ofNullable(donorId).map(v -> v.toString()).orElse(null))
+							.put("donorAttributeName", Optional.ofNullable(donorAttributeName).map(v -> v.trim()).orElse(null))
+							.put("donorAttributeId", Optional.ofNullable(donorAttributeId).map(v -> v.toString()).orElse(null))
+							.put("donorInKind", Optional.ofNullable(donorInKind).map(v -> v.toString()).orElse(null))
+							.put("donorTotal", Optional.ofNullable(donorTotal).map(v -> v.toString()).orElse(null))
+							.put("donorYtd", Optional.ofNullable(donorYtd).map(v -> v.toString()).orElse(null))
+							.put("donorQ1", Optional.ofNullable(donorQ1).map(v -> v.toString()).orElse(null))
+							.put("donorQ2", Optional.ofNullable(donorQ2).map(v -> v.toString()).orElse(null))
+							.put("donorQ3", Optional.ofNullable(donorQ3).map(v -> v.toString()).orElse(null))
+							.put("donorQ4", Optional.ofNullable(donorQ4).map(v -> v.toString()).orElse(null))
+							.put("donorParentName", Optional.ofNullable(donorParentName).map(v -> v.trim()).orElse(null))
+							;
+					JsonObject params = new JsonObject();
+					params.put("body", body);
+					params.put("path", new JsonObject());
+					params.put("cookie", new JsonObject());
+					params.put("query", new JsonObject().put("commitWithin", 10000).put("q", "*:*").put("var", new JsonArray().add("refresh:false")));
+					JsonObject context = new JsonObject().put("params", params);
+					JsonObject json = new JsonObject().put("context", context);
+					futures.add(vertx.eventBus().request(String.format("choice-reports-enUS-%s", "ChoiceDonor"), json, new DeliveryOptions().addHeader("action", String.format("putimport%sFuture", "ChoiceDonor"))));
+				});
+				CompositeFuture.all(futures).onSuccess(a -> {
+					LOG.info(importDataComplete);
+					promise.complete();
+				}).onFailure(ex -> {
+					LOG.error(importDataFail, ex);
+					promise.fail(ex);
+				});
+			}).onFailure(ex -> {
+				LOG.error(importDataFail, ex);
+				promise.fail(ex);
+			});
+		}).onFailure(ex -> {
+			LOG.error(importDataFail, ex);
+			promise.fail(ex);
+		});
+		return promise.future();
+	}
+
+	private Future<Void> importDataReportType() {
+		Promise<Void> promise = Promise.promise();
+		JsonArray reportTypes = Optional.ofNullable(config().getValue(String.format("IMPORT_DATA_%s", "ReportType"))).map(v -> v instanceof JsonArray ? (JsonArray)v : new JsonArray(v.toString())).orElse(new JsonArray());
+		List<Future> futures = new ArrayList<>();
+
+		reportTypes.stream().map(o -> (JsonObject)o).forEach(reportType -> {
+	
+			JsonObject body = new JsonObject()
+					.put(ReportType.VAR_saves, new JsonArray().add(ReportType.VAR_inheritPk).add(ReportType.VAR_typeName))
+					.put(ReportType.VAR_pk, reportType.getString(ReportType.VAR_typeName))
+					.put(ReportType.VAR_typeName, reportType.getString(ReportType.VAR_typeName))
+					;
+			JsonObject params = new JsonObject();
+			params.put("body", body);
+			params.put("path", new JsonObject());
+			params.put("cookie", new JsonObject());
+			params.put("query", new JsonObject().put("commitWithin", 10000).put("q", "*:*").put("var", new JsonArray().add("refresh:false")));
+			JsonObject context = new JsonObject().put("params", params);
+			JsonObject json = new JsonObject().put("context", context);
+			futures.add(vertx.eventBus().request(String.format("choice-reports-enUS-%s", "ReportType"), json, new DeliveryOptions().addHeader("action", String.format("putimport%sFuture", "ReportType"))));
+		});
+		CompositeFuture.all(futures).onSuccess(a -> {
+			LOG.info(importDataComplete);
 			promise.complete();
-		}
-		else {
-			LOG.info(importDataSkip);
-			promise.complete();
-		}
+		}).onFailure(ex -> {
+			LOG.error(importDataFail, ex);
+			promise.fail(ex);
+		});
 		return promise.future();
 	}
 
