@@ -34,6 +34,13 @@
 				websocketChoiceReport(websocketChoiceReportInner);
 				window.varsFq = JSON.parse('{{{toJsonObjectStringInApostrophes varsFq}}}');
 				pageGraph();
+
+				var calendarEl = document.getElementById('calendar');
+				var calendar = new FullCalendar.Calendar(calendarEl, {
+					initialView: 'dayGridMonth'
+					, height: 500
+				});
+				calendar.render();
 			});
 {{#if DEFAULT_MAP_LOCATION }}
 			window.DEFAULT_MAP_LOCATION = { lat: {{ DEFAULT_MAP_LOCATION.lat }}, lon: {{ DEFAULT_MAP_LOCATION.lon }} };
@@ -44,7 +51,7 @@
 		</script>
 {{/inline}}
 {{#*inline "htmUrlChoiceReport"}}{{pageUri}}?q={{query.q}}&amp;rows={{#if rows}}{{rows}}{{else}}{{pagination.rows}}{{/if}}&amp;rows={{#if start}}{{start}}{{else}}{{pagination.start}}{{/if}}{{#each query.fq}}{{#eq fq this}}{{else}}&fq={{fq}}:{{val}}{{/eq}}{{/each}}{{#each query.sort}}{{#eq sort this}}{{else}}&sort={{var}} {{order}}{{/eq}}{{/each}}{{/inline}}
-{{#*inline "htmHeadChoiceReportPage"}}{{> "htmTitleChoiceReportPage"}}{{> "htmMetaChoiceReportPage"}}{{> "htmStyleChoiceReportPage"}}{{> "htmScriptsChoiceReportPage"}}{{> "htmScriptChoiceReportPage"}}{{/inline}}
+{{#*inline "htmHeadChoiceReportPage"}}{{#block "htmTitle"}}{{/block}}{{#block "htmMeta"}}{{/block}}{{#block "htmStyle"}}{{/block}}{{#block "htmScripts"}}{{/block}}{{#block "htmScript"}}{{/block}}{{/inline}}
 {{#*inline "htmBodySearchChoiceReportPage"}}								<!-- #*inline "htmBodySearchChoiceReportPage" -->
 								<div>
 {{#each varsQ}}
@@ -159,6 +166,7 @@
 										</td>
 									</tr>
 								</table>
+								<div id="calendar"></div>
 								<table class="w3-padding ">
 {{#each varsRange }}
 									<tr class="">
@@ -180,7 +188,7 @@
 								</div>
 								<div class="w3-padding w3-tiny " id="pageSearchVal-PivotChoiceReport">
 {{#if defaultPivotVars }}
-									<div class="pageSearchVal pageSearchVal-PivotChoiceReport " id="pageSearchVal-PivotChoiceReport_1">facet.pivot={{#each defaultPivotVars }}{{#if @index }},{{/if}}{{ this }}{{/each}}</div>
+									<div class="pageSearchVal pageSearchVal-PivotChoiceReport " id="pageSearchVal-PivotChoiceReport_1">facet.pivot={!range=r1}{{#each defaultPivotVars }}{{#if @index }},{{/if}}{{ this }}{{/each}}</div>
 {{/if}}
 								</div>
 								<table class="w3-table ">

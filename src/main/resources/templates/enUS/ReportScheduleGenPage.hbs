@@ -55,10 +55,6 @@
 		{{/ifContainsAnyRoles}}
 				}
 				websocketReportSchedule(websocketReportScheduleInner);
-				websocketReportType(websocketReportTypeInner);
-				websocketReportNarrative(websocketReportNarrativeInner);
-				websocketReportEvent(websocketReportEventInner);
-				websocketSiteUser(websocketSiteUserInner);
 				window.varsFq = JSON.parse('{{{toJsonObjectStringInApostrophes varsFq}}}');
 				pageGraph();
 			});
@@ -71,7 +67,7 @@
 		</script>
 {{/inline}}
 {{#*inline "htmUrlReportSchedule"}}{{pageUri}}?q={{query.q}}&amp;rows={{#if rows}}{{rows}}{{else}}{{pagination.rows}}{{/if}}&amp;rows={{#if start}}{{start}}{{else}}{{pagination.start}}{{/if}}{{#each query.fq}}{{#eq fq this}}{{else}}&fq={{fq}}:{{val}}{{/eq}}{{/each}}{{#each query.sort}}{{#eq sort this}}{{else}}&sort={{var}} {{order}}{{/eq}}{{/each}}{{/inline}}
-{{#*inline "htmHeadReportSchedulePage"}}{{> "htmTitleReportSchedulePage"}}{{> "htmMetaReportSchedulePage"}}{{> "htmStyleReportSchedulePage"}}{{> "htmScriptsReportSchedulePage"}}{{> "htmScriptReportSchedulePage"}}{{/inline}}
+{{#*inline "htmHeadReportSchedulePage"}}{{#block "htmTitle"}}{{/block}}{{#block "htmMeta"}}{{/block}}{{#block "htmStyle"}}{{/block}}{{#block "htmScripts"}}{{/block}}{{#block "htmScript"}}{{/block}}{{/inline}}
 {{#*inline "htmBodySearchReportSchedulePage"}}								<!-- #*inline "htmBodySearchReportSchedulePage" -->
 								<div>
 {{#each varsQ}}
@@ -207,7 +203,7 @@
 								</div>
 								<div class="w3-padding w3-tiny " id="pageSearchVal-PivotReportSchedule">
 {{#if defaultPivotVars }}
-									<div class="pageSearchVal pageSearchVal-PivotReportSchedule " id="pageSearchVal-PivotReportSchedule_1">facet.pivot={{#each defaultPivotVars }}{{#if @index }},{{/if}}{{ this }}{{/each}}</div>
+									<div class="pageSearchVal pageSearchVal-PivotReportSchedule " id="pageSearchVal-PivotReportSchedule_1">facet.pivot={!range=r1}{{#each defaultPivotVars }}{{#if @index }},{{/if}}{{ this }}{{/each}}</div>
 {{/if}}
 								</div>
 								<table class="w3-table ">

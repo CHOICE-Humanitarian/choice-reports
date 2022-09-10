@@ -15,16 +15,15 @@ CLUSTER_HOST_NAME: localhost
 CLUSTER_PORT: 12281
 GITHUB_ORG: "CHOICE-Humanitarian"
 QUAYIO_ORG: "computate"
-PROJECT_POWERED_BY_URL: "https://access.redhat.com/products/openshift-online-red-hat"
-PROJECT_POWERED_BY_NAME: "OpenShift Online"
-PROJECT_POWERED_BY_IMAGE_URI: "/svg/openshift.svg"
+SITE_POWERED_BY_URL: "https://access.redhat.com/products/openshift-online-red-hat"
+SITE_POWERED_BY_NAME: "OpenShift Online"
+SITE_POWERED_BY_IMAGE_URI: "/svg/openshift.svg"
 
 STATIC_BASE_URL: "http://localhost:12280/static"
 STATIC_PATH: "/usr/local/src/choice-reports-static"
 
 API_CONTACT_EMAIL: 
-API_COUNTER_PAUSE: 10
-API_COUNTER_RESUME: 5
+API_COUNTER_RESUME: 0
 API_COUNTER_FETCH: 10
 
 JDBC_HOST: localhost
@@ -46,6 +45,11 @@ AUTH_TOKEN_URI: /auth/realms/AUTH_REALM/protocol/openid-connect/token
 
 ZOOKEEPER_HOST_NAME: localhost
 ZOOKEEPER_PORT: 2181
+ZOOKEEPER_BASE_SLEEP_TIME_MILLIS: 5000
+ZOOKEEPER_MAX_SLEEP_MILLIS: 5000
+ZOOKEEPER_MAX_RETRIES: 5
+ZOOKEEPER_CONNECTION_TIMEOUT_MILLIS: 3000
+ZOOKEEPER_SESSION_TIMEOUT_MILLIS: 10000
 
 SOLR_URL: http://localhost:8983/solr/choice-reports
 SOLR_HOST_NAME: localhost

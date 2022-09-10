@@ -27,9 +27,9 @@ import org.computate.search.wrap.Wrap;
  * ApiMethod.enUS: Search
  * 
  * ApiMethod.enUS: SearchPage
- * PageSearchPage.enUS: ReportTypePage
- * PageSuperSearchPage.enUS: BaseModelPage
- * ApiUriSearchPage.enUS: /report-type
+ * Page.SearchPage.enUS: ReportTypePage
+ * PageSuper.SearchPage.enUS: BaseModelPage
+ * ApiUri.SearchPage.enUS: /report-type
  * 
  * AName.enUS: a report type
  * Color: light-green

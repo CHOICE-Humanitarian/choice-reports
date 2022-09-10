@@ -40,7 +40,14 @@
 				websocketReportEvent(websocketReportEventInner);
 				window.varsFq = JSON.parse('{{{toJsonObjectStringInApostrophes varsFq}}}');
 				pageGraph();
+
+				var calendarEl = document.getElementById('site-calendar');
+				var calendar = new FullCalendar.Calendar(calendarEl, {
+					initialView: 'dayGridMonth'
+				});
+				calendar.render();
 			});
+			$('#site-calendar-box').accordion();
 {{#if DEFAULT_MAP_LOCATION }}
 			window.DEFAULT_MAP_LOCATION = { lat: {{ DEFAULT_MAP_LOCATION.lat }}, lon: {{ DEFAULT_MAP_LOCATION.lon }} };
 {{/if}}
@@ -50,7 +57,7 @@
 		</script>
 {{/inline}}
 {{#*inline "htmUrlReportEvent"}}{{pageUri}}?q={{query.q}}&amp;rows={{#if rows}}{{rows}}{{else}}{{pagination.rows}}{{/if}}&amp;rows={{#if start}}{{start}}{{else}}{{pagination.start}}{{/if}}{{#each query.fq}}{{#eq fq this}}{{else}}&fq={{fq}}:{{val}}{{/eq}}{{/each}}{{#each query.sort}}{{#eq sort this}}{{else}}&sort={{var}} {{order}}{{/eq}}{{/each}}{{/inline}}
-{{#*inline "htmHeadReportEventPage"}}{{> "htmTitleReportEventPage"}}{{> "htmMetaReportEventPage"}}{{> "htmStyleReportEventPage"}}{{> "htmScriptsReportEventPage"}}{{> "htmScriptReportEventPage"}}{{/inline}}
+{{#*inline "htmHeadReportEventPage"}}{{#block "htmTitle"}}{{/block}}{{#block "htmMeta"}}{{/block}}{{#block "htmStyle"}}{{/block}}{{#block "htmScripts"}}{{/block}}{{#block "htmScript"}}{{/block}}{{/inline}}
 {{#*inline "htmBodySearchReportEventPage"}}								<!-- #*inline "htmBodySearchReportEventPage" -->
 								<div>
 {{#each varsQ}}
@@ -186,7 +193,7 @@
 								</div>
 								<div class="w3-padding w3-tiny " id="pageSearchVal-PivotReportEvent">
 {{#if defaultPivotVars }}
-									<div class="pageSearchVal pageSearchVal-PivotReportEvent " id="pageSearchVal-PivotReportEvent_1">facet.pivot={{#each defaultPivotVars }}{{#if @index }},{{/if}}{{ this }}{{/each}}</div>
+									<div class="pageSearchVal pageSearchVal-PivotReportEvent " id="pageSearchVal-PivotReportEvent_1">facet.pivot={!range=r1}{{#each defaultPivotVars }}{{#if @index }},{{/if}}{{ this }}{{/each}}</div>
 {{/if}}
 								</div>
 								<table class="w3-table ">
@@ -632,6 +639,10 @@
 		</div>
 {{#block "htmBodyGraph"}}{{/block}}
 	<div class="pageContent w3-content ">
+		<div id="site-calendar-box ">
+			<h3 id="site-calendar-title">Calendar</h3>
+			<div id="site-calendar"></div>
+		</div>
 	{{#eq reportEventCount int0}}
 {{#block "htmBodyCount0"}}{{/block}}
 	{{else}}

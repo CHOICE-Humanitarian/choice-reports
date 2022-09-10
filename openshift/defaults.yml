@@ -80,9 +80,9 @@ SITE_REPO_NAME: "{{ SITE_NAME }}"
 SITE_REPO: "git@github.com:CHOICE-Humanitarian/choice-reports.git"
 # The Github Repo HTTPS. 
 SITE_REPO_HTTPS: "https://github.com/CHOICE-Humanitarian/choice-reports.git"
-PROJECT_POWERED_BY_URL: "https://access.redhat.com/products/openshift-online-red-hat"
-PROJECT_POWERED_BY_NAME: "OpenShift Online"
-PROJECT_POWERED_BY_IMAGE_URI: "/svg/openshift.svg"
+SITE_POWERED_BY_URL: "https://access.redhat.com/products/openshift-online-red-hat"
+SITE_POWERED_BY_NAME: "OpenShift Online"
+SITE_POWERED_BY_IMAGE_URI: "/svg/openshift.svg"
 
 ###############################
 # application global defaults #
@@ -101,13 +101,13 @@ SITE_STATIC_BASE_URL: "https://computate.neocities.org/choice-reports"
 # Where static files are placed in the pod. 
 SITE_STATIC_PATH: 
 # App memory limit. 
-SITE_LIMITS_MEMORY: "500Mi"
+SITE_LIMITS_MEMORY: "1500Mi"
 # App cpu limit. 
-SITE_LIMITS_CPU: "500m"
+SITE_LIMITS_CPU: "700m"
 # App memory requests. 
-SITE_REQUESTS_MEMORY: "500Mi"
+SITE_REQUESTS_MEMORY: "1500Mi"
 # App cpu requests. 
-SITE_REQUESTS_CPU: "500m"
+SITE_REQUESTS_CPU: "700m"
 # Number of pod replicas
 SITE_REPLICAS: "1"
 # Whether to install the Build Config
@@ -119,7 +119,13 @@ VERTX_WARNING_EXCEPTION_SECONDS: 60
 API_COUNTER_PAUSE: 10
 API_COUNTER_RESUME: 5
 API_COUNTER_FETCH: 10
-JAVA_OPTS: "-XX:+UseParallelOldGC -XX:MinHeapFreeRatio=10 -XX:MaxHeapFreeRatio=20 -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -XX:MaxMetaspaceSize=100m -XX:ParallelGCThreads=1 -Djava.util.concurrent.ForkJoinPool.common.parallelism=1 -XX:CICompilerCount=2 -XX:+ExitOnOutOfMemoryError"
+JAVA_OPTS: "-XX:+ExitOnOutOfMemoryError"
+# The site volume size for files.
+SITE_VOLUME_SIZE: 30Gi
+# The volume name for files in the site.
+SITE_VOLUME_NAME: choice-reports
+# The volume mount path for files in the site.
+SITE_VOLUME_MOUNT_PATH: /var/choice-reports
 
 #########################################
 # application US English defaults #

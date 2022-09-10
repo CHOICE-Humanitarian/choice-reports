@@ -30,19 +30,19 @@ import io.vertx.core.Promise;
  * ApiMethod.enUS: Search
  * 
  * ApiMethod.enUS: SearchPage
- * PageSearchPage.enUS: ChoiceReportPage
- * PageSuperSearchPage.enUS: BaseModelPage
- * ApiUriSearchPage.enUS: /report
+ * Page.SearchPage.enUS: ChoiceReportPage
+ * PageSuper.SearchPage.enUS: BaseModelPage
+ * ApiUri.SearchPage.enUS: /report
  * 
  * ApiMethod.enUS: ChoiceReportDisplaySearchPage
- * PageChoiceReportDisplaySearchPage.enUS: ChoiceReportDisplayPage
- * PageSuperChoiceReportDisplaySearchPage.enUS: BaseModelPage
- * ApiUriChoiceReportDisplaySearchPage.enUS: /display-report
+ * Page.ChoiceReportDisplaySearchPage.enUS: ChoiceReportDisplayPage
+ * PageSuper.ChoiceReportDisplaySearchPage.enUS: BaseModelPage
+ * ApiUri.ChoiceReportDisplaySearchPage.enUS: /display-report
  * 
  * ApiMethod.enUS: ChoiceReportPdfSearchPage
- * PageChoiceReportPdfSearchPage.enUS: ChoiceReportPdfPage
- * PageSuperChoiceReportPdfSearchPage.enUS: BaseModelPage
- * ApiUriChoiceReportPdfSearchPage.enUS: /pdf-report
+ * Page.ChoiceReportPdfSearchPage.enUS: ChoiceReportPdfPage
+ * PageSuper.ChoiceReportPdfSearchPage.enUS: BaseModelPage
+ * ApiUri.ChoiceReportPdfSearchPage.enUS: /pdf-report
  * 
  * AName.enUS: a report
  * Color: cyan
@@ -53,7 +53,7 @@ import io.vertx.core.Promise;
  * Role.enUS: SiteAdmin
  * 
  * Rows: 100
-**/          
+**/
 public class ChoiceReport extends ChoiceReportGen<BaseModel> {
 
 	/**  

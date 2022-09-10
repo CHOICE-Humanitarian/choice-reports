@@ -89,6 +89,9 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.choicehumanitarian.reports.enus.model.user.SiteUserEnUSApiServiceImpl;
 import org.computate.vertx.search.list.SearchList;
+import org.choicehumanitarian.reports.enus.model.report.ChoiceReportPage;
+import org.choicehumanitarian.reports.enus.model.report.ChoiceReportDisplayPage;
+import org.choicehumanitarian.reports.enus.model.report.ChoiceReportPdfPage;
 
 
 /**
@@ -990,8 +993,8 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 
 		try {
 			ApiRequest apiRequest = siteRequest.getApiRequest_();
+			Promise<ChoiceReport> promise1 = Promise.promise();
 			pgPool.withTransaction(sqlConnection -> {
-				Promise<ChoiceReport> promise1 = Promise.promise();
 				siteRequest.setSqlConnection(sqlConnection);
 				sqlPATCHChoiceReport(o, inheritPk).onSuccess(choiceReport -> {
 					persistChoiceReport(choiceReport).onSuccess(c -> {
@@ -1556,9 +1559,9 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 				json.put(ConfigKeys.GITHUB_ORG, config.getString(ConfigKeys.GITHUB_ORG));
 				json.put(ConfigKeys.SITE_NAME, config.getString(ConfigKeys.SITE_NAME));
 				json.put(ConfigKeys.SITE_DISPLAY_NAME, config.getString(ConfigKeys.SITE_DISPLAY_NAME));
-				json.put(ConfigKeys.PROJECT_POWERED_BY_URL, config.getString(ConfigKeys.PROJECT_POWERED_BY_URL));
-				json.put(ConfigKeys.PROJECT_POWERED_BY_NAME, config.getString(ConfigKeys.PROJECT_POWERED_BY_NAME));
-				json.put(ConfigKeys.PROJECT_POWERED_BY_IMAGE_URI, config.getString(ConfigKeys.PROJECT_POWERED_BY_IMAGE_URI));
+				json.put(ConfigKeys.SITE_POWERED_BY_URL, config.getString(ConfigKeys.SITE_POWERED_BY_URL));
+				json.put(ConfigKeys.SITE_POWERED_BY_NAME, config.getString(ConfigKeys.SITE_POWERED_BY_NAME));
+				json.put(ConfigKeys.SITE_POWERED_BY_IMAGE_URI, config.getString(ConfigKeys.SITE_POWERED_BY_IMAGE_URI));
 				templateEngine.render(json, templateSearchPageChoiceReport()).onSuccess(buffer -> {
 					promise.complete(new ServiceResponse(200, "OK", buffer, requestHeaders));
 				}).onFailure(ex -> {
@@ -1638,17 +1641,17 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 	}
 
 
-	public void choicereportdisplaysearchpageChoiceReportPageInit(ChoiceReportPage page, SearchList<ChoiceReport> listChoiceReport) {
+	public void choicereportdisplaysearchpageChoiceReportPageInit(ChoiceReportDisplayPage page, SearchList<ChoiceReport> listChoiceReport) {
 	}
 
 	public String templateChoiceReportDisplaySearchPageChoiceReport() {
-		return Optional.ofNullable(config.getString(ConfigKeys.TEMPLATE_PATH)).orElse("templates") + "/enUS/ChoiceReportPage";
+		return Optional.ofNullable(config.getString(ConfigKeys.TEMPLATE_PATH)).orElse("templates") + "/enUS/ChoiceReportDisplayPage";
 	}
 	public Future<ServiceResponse> response200ChoiceReportDisplaySearchPageChoiceReport(SearchList<ChoiceReport> listChoiceReport) {
 		Promise<ServiceResponse> promise = Promise.promise();
 		try {
 			SiteRequestEnUS siteRequest = listChoiceReport.getSiteRequest_(SiteRequestEnUS.class);
-			ChoiceReportPage page = new ChoiceReportPage();
+			ChoiceReportDisplayPage page = new ChoiceReportDisplayPage();
 			MultiMap requestHeaders = MultiMap.caseInsensitiveMultiMap();
 			siteRequest.setRequestHeaders(requestHeaders);
 
@@ -1656,15 +1659,15 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 				siteRequest.setRequestPk(listChoiceReport.get(0).getPk());
 			page.setSearchListChoiceReport_(listChoiceReport);
 			page.setSiteRequest_(siteRequest);
-			page.promiseDeepChoiceReportPage(siteRequest).onSuccess(a -> {
+			page.promiseDeepChoiceReportDisplayPage(siteRequest).onSuccess(a -> {
 				JsonObject json = JsonObject.mapFrom(page);
 				json.put(ConfigKeys.STATIC_BASE_URL, config.getString(ConfigKeys.STATIC_BASE_URL));
 				json.put(ConfigKeys.GITHUB_ORG, config.getString(ConfigKeys.GITHUB_ORG));
 				json.put(ConfigKeys.SITE_NAME, config.getString(ConfigKeys.SITE_NAME));
 				json.put(ConfigKeys.SITE_DISPLAY_NAME, config.getString(ConfigKeys.SITE_DISPLAY_NAME));
-				json.put(ConfigKeys.PROJECT_POWERED_BY_URL, config.getString(ConfigKeys.PROJECT_POWERED_BY_URL));
-				json.put(ConfigKeys.PROJECT_POWERED_BY_NAME, config.getString(ConfigKeys.PROJECT_POWERED_BY_NAME));
-				json.put(ConfigKeys.PROJECT_POWERED_BY_IMAGE_URI, config.getString(ConfigKeys.PROJECT_POWERED_BY_IMAGE_URI));
+				json.put(ConfigKeys.SITE_POWERED_BY_URL, config.getString(ConfigKeys.SITE_POWERED_BY_URL));
+				json.put(ConfigKeys.SITE_POWERED_BY_NAME, config.getString(ConfigKeys.SITE_POWERED_BY_NAME));
+				json.put(ConfigKeys.SITE_POWERED_BY_IMAGE_URI, config.getString(ConfigKeys.SITE_POWERED_BY_IMAGE_URI));
 				templateEngine.render(json, templateChoiceReportDisplaySearchPageChoiceReport()).onSuccess(buffer -> {
 					promise.complete(new ServiceResponse(200, "OK", buffer, requestHeaders));
 				}).onFailure(ex -> {
@@ -1744,17 +1747,17 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 	}
 
 
-	public void choicereportpdfsearchpageChoiceReportPageInit(ChoiceReportPage page, SearchList<ChoiceReport> listChoiceReport) {
+	public void choicereportpdfsearchpageChoiceReportPageInit(ChoiceReportPdfPage page, SearchList<ChoiceReport> listChoiceReport) {
 	}
 
 	public String templateChoiceReportPdfSearchPageChoiceReport() {
-		return Optional.ofNullable(config.getString(ConfigKeys.TEMPLATE_PATH)).orElse("templates") + "/enUS/ChoiceReportPage";
+		return Optional.ofNullable(config.getString(ConfigKeys.TEMPLATE_PATH)).orElse("templates") + "/enUS/ChoiceReportPdfPage";
 	}
 	public Future<ServiceResponse> response200ChoiceReportPdfSearchPageChoiceReport(SearchList<ChoiceReport> listChoiceReport) {
 		Promise<ServiceResponse> promise = Promise.promise();
 		try {
 			SiteRequestEnUS siteRequest = listChoiceReport.getSiteRequest_(SiteRequestEnUS.class);
-			ChoiceReportPage page = new ChoiceReportPage();
+			ChoiceReportPdfPage page = new ChoiceReportPdfPage();
 			MultiMap requestHeaders = MultiMap.caseInsensitiveMultiMap();
 			siteRequest.setRequestHeaders(requestHeaders);
 
@@ -1762,15 +1765,15 @@ public class ChoiceReportEnUSGenApiServiceImpl extends BaseApiServiceImpl implem
 				siteRequest.setRequestPk(listChoiceReport.get(0).getPk());
 			page.setSearchListChoiceReport_(listChoiceReport);
 			page.setSiteRequest_(siteRequest);
-			page.promiseDeepChoiceReportPage(siteRequest).onSuccess(a -> {
+			page.promiseDeepChoiceReportPdfPage(siteRequest).onSuccess(a -> {
 				JsonObject json = JsonObject.mapFrom(page);
 				json.put(ConfigKeys.STATIC_BASE_URL, config.getString(ConfigKeys.STATIC_BASE_URL));
 				json.put(ConfigKeys.GITHUB_ORG, config.getString(ConfigKeys.GITHUB_ORG));
 				json.put(ConfigKeys.SITE_NAME, config.getString(ConfigKeys.SITE_NAME));
 				json.put(ConfigKeys.SITE_DISPLAY_NAME, config.getString(ConfigKeys.SITE_DISPLAY_NAME));
-				json.put(ConfigKeys.PROJECT_POWERED_BY_URL, config.getString(ConfigKeys.PROJECT_POWERED_BY_URL));
-				json.put(ConfigKeys.PROJECT_POWERED_BY_NAME, config.getString(ConfigKeys.PROJECT_POWERED_BY_NAME));
-				json.put(ConfigKeys.PROJECT_POWERED_BY_IMAGE_URI, config.getString(ConfigKeys.PROJECT_POWERED_BY_IMAGE_URI));
+				json.put(ConfigKeys.SITE_POWERED_BY_URL, config.getString(ConfigKeys.SITE_POWERED_BY_URL));
+				json.put(ConfigKeys.SITE_POWERED_BY_NAME, config.getString(ConfigKeys.SITE_POWERED_BY_NAME));
+				json.put(ConfigKeys.SITE_POWERED_BY_IMAGE_URI, config.getString(ConfigKeys.SITE_POWERED_BY_IMAGE_URI));
 				templateEngine.render(json, templateChoiceReportPdfSearchPageChoiceReport()).onSuccess(buffer -> {
 					promise.complete(new ServiceResponse(200, "OK", buffer, requestHeaders));
 				}).onFailure(ex -> {

@@ -10,6 +10,7 @@
 		<script src="{{staticBaseUrl}}/js/sockjs.js"></script>
 		<script src="{{staticBaseUrl}}/js/vertx-eventbus.js"></script>
 		<script src="{{staticBaseUrl}}/js/plotly-2.9.0.min.js"></script>
+		<script src="{{staticBaseUrl}}/js/fullcalendar/main.min.js"></script>
 {{/inline}}
 {{#*inline "htmScriptPageLayout"}}		<!-- #*inline "htmScriptPageLayout" -->
 {{/inline}}
@@ -18,6 +19,7 @@
 		<link rel="icon" href="{{staticBaseUrl}}/favicon.ico" />
 		<link rel="stylesheet" href="{{staticBaseUrl}}/css/w3.css" />
 		<link rel="stylesheet" href="{{staticBaseUrl}}/css/site-enUS.css" />
+		<link rel="stylesheet" href="{{staticBaseUrl}}/css/fullcalendar/main.min.css"/>
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Anonymous%20Pro%7CBellefair%7CJomhuria%7CPT%20Serif%3A700%7CStint%20Ultra%20Condensed&amp;display=swap"/>
 
 {{/inline}}
@@ -61,25 +63,25 @@
 				</div>
 {{/if}}
 				<div class="site-bar-item w3-bar-item ">
-					<a href="/donor" class="header-icon-a w3-hover-opacity w3-center w3-text-light-green "><i class="fad fa-hands-heart w3-text-light-green "></i> donors</a>
+					<a href="/donor{{#if defaultRangeGap}}?facet.range.gap={{encodeURIComponent defaultRangeGap }}&facet.range.start={{encodeURIComponent defaultRangeStart }}&facet.range.end={{encodeURIComponent defaultRangeEnd }}&facet.range={!tag=r1}created&facet.pivot={!range=r1}classSimpleName{{/if}}" class="header-icon-a w3-hover-opacity w3-center w3-text-light-green "><i class="fad fa-hands-heart w3-text-light-green "></i> donors</a>
 				</div>
 				<div class="site-bar-item w3-bar-item ">
-					<a href="/report" class="header-icon-a w3-hover-opacity w3-center w3-text-cyan "><i class="fad fa-file-chart-line w3-text-cyan "></i> reports</a>
+					<a href="/report{{#if defaultRangeGap}}?facet.range.gap={{encodeURIComponent defaultRangeGap }}&facet.range.start={{encodeURIComponent defaultRangeStart }}&facet.range.end={{encodeURIComponent defaultRangeEnd }}&facet.range={!tag=r1}created&facet.pivot={!range=r1}classSimpleName{{/if}}" class="header-icon-a w3-hover-opacity w3-center w3-text-cyan "><i class="fad fa-file-chart-line w3-text-cyan "></i> reports</a>
 				</div>
 				<div class="site-bar-item w3-bar-item ">
-					<a href="/report-type" class="header-icon-a w3-hover-opacity w3-center w3-text-light-green "><i class="fad fa-list-dropdown w3-text-light-green "></i> report types</a>
+					<a href="/report-type{{#if defaultRangeGap}}?facet.range.gap={{encodeURIComponent defaultRangeGap }}&facet.range.start={{encodeURIComponent defaultRangeStart }}&facet.range.end={{encodeURIComponent defaultRangeEnd }}&facet.range={!tag=r1}created&facet.pivot={!range=r1}classSimpleName{{/if}}" class="header-icon-a w3-hover-opacity w3-center w3-text-light-green "><i class="fad fa-list-dropdown w3-text-light-green "></i> report types</a>
 				</div>
 				<div class="site-bar-item w3-bar-item ">
-					<a href="/report-schedule" class="header-icon-a w3-hover-opacity w3-center w3-text-light-green "><i class="fad fa-calendar-days w3-text-light-green "></i> report schedules</a>
+					<a href="/report-schedule{{#if defaultRangeGap}}?facet.range.gap={{encodeURIComponent defaultRangeGap }}&facet.range.start={{encodeURIComponent defaultRangeStart }}&facet.range.end={{encodeURIComponent defaultRangeEnd }}&facet.range={!tag=r1}created&facet.pivot={!range=r1}classSimpleName{{/if}}" class="header-icon-a w3-hover-opacity w3-center w3-text-light-green "><i class="fad fa-calendar-days w3-text-light-green "></i> report schedules</a>
 				</div>
 				<div class="site-bar-item w3-bar-item ">
-					<a href="/report-narrative" class="header-icon-a w3-hover-opacity w3-center w3-text-light-green "><i class="fad fa-calendar-pen w3-text-light-green "></i> report narratives</a>
+					<a href="/report-narrative{{#if defaultRangeGap}}?facet.range.gap={{encodeURIComponent defaultRangeGap }}&facet.range.start={{encodeURIComponent defaultRangeStart }}&facet.range.end={{encodeURIComponent defaultRangeEnd }}&facet.range={!tag=r1}created&facet.pivot={!range=r1}classSimpleName{{/if}}" class="header-icon-a w3-hover-opacity w3-center w3-text-light-green "><i class="fad fa-calendar-pen w3-text-light-green "></i> report narratives</a>
 				</div>
 				<div class="site-bar-item w3-bar-item ">
-					<a href="/calendar-item" class="header-icon-a w3-hover-opacity w3-center w3-text-light-green "><i class="fad fa-calendar-star w3-text-light-green "></i> calendar items</a>
+					<a href="/calendar-item{{#if defaultRangeGap}}?facet.range.gap={{encodeURIComponent defaultRangeGap }}&facet.range.start={{encodeURIComponent defaultRangeStart }}&facet.range.end={{encodeURIComponent defaultRangeEnd }}&facet.range={!tag=r1}created&facet.pivot={!range=r1}classSimpleName{{/if}}" class="header-icon-a w3-hover-opacity w3-center w3-text-light-green "><i class="fad fa-calendar-star w3-text-light-green "></i> calendar items</a>
 				</div>
 				<div class="site-bar-item w3-bar-item ">
-					<a href="/page" class="header-icon-a w3-hover-opacity w3-center w3-text-2017-navy-peony "><i class="fad fa-newspaper w3-text-2017-navy-peony "></i> articles</a>
+					<a href="/page{{#if defaultRangeGap}}?facet.range.gap={{encodeURIComponent defaultRangeGap }}&facet.range.start={{encodeURIComponent defaultRangeStart }}&facet.range.end={{encodeURIComponent defaultRangeEnd }}&facet.range={!tag=r1}created&facet.pivot={!range=r1}classSimpleName{{/if}}" class="header-icon-a w3-hover-opacity w3-center w3-text-2017-navy-peony "><i class="fad fa-newspaper w3-text-2017-navy-peony "></i> articles</a>
 				</div>
 
 {{/inline}}
@@ -103,8 +105,8 @@
 {{#if GITHUB_ORG }}
 				<a class="w3-bar-item grow-20 w3-margin w3-text-white w3-medium " href="https://github.com/{{ GITHUB_ORG }}/{{ SITE_NAME }}/" target="_blank">This site is open source <i class="fa-brands fa-github w3-large "></i></a>
 {{/if }}
-{{#if PROJECT_POWERED_BY_URL }}
-				<a class="w3-bar-item grow-20 w3-margin w3-text-white w3-medium " href="{{ PROJECT_POWERED_BY_URL }}" target="_blank"><span class="w3-medium ">Powered by </span>{{#if PROJECT_POWERED_BY_IMAGE_URI }}<img alt="" class="w3-image " style="display: inline-block; width: 100px; margin: 0 10px;" src="{{ staticBaseUrl }}{{ PROJECT_POWERED_BY_IMAGE_URI }}"/>{{else}}{{#if PROJECT_POWERED_BY_NAME}}{{ PROJECT_POWERED_BY_NAME }}{{/if}}{{/if}}</a>
+{{#if SITE_POWERED_BY_URL }}
+				<a class="w3-bar-item grow-20 w3-margin w3-text-white w3-medium " href="{{ SITE_POWERED_BY_URL }}" target="_blank"><span class="w3-medium ">Powered by </span>{{#if SITE_POWERED_BY_IMAGE_URI }}<img alt="" class="w3-image " style="display: inline-block; width: 100px; margin: 0 10px;" src="{{ staticBaseUrl }}{{ SITE_POWERED_BY_IMAGE_URI }}"/>{{else}}{{#if SITE_POWERED_BY_NAME}}{{ SITE_POWERED_BY_NAME }}{{/if}}{{/if}}</a>
 {{/if }}
 			</div>
 		</footer>

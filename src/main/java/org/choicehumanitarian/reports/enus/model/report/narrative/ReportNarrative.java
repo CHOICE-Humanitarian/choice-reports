@@ -33,9 +33,9 @@ import io.vertx.core.Promise;
  * ApiMethod.enUS: Search
  * 
  * ApiMethod.enUS: SearchPage
- * PageSearchPage.enUS: ReportNarrativePage
- * PageSuperSearchPage.enUS: BaseModelPage
- * ApiUriSearchPage.enUS: /report-narrative
+ * Page.SearchPage.enUS: ReportNarrativePage
+ * PageSuper.SearchPage.enUS: BaseModelPage
+ * ApiUri.SearchPage.enUS: /report-narrative
  * 
  * AName.enUS: a report narrative
  * Color: light-green

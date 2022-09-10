@@ -38,7 +38,7 @@
 		</script>
 {{/inline}}
 {{#*inline "htmUrlBaseModel"}}{{pageUri}}?q={{query.q}}&amp;rows={{#if rows}}{{rows}}{{else}}{{pagination.rows}}{{/if}}&amp;rows={{#if start}}{{start}}{{else}}{{pagination.start}}{{/if}}{{#each query.fq}}{{#eq fq this}}{{else}}&fq={{fq}}:{{val}}{{/eq}}{{/each}}{{#each query.sort}}{{#eq sort this}}{{else}}&sort={{var}} {{order}}{{/eq}}{{/each}}{{/inline}}
-{{#*inline "htmHeadBaseModelPage"}}{{> "htmTitleBaseModelPage"}}{{> "htmMetaBaseModelPage"}}{{> "htmStyleBaseModelPage"}}{{> "htmScriptsBaseModelPage"}}{{> "htmScriptBaseModelPage"}}{{/inline}}
+{{#*inline "htmHeadBaseModelPage"}}{{#block "htmTitle"}}{{/block}}{{#block "htmMeta"}}{{/block}}{{#block "htmStyle"}}{{/block}}{{#block "htmScripts"}}{{/block}}{{#block "htmScript"}}{{/block}}{{/inline}}
 {{#*inline "htmBodySearchBaseModelPage"}}								<!-- #*inline "htmBodySearchBaseModelPage" -->
 								<div>
 {{#each varsQ}}
@@ -174,7 +174,7 @@
 								</div>
 								<div class="w3-padding w3-tiny " id="pageSearchVal-PivotBaseModel">
 {{#if defaultPivotVars }}
-									<div class="pageSearchVal pageSearchVal-PivotBaseModel " id="pageSearchVal-PivotBaseModel_1">facet.pivot={{#each defaultPivotVars }}{{#if @index }},{{/if}}{{ this }}{{/each}}</div>
+									<div class="pageSearchVal pageSearchVal-PivotBaseModel " id="pageSearchVal-PivotBaseModel_1">facet.pivot={!range=r1}{{#each defaultPivotVars }}{{#if @index }},{{/if}}{{ this }}{{/each}}</div>
 {{/if}}
 								</div>
 								<table class="w3-table ">

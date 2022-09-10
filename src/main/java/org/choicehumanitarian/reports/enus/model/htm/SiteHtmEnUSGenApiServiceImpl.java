@@ -87,6 +87,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.choicehumanitarian.reports.enus.model.user.SiteUserEnUSApiServiceImpl;
 import org.computate.vertx.search.list.SearchList;
+import org.choicehumanitarian.reports.enus.model.htm.SiteHtmPage;
 
 
 /**
@@ -644,24 +645,13 @@ public class SiteHtmEnUSGenApiServiceImpl extends BaseApiServiceImpl implements 
 
 		try {
 			ApiRequest apiRequest = siteRequest.getApiRequest_();
-			pgPool.withTransaction(sqlConnection -> {
-				Promise<SiteHtm> promise1 = Promise.promise();
-				siteRequest.setSqlConnection(sqlConnection);
-				persistSiteHtm(o, true).onSuccess(c -> {
-					indexSiteHtm(o).onSuccess(e -> {
-						promise1.complete(o);
-					}).onFailure(ex -> {
-						promise1.fail(ex);
-					});
+			persistSiteHtm(o, true).onSuccess(c -> {
+				indexSiteHtm(o).onSuccess(e -> {
+					promise.complete(o);
 				}).onFailure(ex -> {
-					promise1.fail(ex);
+					promise.fail(ex);
 				});
-				return promise1.future();
-			}).onSuccess(a -> {
-				siteRequest.setSqlConnection(null);
-				promise.complete(o);
 			}).onFailure(ex -> {
-				siteRequest.setSqlConnection(null);
 				promise.fail(ex);
 			});
 		} catch(Exception ex) {
@@ -1018,9 +1008,9 @@ public class SiteHtmEnUSGenApiServiceImpl extends BaseApiServiceImpl implements 
 				json.put(ConfigKeys.GITHUB_ORG, config.getString(ConfigKeys.GITHUB_ORG));
 				json.put(ConfigKeys.SITE_NAME, config.getString(ConfigKeys.SITE_NAME));
 				json.put(ConfigKeys.SITE_DISPLAY_NAME, config.getString(ConfigKeys.SITE_DISPLAY_NAME));
-				json.put(ConfigKeys.PROJECT_POWERED_BY_URL, config.getString(ConfigKeys.PROJECT_POWERED_BY_URL));
-				json.put(ConfigKeys.PROJECT_POWERED_BY_NAME, config.getString(ConfigKeys.PROJECT_POWERED_BY_NAME));
-				json.put(ConfigKeys.PROJECT_POWERED_BY_IMAGE_URI, config.getString(ConfigKeys.PROJECT_POWERED_BY_IMAGE_URI));
+				json.put(ConfigKeys.SITE_POWERED_BY_URL, config.getString(ConfigKeys.SITE_POWERED_BY_URL));
+				json.put(ConfigKeys.SITE_POWERED_BY_NAME, config.getString(ConfigKeys.SITE_POWERED_BY_NAME));
+				json.put(ConfigKeys.SITE_POWERED_BY_IMAGE_URI, config.getString(ConfigKeys.SITE_POWERED_BY_IMAGE_URI));
 				templateEngine.render(json, templateSearchPageSiteHtm()).onSuccess(buffer -> {
 					promise.complete(new ServiceResponse(200, "OK", buffer, requestHeaders));
 				}).onFailure(ex -> {

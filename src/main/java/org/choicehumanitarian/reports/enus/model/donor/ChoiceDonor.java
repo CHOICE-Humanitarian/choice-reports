@@ -28,9 +28,9 @@ import org.computate.search.wrap.Wrap;
  * ApiMethod.enUS: Search
  * 
  * ApiMethod.enUS: SearchPage
- * PageSearchPage.enUS: ChoiceDonorPage
- * PageSuperSearchPage.enUS: BaseModelPage
- * ApiUriSearchPage.enUS: /donor
+ * Page.SearchPage.enUS: ChoiceDonorPage
+ * PageSuper.SearchPage.enUS: BaseModelPage
+ * ApiUri.SearchPage.enUS: /donor
  * 
  * AName.enUS: a donor
  * Color: light-green

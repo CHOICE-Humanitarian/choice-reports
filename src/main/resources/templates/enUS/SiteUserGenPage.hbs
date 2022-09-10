@@ -8,7 +8,6 @@
 		<script src="{{staticBaseUrl}}/js/enUS/ReportNarrativePage.js"></script>
 		<script src="{{staticBaseUrl}}/js/enUS/ReportEventPage.js"></script>
 		<script src="{{staticBaseUrl}}/js/enUS/ReportSchedulePage.js"></script>
-		<script src="{{staticBaseUrl}}/js/enUS/ReportSchedulePage.js"></script>
 {{/inline}}
 {{#*inline "htmScriptSiteUserPage"}}		<!-- inline "htmScriptSiteUserPage" -->
 		<script>
@@ -62,7 +61,7 @@
 		</script>
 {{/inline}}
 {{#*inline "htmUrlSiteUser"}}{{pageUri}}?q={{query.q}}&amp;rows={{#if rows}}{{rows}}{{else}}{{pagination.rows}}{{/if}}&amp;rows={{#if start}}{{start}}{{else}}{{pagination.start}}{{/if}}{{#each query.fq}}{{#eq fq this}}{{else}}&fq={{fq}}:{{val}}{{/eq}}{{/each}}{{#each query.sort}}{{#eq sort this}}{{else}}&sort={{var}} {{order}}{{/eq}}{{/each}}{{/inline}}
-{{#*inline "htmHeadSiteUserPage"}}{{> "htmTitleSiteUserPage"}}{{> "htmMetaSiteUserPage"}}{{> "htmStyleSiteUserPage"}}{{> "htmScriptsSiteUserPage"}}{{> "htmScriptSiteUserPage"}}{{/inline}}
+{{#*inline "htmHeadSiteUserPage"}}{{#block "htmTitle"}}{{/block}}{{#block "htmMeta"}}{{/block}}{{#block "htmStyle"}}{{/block}}{{#block "htmScripts"}}{{/block}}{{#block "htmScript"}}{{/block}}{{/inline}}
 {{#*inline "htmBodySearchSiteUserPage"}}								<!-- #*inline "htmBodySearchSiteUserPage" -->
 								<div>
 {{#each varsQ}}
@@ -198,7 +197,7 @@
 								</div>
 								<div class="w3-padding w3-tiny " id="pageSearchVal-PivotSiteUser">
 {{#if defaultPivotVars }}
-									<div class="pageSearchVal pageSearchVal-PivotSiteUser " id="pageSearchVal-PivotSiteUser_1">facet.pivot={{#each defaultPivotVars }}{{#if @index }},{{/if}}{{ this }}{{/each}}</div>
+									<div class="pageSearchVal pageSearchVal-PivotSiteUser " id="pageSearchVal-PivotSiteUser_1">facet.pivot={!range=r1}{{#each defaultPivotVars }}{{#if @index }},{{/if}}{{ this }}{{/each}}</div>
 {{/if}}
 								</div>
 								<table class="w3-table ">

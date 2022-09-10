@@ -34,9 +34,9 @@ import io.vertx.core.Promise;
  * ApiMethod.enUS: Search
  * 
  * ApiMethod.enUS: SearchPage
- * PageSearchPage.enUS: ReportSchedulePage
- * PageSuperSearchPage.enUS: BaseModelPage
- * ApiUriSearchPage.enUS: /report-schedule
+ * Page.SearchPage.enUS: ReportSchedulePage
+ * PageSuper.SearchPage.enUS: BaseModelPage
+ * ApiUri.SearchPage.enUS: /report-schedule
  * 
  * AName.enUS: a report schedule
  * Color: light-green

@@ -1,9 +1,9 @@
 ---
 GITHUB_ORG: "CHOICE-Humanitarian"
 QUAYIO_ORG: "computate"
-PROJECT_POWERED_BY_URL: "https://access.redhat.com/products/openshift-online-red-hat"
-PROJECT_POWERED_BY_NAME: "OpenShift Online"
-PROJECT_POWERED_BY_IMAGE_URI: "/svg/openshift.svg"
+SITE_POWERED_BY_URL: "https://access.redhat.com/products/openshift-online-red-hat"
+SITE_POWERED_BY_NAME: "OpenShift Online"
+SITE_POWERED_BY_IMAGE_URI: "/svg/openshift.svg"
 SITE_NAME: "choice-reports"
 SITE_DISPLAY_NAME: "CHOICE Reports"
 SITE_SERVICES:

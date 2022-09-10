@@ -1,60 +1,46 @@
-package org.choicehumanitarian.reports.enus.model.donor;
+package org.choicehumanitarian.reports.enus.model.report;
 
-import org.choicehumanitarian.reports.enus.page.PageLayout;
-import org.choicehumanitarian.reports.enus.model.base.BaseModelPage;
-import org.choicehumanitarian.reports.enus.request.SiteRequestEnUS;
-import org.choicehumanitarian.reports.enus.model.user.SiteUser;
-import java.io.IOException;
-import io.vertx.core.http.HttpServerRequest;
-import io.vertx.core.http.HttpServerResponse;
-import org.computate.vertx.search.list.SearchList;
-import org.computate.search.wrap.Wrap;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.LocalDate;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
-import io.vertx.core.json.JsonObject;
-import io.vertx.ext.web.api.service.ServiceRequest;
-import io.vertx.core.json.JsonArray;
-import java.net.URLDecoder;
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.commons.lang3.StringUtils;
-import java.util.Map;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
-import java.util.stream.Collectors;
-import java.util.Arrays;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.math.MathContext;
-import org.apache.commons.collections.CollectionUtils;
-import java.util.Objects;
-import io.vertx.core.Promise;
+import java.net.URLDecoder;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.choicehumanitarian.reports.enus.config.ConfigKeys;
 import org.computate.search.response.solr.SolrResponse;
-import java.util.HashMap;
 import org.computate.search.tool.TimeTool;
-import java.time.ZoneId;
+import org.computate.search.wrap.Wrap;
+import org.computate.vertx.search.list.SearchList;
 
+import io.vertx.core.Promise;
+import io.vertx.core.json.JsonArray;
+import io.vertx.core.json.JsonObject;
+import io.vertx.ext.web.api.service.ServiceRequest;
 
 /**
  * Translate: false
  **/
-public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<BaseModelPage> {
+public class ChoiceReportPdfPage extends ChoiceReportPdfPageGen<ChoiceReportGenPage> {
 
 	/**
 	 * {@inheritDoc}
 	 * Ignore: true
 	 **/
-	protected void _searchListChoiceDonor_(Wrap<SearchList<ChoiceDonor>> w) {
+	protected void _searchListChoiceReport_(Wrap<SearchList<ChoiceReport>> w) {
 	}
 
 	protected void _pageResponse(Wrap<String> w) {
-		if(searchListChoiceDonor_ != null)
-			w.o(JsonObject.mapFrom(searchListChoiceDonor_.getResponse()).toString());
+		if(searchListChoiceReport_ != null)
+			w.o(JsonObject.mapFrom(searchListChoiceReport_.getResponse()).toString());
 	}
 
 	protected void _defaultZoneId(Wrap<String> w) {
@@ -80,35 +66,35 @@ public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<BaseModelPage> {
 	}
 
 	protected void _defaultRangeGap(Wrap<String> w) {
-		w.o(Optional.ofNullable(searchListChoiceDonor_.getFacetRangeGap()).orElse("+1DAY"));
+		w.o(Optional.ofNullable(searchListChoiceReport_.getFacetRangeGap()).orElse("+1DAY"));
 	}
 
 	protected void _defaultRangeEnd(Wrap<ZonedDateTime> w) {
-		w.o(Optional.ofNullable(searchListChoiceDonor_.getFacetRangeEnd()).map(s -> TimeTool.parseZonedDateTime(defaultTimeZone, s)).orElse(ZonedDateTime.now(defaultTimeZone).toLocalDate().atStartOfDay(defaultTimeZone).plusDays(1)));
+		w.o(Optional.ofNullable(searchListChoiceReport_.getFacetRangeEnd()).map(s -> TimeTool.parseZonedDateTime(defaultTimeZone, s)).orElse(ZonedDateTime.now(defaultTimeZone).toLocalDate().atStartOfDay(defaultTimeZone).plusDays(1)));
 	}
 
 	protected void _defaultRangeStart(Wrap<ZonedDateTime> w) {
-		w.o(Optional.ofNullable(searchListChoiceDonor_.getFacetRangeStart()).map(s -> TimeTool.parseZonedDateTime(defaultTimeZone, s)).orElse(defaultRangeEnd.minusDays(7).toLocalDate().atStartOfDay(defaultTimeZone)));
+		w.o(Optional.ofNullable(searchListChoiceReport_.getFacetRangeStart()).map(s -> TimeTool.parseZonedDateTime(defaultTimeZone, s)).orElse(defaultRangeEnd.minusDays(7).toLocalDate().atStartOfDay(defaultTimeZone)));
 	}
 
 	protected void _defaultRangeVar(Wrap<String> w) {
-		w.o(Optional.ofNullable(searchListChoiceDonor_.getFacetRanges()).orElse(Arrays.asList()).stream().findFirst().map(v -> { if(v.contains("}")) return StringUtils.substringBefore(StringUtils.substringAfterLast(v, "}"), "_"); else return ChoiceDonor.searchVarChoiceDonor(v); }).orElse("created"));
+		w.o(Optional.ofNullable(searchListChoiceReport_.getFacetRanges()).orElse(Arrays.asList()).stream().findFirst().map(v -> { if(v.contains("}")) return StringUtils.substringBefore(StringUtils.substringAfterLast(v, "}"), "_"); else return ChoiceReport.searchVarChoiceReport(v); }).orElse("created"));
 	}
 
 	protected void _defaultFacetSort(Wrap<String> w) {
-		w.o(Optional.ofNullable(searchListChoiceDonor_.getFacetSort()).orElse("index"));
+		w.o(Optional.ofNullable(searchListChoiceReport_.getFacetSort()).orElse("index"));
 	}
 
 	protected void _defaultFacetLimit(Wrap<Integer> w) {
-		w.o(Optional.ofNullable(searchListChoiceDonor_.getFacetLimit()).orElse(1));
+		w.o(Optional.ofNullable(searchListChoiceReport_.getFacetLimit()).orElse(1));
 	}
 
 	protected void _defaultFacetMinCount(Wrap<Integer> w) {
-		w.o(Optional.ofNullable(searchListChoiceDonor_.getFacetMinCount()).orElse(1));
+		w.o(Optional.ofNullable(searchListChoiceReport_.getFacetMinCount()).orElse(1));
 	}
 
 	protected void _defaultPivotMinCount(Wrap<Integer> w) {
-		w.o(Optional.ofNullable(searchListChoiceDonor_.getFacetPivotMinCount()).orElse(0));
+		w.o(Optional.ofNullable(searchListChoiceReport_.getFacetPivotMinCount()).orElse(0));
 	}
 
 	protected void _DEFAULT_MAP_LOCATION(Wrap<JsonObject> w) {
@@ -128,14 +114,14 @@ public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<BaseModelPage> {
 
 	@Override
 	protected void _defaultFieldListVars(List<String> l) {
-		Optional.ofNullable(searchListChoiceDonor_.getFields()).orElse(Arrays.asList()).forEach(varStored -> {
+		Optional.ofNullable(searchListChoiceReport_.getFields()).orElse(Arrays.asList()).forEach(varStored -> {
 			String varStored2 = varStored;
 			if(StringUtils.contains(varStored2, "}"))
 				varStored2 = StringUtils.substringAfterLast(varStored2, "}");
 			String[] parts = varStored2.split(",");
 			for(String part : parts) {
 				if(StringUtils.isNotBlank(part)) {
-					String var = ChoiceDonor.searchVarChoiceDonor(part);
+					String var = ChoiceReport.searchVarChoiceReport(part);
 					if(StringUtils.isNotBlank(var))
 						l.add(var);
 				}
@@ -145,14 +131,14 @@ public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<BaseModelPage> {
 
 	@Override
 	protected void _defaultStatsVars(List<String> l) {
-		Optional.ofNullable(searchListChoiceDonor_.getStatsFields()).orElse(Arrays.asList()).forEach(varIndexed -> {
+		Optional.ofNullable(searchListChoiceReport_.getStatsFields()).orElse(Arrays.asList()).forEach(varIndexed -> {
 			String varIndexed2 = varIndexed;
 			if(StringUtils.contains(varIndexed2, "}"))
 				varIndexed2 = StringUtils.substringAfterLast(varIndexed2, "}");
 			String[] parts = varIndexed2.split(",");
 			for(String part : parts) {
 				if(StringUtils.isNotBlank(part)) {
-					String var = ChoiceDonor.searchVarChoiceDonor(part);
+					String var = ChoiceReport.searchVarChoiceReport(part);
 					if(StringUtils.isNotBlank(var))
 						l.add(var);
 				}
@@ -162,14 +148,14 @@ public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<BaseModelPage> {
 
 	@Override
 	protected void _defaultPivotVars(List<String> l) {
-		Optional.ofNullable(searchListChoiceDonor_.getFacetPivots()).orElse(Arrays.asList()).forEach(facetPivot -> {
+		Optional.ofNullable(searchListChoiceReport_.getFacetPivots()).orElse(Arrays.asList()).forEach(facetPivot -> {
 			String facetPivot2 = facetPivot;
 			if(StringUtils.contains(facetPivot2, "}"))
 				facetPivot2 = StringUtils.substringAfterLast(facetPivot2, "}");
 			String[] parts = facetPivot2.split(",");
 			for(String part : parts) {
 				if(StringUtils.isNotBlank(part)) {
-					String var = ChoiceDonor.searchVarChoiceDonor(part);
+					String var = ChoiceReport.searchVarChoiceReport(part);
 					if(StringUtils.isNotBlank(var))
 						l.add(var);
 				}
@@ -180,35 +166,35 @@ public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<BaseModelPage> {
 	/**
 	 * {@inheritDoc}
 	 **/
-	protected void _listChoiceDonor(JsonArray l) {
-		Optional.ofNullable(searchListChoiceDonor_).map(o -> o.getList()).orElse(Arrays.asList()).stream().map(o -> JsonObject.mapFrom(o)).forEach(o -> l.add(o));
+	protected void _listChoiceReport(JsonArray l) {
+		Optional.ofNullable(searchListChoiceReport_).map(o -> o.getList()).orElse(Arrays.asList()).stream().map(o -> JsonObject.mapFrom(o)).forEach(o -> l.add(o));
 	}
 
 	protected void _stats(Wrap<SolrResponse.Stats> w) {
-		w.o(searchListChoiceDonor_.getResponse().getStats());
+		w.o(searchListChoiceReport_.getResponse().getStats());
 	}
 
 	protected void _facetCounts(Wrap<SolrResponse.FacetCounts> w) {
-		w.o(searchListChoiceDonor_.getResponse().getFacetCounts());
+		w.o(searchListChoiceReport_.getResponse().getFacetCounts());
 	}
 
-	protected void _choiceDonorCount(Wrap<Integer> w) {
-		w.o(searchListChoiceDonor_ == null ? 0 : searchListChoiceDonor_.size());
+	protected void _choiceReportCount(Wrap<Integer> w) {
+		w.o(searchListChoiceReport_ == null ? 0 : searchListChoiceReport_.size());
 	}
 
-	protected void _choiceDonor_(Wrap<ChoiceDonor> w) {
-		if(choiceDonorCount == 1)
-			w.o(searchListChoiceDonor_.get(0));
+	protected void _choiceReport_(Wrap<ChoiceReport> w) {
+		if(choiceReportCount == 1)
+			w.o(searchListChoiceReport_.get(0));
 	}
 
 	protected void _pk(Wrap<Long> w) {
-		if(choiceDonorCount == 1)
-			w.o(choiceDonor_.getPk());
+		if(choiceReportCount == 1)
+			w.o(choiceReport_.getPk());
 	}
 
 	protected void _id(Wrap<String> w) {
-		if(choiceDonorCount == 1)
-			w.o(choiceDonor_.getId());
+		if(choiceReportCount == 1)
+			w.o(choiceReport_.getId());
 	}
 
 	@Override
@@ -218,29 +204,29 @@ public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<BaseModelPage> {
 
 	@Override
 	protected void _classSimpleName(Wrap<String> w) {
-		w.o("ChoiceDonor");
+		w.o("ChoiceReport");
 	}
 
 	@Override
 	protected void _pageTitle(Wrap<String> c) {
-		if(choiceDonor_ != null && choiceDonor_.getObjectTitle() != null)
-			c.o(choiceDonor_.getObjectTitle());
-		else if(choiceDonor_ != null)
-			c.o("donors");
-		else if(searchListChoiceDonor_ == null || choiceDonorCount == 0)
-			c.o("no donor found");
+		if(choiceReport_ != null && choiceReport_.getObjectTitle() != null)
+			c.o(choiceReport_.getObjectTitle());
+		else if(choiceReport_ != null)
+			c.o("reports");
+		else if(searchListChoiceReport_ == null || choiceReportCount == 0)
+			c.o("no report found");
 		else
-			c.o("donors");
+			c.o("reports");
 	}
 
 	@Override
 	protected void _pageUri(Wrap<String> c) {
-		c.o("/donor");
+		c.o("/report");
 	}
 
 	@Override
 	protected void _apiUri(Wrap<String> c) {
-		c.o("/api/donor");
+		c.o("/api/report");
 	}
 
 	@Override
@@ -252,15 +238,15 @@ public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<BaseModelPage> {
 
 	@Override
 	protected void _rolesRequired(List<String> l) {
-		l.addAll(Optional.ofNullable(siteRequest_.getConfig().getJsonArray(ConfigKeys.AUTH_ROLES_REQUIRED + "_ChoiceDonor")).orElse(new JsonArray()).stream().map(o -> o.toString()).collect(Collectors.toList()));
+		l.addAll(Optional.ofNullable(siteRequest_.getConfig().getJsonArray(ConfigKeys.AUTH_ROLES_REQUIRED + "_ChoiceReport")).orElse(new JsonArray()).stream().map(o -> o.toString()).collect(Collectors.toList()));
 	}
 
 	@Override
 	protected void _pagination(JsonObject pagination) {
 		JsonArray pages = new JsonArray();
-		Long start = searchListChoiceDonor_.getStart().longValue();
-		Long rows = searchListChoiceDonor_.getRows().longValue();
-		Long foundNum = searchListChoiceDonor_.getResponse().getResponse().getNumFound().longValue();
+		Long start = searchListChoiceReport_.getStart().longValue();
+		Long rows = searchListChoiceReport_.getRows().longValue();
+		Long foundNum = searchListChoiceReport_.getResponse().getResponse().getNumFound().longValue();
 		Long startNum = start + 1L;
 		Long endNum = start + rows;
 		Long floorMod = (rows == 0L ? 0L : Math.floorMod(foundNum, rows));
@@ -302,12 +288,12 @@ public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<BaseModelPage> {
 
 	@Override
 	protected void _varsQ(JsonObject vars) {
-		ChoiceDonor.varsQForClass().forEach(var -> {
+		ChoiceReport.varsQForClass().forEach(var -> {
 			JsonObject json = new JsonObject();
 			json.put("var", var);
-			json.put("displayName", Optional.ofNullable(ChoiceDonor.displayNameChoiceDonor(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
-			json.put("classSimpleName", Optional.ofNullable(ChoiceDonor.classSimpleNameChoiceDonor(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
-			json.put("val", Optional.ofNullable(searchListChoiceDonor_.getRequest().getQuery()).filter(fq -> fq.startsWith(ChoiceDonor.varIndexedChoiceDonor(var) + ":")).map(s -> StringUtils.substringAfter(s, ":")).orElse(null));
+			json.put("displayName", Optional.ofNullable(ChoiceReport.displayNameChoiceReport(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
+			json.put("classSimpleName", Optional.ofNullable(ChoiceReport.classSimpleNameChoiceReport(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
+			json.put("val", Optional.ofNullable(searchListChoiceReport_.getRequest().getQuery()).filter(fq -> fq.startsWith(ChoiceReport.varIndexedChoiceReport(var) + ":")).map(s -> StringUtils.substringAfter(s, ":")).orElse(null));
 			vars.put(var, json);
 		});
 	}
@@ -315,17 +301,17 @@ public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<BaseModelPage> {
 	@Override
 	protected void _varsFq(JsonObject vars) {
 		Map<String, SolrResponse.FacetField> facetFields = Optional.ofNullable(facetCounts).map(c -> c.getFacetFields()).map(f -> f.getFacets()).orElse(new HashMap<String,SolrResponse.FacetField>());
-		ChoiceDonor.varsFqForClass().forEach(var -> {
-			String varIndexed = ChoiceDonor.varIndexedChoiceDonor(var);
-			String varStored = ChoiceDonor.varStoredChoiceDonor(var);
+		ChoiceReport.varsFqForClass().forEach(var -> {
+			String varIndexed = ChoiceReport.varIndexedChoiceReport(var);
+			String varStored = ChoiceReport.varStoredChoiceReport(var);
 			JsonObject json = new JsonObject();
 			json.put("var", var);
 			json.put("varStored", varStored);
 			json.put("varIndexed", varIndexed);
 					String type = StringUtils.substringAfterLast(varIndexed, "_");
-			json.put("displayName", Optional.ofNullable(ChoiceDonor.displayNameChoiceDonor(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
-			json.put("classSimpleName", Optional.ofNullable(ChoiceDonor.classSimpleNameChoiceDonor(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
-			json.put("val", searchListChoiceDonor_.getRequest().getFilterQueries().stream().filter(fq -> fq.startsWith(ChoiceDonor.varIndexedChoiceDonor(var) + ":")).findFirst().map(s -> StringUtils.substringAfter(s, ":")).orElse(null));
+			json.put("displayName", Optional.ofNullable(ChoiceReport.displayNameChoiceReport(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
+			json.put("classSimpleName", Optional.ofNullable(ChoiceReport.classSimpleNameChoiceReport(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
+			json.put("val", searchListChoiceReport_.getRequest().getFilterQueries().stream().filter(fq -> fq.startsWith(ChoiceReport.varIndexedChoiceReport(var) + ":")).findFirst().map(s -> StringUtils.substringAfter(s, ":")).orElse(null));
 			Optional.ofNullable(stats).map(s -> s.get(varIndexed)).ifPresent(stat -> {
 				json.put("stats", JsonObject.mapFrom(stat));
 			});
@@ -357,13 +343,13 @@ public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<BaseModelPage> {
 
 	@Override
 	protected void _varsRange(JsonObject vars) {
-		ChoiceDonor.varsRangeForClass().forEach(var -> {
-			String varIndexed = ChoiceDonor.varIndexedChoiceDonor(var);
+		ChoiceReport.varsRangeForClass().forEach(var -> {
+			String varIndexed = ChoiceReport.varIndexedChoiceReport(var);
 			JsonObject json = new JsonObject();
 			json.put("var", var);
-			json.put("displayName", Optional.ofNullable(ChoiceDonor.displayNameChoiceDonor(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
-			json.put("classSimpleName", Optional.ofNullable(ChoiceDonor.classSimpleNameChoiceDonor(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
-			json.put("val", searchListChoiceDonor_.getRequest().getFilterQueries().stream().filter(fq -> fq.startsWith(ChoiceDonor.varIndexedChoiceDonor(var) + ":")).findFirst().map(s -> StringUtils.substringAfter(s, ":")).orElse(null));
+			json.put("displayName", Optional.ofNullable(ChoiceReport.displayNameChoiceReport(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
+			json.put("classSimpleName", Optional.ofNullable(ChoiceReport.classSimpleNameChoiceReport(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
+			json.put("val", searchListChoiceReport_.getRequest().getFilterQueries().stream().filter(fq -> fq.startsWith(ChoiceReport.varIndexedChoiceReport(var) + ":")).findFirst().map(s -> StringUtils.substringAfter(s, ":")).orElse(null));
 			vars.put(var, json);
 		});
 	}
@@ -374,7 +360,7 @@ public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<BaseModelPage> {
 		JsonObject params = serviceRequest.getParams();
 
 		JsonObject queryParams = Optional.ofNullable(serviceRequest).map(ServiceRequest::getParams).map(or -> or.getJsonObject("query")).orElse(new JsonObject());
-		Long num = searchListChoiceDonor_.getResponse().getResponse().getNumFound().longValue();
+		Long num = searchListChoiceReport_.getResponse().getResponse().getNumFound().longValue();
 		String q = "*:*";
 		String q1 = "objectText";
 		String q2 = "";
@@ -402,28 +388,28 @@ public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<BaseModelPage> {
 		}
 		query.put("q", q);
 
-		Long rows1 = Optional.ofNullable(searchListChoiceDonor_).map(l -> l.getRows()).orElse(10L);
-		Long start1 = Optional.ofNullable(searchListChoiceDonor_).map(l -> l.getStart()).orElse(1L);
+		Long rows1 = Optional.ofNullable(searchListChoiceReport_).map(l -> l.getRows()).orElse(10L);
+		Long start1 = Optional.ofNullable(searchListChoiceReport_).map(l -> l.getStart()).orElse(1L);
 		Long start2 = start1 - rows1;
 		Long start3 = start1 + rows1;
 		Long rows2 = rows1 / 2;
 		Long rows3 = rows1 * 2;
 		start2 = start2 < 0 ? 0 : start2;
 		JsonObject fqs = new JsonObject();
-		for(String fq : Optional.ofNullable(searchListChoiceDonor_).map(l -> l.getFilterQueries()).orElse(Arrays.asList())) {
+		for(String fq : Optional.ofNullable(searchListChoiceReport_).map(l -> l.getFilterQueries()).orElse(Arrays.asList())) {
 			if(!StringUtils.contains(fq, "(")) {
-				String fq1 = ChoiceDonor.searchVarChoiceDonor(StringUtils.substringBefore(fq, ":"));
+				String fq1 = ChoiceReport.searchVarChoiceReport(StringUtils.substringBefore(fq, ":"));
 				String fq2 = StringUtils.substringAfter(fq, ":");
 				if(!StringUtils.startsWithAny(fq, "classCanonicalNames_", "archived_", "deleted_", "sessionId", "userKeys"))
-					fqs.put(fq1, new JsonObject().put("var", fq1).put("val", fq2).put("displayName", ChoiceDonor.displayNameForClass(fq1)));
+					fqs.put(fq1, new JsonObject().put("var", fq1).put("val", fq2).put("displayName", ChoiceReport.displayNameForClass(fq1)));
 				}
 			}
 		query.put("fq", fqs);
 
 		JsonArray sorts = new JsonArray();
-		for(String sort : Optional.ofNullable(searchListChoiceDonor_).map(l -> l.getSorts()).orElse(Arrays.asList())) {
-			String sort1 = ChoiceDonor.searchVarChoiceDonor(StringUtils.substringBefore(sort, " "));
-			sorts.add(new JsonObject().put("var", sort1).put("order", StringUtils.substringAfter(sort, " ")).put("displayName", ChoiceDonor.displayNameForClass(sort1)));
+		for(String sort : Optional.ofNullable(searchListChoiceReport_).map(l -> l.getSorts()).orElse(Arrays.asList())) {
+			String sort1 = ChoiceReport.searchVarChoiceReport(StringUtils.substringBefore(sort, " "));
+			sorts.add(new JsonObject().put("var", sort1).put("order", StringUtils.substringAfter(sort, " ")).put("displayName", ChoiceReport.displayNameForClass(sort1)));
 		}
 		query.put("sort", sorts);
 	}
@@ -435,7 +421,7 @@ public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<BaseModelPage> {
 
 	@Override
 	protected void _pageImageUri(Wrap<String> c) {
-			c.o("/png/donor-999.png");
+			c.o("/png/report-999.png");
 	}
 
 	@Override
@@ -445,10 +431,10 @@ public class ChoiceDonorGenPage extends ChoiceDonorGenPageGen<BaseModelPage> {
 
 	@Override
 	protected void _contextIconName(Wrap<String> c) {
-			c.o("hands-heart");
+			c.o("file-chart-line");
 	}
 
-	protected void _pageUriChoiceDonor(Wrap<String> c) {
-			c.o("/donor");
+	protected void _pageUriChoiceReport(Wrap<String> c) {
+			c.o("/report");
 	}
 }

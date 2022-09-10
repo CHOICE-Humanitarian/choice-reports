@@ -37,14 +37,36 @@ import io.vertx.core.Future;
 import io.vertx.core.json.JsonArray;
 
 /**	
- * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.WorkerVerticle">Find the class WorkerVerticle in Solr. </a>
- * <br><br>Delete the class WorkerVerticle in Solr. 
- * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.WorkerVerticle&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
- * <br>Delete  the package org.choicehumanitarian.reports.enus.vertx in Solr. 
- * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomEnsemble_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
- * <br>Delete  the project choice-reports in Solr. 
- * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;siteNom_indexed_string:choice\-reports&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
- * <br>
+ * <h1>Suggestions that can generate more code for you: </h1>
+ * <ol>
+ * <li>You can add a class comment "{@inheritDoc}" if you wish to inherit the helpful inherited class comments from class WorkerVerticleGen into the class WorkerVerticle. 
+ * </li>
+ * <li>You can add a class comment "Api: true" if you wish to GET, POST, PATCH or PUT these WorkerVerticle objects in a RESTful API. 
+ * </li>
+ * </ol>
+ * <h1>About the WorkerVerticle class and it's generated class WorkerVerticleGen&lt;AbstractVerticle&gt;: </h1>
+ * <p>
+ * This Java class extends a generated Java class built by the <a href="https://github.com/computate-org/computate">https://github.com/computate-org/computate</a> project. 
+ * Whenever this Java class is modified or touched, the watch service installed as described in the README, indexes all the information about this Java class in a local Apache Solr Search Engine. 
+ * If you are running the service, you can see the indexed data about this Java Class here: 
+ * </p>
+ * <p><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.WorkerVerticle">Find the class WorkerVerticle in Solr. </a></p>
+ * <p>
+ * The extended class ending with "Gen" did not exist at first, but was automatically created by the same watch service based on the data retrieved from the local Apache Server search engine. 
+ * The extended class contains many generated fields, getters, setters, initialization code, and helper methods to help build a website and API fast, reactive, and scalable. 
+ * </p>
+ * <p>
+ * Delete the class WorkerVerticle in Solr: 
+ * curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx.WorkerVerticle&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'
+ * </p>
+ * <p>
+ * Delete  the package org.choicehumanitarian.reports.enus.vertx in Solr: 
+ * curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomEnsemble_enUS_indexed_string:org.choicehumanitarian.reports.enus.vertx&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'
+ * </p>
+ * <p>
+ * Delete  the project choice-reports in Solr: 
+ * curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;siteNom_indexed_string:choice\-reports&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'
+ * </p>
  **/
 public abstract class WorkerVerticleGen<DEV> extends AbstractVerticle {
 	protected static final Logger LOG = LoggerFactory.getLogger(WorkerVerticle.class);
@@ -85,16 +107,6 @@ public abstract class WorkerVerticleGen<DEV> extends AbstractVerticle {
 	public static final String importDataFail = importDataFail1;
 	public static final String importDataSkip1 = "Skip importing data. ";
 	public static final String importDataSkip = importDataSkip1;
-
-	public static final String importDataSitePageComplete1 = "Importing %s data completed. ";
-	public static final String importDataSitePageComplete = importDataSitePageComplete1;
-	public static final String importDataSitePageFail1 = "Importing %s data failed. ";
-	public static final String importDataSitePageFail = importDataSitePageFail1;
-
-	public static final String importSitePageComplete1 = "Importing page %s completed. ";
-	public static final String importSitePageComplete = importSitePageComplete1;
-	public static final String importSitePageFail1 = "Importing page %s failed. ";
-	public static final String importSitePageFail = importSitePageFail1;
 
 	public static final String refreshAllDataComplete1 = "Refresh all data completed. ";
 	public static final String refreshAllDataComplete = refreshAllDataComplete1;
@@ -256,7 +268,7 @@ public abstract class WorkerVerticleGen<DEV> extends AbstractVerticle {
 		return sb.toString();
 	}
 
-	public static final String[] WorkerVerticleVals = new String[] { configureHandlebarsFail1, configureHandlebarsComplete1, configureDataConnectionError1, configureDataConnectionSuccess1, configureDataInitError1, configureDataInitSuccess1, configureSharedWorkerExecutorFail1, configureSharedWorkerExecutorComplete1, configureEmailComplete1, configureEmailFail1, importTimerScheduling1, importTimerSkip1, importTimerFail1, importDataComplete1, importDataFail1, importDataSkip1, importDataSitePageComplete1, importDataSitePageFail1, importSitePageComplete1, importSitePageFail1, refreshAllDataComplete1, refreshAllDataStarted1, refreshAllDataFail1, refreshAllDataSkip1, refreshDataComplete1, refreshDataStarted1, refreshDataSkip1, refreshDataFail1, refreshDataCounterResetFail1 };
+	public static final String[] WorkerVerticleVals = new String[] { configureHandlebarsFail1, configureHandlebarsComplete1, configureDataConnectionError1, configureDataConnectionSuccess1, configureDataInitError1, configureDataInitSuccess1, configureSharedWorkerExecutorFail1, configureSharedWorkerExecutorComplete1, configureEmailComplete1, configureEmailFail1, importTimerScheduling1, importTimerSkip1, importTimerFail1, importDataComplete1, importDataFail1, importDataSkip1, refreshAllDataComplete1, refreshAllDataStarted1, refreshAllDataFail1, refreshAllDataSkip1, refreshDataComplete1, refreshDataStarted1, refreshDataSkip1, refreshDataFail1, refreshDataCounterResetFail1 };
 
 	public static final String CLASS_SIMPLE_NAME = "WorkerVerticle";
 

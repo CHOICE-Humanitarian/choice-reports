@@ -223,7 +223,7 @@ Or the REDHAT_OPENSHIFT_STORAGE_CLASS_NAME which might be different than gp2 for
 If so, try creating a persistent volume in the UI to figure out a good storage class for your environment: 
 
 ```yaml
-PROJECT_NAME: choice-reports
+SITE_NAME: choice-reports
 
 REDHAT_OPENSHIFT_HOST: https://api.rh-us-east-1.openshift.com
 REDHAT_OPENSHIFT_TOKEN: OcrtrXzKNKVj0riR2FvfqORgGfnURx98G8zRPd2MUvs
@@ -284,10 +284,4 @@ podman build -t computate/choice-reports:latest .
 ```bash
 podman login quay.io
 podman push computate/choice-reports:latest quay.io/computate/choice-reports:latest
-```
-
-## How the base classes for this project were created
-
-```bash
-ansible-playbook -e @~/.local/src/choice-reports/local/ansible_install_vars.yml ~/.local/src/computate-org/vertx_project.yml
 ```

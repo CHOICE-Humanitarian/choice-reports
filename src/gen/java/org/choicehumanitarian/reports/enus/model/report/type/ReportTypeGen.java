@@ -44,14 +44,53 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.computate.search.response.solr.SolrResponse;
 
 /**	
- * <br><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.type.ReportType">Find the class ReportType in Solr. </a>
- * <br><br>Delete the class ReportType in Solr. 
- * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.type.ReportType&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
- * <br>Delete  the package org.choicehumanitarian.reports.enus.model.report.type in Solr. 
- * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomEnsemble_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.type&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
- * <br>Delete  the project choice-reports in Solr. 
- * <br><pre>curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;siteNom_indexed_string:choice\-reports&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'</pre>
- * <br>
+ * <h1>Suggestions that can generate more code for you: </h1>
+ * <ol>
+ * <li>You can add a class comment "{@inheritDoc}" if you wish to inherit the helpful inherited class comments from class ReportTypeGen into the class ReportType. 
+ * </li>
+ * </ol>
+ * <h1>About the ReportType class and it's generated class ReportTypeGen&lt;BaseModel&gt;: </h1>
+ * <p>
+ * This Java class extends a generated Java class built by the <a href="https://github.com/computate-org/computate">https://github.com/computate-org/computate</a> project. 
+ * Whenever this Java class is modified or touched, the watch service installed as described in the README, indexes all the information about this Java class in a local Apache Solr Search Engine. 
+ * If you are running the service, you can see the indexed data about this Java Class here: 
+ * </p>
+ * <p><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.type.ReportType">Find the class ReportType in Solr. </a></p>
+ * <p>
+ * The extended class ending with "Gen" did not exist at first, but was automatically created by the same watch service based on the data retrieved from the local Apache Server search engine. 
+ * The extended class contains many generated fields, getters, setters, initialization code, and helper methods to help build a website and API fast, reactive, and scalable. 
+ * </p>
+ * <p>This class contains a comment "Model: true", which means this class will be stored in the database. 
+ * Every protected void method that begins with "_" that contains a "Persist: true" comment will be a persisted field in the database table. 
+ * </p>
+ * <p>This class contains a comment "Indexed: true", which means this class will be indexed in the search engine. 
+ * Every protected void method that begins with "_" that is marked to be searched with a comment like "Indexed: true", "Stored: true", or "DocValues: true" will be indexed in the search engine. 
+ * </p>
+ * <p>This class contains a comment "Page: true", which means this class will have webpage code generated for these objects. 
+ * Java Vert.x backend API code, Handlebars HTML template frontend code, and JavaScript code will all generated and can be extended. 
+ * This creates a new Java class org.choicehumanitarian.reports.enus.model.report.type.ReportTypePage. 
+ * </p>
+ * <p>This class contains a comment "SuperPage.enUS: BaseModelPage", which identifies the Java super class of the page code by it's class simple name "BaseModelPage". 
+ * This means that the newly created class org.choicehumanitarian.reports.enus.model.report.type.ReportTypePage extends org.choicehumanitarian.reports.enus.model.base.BaseModelPage. 
+ * </p>
+ * <p>This class contains a comment "Api: true", which means this class will have Java Vert.x API backend code generated for these objects. 
+ * </p>
+ * <p>This class contains a comment "ApiTag: Report Type", which groups all of the OpenAPIs for ReportType objects under the tag "Report Type". 
+ * </p>
+ * <p>This class contains a comment "ApiUri: /api/report-type", which defines the base API URI for ReportType objects as "/api/report-type" in the OpenAPI spec. 
+ * </p>
+ * <p>
+ * Delete the class ReportType in Solr: 
+ * curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomCanonique_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.type.ReportType&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'
+ * </p>
+ * <p>
+ * Delete  the package org.choicehumanitarian.reports.enus.model.report.type in Solr: 
+ * curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomEnsemble_enUS_indexed_string:org.choicehumanitarian.reports.enus.model.report.type&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'
+ * </p>
+ * <p>
+ * Delete  the project choice-reports in Solr: 
+ * curl 'http://localhost:8983/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;siteNom_indexed_string:choice\-reports&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'
+ * </p>
  **/
 public abstract class ReportTypeGen<DEV> extends BaseModel {
 	protected static final Logger LOG = LoggerFactory.getLogger(ReportType.class);

@@ -95,6 +95,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.choicehumanitarian.reports.enus.model.user.SiteUserEnUSApiServiceImpl;
 import org.computate.vertx.search.list.SearchList;
+import org.choicehumanitarian.reports.enus.model.user.SiteUserPage;
 
 
 /**
@@ -398,8 +399,8 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 
 		try {
 			ApiRequest apiRequest = siteRequest.getApiRequest_();
+			Promise<SiteUser> promise1 = Promise.promise();
 			pgPool.withTransaction(sqlConnection -> {
-				Promise<SiteUser> promise1 = Promise.promise();
 				siteRequest.setSqlConnection(sqlConnection);
 				sqlPATCHSiteUser(o, inheritPk).onSuccess(siteUser -> {
 					persistSiteUser(siteUser).onSuccess(c -> {
@@ -1715,9 +1716,9 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 				json.put(ConfigKeys.GITHUB_ORG, config.getString(ConfigKeys.GITHUB_ORG));
 				json.put(ConfigKeys.SITE_NAME, config.getString(ConfigKeys.SITE_NAME));
 				json.put(ConfigKeys.SITE_DISPLAY_NAME, config.getString(ConfigKeys.SITE_DISPLAY_NAME));
-				json.put(ConfigKeys.PROJECT_POWERED_BY_URL, config.getString(ConfigKeys.PROJECT_POWERED_BY_URL));
-				json.put(ConfigKeys.PROJECT_POWERED_BY_NAME, config.getString(ConfigKeys.PROJECT_POWERED_BY_NAME));
-				json.put(ConfigKeys.PROJECT_POWERED_BY_IMAGE_URI, config.getString(ConfigKeys.PROJECT_POWERED_BY_IMAGE_URI));
+				json.put(ConfigKeys.SITE_POWERED_BY_URL, config.getString(ConfigKeys.SITE_POWERED_BY_URL));
+				json.put(ConfigKeys.SITE_POWERED_BY_NAME, config.getString(ConfigKeys.SITE_POWERED_BY_NAME));
+				json.put(ConfigKeys.SITE_POWERED_BY_IMAGE_URI, config.getString(ConfigKeys.SITE_POWERED_BY_IMAGE_URI));
 				templateEngine.render(json, templateSearchPageSiteUser()).onSuccess(buffer -> {
 					promise.complete(new ServiceResponse(200, "OK", buffer, requestHeaders));
 				}).onFailure(ex -> {

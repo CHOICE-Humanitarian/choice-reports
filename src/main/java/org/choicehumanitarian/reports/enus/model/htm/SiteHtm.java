@@ -35,8 +35,8 @@ import io.vertx.core.json.JsonObject;
  * ApiMethod: PUTImport
  * 
  * ApiMethod.enUS: SearchPage
- * PageSearchPage.enUS: SiteHtmPage
- * ApiUriSearchPage.enUS: /htm
+ * Page.SearchPage.enUS: SiteHtmPage
+ * ApiUri.SearchPage.enUS: /htm
  * 
  * AName.enUS: an HTML
  * Color: 2017-navy-peony
@@ -355,6 +355,8 @@ public class SiteHtm extends SiteHtmGen<Object> {
 	 * {@inheritDoc}
 	 * DocValues: true
 	 * Description: The simple name of this Java class
+	 * DisplayName.enUS: object type
+	 * Facet: true
 	 */
 	protected void _classSimpleName(Wrap<String> w) {
 		w.o(getClass().getSimpleName());

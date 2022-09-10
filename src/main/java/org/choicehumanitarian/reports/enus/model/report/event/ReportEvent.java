@@ -27,9 +27,9 @@ import org.computate.search.wrap.Wrap;
  * ApiMethod.enUS: Search
  * 
  * ApiMethod.enUS: SearchPage
- * PageSearchPage.enUS: ReportEventPage
- * PageSuperSearchPage.enUS: BaseModelPage
- * ApiUriSearchPage.enUS: /calendar-item
+ * Page.SearchPage.enUS: ReportEventPage
+ * PageSuper.SearchPage.enUS: BaseModelPage
+ * ApiUri.SearchPage.enUS: /calendar-item
  * 
  * AName.enUS: a calendar item
  * Color: light-green
