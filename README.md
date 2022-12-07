@@ -285,3 +285,16 @@ podman build -t computate/choice-reports:latest .
 podman login quay.io
 podman push computate/choice-reports:latest quay.io/computate/choice-reports:latest
 ```
+
+
+1. **Test area**
+    * Description
+    * Acceptance tests:
+        5. Validate the project:
+            1. For a given project named `012345myproject` for example, check that the given project is listed in the `oc` CLI:
+                1. 
+                    ```bash
+                    $ oc get project/012345myproject
+                    NAME             DISPLAY NAME  STATUS
+                    012345myproject                Active
+                    ```
