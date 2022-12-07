@@ -298,3 +298,9 @@ podman push computate/choice-reports:latest quay.io/computate/choice-reports:lat
                     NAME             DISPLAY NAME  STATUS
                     012345myproject                Active
                     ```
+2. 
+    ```bash
+    $ oc get project/012345myproject
+    NAME             DISPLAY NAME  STATUS
+    012345myproject                Active
+    ```
