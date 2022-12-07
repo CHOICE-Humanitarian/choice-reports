@@ -288,6 +288,39 @@ podman push computate/choice-reports:latest quay.io/computate/choice-reports:lat
 
 
 1. **Test area**
+    ```bash
+    $ oc get project/012345myproject
+    NAME             DISPLAY NAME  STATUS
+    012345myproject                Active
+    ```
+2. **Test area**
+    * Description
+    * Acceptance tests:
+        ```bash
+        $ oc get project/012345myproject
+        NAME             DISPLAY NAME  STATUS
+        012345myproject                Active
+        ```
+3. **Test area**
+    * Description
+    * Acceptance tests:
+        1. Validate the project:
+            ```bash
+            $ oc get project/012345myproject
+            NAME             DISPLAY NAME  STATUS
+            012345myproject                Active
+            ```
+4. **Test area**
+    * Description
+    * Acceptance tests:
+        1. Validate the project:
+            1. For a given project named `012345myproject` for example, check that the given project is listed in the `oc` CLI:
+                ```bash
+                $ oc get project/012345myproject
+                NAME             DISPLAY NAME  STATUS
+                012345myproject                Active
+                ```
+5. **Test area**
     * Description
     * Acceptance tests:
         1. Validate the project:
@@ -298,9 +331,3 @@ podman push computate/choice-reports:latest quay.io/computate/choice-reports:lat
                     NAME             DISPLAY NAME  STATUS
                     012345myproject                Active
                     ```
-2. 
-    ```bash
-    $ oc get project/012345myproject
-    NAME             DISPLAY NAME  STATUS
-    012345myproject                Active
-    ```
