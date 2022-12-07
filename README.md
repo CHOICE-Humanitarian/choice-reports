@@ -290,7 +290,7 @@ podman push computate/choice-reports:latest quay.io/computate/choice-reports:lat
 1. **Test area**
     * Description
     * Acceptance tests:
-        5. Validate the project:
+        1. Validate the project:
             1. For a given project named `012345myproject` for example, check that the given project is listed in the `oc` CLI:
                 1. 
                     ```bash
